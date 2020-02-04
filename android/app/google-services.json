@@ -1,35 +1,42 @@
 {
   "project_info": {
-    "project_number": "173260452730",
-    "firebase_url": "https://aldea-prod-64219.firebaseio.com",
-    "project_id": "aldea-prod-64219",
-    "storage_bucket": "aldea-prod-64219.appspot.com"
+    "project_number": "34471012076",
+    "firebase_url": "https://aldea-dev-40685.firebaseio.com",
+    "project_id": "aldea-dev-40685",
+    "storage_bucket": "aldea-dev-40685.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:173260452730:android:62eb4c2109a3083502dcc3",
+        "mobilesdk_app_id": "1:34471012076:android:a89b33039333a933aaa7c9",
         "android_client_info": {
           "package_name": "es.dinobyte.aldea"
         }
       },
       "oauth_client": [
         {
-          "client_id": "173260452730-4ombgqhnadn51rokd43p3pmgq3d7u76h.apps.googleusercontent.com",
+          "client_id": "34471012076-bhnbbfndpq5nah4a9gvkgcffrqdfcpb4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBu8x4X59sbUuW9NBJ_hGf7nBpk0LSRUlM"
+          "current_key": "AIzaSyCvFOQ7DTj8zfj-0ElhuaIyauuM-BERmhQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "173260452730-4ombgqhnadn51rokd43p3pmgq3d7u76h.apps.googleusercontent.com",
+              "client_id": "34471012076-bhnbbfndpq5nah4a9gvkgcffrqdfcpb4.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "34471012076-di6o0kbk2cqlfevp1frjielt8a96gdld.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "es.dinobyte.aldea"
+              }
             }
           ]
         }
