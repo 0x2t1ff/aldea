@@ -37,7 +37,7 @@ class ConfirmNumberViewModel extends BaseModel {
     if (result is bool) {
       if (result) {
         //do something
-        _navigationService.navigateTo(HomeViewRoute);
+        _navigationService.navigateTo(HomeViewRoute, true);
       } else {
         _dialogService.showDialog(
             title: "Error",

@@ -54,4 +54,9 @@ class AuthenticationService {
       return e.message;
     }
   }
+
+  Future<bool> isUserLoggedIn() async {
+    var user = await _firebaseAuth.currentUser();
+    return user != null;
+  }
 }

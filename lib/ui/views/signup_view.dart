@@ -23,7 +23,7 @@ class SignUpView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'Sign Up',
+                'Registrate',
                 style: TextStyle(
                   fontSize: 38,
                 ),
@@ -36,10 +36,10 @@ class SignUpView extends StatelessWidget {
               ),
               verticalSpaceSmall,
               InputField(
-                placeholder: 'Password',
+                placeholder: 'Contraseña',
                 password: true,
                 controller: passwordController,
-                additionalNote: 'Password has to be a minimum of 6 characters.',
+                additionalNote: 'La contraseña debe contener minimo 6 caracteres.',
               ),
               verticalSpaceMedium,
               Row(
@@ -47,7 +47,7 @@ class SignUpView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   BusyButton(
-                    title: 'Sign Up',
+                    title: 'Registrate',
                     busy: model.busy,
                     onPressed: () {
                       model.signUp(
@@ -60,9 +60,9 @@ class SignUpView extends StatelessWidget {
               ),
               verticalSpaceMedium,
               TextLink(
-                'Ya tienes una cuenta? Loggeate.',
+                '¿Ya tienes una cuenta? Loggeate.',
                 onPressed: () {
-                  // TODO: Handle navigation
+                  model.navigateLogin();
                 },
               )
             ],

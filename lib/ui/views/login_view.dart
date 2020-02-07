@@ -23,17 +23,20 @@ class LoginView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  height: 150,
-                  child: Image.asset('assets/images/title.png'),
+                 Text(
+                'Accede',
+                style: TextStyle(
+                  fontSize: 38,
                 ),
+              ),
+              verticalSpaceLarge,
                 InputField(
                   placeholder: 'Email',
                   controller: emailController,
                 ),
                 verticalSpaceSmall,
                 InputField(
-                  placeholder: 'Password',
+                  placeholder: 'Contraseña',
                   password: true,
                   controller: passwordController,
                 ),
@@ -43,7 +46,7 @@ class LoginView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     BusyButton(
-                      title: 'Login',
+                      title: 'Acceder',
                       busy: model.busy,
                       onPressed: () {
                         model.login(
@@ -55,9 +58,9 @@ class LoginView extends StatelessWidget {
                 ),
                 verticalSpaceMedium,
                 TextLink(
-                  'Create an Account if you\'re new.',
+                  '¿Eres nuevo? Registrate.',
                   onPressed: () {
-                    // TODO: Handle navigation
+                    model.navigateRegister();
                   },
                 )
               ],

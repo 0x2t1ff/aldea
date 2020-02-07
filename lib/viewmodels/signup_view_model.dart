@@ -13,6 +13,11 @@ class SignUpViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
+
+  void navigateLogin(){
+    _navigationService.navigateTo(LoginViewRoute, true);
+  }
+
   Future signUp({
     @required String email,
     @required String password,
@@ -25,7 +30,7 @@ class SignUpViewModel extends BaseModel {
     setBusy(false);
     if (result is bool) {
       if (result) {
-        _navigationService.navigateTo(HomeViewRoute);
+        _navigationService.navigateTo(HomeViewRoute, true);
       } else {
         await _dialogService.showDialog(
           title: 'Error',
