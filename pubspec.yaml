@@ -19,6 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+    
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -29,6 +30,7 @@ dependencies:
   firebase_analytics: ^5.0.2
   firebase_auth: ^0.14.0+5
   cloud_firestore: ^0.12.9+5
+  google_nav_bar: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -45,7 +47,44 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  fonts:
+    - family: Chats
+      fonts:
+        - asset: assets/icons/Chats.ttf
+    - family: Home
+      fonts:
+        - asset: assets/icons/Home.ttf
+    - family: Buscar
+      fonts:
+        - asset: assets/icons/Buscar.ttf
+    - family: Profile
+      fonts:
+      - asset: assets/icons/Profile.ttf
+    - family: Quickstrike
+      fonts:
+      - asset: assets/icons/QuickStrike.ttf
 
+    - family: Linguineve
+      fonts:
+        - asset: assets/fonts/Linguineve_Regular.ttf
+        - asset: assets/fonts/Linguineve_Regular_Italic.ttf
+          style: italic
+    - family: Thinoo
+      fonts:
+        - asset: assets/fonts/thinoothin.otf
+        - asset: assets/fonts/thinoobold.otf
+          weight: 700
+    - family: Raleway
+      fonts:
+        - asset: assets/fonts/Raleway_Regular.ttf
+        - asset: assets/fonts/Raleway_SemiBold.ttf
+          weight: 400
+        - asset: assets/fonts/Raleway_Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Raleway_ExtraBold.ttf
+          weight: 900
+        - asset: assets/fonts/Raleway_Italic.ttf
+  #
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg

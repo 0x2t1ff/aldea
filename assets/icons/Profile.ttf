@@ -1,0 +1,18 @@
+push graphic-context
+viewbox 0 0 230 229
+affine 0.998394 0 0 1.00035 0 0
+push defs
+pop defs
+push graphic-context
+affine 1 0 0 1 -307.22 -183.18
+path 'M452.83,202.82a51.74,51.74,0,1,0,20.29,41.09,51.59,51.59,0,0,0-20.29-41.09'
+pop graphic-context
+push graphic-context
+affine 1 0 0 1 -307.22 -183.18
+path 'M490.44,319.93'
+pop graphic-context
+push graphic-context
+affine 1 0 0 1 -307.22 -183.18
+path 'M490.44,319.93a107.47,107.47,0,0,0-174,65.3,15.36,15.36,0,0,0,15.16,17.87H513.21a15.36,15.36,0,0,0,15.16-17.87,106.66,106.66,0,0,0-12.9-35.86'
+pop graphic-context
+pop graphic-context

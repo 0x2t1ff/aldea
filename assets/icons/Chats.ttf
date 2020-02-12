@@ -1,0 +1,27 @@
+push graphic-context
+viewbox 0 0 270 217
+affine 1.00174 0 0 0.999171 0 0
+push defs
+pop defs
+push graphic-context
+affine 1 0 0 1 -285.88 -193.53
+path 'M546.41,283.32V221.06a18.23,18.23,0,0,0-18.58-18.53H313.47a18.24,18.24,0,0,0-18.59,18.53V335.68c0,10.75,8.32,19.47,18.59,19.47h8.71'
+pop graphic-context
+push graphic-context
+affine 1 0 0 1 -285.88 -193.53
+path 'M413.94,355.15H529.42c9.39,0,17-8,17-17.8V326.46'
+pop graphic-context
+push graphic-context
+polyline 128.06 161.62 36.88 208.18 36.88 161.62
+pop graphic-context
+push graphic-context
+line 47.59,96.41 149.47,96.41
+pop graphic-context
+push graphic-context
+line 47.59,59.25 178.88,59.25
+pop graphic-context
+push graphic-context
+affine 1 0 0 1 -285.88 -193.53
+path 'M489,261.53c4.58,0,9-4,8.75-8.75A8.9,8.9,0,0,0,489,244c-4.58,0-9,4-8.75,8.75a8.9,8.9,0,0,0,8.75,8.75Z'
+pop graphic-context
+pop graphic-context

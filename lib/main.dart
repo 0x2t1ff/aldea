@@ -1,3 +1,5 @@
+import 'package:aldea/ui/views/home_view.dart';
+
 import './ui/views/signup_view.dart';
 import 'package:flutter/material.dart';
 import './services/navigation_service.dart';
@@ -16,7 +18,9 @@ void main() {
 
 class MyApp extends StatelessWidget {
   @override
+  
   Widget build(BuildContext context) {
+    
     return MaterialApp(
       title: 'Compound',
       builder: (context, child) => Navigator(
@@ -32,8 +36,9 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Open Sans',
             ),
       ),
-      home: SignUpView(),
+      home: HomeView(),
       onGenerateRoute: generateRoute,
     );
+    
   }
 }

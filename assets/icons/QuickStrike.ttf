@@ -1,0 +1,24 @@
+push graphic-context
+viewbox 0 0 271 230
+affine 0.999779 0 0 0.999479 0 0
+push defs
+pop defs
+push graphic-context
+circle 98.15,132.49 98.15,221.07
+pop graphic-context
+push graphic-context
+affine 1 0 0 1 -296.12 -190.06
+path 'M394.26,266.67a55.88,55.88,0,0,0-55.88,55.88'
+pop graphic-context
+push graphic-context
+affine 1 0 0 1 -296.12 -190.06
+path 'M557.67,199.68c-39.32,46.66-33.76-18.24-78.27,26.27'
+pop graphic-context
+push graphic-context
+affine 1 0 0 1 -296.12 -190.06
+path 'M478.13,276.47s18.71-6.61,17.75-19.42S485,233.87,480,228.91s-18-14.65-30.24-14-18.54,20.29-18.54,20.29'
+pop graphic-context
+push graphic-context
+rectangle 0,0 271.06,230.12
+pop graphic-context
+pop graphic-context
