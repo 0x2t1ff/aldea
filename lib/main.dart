@@ -1,10 +1,13 @@
+
 import 'package:aldea/ui/views/home_view.dart';
 
 import './ui/views/signup_view.dart';
+
+import 'package:aldea/ui/views/login_view.dart';
 import 'package:flutter/material.dart';
 import './services/navigation_service.dart';
 import './services/dialog_service.dart';
-import './ui/views/login_view.dart';
+import './ui/views/startup_view.dart';
 import 'managers/dialog_manager.dart';
 import './ui/router.dart';
 import 'locator.dart';
@@ -36,7 +39,9 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Open Sans',
             ),
       ),
-      home: HomeView(),
+
+      home: StartUpView(),
+
       onGenerateRoute: generateRoute,
     );
     

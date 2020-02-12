@@ -64,6 +64,7 @@ flutter:
       fonts:
       - asset: assets/icons/QuickStrike.ttf
 
+
     - family: Linguineve
       fonts:
         - asset: assets/fonts/Linguineve_Regular.ttf
@@ -85,6 +86,10 @@ flutter:
           weight: 900
         - asset: assets/fonts/Raleway_Italic.ttf
   #
+
+  assets:
+    - assets/images/hoguera.png
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
