@@ -31,24 +31,24 @@ class _HomeViewState extends State<HomeView> {
     tabs.add(GButton(
       icon: custicon.Buscar.buscar,
       // textStyle: t.textStyle,
-      text: 'Aldeas',
+      text: 'Aldeas         ',
     ));
 
     tabs.add(GButton(
-      icon: IconData(custicon.QuickStrike.quickstrike.codePoint),
+      icon: custicon.QuickStrike.quickstrike,
       // textStyle: t.textStyle,
-      text: 'Quickstrike',
+      text: 'Quickstrike         ',
     ));
 
     tabs.add(GButton(
-      icon: IconData(custicon.Chats.chats.codePoint),
+      icon: custicon.Chats.chats,
       // textStyle: t.textStyle,
-      text: 'Chats',
+      text: '     Chats         ',
     ));
     tabs.add(GButton(
-      icon: IconData(custicon.Profile.profile.codePoint),
+      icon: custicon.Profile.profile,
       // textStyle: t.textStyle,
-      text: 'Perfil',
+      text: 'Perfil         ',
     ));
   }
 
@@ -67,7 +67,7 @@ class _HomeViewState extends State<HomeView> {
         bottomNavigationBar: SafeArea(
             child: Container(
           width: device.screenWidth(context),
-          height: device.screenHeight(context) * 0.1,
+          height: device.screenHeight(context) * 0.092,
           decoration: BoxDecoration(
             color: theme.blueishGreyColor,
           ),
