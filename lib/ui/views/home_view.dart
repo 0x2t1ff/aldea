@@ -1,5 +1,8 @@
+import 'package:aldea/ui/widgets/bottom_filler.dart';
+import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
+import '../views/communities_view.dart';
+import '../shared/google_navbar.dart';
 import "../shared/ui_helpers.dart" as device;
 import "../shared/app_colors.dart" as theme;
 import "../../constants/icondata.dart" as custicon;
@@ -55,38 +58,64 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Text('Home'),
-        appBar: AppBar(
-          brightness: Brightness.dark,
-          title: Text(
+      backgroundColor: Color(0xff0F1013),
+      body: Column(children: <Widget>[
+        NotchFiller(),
+        Container(
+          padding: EdgeInsets.only(left: 15),
+          width: double.infinity,
+          height: device.usableScreenHeight(context) * 0.1,
+          alignment: Alignment.centerLeft,
+          color: Color(0xff17191E),
+          child: Text(
             'ALDEA',
-            style: TextStyle(color: Colors.black, fontFamily: 'Thinoo'),
+            style: TextStyle(
+                color: Colors.white, fontFamily: 'Thinoo', fontSize: 40),
           ),
-          backgroundColor: Colors.white,
         ),
-        bottomNavigationBar: SafeArea(
-            child: Container(
-          width: device.screenWidth(context),
-          height: device.screenHeight(context) * 0.092,
-          decoration: BoxDecoration(
-            color: theme.blueishGreyColor,
+        Container(
+          width: double.infinity,
+          height: device.usableScreenHeight(context) * 0.8,
+          child: PageView(
+            controller: controller,
+            children: <Widget>[
+              Container(),
+              CommunitiesView(),
+              Container(),
+              Container(),
+              Container(),
+            ],
           ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.05,
-              vertical: MediaQuery.of(context).size.height * 0.01,
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Container(
+              width: device.screenWidth(context),
+              height: device.usableScreenHeight(context) * 0.1,
+              decoration: BoxDecoration(
+                color: theme.blueishGreyColor,
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.05,
+                  vertical: MediaQuery.of(context).size.height * 0.01,
+                ),
+                child: GNav(
+                    tabs: tabs,
+                    selectedIndex: selectedIndex,
+                    onTabChange: (index) {
+                      setState(() {
+                        selectedIndex = index;
+                      });
+                      controller.jumpToPage(index);
+                    }),
+              ),
             ),
-            child: GNav(
-                tabs: tabs,
-                selectedIndex: selectedIndex,
-                onTabChange: (index) {
-                  print(index);
-                  setState(() {
-                    selectedIndex = index;
-                  });
-                  controller.jumpToPage(index);
-                }),
-          ),
-        )));
+            BottomFiller()
+          ],
+        )
+      ]),
+    );
   }
 }

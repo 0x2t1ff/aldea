@@ -1,13 +1,8 @@
-
-import 'package:aldea/ui/views/home_view.dart';
-
-import './ui/views/signup_view.dart';
-
-import 'package:aldea/ui/views/login_view.dart';
 import 'package:flutter/material.dart';
 import './services/navigation_service.dart';
 import './services/dialog_service.dart';
 import './ui/views/startup_view.dart';
+import 'package:flutter/services.dart';
 import 'managers/dialog_manager.dart';
 import './ui/router.dart';
 import 'locator.dart';
@@ -15,15 +10,13 @@ import 'locator.dart';
 void main() {
   // Register all the models and services before the app starts
   setupLocator();
-
   runApp(MyApp());
+  SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
 }
 
 class MyApp extends StatelessWidget {
   @override
-  
   Widget build(BuildContext context) {
-    
     return MaterialApp(
       title: 'Compound',
       builder: (context, child) => Navigator(
@@ -39,11 +32,8 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Open Sans',
             ),
       ),
-
       home: StartUpView(),
-
       onGenerateRoute: generateRoute,
     );
-    
   }
 }
