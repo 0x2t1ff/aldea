@@ -1,3 +1,4 @@
+import 'package:aldea/ui/views/profile_view.dart';
 import 'package:aldea/ui/widgets/bottom_filler.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:flutter/material.dart';
@@ -62,15 +63,21 @@ class _HomeViewState extends State<HomeView> {
       body: Column(children: <Widget>[
         NotchFiller(),
         Container(
-          padding: EdgeInsets.only(left: 15),
+          padding: EdgeInsets.symmetric(horizontal: 15),
           width: double.infinity,
           height: device.usableScreenHeight(context) * 0.1,
           alignment: Alignment.centerLeft,
           color: Color(0xff17191E),
-          child: Text(
-            'ALDEA',
-            style: TextStyle(
-                color: Colors.white, fontFamily: 'Thinoo', fontSize: 40),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'ALDEA',
+                style: TextStyle(
+                    color: Colors.white, fontFamily: 'Thinoo', fontSize: 40),
+              ),
+              SizedBox(height: 50 ,child: Image.asset('assets/images/hoguera.png'))
+            ],
           ),
         ),
         Container(
@@ -83,7 +90,7 @@ class _HomeViewState extends State<HomeView> {
               CommunitiesView(),
               Container(),
               Container(),
-              Container(),
+              ProfileView()
             ],
           ),
         ),

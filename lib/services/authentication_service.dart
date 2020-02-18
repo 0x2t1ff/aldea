@@ -4,6 +4,14 @@ import 'package:flutter/foundation.dart';
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  Future<String> getUserUID() async { 
+    return (await _firebaseAuth.currentUser()).uid;
+  }
+
+  Future<FirebaseUser> getCurrentUser() async { 
+    return await _firebaseAuth.currentUser();
+  }
+
   Future loginWithEmail({
     @required String email,
     @required String password,

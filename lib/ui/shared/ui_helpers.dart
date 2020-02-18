@@ -25,6 +25,8 @@ double bottomHeight(BuildContext context) => MediaQuery.of(context).padding.bott
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
 double usableScreenHeight(BuildContext context) => MediaQuery.of(context).size.height - notchHeight(context) - bottomHeight(context);
+double usableScreenWithoughtBars(BuildContext context) => usableScreenHeight(context) * 0.8;
+
 
 double screenHeightFraction(BuildContext context,
         {int dividedBy = 1, double offsetBy = 0}) =>

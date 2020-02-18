@@ -88,6 +88,10 @@ flutter:
 
   assets:
     - assets/images/hoguera.png
+    - assets/images/vouch.png
+    - assets/images/hoguera-azul.png
+    - assets/images/posts.png
+    - assets/images/win.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

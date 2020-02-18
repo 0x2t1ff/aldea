@@ -1,5 +1,4 @@
-import 'package:aldea/ui/views/signup_view.dart';
-
+import 'package:aldea/services/firestore_service.dart';
 import '../locator.dart';
 import '../constants/route_names.dart';
 import '../services/authentication_service.dart';
@@ -14,6 +13,7 @@ class LoginViewModel extends BaseModel {
       locator<AuthenticationService>();
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  final FirestoreService _firestoreService = locator<FirestoreService>();
 
   void navigateRegister() {
     _navigationService.navigateTo(SignUpViewRoute, true);
@@ -31,7 +31,10 @@ class LoginViewModel extends BaseModel {
     setBusy(false);
     if (result is bool) {
       if (result) {
-        _navigationService.navigateTo(HomeViewRoute, true);
+      var userUid = await _authenticationService.getUserUID();
+      var userData = await _firestoreService.getUserData(userUid);
+      registerCurrentUser(userData);
+      _navigationService.navigateTo(HomeViewRoute, true);
       } else {
         await _dialogService.showDialog(
             title: 'Error',
