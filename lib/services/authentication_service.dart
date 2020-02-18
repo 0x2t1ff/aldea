@@ -67,4 +67,11 @@ class AuthenticationService {
     var user = await _firebaseAuth.currentUser();
     return user != null;
   }
+
+  Future<FirebaseUser> getUserID() async{
+    var userId = _firebaseAuth.currentUser();
+    return userId;
+
+  }
 }
+

@@ -22,6 +22,7 @@ class ConfirmNumberViewModel extends BaseModel {
       phoneNumber: phoneNumber,
       codeSent: codeSent,
       verifactionCompleted: verificationCompleted
+      
     );
     setBusy(false);
   }
