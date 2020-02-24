@@ -1,11 +1,11 @@
-import 'package:aldea/services/authentication_service.dart';
 import 'package:flutter/widgets.dart';
-import "../locator.dart";
+import '../locator.dart';
+import '../models/user_model.dart';
 
 class BaseModel extends ChangeNotifier {
-final AuthenticationService _authenticationService = locator<AuthenticationService>();
-
- currentUserId() =>   _authenticationService.getUserID();
+  User get currentUser {
+    return locator<User>();
+  }
 
   bool _busy = false;
   bool get busy => _busy;

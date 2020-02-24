@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:aldea/ui/shared/ui_helpers.dart';
+import 'package:aldea/ui/widgets/input_field.dart';
+import 'package:aldea/ui/widgets/profile_body.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import '../shared/shared_styles.dart';
@@ -6,10 +10,21 @@ import '../../viewmodels/profile_view_model.dart';
 import 'dart:ui';
 
 class ProfileView extends StatelessWidget {
+  final phoneController = TextEditingController();
+  final mailController = TextEditingController();
+  final genderController = TextEditingController();
+  final addressController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<ProfileViewModel>.withConsumer(
       viewModel: ProfileViewModel(),
+      onModelReady: (model) {
+        phoneController.text = model.currentUser.phoneNumber;
+        mailController.text = model.currentUser.email;
+        genderController.text = model.currentUser.gender;
+        addressController.text = model.currentUser.address;
+      },
       builder: (context, model, child) => Container(
           height: double.infinity,
           width: double.infinity,
@@ -18,26 +33,82 @@ class ProfileView extends StatelessWidget {
               Expanded(
                   flex: 1,
                   child: Stack(
+                      overflow: Overflow.visible,
                       alignment: Alignment.bottomCenter,
                       children: <Widget>[
                         Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                      "https://scontent-mad1-1.cdninstagram.com/v/t51.2885-15/e35/20902566_1334967203298092_3707662494303518720_n.jpg?_nc_ht=scontent-mad1-1.cdninstagram.com&_nc_cat=108&_nc_ohc=6JQ4m3djnNYAX_9ZH7J&oh=670f1400b6fd54898d77b43c58f8c672&oe=5EC77894"),
-                                  fit: BoxFit.cover)),
-                          width: double.infinity,
-                        ),
+                            decoration: BoxDecoration(
+                                image: (model.currentUser.bkdPicUrl != null ||
+                                        model.selectedBkdImage != null)
+                                    ? DecorationImage(
+                                        image: model.selectedBkdImage != null
+                                            ? FileImage(model.selectedBkdImage)
+                                            : NetworkImage(
+                                                model.currentUser.bkdPicUrl),
+                                        fit: BoxFit.cover)
+                                    : null),
+                            width: double.infinity,
+                            child: model.selectedBkdImage == null
+                                ? GestureDetector(
+                                    onTap: () {
+                                      if (model.isEditting)
+                                        model.selectBkdImage();
+                                    },
+                                    child: Container(
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            color:
+                                                model.currentUser.bkdPicUrl ==
+                                                        null
+                                                    ? Color(0xff223C47)
+                                                    : (model.isEditting
+                                                        ? Colors.black45
+                                                        : null)),
+                                        child: model.isEditting
+                                            ? Icon(
+                                                Icons.add,
+                                                color: Colors.white,
+                                                size: 40,
+                                              )
+                                            : Container()),
+                                  )
+                                : Container()),
                         Positioned(
                             left: screenWidth(context) * 0.05,
                             top: usableScreenWithoughtBars(context) * 0.04,
                             child: Container(
                               decoration: profilePicDecoration,
                               child: CircleAvatar(
+                                child: (model.isEditting &&
+                                        model.selectedProfileImage == null)
+                                    ? GestureDetector(
+                                        onTap: () => model.selectProfileImage(),
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.black45),
+                                          child: Icon(
+                                            Icons.add,
+                                            color: Colors.white,
+                                            size: 30,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
                                 radius:
                                     usableScreenWithoughtBars(context) * 0.07,
-                                backgroundImage: NetworkImage(
-                                   model.getUserProfilePicUrl()),
+                                backgroundImage: model.selectedProfileImage !=
+                                        null
+                                    ? FileImage(model.selectedProfileImage)
+                                    : (model.currentUser.picUrl != null
+                                        ? NetworkImage(model.currentUser.picUrl)
+                                        : AssetImage(
+                                            "assets/images/default-profile.png")),
                               ),
                             )),
                         Positioned(
@@ -51,215 +122,255 @@ class ProfileView extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(model.getUserName(),
+                              Text(model.currentUser.name,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 30,
                                       fontFamily: "Raleway",
                                       fontWeight: FontWeight.w600)),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.expand_more,
-                                  color: Colors.white,
+                              Transform.rotate(
+                                angle: model.isShowingInfo ? pi : 0,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.expand_more,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    model.toggleInfo();
+                                  },
+                                  iconSize: 40,
                                 ),
-                                onPressed: () {},
-                                iconSize: 40,
                               )
                             ],
                           ),
-                        ))
+                        )),
                       ])),
               Expanded(
                   flex: 2,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 35),
-                    width: double.infinity,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 5,
-                            child: Column(
-                              children: <Widget>[
-                                Expanded(
-                                    flex: 7,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: usableScreenWithoughtBars(
-                                                  context) *
-                                              0.015),
-                                      decoration: profileBoxesDecoration,
-                                      width: double.infinity,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: <Widget>[
-                                          Text(
-                                            "Posts",
-                                            style: TextStyle(
-                                                color: Color(0xffB1AFAF),
-                                                fontFamily: "Raleway",
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20),
-                                          ),
-                                          SizedBox(
-                                            height: usableScreenWithoughtBars(
-                                                    context) *
-                                                0.1,
-                                            child: Image.asset(
-                                                'assets/images/posts.png'),
-                                          ),
-                                          Text(
-                                            model.getUserPostsCount(),
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: "Raleway",
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20),
-                                          )
-                                        ],
-                                      ),
-                                    )),
-                                SizedBox(
-                                    height: usableScreenWithoughtBars(context) *
-                                        0.05),
-                                Expanded(
-                                    flex: 4,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: usableScreenWithoughtBars(
-                                                  context) *
-                                              0.01),
-                                      decoration: profileBoxesDecoration,
-                                      width: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: <Widget>[
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              Text(
-                                                "Vouch",
-                                                style: TextStyle(
-                                                    color: Color(0xffB1AFAF),
-                                                    fontFamily: "Raleway",
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20),
-                                              ),
-                                              Text(
-                                                model.getUserVouchCount(),
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: "Raleway",
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20),
-                                              )
-                                            ],
-                                          ),
-                                          Image.asset("assets/images/vouch.png")
-                                        ],
-                                      ),
-                                    ))
-                              ],
-                            ),
+                  child: Stack(
+                    children: <Widget>[
+                      ProfileBody(
+                        postsCount: model.currentUser.postsCount.toString(),
+                        winCount: model.currentUser.winCount.toString(),
+                        communitiesCount:
+                            model.currentUser.communitiesCount.toString(),
+                        vouchCount: model.currentUser.vouchCount.toString(),
+                      ),
+                      Container(
+                        color: Color(0xff3C8FA7).withOpacity(0.8),
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 250),
+                          width: screenWidth(context),
+                          height: model.isShowingInfo
+                              ? usableScreenHeight(context) * 0.3
+                              : 0,
+                          decoration: BoxDecoration(
+                            border: model.isShowingInfo
+                                ? Border(
+                                    top: BorderSide(
+                                        width: 2, color: Colors.white))
+                                : null,
                           ),
-                          horizontalSpaceMedium,
-                          Expanded(
-                            flex: 4,
-                            child: Column(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical:
-                                            usableScreenWithoughtBars(context) *
-                                                0.01),
-                                    decoration: profileBoxesDecoration,
-                                    width: double.infinity,
-                                    child: Column(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                child: Row(
+                                  children: <Widget>[
+                                    Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                          MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text(
-                                          "Aldeas",
-                                          style: TextStyle(
-                                              color: Color(0xffB1AFAF),
-                                              fontFamily: "Raleway",
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20),
-                                        ),
-                                        SizedBox(
-                                          height: usableScreenWithoughtBars(
-                                                  context) *
-                                              0.1,
-                                          child: Image.asset(
-                                              'assets/images/hoguera-azul.png'),
-                                        ),
-                                        Text(
-                                          model.getUserCommunitiesCount(),
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: "Raleway",
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20),
-                                        )
+                                        Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              "Mail: ",
+                                              style: profileDropdownTextStyle,
+                                            )),
+                                        Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              "Teléfono: ",
+                                              style: profileDropdownTextStyle,
+                                            )),
+                                        Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              "Género: ",
+                                              style: profileDropdownTextStyle,
+                                            )),
+                                        Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              "Dirección: ",
+                                              style: profileDropdownTextStyle,
+                                            )),
                                       ],
                                     ),
-                                  ),
-                                ),
-                                SizedBox(
-                                    height: usableScreenWithoughtBars(context) *
-                                        0.05),
-                                Expanded(
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical:
-                                            usableScreenWithoughtBars(context) *
-                                                0.01),
-                                    decoration: profileBoxesDecoration,
-                                    width: double.infinity,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: <Widget>[
-                                        Text(
-                                          "Wins",
-                                          style: TextStyle(
-                                              color: Color(0xffB1AFAF),
-                                              fontFamily: "Raleway",
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20),
-                                        ),
-                                        SizedBox(height: usableScreenWithoughtBars(context) * 0.1, child: Image.asset('assets/images/win.png')),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text(
-                                              model.getUserWinsCount(),
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: "Raleway",
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20),
-                                            ),
-                                            Icon(
-                                              Icons.star,
-                                              color: Color(0xffE2DB76),
-                                              size: 22,
+                                    Expanded(
+                                      child: model.isEditting
+                                          ? Column(
+                                              children: <Widget>[
+                                                Expanded(
+                                                    child: TextField(
+                                                  controller: mailController,
+                                                  readOnly: true,
+                                                  style:
+                                                      profileDropdownTextStyle,
+                                                  decoration:
+                                                      profileDropDownInputDecoration,
+                                                )),
+                                                Expanded(
+                                                    child: TextField(
+                                                        keyboardType:
+                                                            TextInputType.phone,
+                                                        controller:
+                                                            phoneController,
+                                                        style:
+                                                            profileDropdownTextStyle,
+                                                        decoration:
+                                                            profileDropDownInputDecoration)),
+                                                Expanded(
+                                                    child: TextField(
+                                                        controller:
+                                                            genderController,
+                                                        style:
+                                                            profileDropdownTextStyle,
+                                                        decoration:
+                                                            profileDropDownInputDecoration)),
+                                                Expanded(
+                                                    child: TextField(
+                                                        controller:
+                                                            addressController,
+                                                        style:
+                                                            profileDropdownTextStyle,
+                                                        decoration:
+                                                            profileDropDownInputDecoration)),
+                                              ],
                                             )
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ]),
+                                          : Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    model.currentUser.email !=
+                                                            null
+                                                        ? model
+                                                            .currentUser.email
+                                                        : '',
+                                                    style:
+                                                        profileDropdownTextStyle,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    model.currentUser
+                                                                .phoneNumber !=
+                                                            null
+                                                        ? model.currentUser
+                                                            .phoneNumber
+                                                        : '',
+                                                    style:
+                                                        profileDropdownTextStyle,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    model.currentUser.gender !=
+                                                            null
+                                                        ? model
+                                                            .currentUser.gender
+                                                        : '',
+                                                    style:
+                                                        profileDropdownTextStyle,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    model.currentUser.address !=
+                                                            null
+                                                        ? model
+                                                            .currentUser.address
+                                                        : '',
+                                                    style:
+                                                        profileDropdownTextStyle,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                  padding: EdgeInsets.only(bottom: 10),
+                                  width: double.infinity,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      model.isEditting
+                                          ? IconButton(
+                                              icon: Icon(Icons.clear),
+                                              color: Colors.white,
+                                              iconSize: 30,
+                                              onPressed: () =>
+                                                  model.cancelChanges())
+                                          : Container(),
+                                      !model.busy
+                                          ? IconButton(
+                                              icon: Icon(
+                                                model.isEditting
+                                                    ? Icons.check
+                                                    : Icons.edit,
+                                                color: Colors.white,
+                                              ),
+                                              onPressed: () {
+                                                model.isEditting
+                                                    ? model.saveChanges(
+                                                        email:
+                                                            mailController.text,
+                                                        phoneNumber:
+                                                            phoneController
+                                                                .text,
+                                                        gender: genderController
+                                                            .text,
+                                                        address:
+                                                            addressController
+                                                                .text)
+                                                    : model.editProfile();
+                                              },
+                                              iconSize: 30,   
+                                            )
+                                          : SizedBox(
+                                              height: 30,
+                                              width: 30,
+                                              child:
+                                                  CircularProgressIndicator()),
+                                    ],
+                                  ))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   )),
             ],
           )),

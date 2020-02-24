@@ -1,7 +1,6 @@
 import 'package:aldea/ui/widgets/quickstrike_item.dart';
 import 'package:aldea/viewmodels/quickstrike_view_model.dart';
 import "package:flutter/material.dart";
-import '../shared/ui_helpers.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import "../shared/app_colors.dart" as custcolor;
 

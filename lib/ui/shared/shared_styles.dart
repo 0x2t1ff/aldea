@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+const InputDecoration profileDropDownInputDecoration = InputDecoration(
+    enabledBorder:
+        UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+    focusedBorder:
+        UnderlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 2)));
+
 // Box Decorations
 
 BoxDecoration fieldDecortaion = BoxDecoration(
@@ -23,6 +29,17 @@ BoxDecoration profileBoxesDecoration = BoxDecoration(
       BoxShadow(offset: Offset(3, 3), blurRadius: 6, color: Colors.black),
     ]);
 
+BoxDecoration quickstrikePicDecoration = BoxDecoration(
+    border: Border.all(
+      color: Colors.black,
+      width: 1,
+    ),
+    borderRadius: BorderRadius.circular(50),
+    color: Colors.black,
+    boxShadow: [
+      BoxShadow(offset: Offset(5, 5), blurRadius: 10, color: Colors.black)
+    ]);
+
 // Field Variables
 
 const double fieldHeight = 55;
@@ -34,5 +51,8 @@ const EdgeInsets largeFieldPadding =
     const EdgeInsets.symmetric(horizontal: 15, vertical: 15);
 
 // Text Variables
+const TextStyle profileDropdownTextStyle =
+    TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white);
+
 const TextStyle buttonTitleTextStyle =
     const TextStyle(fontWeight: FontWeight.w700, color: Colors.white);

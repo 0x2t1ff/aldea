@@ -1,4 +1,5 @@
 import 'package:aldea/models/quickstrike_model.dart';
+import 'package:aldea/ui/shared/shared_styles.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 
@@ -41,20 +42,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                   left: devicesize.screenWidth(context) * 0.045),
             ),
             Container(
-              //TODO: cambiar boxdecoration a la variable profilepicdecoration
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.black,
-                  boxShadow: [
-                    BoxShadow(
-                        offset: Offset(5, 5),
-                        blurRadius: 10,
-                        color: Colors.black)
-                  ]),
+              decoration: quickstrikePicDecoration,
               child: CircleAvatar(
                 radius: devicesize.screenWidth(context) * 0.065,
                 backgroundImage: NetworkImage(widget.quickStrikePost.imageUrl),
@@ -157,7 +145,8 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                         )
                       ],
                       borderRadius: BorderRadius.circular(50),
-                      color: isEnlisted ? Colors.green : custcolor.lightBlueColor),
+                      color:
+                          isEnlisted ? Colors.green : custcolor.lightBlueColor),
                   child: Padding(
                     padding: EdgeInsets.only(
                         top: devicesize.screenHeight(context) * 0.014),
@@ -288,25 +277,30 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: devicesize.screenHeight(context) * 0.0221 ),
+                    padding: EdgeInsets.only(
+                        top: devicesize.screenHeight(context) * 0.0221),
                     child: Container(
                       height: devicesize.screenHeight(context) * 0.0357,
                       width: devicesize.screenWidth(context) * 0.912,
                       child: TextFormField(
                         decoration: InputDecoration(
                           hintText: 'Escribe un comentario',
-                          hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Raleway', fontSize: devicesize.screenHeight(context) * 0.018 ,fontStyle: FontStyle.italic ),
-                          contentPadding: EdgeInsets.only(top: devicesize.screenHeight(context) * 0.01),
+                          hintStyle: TextStyle(
+                              color: Colors.grey,
+                              fontFamily: 'Raleway',
+                              fontSize:
+                                  devicesize.screenHeight(context) * 0.018,
+                              fontStyle: FontStyle.italic),
+                          contentPadding: EdgeInsets.only(
+                              top: devicesize.screenHeight(context) * 0.01),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(100),
                           ),
                           fillColor: Color(0xff15232B),
                           filled: true,
-                          prefixIcon: Icon(
-                            Icons.add_comment,
-                            color: Colors.white,
-                            size: devicesize.screenHeight(context) * 0.023
-                          ),
+                          prefixIcon: Icon(Icons.add_comment,
+                              color: Colors.white,
+                              size: devicesize.screenHeight(context) * 0.023),
                         ),
                         controller: commentController,
                       ),

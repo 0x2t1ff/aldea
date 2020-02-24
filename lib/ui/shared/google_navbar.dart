@@ -51,18 +51,18 @@ class _GNavState extends State<GNav> {
   }
 }
 class GButton extends StatefulWidget {
-  bool active;
-  double gap ;
-  Color iconColor ;
-  Color iconActiveColor;
-  Color textColor;
-  EdgeInsetsGeometry padding;
-  TextStyle textStyle;
-  double iconSize;
-  Function onPressed;
-  String text;
-  IconData icon;
-  Color color;
+  final bool active;
+  final double gap ;
+  final Color iconColor ;
+  final Color iconActiveColor;
+  final Color textColor;
+  final EdgeInsetsGeometry padding;
+  final TextStyle textStyle;
+  final double iconSize;
+  final Function onPressed;
+  final String text;
+  final IconData icon;
+  final Color color;
   GButton(
       {Key key,
       this.active,

@@ -2,14 +2,12 @@ import 'package:aldea/services/dialog_service.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/viewmodels/base_model.dart';
 import "../locator.dart";
-import "../services/navigation_service.dart";
 import "package:flutter/foundation.dart";
 import "../models/quickstrike_model.dart";
 
 class CreateQuickstrikeViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final DialogService _dialogService = locator<DialogService>();
-  final NavigationService _navigationService = locator<NavigationService>();
 
   Future addPost(
       {@required String title,
@@ -22,7 +20,7 @@ class CreateQuickstrikeViewModel extends BaseModel {
     setBusy(true);
     var result = await _firestoreService.addPost(QuickStrikePost(
         title: title,
-        userId: currentUserId(),
+        userId: currentUser.uid,
         description: description,
         modelo: modelo,
         isGame: isGame,

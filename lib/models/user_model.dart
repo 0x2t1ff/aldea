@@ -2,28 +2,30 @@ class User {
   final String name;
   final String uid;
   final String picUrl;
+  final String picName;
   final String bkdPicUrl;
+  final String bkdPicName;
   final int postsCount;
   final int vouchCount;
   final int communitiesCount;
   final int winCount;
-  final String gender;
-  final int age;
-  final String phoneNumber;
-  final String email;
-  final String address;
+  String gender;
+  String phoneNumber;
+  String email;
+  String address;
 
   User(
       {this.name,
       this.uid,
       this.picUrl,
+      this.picName,
       this.bkdPicUrl,
+      this.bkdPicName,
       this.postsCount,
       this.vouchCount,
       this.communitiesCount,
       this.winCount,
       this.gender,
-      this.age,
       this.phoneNumber,
       this.email,
       this.address});
@@ -31,15 +33,36 @@ class User {
   User.fromData(Map<String, dynamic> data)
       : name = data['name'],
         uid = data['uid'],
-        picUrl = data['photoUrl'],
-        bkdPicUrl = data['bkdPic'],
+        picUrl = data['picUrl'],
+        picName = data['picName'],
+        bkdPicUrl = data['bkdPicUrl'],
+        bkdPicName = data['bkdPicName'],
         postsCount = data['postsCount'],
         vouchCount = data['vouchCount'],
         communitiesCount = data['communitiesCount'],
         winCount = data['winCount'],
         gender = data['gender'],
-        age = data['age'],
         phoneNumber = data['phoneNumber'],
         email = data['email'],
         address = data['address'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'uid': uid,
+      'name': name,
+      'email': email,
+      'picUrl': picUrl,
+      'picName' : picName,
+      'bkdPicUrl': bkdPicUrl,
+      'bkdPicName' : bkdPicName,
+      'postsCount': postsCount,
+      'communitiesCount' : communitiesCount,
+      'vouchCount' : vouchCount,
+      'winCount' : winCount,
+      'gender' : gender,
+      'phoneNumber' : phoneNumber,
+      'address' : address
+      
+    };
+  }
 }

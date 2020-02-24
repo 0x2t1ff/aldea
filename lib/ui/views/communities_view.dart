@@ -1,9 +1,7 @@
-import 'package:aldea/ui/widgets/bottom_filler.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import '../../viewmodels/communities_view_model.dart';
 import '../../ui/shared/ui_helpers.dart';
-import '../widgets/notch_filler.dart';
 
 class CommunitiesView extends StatelessWidget {
   @override

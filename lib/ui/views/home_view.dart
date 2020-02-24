@@ -89,6 +89,7 @@ class _HomeViewState extends State<HomeView> {
             width: double.infinity,
             height: device.usableScreenHeight(context) * 0.8,
             child: PageView(
+              physics: NeverScrollableScrollPhysics(),
               controller: controller,
               children: <Widget>[
                 Container(),
