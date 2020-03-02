@@ -1,3 +1,4 @@
+import 'package:aldea/locator.dart';
 import 'package:aldea/ui/views/profile_view.dart';
 import 'package:aldea/ui/views/quickstrike_view.dart';
 import 'package:aldea/ui/widgets/bottom_filler.dart';
@@ -17,6 +18,9 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final CommunitiesView _communitiesView = locator<CommunitiesView>();
+  final ProfileView _profileView = locator<ProfileView>();
+  final QuickSTrikeView _quickSTrikeView = locator<QuickSTrikeView>();
   int selectedIndex = 0;
   PageController controller = PageController();
 
@@ -93,10 +97,10 @@ class _HomeViewState extends State<HomeView> {
               controller: controller,
               children: <Widget>[
                 Container(),
-                CommunitiesView(),
-                QuickSTrikeView(),
+                _communitiesView,
+                _quickSTrikeView,
                 Container(),
-                ProfileView()
+                _profileView
               ],
             ),
           ),

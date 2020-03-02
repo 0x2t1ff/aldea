@@ -52,7 +52,8 @@ class ProfileViewModel extends BaseModel {
     notifyListeners();
   }
 
-  Future saveChanges({String email, String phoneNumber, String gender, String address}) async {
+  Future saveChanges(
+      {String email, String phoneNumber, String gender, String address}) async {
     setBusy(true);
     CloudStorageResult profileResult;
     CloudStorageResult bkdResult;
@@ -71,7 +72,6 @@ class ProfileViewModel extends BaseModel {
     }
 
     await _firestoreService.updateUser(
-
         uid: currentUser.uid,
         picUrl:
             profileResult != null ? profileResult.imageUrl : currentUser.picUrl,
@@ -86,8 +86,17 @@ class ProfileViewModel extends BaseModel {
         email: email,
         phoneNumber: phoneNumber,
         gender: gender,
-        address: address
-            );
+        address: address);
+
+    if (profileResult != null) {
+      currentUser.picUrl = profileResult.imageUrl;
+      currentUser.picName = profileResult.imageFileName;
+    }
+
+    if(bkdResult != null){
+      currentUser.bkdPicName = bkdResult.imageFileName;
+      currentUser.bkdPicUrl = bkdResult.imageUrl;
+    }
     currentUser.email = email;
     currentUser.phoneNumber = phoneNumber;
     currentUser.address = address;

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:aldea/ui/shared/ui_helpers.dart';
-import 'package:aldea/ui/widgets/input_field.dart';
 import 'package:aldea/ui/widgets/profile_body.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
@@ -20,10 +19,14 @@ class ProfileView extends StatelessWidget {
     return ViewModelProvider<ProfileViewModel>.withConsumer(
       viewModel: ProfileViewModel(),
       onModelReady: (model) {
-        phoneController.text = model.currentUser.phoneNumber;
-        mailController.text = model.currentUser.email;
-        genderController.text = model.currentUser.gender;
-        addressController.text = model.currentUser.address;
+        if (phoneController.text.isEmpty)
+          phoneController.text = model.currentUser.phoneNumber;
+        if (mailController.text.isEmpty)
+          mailController.text = model.currentUser.email;
+        if (genderController.text.isEmpty)
+          genderController.text = model.currentUser.gender;
+        if (addressController.text.isEmpty)
+          addressController.text = model.currentUser.address;
       },
       builder: (context, model, child) => Container(
           height: double.infinity,
@@ -357,7 +360,7 @@ class ProfileView extends StatelessWidget {
                                                                 .text)
                                                     : model.editProfile();
                                               },
-                                              iconSize: 30,   
+                                              iconSize: 30,
                                             )
                                           : SizedBox(
                                               height: 30,

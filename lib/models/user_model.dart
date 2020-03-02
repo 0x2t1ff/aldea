@@ -1,10 +1,10 @@
 class User {
   final String name;
   final String uid;
-  final String picUrl;
-  final String picName;
-  final String bkdPicUrl;
-  final String bkdPicName;
+  String picUrl;
+  String picName;
+  String bkdPicUrl;
+  String bkdPicName;
   final int postsCount;
   final int vouchCount;
   final int communitiesCount;
@@ -52,17 +52,16 @@ class User {
       'name': name,
       'email': email,
       'picUrl': picUrl,
-      'picName' : picName,
+      'picName': picName,
       'bkdPicUrl': bkdPicUrl,
-      'bkdPicName' : bkdPicName,
+      'bkdPicName': bkdPicName,
       'postsCount': postsCount,
-      'communitiesCount' : communitiesCount,
-      'vouchCount' : vouchCount,
-      'winCount' : winCount,
-      'gender' : gender,
-      'phoneNumber' : phoneNumber,
-      'address' : address
-      
+      'communitiesCount': communitiesCount,
+      'vouchCount': vouchCount,
+      'winCount': winCount,
+      'gender': gender,
+      'phoneNumber': phoneNumber,
+      'address': address
     };
   }
 }

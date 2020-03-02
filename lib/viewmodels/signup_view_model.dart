@@ -30,7 +30,6 @@ class SignUpViewModel extends BaseModel {
     );
     if (result is bool) {
       if (result) {
-        var user = await _authenticationService.getCurrentUser();
         setBusy(false);
         _navigationService.navigateTo(HomeViewRoute, true);
       } else {

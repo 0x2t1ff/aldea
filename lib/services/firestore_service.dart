@@ -9,6 +9,10 @@ class FirestoreService {
 
   final CollectionReference _postsCollectionReference =
       Firestore.instance.collection('posts');
+
+  final CollectionReference _communitiesCollectionReference =
+      Firestore.instance.collection('communities');
+
   Future<Map<String, dynamic>> getUserData(String uid) async {
     try {
       var userData = await _userCollectionReference.document(uid).get();
@@ -68,10 +72,30 @@ class FirestoreService {
       'picName': picName,
       'bkdPicUrl': bkdPicUrl,
       'bkdPicName': bkdPicName,
-      'email' : email,
-      'phoneNumber' : phoneNumber,
-      'gender' : gender,
-      'address' : address
+      'email': email,
+      'phoneNumber': phoneNumber,
+      'gender': gender,
+      'address': address
     });
+  }
+
+  Future<List<DocumentSnapshot>> getCommunities({int skip}) async {
+    try {
+      var communitiesQuery = await _communitiesCollectionReference
+          .orderBy("followerCount", descending: true).limit(6).getDocuments();
+     return communitiesQuery.documents;
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  Future<Map<String, dynamic>> getTopCommunities() async {
+    try {
+      var communitiesData =
+          await _communitiesCollectionReference.document('top').get();
+      return communitiesData.data;
+    } catch (e) {
+      return e.message;
+    }
   }
 }

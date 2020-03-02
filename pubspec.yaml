@@ -33,6 +33,7 @@ dependencies:
   cloud_firestore: ^0.13.3
   firebase_storage: ^3.1.1
   image_picker: ^0.6.3+3 
+  carousel_slider: ^1.4.1
 
 dev_dependencies:
   flutter_test:
@@ -96,7 +97,12 @@ flutter:
     - assets/images/posts.png
     - assets/images/win.png
     - assets/images/participationRed.png
-    - assets/images/default-profile.png
+    - assets/images/cart.png
+    - assets/images/white-cart.png
+    - assets/images/reglas.png
+    - assets/images/community-chat.png
+    - assets/images/user-posts.png
+    - assets/images/add-to-cart.png
     - assets/animations/quickstrikeAnimation.flr
 
   # To add assets to your application, add an assets section, like this:

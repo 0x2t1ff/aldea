@@ -13,7 +13,7 @@ class CloudStorageService {
     var imageFileName =
         title + DateTime.now().millisecondsSinceEpoch.toString();
     final StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child("/$userId/profile/$imageFileName");
+        FirebaseStorage.instance.ref().child("/users/$userId/profile/$imageFileName");
 
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(imageToUpload);
     StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
