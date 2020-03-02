@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class QuickStrikePost {
@@ -10,16 +11,20 @@ class QuickStrikePost {
   final bool isGame;
   final String modelo;
   final String description;
+  final Timestamp fechaQuickstrike;
+  final String id;
   QuickStrikePost({
     @required this.userId,
     @required this.title,
     @required this.price,
     @required this.modelo,
     @required this.description,
+    @required this.fechaQuickstrike,
     this.isGame,
     this.isLista,
     this.isRandom,
     this.imageUrl,
+    this.id,
     
   });
 
@@ -34,11 +39,13 @@ class QuickStrikePost {
       'isGame': isGame, 
       'modelo': modelo,
       'description': description,
+      'fechaQuickstrike': fechaQuickstrike, 
+      'id' : id,
     };
   }
 
-  static QuickStrikePost fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+   static QuickStrikePost fromMap(Map<String, dynamic> map) {
+
 
     return QuickStrikePost(
       title: map['title'],
@@ -50,6 +57,8 @@ class QuickStrikePost {
       isLista: map ['isLista'],
       description: map['description'],
       modelo: map['modelo'],
+      fechaQuickstrike: map['fechaQuickstrike'],
+      id:map['id']
       
     );
   }

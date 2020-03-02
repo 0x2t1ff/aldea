@@ -14,18 +14,18 @@ class QuickStrikeViewModel extends BaseModel{
   List<QuickStrikePost> get posts => _quickstrikes;
 
   Future fetchPosts() async {
+   setBusy(true);
+   var quickstrikeResults = await _firestoreService.getFollowingPostsOnceOff();
     setBusy(true);
-    var quickstrikeResults = await _firestoreService.getPostsOnceOff();
-    setBusy(false);
 
-    if(quickstrikeResults is List<QuickStrikePost>){
-      _quickstrikes = quickstrikeResults;
-      notifyListeners();
-    }else{
-      await _dialogService.showDialog(
-        title: 'La actualizacion de quickstrikes ha fallado',
-        description: quickstrikeResults,
-      );
-    }
+  if(quickstrikeResults is List<QuickStrikePost>){
+    _quickstrikes = quickstrikeResults;
+    notifyListeners();
+  }else{
+    await _dialogService.showDialog(
+      title: 'La actualizacion de quickstrikes ha fallado',
+      description: "ha fallado XD asi al menos no crashea ",
+    );
+   }
   }
 }

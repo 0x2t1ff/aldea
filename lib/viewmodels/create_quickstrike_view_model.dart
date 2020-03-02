@@ -1,6 +1,7 @@
 import 'package:aldea/services/dialog_service.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/viewmodels/base_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import "../locator.dart";
 import "package:flutter/foundation.dart";
 import "../models/quickstrike_model.dart";
@@ -16,9 +17,11 @@ class CreateQuickstrikeViewModel extends BaseModel {
       bool isRandom,
       bool isGame,
       String description,
-      String modelo}) async {
+      String modelo,
+      Timestamp  fechaQuickstrike}) async {
     setBusy(true);
     var result = await _firestoreService.addPost(QuickStrikePost(
+      fechaQuickstrike: fechaQuickstrike,
         title: title,
         userId: currentUser.uid,
         description: description,
@@ -34,7 +37,7 @@ class CreateQuickstrikeViewModel extends BaseModel {
     } else {
       await _dialogService.showDialog(
         title: "El quickstrike se ha creado correctamente",
-        description: "Tu pos ha sido creado",
+        description: "Tu post ha sido creado",
       );
     }
     //maybe se necesita para volver atras

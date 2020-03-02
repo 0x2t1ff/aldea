@@ -2,7 +2,7 @@ import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/ui/shared/shared_styles.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../shared/ui_helpers.dart' as devicesize;
 import '../shared/app_colors.dart' as custcolor;
 
@@ -17,10 +17,13 @@ class QuickStrikeItem extends StatefulWidget {
 class _QuickStrikeItemState extends State<QuickStrikeItem> {
   bool isExpanded = true;
   bool isEnlisted = false;
+  String animationSelector = "";
   @override
   Widget build(BuildContext context) {
     final commentController = TextEditingController();
     var quickstrikeType = "";
+    int estimateTs = widget.quickStrikePost.fechaQuickstrike.millisecondsSinceEpoch;
+
     if (widget.quickStrikePost.isGame) {
       quickstrikeType = "Game";
     }
@@ -147,18 +150,33 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                       borderRadius: BorderRadius.circular(50),
                       color:
                           isEnlisted ? Colors.green : custcolor.lightBlueColor),
+                  // set needed date
+
                   child: Padding(
                     padding: EdgeInsets.only(
                         top: devicesize.screenHeight(context) * 0.014),
-                    //TODO: hacer cuenta atras con bbdd
-                    child: Text(
-                      "29:39:12",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: isEnlisted ? Colors.white : Color(0xff3C8FA7),
-                          fontFamily: 'Raleway',
-                          fontSize: devicesize.screenWidth(context) * 0.05),
-                    ),
+                    child: StreamBuilder(
+                        stream: Stream.periodic(Duration(seconds: 1), (i) => i),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<int> snapshot) {
+                          DateFormat format = DateFormat("mm:ss");
+                          int now = DateTime.now().millisecondsSinceEpoch;
+                          Duration remaining =
+                              Duration(milliseconds: estimateTs - now);
+                          var dateString =
+                              '${remaining.inHours}:${format.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}';
+                          return Text(
+                            dateString,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: isEnlisted
+                                    ? Colors.white
+                                    : Color(0xff3C8FA7),
+                                fontFamily: 'Raleway',
+                                fontSize:
+                                    devicesize.screenWidth(context) * 0.05),
+                          );
+                        }),
                   ),
                 ),
                 IconButton(
@@ -180,19 +198,18 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
       ),
       isExpanded
           ? Container(
-              height: devicesize.screenHeight(context) * 0.3966,
+              padding: EdgeInsets.only(bottom: 15),
               width: devicesize.screenWidth(context),
               color: Colors.black,
               child: Column(
                 children: <Widget>[
                   Container(
-                    height: devicesize.screenHeight(context) * 0.203,
                     width: devicesize.screenWidth(context),
                     color: Colors.black,
                     padding:
                         EdgeInsets.all(devicesize.screenHeight(context) * 0.01),
                     child: Text(
-                      "XD XDXDXDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD XDDDDDDDDDDDDDDDDDDD FDGSASASDDF XXXXXXXFSD LOREM IMPOSUSM HAHH LOOK JUST GETS SLKA  1200 EN EL BOLSILLO TENGO SIROPE LEAN HAHA XANAX",
+                      "XD XDXDXDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD DGSASASDDF XXXXXXXFSD LOREM IMPOSUSM HAHH LOOK JUST GETS SLKA  1200 EN EL BOLSILLO TENGO SIROPE LEAN HAHA XANAX",
                       style: TextStyle(
                           color: Color(0xff3C8FA7),
                           fontFamily: "Raleway",
@@ -261,6 +278,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                             setState(() {
                               print("pulsaste we");
                               isEnlisted = !isEnlisted;
+                              isEnlisted ? animationSelector ='RTOG' : animationSelector = 'GTOR';
                             });
                           },
                           child: Container(
@@ -269,7 +287,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                             child: FlareActor(
                               'assets/animations/quickstrikeAnimation.flr',
                               fit: BoxFit.fill,
-                              animation: isEnlisted ? 'RTOG' : 'GTOR',
+                              animation: animationSelector ,
                             ),
                           ),
                         ),
