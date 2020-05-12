@@ -5,22 +5,26 @@ class DialogRequest {
   final String description;
   final String buttonTitle;
   final String cancelTitle;
+  final bool hasTextArea;
 
   DialogRequest(
       {@required this.title,
       @required this.description,
       @required this.buttonTitle,
+      this.hasTextArea = false,
       this.cancelTitle});
 }
 
 class DialogResponse {
   final String fieldOne;
   final String fieldTwo;
+  final String textField;
   final bool confirmed;
 
   DialogResponse({
     this.fieldOne,
     this.fieldTwo,
     this.confirmed,
+    this.textField, 
   });
 }

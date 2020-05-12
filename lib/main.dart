@@ -1,10 +1,7 @@
-import 'package:aldea/models/community.dart';
-import 'package:aldea/ui/views/signup_view.dart';
 import 'package:aldea/ui/views/startup_view.dart';
 import 'package:flutter/material.dart';
 import './services/navigation_service.dart';
 import './services/dialog_service.dart';
-import './ui/views/community_view.dart';
 import 'package:flutter/services.dart';
 import 'managers/dialog_manager.dart';
 import './ui/router.dart';

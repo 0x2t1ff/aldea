@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import '../models/user_model.dart';
 
 class FirestoreService {
+  //COLLECTION REFERENCES
   final CollectionReference _userCollectionReference =
       Firestore.instance.collection('users');
 
@@ -17,20 +18,13 @@ class FirestoreService {
   final CollectionReference _followingPostsCollectionReference =
       Firestore.instance.collection('followers');
 
+  //USER METHODS
   Future<Map<String, dynamic>> getUserData(String uid) async {
     try {
       var userData = await _userCollectionReference.document(uid).get();
       return userData.data;
     } catch (e) {
       return e.message;
-    }
-  }
-
-  Future addPost(QuickStrikePost post) async {
-    try {
-      await _postsCollectionReference.add(post.toMap());
-    } catch (e) {
-      return e.toString();
     }
   }
 
@@ -43,26 +37,6 @@ class FirestoreService {
         return e.message;
       }
 
-      return e.toString();
-    }
-  }
-
-  Future getPostsOnceOff(String eventId) async {
-    try {
-      var postDocumentSnapshot = await _postsCollectionReference
-          .where("id", isEqualTo: eventId)
-          .limit(10)
-          .getDocuments();
-      print(postDocumentSnapshot.documents.last.data.toString() +
-          "printing length of documents" +
-          eventId);
-      {
-        if (postDocumentSnapshot.documents.isNotEmpty) {
-          return QuickStrikePost.fromMap(
-              postDocumentSnapshot.documents.last.data);
-        }
-      }
-    } catch (e) {
       return e.toString();
     }
   }
@@ -89,11 +63,75 @@ class FirestoreService {
     });
   }
 
-  Future<List<DocumentSnapshot>> getCommunities({int skip}) async {
+  //COMMUNITY METHODS
+  Future<List<DocumentSnapshot>> getCommunityRequests(String id)async {
+    var documents = await _communitiesCollectionReference.document(id).collection("requests").getDocuments();
+    return documents.documents;
+
+  }
+
+  Future addPost(QuickStrikePost post) async {
+    try {
+      await _postsCollectionReference.add(post.toMap());
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future requestCommunityAccess(String communityUid, User user,String text, bool isFromFB) async {
+    try {
+      await _communitiesCollectionReference
+          .document(communityUid)
+          .collection('requests')
+          .document(user.uid)
+          .setData({'isFromFB': isFromFB, 'text': text, 'user': user.toJson()});
+      await _userCollectionReference
+          .document(user.uid)
+          .updateData({'requests': user.requests..add(communityUid)});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future getPostsOnceOff(String eventId) async {
+    try {
+      var postDocumentSnapshot = await _postsCollectionReference
+          .where("id", isEqualTo: eventId)
+          .limit(10)
+          .getDocuments();
+      print(postDocumentSnapshot.documents.last.data.toString() +
+          "printing length of documents" +
+          eventId);
+      {
+        if (postDocumentSnapshot.documents.isNotEmpty) {
+          return QuickStrikePost.fromMap(
+              postDocumentSnapshot.documents.last.data);
+        }
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future<List<DocumentSnapshot>> getFirstCommunities() async {
     try {
       var communitiesQuery = await _communitiesCollectionReference
           .orderBy("followerCount", descending: true)
           .limit(6)
+          .getDocuments();
+      return communitiesQuery.documents;
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  Future<List<DocumentSnapshot>> getMoreCommunities(DocumentSnapshot d,
+      {int limit = 9}) async {
+    try {
+      var communitiesQuery = await _communitiesCollectionReference
+          .orderBy("followerCount", descending: true)
+          .startAfterDocument(d)
+          .limit(limit)
           .getDocuments();
       return communitiesQuery.documents;
     } catch (e) {
@@ -107,7 +145,7 @@ class FirestoreService {
           await _communitiesCollectionReference.document('top').get();
       return communitiesData.data;
     } catch (e) {
-      return e.message;
+      print(e.message);
     }
   }
 
@@ -142,6 +180,18 @@ class FirestoreService {
       return listData;
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  Future<List<DocumentSnapshot>> getProductsFromCommunity(String uid) async {
+    try {
+      var result = await _communitiesCollectionReference
+          .document(uid)
+          .collection('market')
+          .getDocuments();
+      return result.documents;
+    } catch (e) {
+      return (e.message);
     }
   }
 }

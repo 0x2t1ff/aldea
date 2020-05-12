@@ -115,36 +115,45 @@ class ProfileView extends StatelessWidget {
                               ),
                             )),
                         Positioned(
+                            child: ClipRect(
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                              sigmaX: 6.0,
+                              sigmaY: 6.0,
+                            ),
                             child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                          ),
-                          height: usableScreenWithoughtBars(context) * 0.1,
-                          width: double.infinity,
-                          color: Color(0xff3C8FA7).withOpacity(0.8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(model.currentUser.name,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 30,
-                                      fontFamily: "Raleway",
-                                      fontWeight: FontWeight.w600)),
-                              Transform.rotate(
-                                angle: model.isShowingInfo ? pi : 0,
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.expand_more,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    model.toggleInfo();
-                                  },
-                                  iconSize: 40,
-                                ),
-                              )
-                            ],
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
+                              height: usableScreenWithoughtBars(context) * 0.1,
+                              width: double.infinity,
+                              color: Color(0xff3C8FA7).withOpacity(0.6),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(model.currentUser.name,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 30,
+                                          fontFamily: "Raleway",
+                                          fontWeight: FontWeight.w600)),
+                                  Transform.rotate(
+                                    angle: model.isShowingInfo ? pi : 0,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.expand_more,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        model.toggleInfo();
+                                      },
+                                      iconSize: 40,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         )),
                       ])),
@@ -156,220 +165,240 @@ class ProfileView extends StatelessWidget {
                         postsCount: model.currentUser.postsCount.toString(),
                         winCount: model.currentUser.winCount.toString(),
                         communitiesCount:
-                            model.currentUser.communitiesCount.toString(),
+                            model.currentUser.communities.length.toString(),
                         vouchCount: model.currentUser.vouchCount.toString(),
                       ),
-                      Container(
-                        color: Color(0xff3C8FA7).withOpacity(0.8),
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 250),
-                          width: screenWidth(context),
-                          height: model.isShowingInfo
-                              ? usableScreenHeight(context) * 0.3
-                              : 0,
-                          decoration: BoxDecoration(
-                            border: model.isShowingInfo
-                                ? Border(
-                                    top: BorderSide(
-                                        width: 2, color: Colors.white))
-                                : null,
+                      ClipRect(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(
+                            sigmaX: 6.0,
+                            sigmaY: 6.0,
                           ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 0,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Expanded(
-                                child: Row(
-                                  children: <Widget>[
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                          child: Container(
+                            color: Color(0xff3C8FA7).withOpacity(0.6),
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: AnimatedContainer(
+                              duration: Duration(milliseconds: 250),
+                              width: screenWidth(context),
+                              height: model.isShowingInfo
+                                  ? usableScreenHeight(context) * 0.3
+                                  : 0,
+                              decoration: BoxDecoration(
+                                border: model.isShowingInfo
+                                    ? Border(
+                                        top: BorderSide(
+                                            width: 2, color: Colors.white))
+                                    : null,
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 0,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Row(
                                       children: <Widget>[
-                                        Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "Mail: ",
-                                              style: profileDropdownTextStyle,
-                                            )),
-                                        Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "Teléfono: ",
-                                              style: profileDropdownTextStyle,
-                                            )),
-                                        Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "Género: ",
-                                              style: profileDropdownTextStyle,
-                                            )),
-                                        Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "Dirección: ",
-                                              style: profileDropdownTextStyle,
-                                            )),
-                                      ],
-                                    ),
-                                    Expanded(
-                                      child: model.isEditting
-                                          ? Column(
-                                              children: <Widget>[
-                                                Expanded(
-                                                    child: TextField(
-                                                  controller: mailController,
-                                                  readOnly: true,
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  "Mail: ",
                                                   style:
                                                       profileDropdownTextStyle,
-                                                  decoration:
-                                                      profileDropDownInputDecoration,
                                                 )),
-                                                Expanded(
-                                                    child: TextField(
-                                                        keyboardType:
-                                                            TextInputType.phone,
-                                                        controller:
-                                                            phoneController,
+                                            Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  "Teléfono: ",
+                                                  style:
+                                                      profileDropdownTextStyle,
+                                                )),
+                                            Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  "Género: ",
+                                                  style:
+                                                      profileDropdownTextStyle,
+                                                )),
+                                            Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  "Dirección: ",
+                                                  style:
+                                                      profileDropdownTextStyle,
+                                                )),
+                                          ],
+                                        ),
+                                        Expanded(
+                                          child: model.isEditting
+                                              ? Column(
+                                                  children: <Widget>[
+                                                    Expanded(
+                                                        child: TextField(
+                                                      controller:
+                                                          mailController,
+                                                      readOnly: true,
+                                                      style:
+                                                          profileDropdownTextStyle,
+                                                      decoration:
+                                                          profileDropDownInputDecoration,
+                                                    )),
+                                                    Expanded(
+                                                        child: TextField(
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .phone,
+                                                            controller:
+                                                                phoneController,
+                                                            style:
+                                                                profileDropdownTextStyle,
+                                                            decoration:
+                                                                profileDropDownInputDecoration)),
+                                                    Expanded(
+                                                        child: TextField(
+                                                            controller:
+                                                                genderController,
+                                                            style:
+                                                                profileDropdownTextStyle,
+                                                            decoration:
+                                                                profileDropDownInputDecoration)),
+                                                    Expanded(
+                                                        child: TextField(
+                                                            controller:
+                                                                addressController,
+                                                            style:
+                                                                profileDropdownTextStyle,
+                                                            decoration:
+                                                                profileDropDownInputDecoration)),
+                                                  ],
+                                                )
+                                              : Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Text(
+                                                        model.currentUser
+                                                                    .email !=
+                                                                null
+                                                            ? model.currentUser
+                                                                .email
+                                                            : '',
                                                         style:
                                                             profileDropdownTextStyle,
-                                                        decoration:
-                                                            profileDropDownInputDecoration)),
-                                                Expanded(
-                                                    child: TextField(
-                                                        controller:
-                                                            genderController,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Text(
+                                                        model.currentUser
+                                                                    .phoneNumber !=
+                                                                null
+                                                            ? model.currentUser
+                                                                .phoneNumber
+                                                            : '',
                                                         style:
                                                             profileDropdownTextStyle,
-                                                        decoration:
-                                                            profileDropDownInputDecoration)),
-                                                Expanded(
-                                                    child: TextField(
-                                                        controller:
-                                                            addressController,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Text(
+                                                        model.currentUser
+                                                                    .gender !=
+                                                                null
+                                                            ? model.currentUser
+                                                                .gender
+                                                            : '',
                                                         style:
                                                             profileDropdownTextStyle,
-                                                        decoration:
-                                                            profileDropDownInputDecoration)),
-                                              ],
-                                            )
-                                          : Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Container(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    model.currentUser.email !=
-                                                            null
-                                                        ? model
-                                                            .currentUser.email
-                                                        : '',
-                                                    style:
-                                                        profileDropdownTextStyle,
-                                                  ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Text(
+                                                        model.currentUser
+                                                                    .address !=
+                                                                null
+                                                            ? model.currentUser
+                                                                .address
+                                                            : '',
+                                                        style:
+                                                            profileDropdownTextStyle,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                Container(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    model.currentUser
-                                                                .phoneNumber !=
-                                                            null
-                                                        ? model.currentUser
-                                                            .phoneNumber
-                                                        : '',
-                                                    style:
-                                                        profileDropdownTextStyle,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                      padding: EdgeInsets.only(bottom: 10),
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          model.isEditting
+                                              ? IconButton(
+                                                  icon: Icon(Icons.clear),
+                                                  color: Colors.white,
+                                                  iconSize: 30,
+                                                  onPressed: () =>
+                                                      model.cancelChanges())
+                                              : Container(),
+                                          !model.busy
+                                              ? IconButton(
+                                                  icon: Icon(
+                                                    model.isEditting
+                                                        ? Icons.check
+                                                        : Icons.edit,
+                                                    color: Colors.white,
                                                   ),
-                                                ),
-                                                Container(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    model.currentUser.gender !=
-                                                            null
-                                                        ? model
-                                                            .currentUser.gender
-                                                        : '',
-                                                    style:
-                                                        profileDropdownTextStyle,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    model.currentUser.address !=
-                                                            null
-                                                        ? model
-                                                            .currentUser.address
-                                                        : '',
-                                                    style:
-                                                        profileDropdownTextStyle,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                    )
-                                  ],
-                                ),
+                                                  onPressed: () {
+                                                    model.isEditting
+                                                        ? model.saveChanges(
+                                                            email:
+                                                                mailController
+                                                                    .text,
+                                                            phoneNumber:
+                                                                phoneController
+                                                                    .text,
+                                                            gender:
+                                                                genderController
+                                                                    .text,
+                                                            address:
+                                                                addressController
+                                                                    .text)
+                                                        : model.editProfile();
+                                                  },
+                                                  iconSize: 30,
+                                                )
+                                              : SizedBox(
+                                                  height: 30,
+                                                  width: 30,
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                        ],
+                                      ))
+                                ],
                               ),
-                              Container(
-                                  padding: EdgeInsets.only(bottom: 10),
-                                  width: double.infinity,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      model.isEditting
-                                          ? IconButton(
-                                              icon: Icon(Icons.clear),
-                                              color: Colors.white,
-                                              iconSize: 30,
-                                              onPressed: () =>
-                                                  model.cancelChanges())
-                                          : Container(),
-                                      !model.busy
-                                          ? IconButton(
-                                              icon: Icon(
-                                                model.isEditting
-                                                    ? Icons.check
-                                                    : Icons.edit,
-                                                color: Colors.white,
-                                              ),
-                                              onPressed: () {
-                                                model.isEditting
-                                                    ? model.saveChanges(
-                                                        email:
-                                                            mailController.text,
-                                                        phoneNumber:
-                                                            phoneController
-                                                                .text,
-                                                        gender: genderController
-                                                            .text,
-                                                        address:
-                                                            addressController
-                                                                .text)
-                                                    : model.editProfile();
-                                              },
-                                              iconSize: 30,
-                                            )
-                                          : SizedBox(
-                                              height: 30,
-                                              width: 30,
-                                              child:
-                                                  CircularProgressIndicator()),
-                                    ],
-                                  ))
-                            ],
+                            ),
                           ),
                         ),
                       ),

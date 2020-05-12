@@ -1,0 +1,186 @@
+import 'dart:ui';
+
+import 'package:aldea/models/community.dart';
+import 'package:aldea/ui/shared/shared_styles.dart';
+import 'package:aldea/ui/shared/ui_helpers.dart';
+import 'package:aldea/viewmodels/communities_view_model.dart';
+import 'package:flutter/material.dart';
+import '../../constants/icondata.dart';
+
+class CommunityPreview extends StatelessWidget {
+  final CommunitiesViewModel model;
+  final Community community;
+  final Function cancel;
+
+  const CommunityPreview({Key key, this.model, this.community, this.cancel})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color: Colors.white,
+            image: community != null
+                ? DecorationImage(
+                    image: NetworkImage(community.bkdPicUrl),
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.1), BlendMode.srcOver))
+                : null),
+        duration: Duration(milliseconds: 250),
+        height: community != null ? screenWidth(context) - 30 : 0,
+        width: double.infinity,
+        child: community != null
+            ? Column(
+                children: <Widget>[
+                  Expanded(
+                      flex: 8,
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(25),
+                        child: Stack(
+                          alignment: Alignment.bottomLeft,
+                          children: <Widget>[
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: IconButton(
+                                  icon: Icon(
+                                    Icons.clear,
+                                    size: 30,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: cancel),
+                            ),
+                            Container(
+                                decoration: profilePicDecoration,
+                                child: CircleAvatar(
+                                  radius: 50,
+                                  backgroundImage:
+                                      NetworkImage(community.iconPicUrl),
+                                ))
+                          ],
+                        ),
+                      )),
+                  Expanded(
+                    flex: 2,
+                    child: ClipRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaX: 6.0,
+                          sigmaY: 6.0,
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          height: double.infinity,
+                          alignment: Alignment.centerLeft,
+                          width: double.infinity,
+                          color: Color(0xff295463).withOpacity(0.2),
+                          child: Text(
+                            community.name,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 26,
+                                fontFamily: 'Raleway',
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          color: Color(0xff17191E).withOpacity(0.95),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(25),
+                              bottomRight: Radius.circular(25))),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            community.description,
+                            style: TextStyle(
+                                color: Color(0xffB1AFAF),
+                                fontSize: 16,
+                                fontFamily: 'Raleway',
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Profile.profile,
+                                        color: Color(0xff3C8FA7),
+                                      ),
+                                      horizontalSpaceTiny,
+                                      Text(
+                                        community.followerCount.toString(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontFamily: 'Raleway',
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  horizontalSpaceMedium,
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.photo_filter,
+                                        color: Color(0xff3C8FA7),
+                                        size: 30,
+                                      ),
+                                      horizontalSpaceTiny,
+                                      Text(
+                                        community.postsCount.toString(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontFamily: 'Raleway',
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              IconButton(
+                                  icon: model.isSendingRequest
+                                      ? CircularProgressIndicator()
+                                      : Icon(
+                                          model.currentUser.communities
+                                                  .contains(community.uid)
+                                              ? Icons.input
+                                              : Icons.person_add,
+                                          color: Color(0xff3C8FA7),
+                                          size: 35,
+                                        ),
+                                  onPressed: () {
+                                    if (model.currentUser.communities
+                                        .contains(community.uid))
+                                      model.goToCommunity(community);
+                                    else
+                                      model.requestCommunityAcces(community);
+                                  })
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : Container());
+  }
+}

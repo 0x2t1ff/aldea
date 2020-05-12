@@ -1,3 +1,5 @@
+import 'package:aldea/ui/views/community_view.dart';
+
 import './base_model.dart';
 import '../locator.dart';
 import '../constants/route_names.dart';
@@ -18,7 +20,7 @@ class StartUpViewModel extends BaseModel {
       var userUid = await _authenticationService.getUserUID();
       var userData = await _firestoreService.getUserData(userUid);
       registerCurrentUser(userData);
-      _navigationService.navigateTo(HomeViewRoute, true);
+      _navigationService.navigateTo(HomeViewRoute , true);
     } else {
       _navigationService.navigateTo(LoginViewRoute, true);
     }

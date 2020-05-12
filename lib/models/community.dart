@@ -1,15 +1,17 @@
 class Community {
+  final String uid;
   final String name;
   final String description;
+  final String rules;
   final String iconPicUrl;
   final String bkdPicUrl;
   final String iconPicName;
   final String bkdPicName;
   final int postsCount;
   final int followerCount;
-  final List<String> moderators;
+  final List<dynamic> moderators;
 
-  Community(
+  Community(this.uid, this.rules, 
       {this.name,
       this.description,
       this.iconPicUrl,
@@ -20,9 +22,11 @@ class Community {
       this.followerCount,
       this.moderators});
 
-  Community.fromData(Map<String, dynamic> data)
+  Community.fromData(Map<String, dynamic> data, String uid)
       : name = data['name'],
+        uid = uid,
         description = data['description'],
+        rules = data['rules'],
         iconPicUrl = data['iconPicUrl'],
         iconPicName = data['iconPicName'],
         bkdPicUrl = data['bkdPicUrl'],

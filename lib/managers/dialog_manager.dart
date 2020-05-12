@@ -11,6 +11,8 @@ class DialogManager extends StatefulWidget {
 }
 
 class _DialogManagerState extends State<DialogManager> {
+  final controller = TextEditingController();
+
   DialogService _dialogService = locator<DialogService>();
 
   @override
@@ -29,8 +31,28 @@ class _DialogManagerState extends State<DialogManager> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text(request.title),
-              content: Text(request.description),
+              title: Text(request.title, style: TextStyle(color: Colors.white)),
+              content: !request.hasTextArea
+                  ? Text(request.description)
+                  : TextField(
+                      controller: controller,
+                      style: TextStyle(color: Colors.white),
+                      maxLines: 10,
+                      decoration: InputDecoration(
+                          hintText: "Escribe el cuerpo de tu solicitud...",
+                          hintStyle: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Colors.white24),
+                          filled: true,
+                          fillColor: Color(0xff15232B),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(15),
+                          )),
+                    ),
+              backgroundColor: Color(0xff17191E),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14)),
               actions: <Widget>[
                 if (isConfirmationDialog)
                   FlatButton(
@@ -44,7 +66,7 @@ class _DialogManagerState extends State<DialogManager> {
                   child: Text(request.buttonTitle),
                   onPressed: () {
                     _dialogService
-                        .dialogComplete(DialogResponse(confirmed: true));
+                        .dialogComplete(DialogResponse(confirmed: true, textField: controller.text));
                   },
                 ),
               ],

@@ -3,7 +3,8 @@ import 'package:provider_architecture/provider_architecture.dart';
 
 import '../../viewmodels/startup_view_model.dart';
 
-class StartUpView extends StatelessWidget {
+class 
+StartUpView extends StatelessWidget {
   const StartUpView({Key key}) : super(key: key);
 
   @override
