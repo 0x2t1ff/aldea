@@ -1,4 +1,5 @@
 import 'package:aldea/locator.dart';
+import 'package:aldea/ui/views/feed_view.dart';
 import 'package:aldea/ui/views/profile_view.dart';
 import 'package:aldea/ui/views/quickstrike_view.dart';
 import 'package:aldea/ui/widgets/bottom_filler.dart';
@@ -19,6 +20,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final CommunitiesView _communitiesView = locator<CommunitiesView>();
+  final FeedView _feedView = locator<FeedView>();
   final ProfileView _profileView = locator<ProfileView>();
   final QuickSTrikeView _quickSTrikeView = locator<QuickSTrikeView>();
   int selectedIndex = 0;
@@ -96,7 +98,7 @@ class _HomeViewState extends State<HomeView> {
               physics: NeverScrollableScrollPhysics(),
               controller: controller,
               children: <Widget>[
-                Container(),
+                _feedView,
                 _communitiesView,
                 _quickSTrikeView,
                 Container(),

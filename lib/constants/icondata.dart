@@ -39,3 +39,19 @@ class QuickStrike {
 
   static const IconData quickstrike = const IconData(0xe900, fontFamily: _kFontFam);
 }
+
+class Add {
+  Add._();
+
+  static const _kFontFam = 'Add';
+
+  static const IconData add = const IconData(0xe900, fontFamily: _kFontFam);
+}
+
+class Publicaciones {
+  Publicaciones._();
+
+  static const _kFontFam = 'Publicaciones';
+
+  static const IconData publicaciones = const IconData(0xe900, fontFamily: _kFontFam);
+}

@@ -12,7 +12,6 @@ import '../../viewmodels/community_view_model.dart';
 
 class CommunityView extends StatelessWidget {
   final Community community;
-
   const CommunityView({Key key, this.community}) : super(key: key);
 
   @override

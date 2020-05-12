@@ -93,7 +93,7 @@ class ProfileViewModel extends BaseModel {
       currentUser.picName = profileResult.imageFileName;
     }
 
-    if(bkdResult != null){
+    if (bkdResult != null) {
       currentUser.bkdPicName = bkdResult.imageFileName;
       currentUser.bkdPicUrl = bkdResult.imageUrl;
     }

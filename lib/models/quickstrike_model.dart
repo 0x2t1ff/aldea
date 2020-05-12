@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-class QuickStrikePost {
+class QuickStrikeModel {
   final String title;
   final String imageUrl;
   final String userId;
@@ -13,7 +13,7 @@ class QuickStrikePost {
   final String description;
   final Timestamp fechaQuickstrike;
   final String id;
-  QuickStrikePost({
+  QuickStrikeModel({
     @required this.userId,
     @required this.title,
     @required this.price,
@@ -44,10 +44,10 @@ class QuickStrikePost {
     };
   }
 
-   static QuickStrikePost fromMap(Map<String, dynamic> map) {
+   static QuickStrikeModel fromMap(Map<String, dynamic> map) {
 
 
-    return QuickStrikePost(
+    return QuickStrikeModel(
       title: map['title'],
       imageUrl: map['imageUrl'],
       userId: map['userId'],

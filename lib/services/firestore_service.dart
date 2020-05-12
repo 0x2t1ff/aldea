@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aldea/models/post_model.dart';
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +13,8 @@ class FirestoreService {
 
   final CollectionReference _postsCollectionReference =
       Firestore.instance.collection('posts');
-
+  final CollectionReference _quickstrikeCollectionReference =
+      Firestore.instance.collection('quickstrikes');
   final CollectionReference _communitiesCollectionReference =
       Firestore.instance.collection('communities');
   final CollectionReference _followingPostsCollectionReference =
@@ -28,6 +30,14 @@ class FirestoreService {
     }
   }
 
+  Future addPost(QuickStrikeModel post) async {
+    try {
+      await _postsCollectionReference.add(post.toMap());
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   Future createUser(User user) async {
     try {
       await _userCollectionReference.document(user.uid).setData(user.toJson());
@@ -37,6 +47,26 @@ class FirestoreService {
         return e.message;
       }
 
+      return e.toString();
+    }
+  }
+
+  Future getPostsOnceOff(String eventId) async {
+    try {
+      var postDocumentSnapshot = await _postsCollectionReference
+          .where("id", isEqualTo: eventId)
+          .limit(10)
+          .getDocuments();
+      print(postDocumentSnapshot.documents.last.data.toString() +
+          "printing length of documents" +
+          eventId);
+      {
+        if (postDocumentSnapshot.documents.isNotEmpty) {
+          return QuickStrikeModel.fromMap(
+              postDocumentSnapshot.documents.last.data);
+        }
+      }
+    } catch (e) {
       return e.toString();
     }
   }
@@ -70,13 +100,6 @@ class FirestoreService {
 
   }
 
-  Future addPost(QuickStrikePost post) async {
-    try {
-      await _postsCollectionReference.add(post.toMap());
-    } catch (e) {
-      return e.toString();
-    }
-  }
 
   Future requestCommunityAccess(String communityUid, User user,String text, bool isFromFB) async {
     try {
@@ -93,25 +116,6 @@ class FirestoreService {
     }
   }
 
-  Future getPostsOnceOff(String eventId) async {
-    try {
-      var postDocumentSnapshot = await _postsCollectionReference
-          .where("id", isEqualTo: eventId)
-          .limit(10)
-          .getDocuments();
-      print(postDocumentSnapshot.documents.last.data.toString() +
-          "printing length of documents" +
-          eventId);
-      {
-        if (postDocumentSnapshot.documents.isNotEmpty) {
-          return QuickStrikePost.fromMap(
-              postDocumentSnapshot.documents.last.data);
-        }
-      }
-    } catch (e) {
-      return e.toString();
-    }
-  }
 
   Future<List<DocumentSnapshot>> getFirstCommunities() async {
     try {
@@ -149,12 +153,41 @@ class FirestoreService {
     }
   }
 
-  Future getFollowingPostsOnceOff() async {
-    print("xdxd");
-
+  Future getQuickstrikes(String uid) async {
     try {
       var postDocumentSnapshot = await _followingPostsCollectionReference
-          .where("followers", arrayContains: "piqRc5zN4lY6K2ZzEfus")
+          .where("followers", arrayContains: uid)
+          .orderBy("lastQuickstrike", descending: true)
+          .limit(20)
+          .getDocuments();
+      var data = postDocumentSnapshot.documents.map((doc) => doc.data);
+      var lastPosts = [];
+      data.forEach((f) {
+        lastPosts.add(f["quickstrikes"][0]["id"]);
+      });
+
+      List<QuickStrikeModel> listData = new List<QuickStrikeModel>();
+
+      for(var f in lastPosts ) {
+        await _quickstrikeCollectionReference
+            .where("id", isEqualTo: f)
+            .limit(1)
+            .getDocuments()
+            .then((onValue) => onValue.documents.first.data != null
+                ? listData
+                    .add(QuickStrikeModel.fromMap(onValue.documents.first.data))
+                : print("it was null"));
+      };
+      return listData;
+    } catch (e) {
+      print(e.toString() + " the error");
+    }
+  }
+
+  Future getFollowingPostsOnceOff(String uid) async {
+    try {
+      var postDocumentSnapshot = await _followingPostsCollectionReference
+          .where("followers", arrayContains: uid)
           .orderBy("lastPost", descending: true)
           .limit(10)
           .getDocuments();
@@ -163,24 +196,29 @@ class FirestoreService {
       var lastPosts = [];
 
       data.forEach((f) => lastPosts.add(f["posts"][0]["id"]));
-      print(lastPosts.toString());
-      List<QuickStrikePost> listData = new List<QuickStrikePost>();
-
-      lastPosts.forEach((f) async {
+      List<PostModel> listData = new List<PostModel>();
+      int count = 0;
+      for(var f in lastPosts) {
         await _postsCollectionReference
             .where("id", isEqualTo: f)
             .limit(1)
             .getDocuments()
-            .then((onValue) => onValue.documents.first.data != null
-                ? listData
-                    .add(QuickStrikePost.fromMap(onValue.documents.first.data))
-                : print("it was null"));
-      });
+            .then((onValue) {
+          if (onValue.documents.first.data != null) {
+            listData.add(PostModel.fromMap(onValue.documents.first.data));
+            count++;
+            print(count.toString());
+          } else {
+            print("it was null");
+          }
+        });
+      };
       //TODO: HACER RETURN UNA VEZ ACABADA LA CARGA DE POSTS
       return listData;
     } catch (e) {
       print(e.toString());
     }
+    
   }
 
   Future<List<DocumentSnapshot>> getProductsFromCommunity(String uid) async {

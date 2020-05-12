@@ -24,6 +24,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   flare_flutter: ^2.0.1
+  flutter_datetime_picker: ^1.3.8
   intl: ^0.16.1
   get_it: ^3.1.0
   provider_architecture: ^1.0.5
@@ -67,6 +68,12 @@ flutter:
     - family: Quickstrike
       fonts:
       - asset: assets/icons/QuickStrike.ttf
+    - family: Add
+      fonts:
+      - asset: assets/icons/Add.ttf
+    - family: Publicaciones
+      fonts:
+      - asset: assets/icons/Publicaciones.ttf
 
 
     - family: Linguineve
@@ -105,6 +112,7 @@ flutter:
     - assets/images/user-posts.png
     - assets/images/add-to-cart.png
     - assets/animations/quickstrikeAnimation.flr
+    - assets/images/trophy.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

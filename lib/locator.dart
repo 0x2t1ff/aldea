@@ -9,6 +9,8 @@ import './models/user_model.dart';
 import './utils/image_selector.dart';
 import 'ui/views/profile_view.dart';
 import 'ui/views/quickstrike_view.dart';
+import 'ui/views/feed_view.dart';
+
 
 GetIt locator = GetIt.instance;
 
@@ -22,6 +24,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => CommunitiesView());
   locator.registerLazySingleton(() => QuickSTrikeView());
   locator.registerLazySingleton(() => ProfileView());
+  locator.registerLazySingleton(() => FeedView());
   
 }
 

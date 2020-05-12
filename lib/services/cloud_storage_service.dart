@@ -12,8 +12,9 @@ class CloudStorageService {
   }) async {
     var imageFileName =
         title + DateTime.now().millisecondsSinceEpoch.toString();
-    final StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child("/users/$userId/profile/$imageFileName");
+    final StorageReference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
+        .child("/users/$userId/profile/$imageFileName");
 
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(imageToUpload);
     StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
@@ -24,6 +25,29 @@ class CloudStorageService {
       var url = downloadUrl.toString();
       return CloudStorageResult(
           imageFileName: "/$userId/profile/$imageFileName", imageUrl: url);
+    }
+    return null;
+  }
+
+  Future<CloudStorageResult> uploadPostImage({
+    @required File imageToUpload,
+    @required String postId,
+    @required String title,
+  }) async {
+    var imageFileName =
+        title + DateTime.now().millisecondsSinceEpoch.toString();
+
+    final StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child("/posts/$postId/$imageFileName");
+
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(imageToUpload);
+    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+
+    var downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
+    if (uploadTask.isComplete) {
+      var url = downloadUrl.toString();
+      return CloudStorageResult(
+          imageFileName: "/$postId/$imageFileName", imageUrl: url);
     }
     return null;
   }

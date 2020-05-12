@@ -7,7 +7,7 @@ import '../shared/ui_helpers.dart' as devicesize;
 import '../shared/app_colors.dart' as custcolor;
 
 class QuickStrikeItem extends StatefulWidget {
-  final QuickStrikePost quickStrikePost;
+  final QuickStrikeModel quickStrikePost;
   const QuickStrikeItem({Key key, this.quickStrikePost}) : super(key: key);
 
   @override
@@ -147,7 +147,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                           ),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(50),
+                      borderRadius: BorderRadius.circular(100),
                       color:
                           isEnlisted ? Colors.green : custcolor.lightBlueColor),
                   // set needed date
@@ -198,7 +198,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
       ),
       isExpanded
           ? Container(
-              padding: EdgeInsets.only(bottom: 15),
+              padding: EdgeInsets.only(bottom: devicesize.screenHeight(context) * 0.0185),
               width: devicesize.screenWidth(context),
               color: Colors.black,
               child: Column(
@@ -321,6 +321,11 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                               size: devicesize.screenHeight(context) * 0.023),
                         ),
                         controller: commentController,
+                        style:  TextStyle(
+                          color: custcolor.almostWhite,
+                          fontFamily: "Raleway",
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12),
                       ),
                     ),
                   ),
