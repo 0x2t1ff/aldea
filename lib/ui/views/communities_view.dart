@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:aldea/ui/widgets/all_communities.dart';
 import 'package:aldea/ui/widgets/communities_carousel.dart';
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import '../../viewmodels/communities_view_model.dart';
 import '../../ui/shared/ui_helpers.dart';
 
@@ -15,14 +15,13 @@ class CommunitiesView extends StatefulWidget {
 class _CommunitiesViewState extends State<CommunitiesView>
     with AutomaticKeepAliveClientMixin {
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
   var isShowingMore = false;
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<CommunitiesViewModel>.withConsumer(
-      viewModel: CommunitiesViewModel(),
+    return ViewModelBuilder<CommunitiesViewModel>.reactive(
+      viewModelBuilder: () => CommunitiesViewModel(),
       onModelReady: (model) {
         if (model.topCommunities.isEmpty) {
           model.fetchCommunities();

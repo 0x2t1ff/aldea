@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/ui/widgets/profile_body.dart';
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import '../shared/shared_styles.dart';
 import '../../viewmodels/profile_view_model.dart';
 import 'dart:ui';
@@ -16,8 +16,8 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<ProfileViewModel>.withConsumer(
-      viewModel: ProfileViewModel(),
+    return ViewModelBuilder<ProfileViewModel>.reactive(
+      viewModelBuilder: () => ProfileViewModel(),
       onModelReady: (model) {
         if (phoneController.text.isEmpty)
           phoneController.text = model.currentUser.phoneNumber;

@@ -4,7 +4,7 @@ import 'package:aldea/ui/widgets/market_landing.dart';
 import 'package:aldea/ui/widgets/product_selected.dart';
 import 'package:aldea/viewmodels/market_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/viewmodel_provider.dart';
+import 'package:stacked/stacked.dart';
 
 class MarketView extends StatefulWidget {
   final Community community;
@@ -22,8 +22,8 @@ class _MarketViewState extends State<MarketView> with AutomaticKeepAliveClientMi
   bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<MarketViewModel>.withConsumer(
-        viewModel: MarketViewModel(widget.community.uid),
+    return ViewModelBuilder<MarketViewModel>.reactive(
+        viewModelBuilder: () => MarketViewModel(widget.community.uid),
         onModelReady: (m) async {
           await m.fetchProducts();
           m.setFirstProducts();

@@ -6,7 +6,7 @@ import 'package:aldea/ui/views/market_view.dart';
 import 'package:aldea/ui/widgets/community_rules.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/viewmodel_provider.dart';
+import 'package:stacked/stacked.dart';
 import '../shared/ui_helpers.dart';
 import '../../viewmodels/community_view_model.dart';
 
@@ -17,8 +17,8 @@ class CommunityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isModerator;
-    return ViewModelProvider<CommunityViewModel>.withConsumer(
-        viewModel: CommunityViewModel(),
+    return ViewModelBuilder<CommunityViewModel>.reactive(
+        viewModelBuilder: () => CommunityViewModel(),
         onModelReady: (model) {
           if (community.moderators.contains(model.currentUser.uid))
             model.getRequests(community.uid);

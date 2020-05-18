@@ -4,7 +4,7 @@ import '../shared/ui_helpers.dart';
 import '../widgets/busy_button.dart';
 import '../widgets/input_field.dart';
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import '../../viewmodels/confirm_view_model.dart';
 
 class ConfirmNumberView extends StatelessWidget {
@@ -13,8 +13,8 @@ class ConfirmNumberView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<ConfirmNumberViewModel>.withConsumer(
-      viewModel: ConfirmNumberViewModel(),
+    return ViewModelBuilder<ConfirmNumberViewModel>.reactive(
+      viewModelBuilder: () => ConfirmNumberViewModel(),
       builder: (context, model, child) => Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 50.0),

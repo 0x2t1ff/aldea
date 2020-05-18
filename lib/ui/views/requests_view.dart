@@ -5,7 +5,7 @@ import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:aldea/ui/widgets/swipe_item.dart';
 import 'package:aldea/viewmodels/requests_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/viewmodel_provider.dart';
+import 'package:stacked/stacked.dart';
 import "../shared/app_colors.dart";
 
 class RequestsView extends StatelessWidget {
@@ -14,8 +14,8 @@ class RequestsView extends StatelessWidget {
   const RequestsView({this.requests});
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<RequestsViewModel>.withConsumer(
-      viewModel: RequestsViewModel(requests),
+    return ViewModelBuilder<RequestsViewModel>.reactive(
+      viewModelBuilder: () => RequestsViewModel(requests),
       builder: (ctx, model, child) => Scaffold(
         backgroundColor: Color(0xff0F1013),
         body: Column(
