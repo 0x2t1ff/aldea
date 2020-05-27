@@ -1,16 +1,19 @@
 
 import 'package:aldea/ui/shared/ui_helpers.dart';
+import 'package:aldea/viewmodels/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import '../shared/shared_styles.dart';
+
 
 class ProfileBody extends StatelessWidget {
   final String postsCount;
   final String communitiesCount;
   final String vouchCount;
   final String winCount;
+  final ProfileViewModel model;
 
   ProfileBody(
-      {this.postsCount, this.communitiesCount, this.vouchCount, this.winCount});
+      {this.postsCount, this.communitiesCount, this.vouchCount, this.winCount, this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -67,26 +70,33 @@ class ProfileBody extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "Vouch",
-                              style: TextStyle(
-                                  color: Color(0xffB1AFAF),
-                                  fontFamily: "Raleway",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                            Text(
-                              vouchCount.toString(),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: "Raleway",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            )
-                          ],
+                        GestureDetector(
+                                                  child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "Vouch",
+                                style: TextStyle(
+                                    color: Color(0xffB1AFAF),
+                                    fontFamily: "Raleway",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                              Text(
+                                vouchCount.toString(),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Raleway",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              )
+                            ],
+                          ),
+                          onTap: (){
+                            model.seeVouches();
+                            
+                          }
+  
                         ),
                         SizedBox(height: usableScreenWithoughtBars(context) * 0.12 ,child: Image.asset("assets/images/vouch.png"))
                       ],

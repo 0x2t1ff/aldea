@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
-class QuickStrikeModel {
+class QuickStrikePost {
   final String title;
-  final String imageUrl;
+  final List<dynamic> imageUrl;
   final String userId;
-  final double price; 
+  final double price;
   final bool isRandom;
   final bool isLista;
   final bool isGame;
@@ -13,19 +12,26 @@ class QuickStrikeModel {
   final String description;
   final Timestamp fechaQuickstrike;
   final String id;
-  QuickStrikeModel({
-    @required this.userId,
-    @required this.title,
-    @required this.price,
-    @required this.modelo,
-    @required this.description,
-    @required this.fechaQuickstrike,
+  final String communityName;
+  final String profilePic;
+  final bool isEmpty;
+  final bool finished;
+  QuickStrikePost({
+    this.userId,
+    this.title,
+    this.price,
+    this.modelo,
+    this.description,
+    this.fechaQuickstrike,
+    this.profilePic,
     this.isGame,
+    this.communityName,
     this.isLista,
     this.isRandom,
     this.imageUrl,
     this.id,
-    
+    this.isEmpty,
+    this.finished
   });
 
   Map<String, dynamic> toMap() {
@@ -33,33 +39,38 @@ class QuickStrikeModel {
       'userId': userId,
       'title': title,
       'imageUrl': imageUrl,
-      'price': price, 
+      'price': price,
       'isRandom': isRandom,
       'isLista': isLista,
-      'isGame': isGame, 
+      'isGame': isGame,
       'modelo': modelo,
       'description': description,
-      'fechaQuickstrike': fechaQuickstrike, 
-      'id' : id,
+      'fechaQuickstrike': fechaQuickstrike,
+      'id': id,
+      'communityName': communityName,
+      'profilePic': profilePic,
+      'isEmpty': isEmpty,
+      'finished': finished,
     };
   }
 
-   static QuickStrikeModel fromMap(Map<String, dynamic> map) {
-
-
-    return QuickStrikeModel(
+  static QuickStrikePost fromMap(Map<String, dynamic> map) {
+    return QuickStrikePost(
       title: map['title'],
       imageUrl: map['imageUrl'],
       userId: map['userId'],
       price: map['price'],
       isGame: map['isGame'],
       isRandom: map['isRandom'],
-      isLista: map ['isLista'],
+      isLista: map['isLista'],
       description: map['description'],
       modelo: map['modelo'],
       fechaQuickstrike: map['fechaQuickstrike'],
-      id:map['id']
-      
+      id: map['id'],
+      profilePic: map['profilePic'],
+      communityName: map['communityName'],
+      isEmpty: map['isEmpty'],
+      finished:  map['finished']
     );
   }
 }

@@ -6,7 +6,6 @@ class User {
   String bkdPicUrl;
   String bkdPicName;
   final int postsCount;
-  final int vouchCount;
   final int winCount;
   List<dynamic> communities; 
   List<dynamic> requests;
@@ -14,6 +13,8 @@ class User {
   String phoneNumber;
   String email;
   String address;
+  List<dynamic> vouches;
+  List<String> onGoingQuickstrikes = [];
 
   User(
       {this.name,
@@ -23,13 +24,15 @@ class User {
       this.bkdPicUrl,
       this.bkdPicName,
       this.postsCount,
-      this.vouchCount,
       this.winCount,
       this.gender,
       this.phoneNumber,
       this.email,
       this.address,
-      this.communities});
+      this.communities,
+      this.vouches,
+      this.onGoingQuickstrikes,
+      this.requests,});
 
   User.fromData(Map<String, dynamic> data)
       : name = data['name'],
@@ -39,14 +42,15 @@ class User {
         bkdPicUrl = data['bkdPicUrl'],
         bkdPicName = data['bkdPicName'],
         postsCount = data['postsCount'],
-        vouchCount = data['vouchCount'],
         winCount = data['winCount'],
         gender = data['gender'],
+        vouches = data['vouches'],
         phoneNumber = data['phoneNumber'],
         email = data['email'],
         address = data['address'],
         requests = data['requests'],
-        communities = data['communities'];
+        communities = data['communities'],
+        onGoingQuickstrikes = data["onGoingQuickstrikes"];
 
   Map<String, dynamic> toJson() {
     return {
@@ -58,13 +62,13 @@ class User {
       'bkdPicUrl': bkdPicUrl,
       'bkdPicName': bkdPicName,
       'postsCount': postsCount,
-      'vouchCount': vouchCount,
       'winCount': winCount,
       'gender': gender,
       'phoneNumber': phoneNumber,
       'address': address,
       'requests': requests,
-      'communities': communities
+      'communities': communities,
+      'vouches' : vouches,
     };
   }
 }

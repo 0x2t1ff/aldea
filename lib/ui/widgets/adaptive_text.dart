@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import "../shared/app_colors.dart" as custcolor;
 import "../shared/ui_helpers.dart" as devicesize;
 
 class AdaptiveText extends StatefulWidget {

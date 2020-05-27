@@ -20,7 +20,7 @@ class CreateQuickstrikeViewModel extends BaseModel {
       String modelo,
       Timestamp  fechaQuickstrike}) async {
     setBusy(true);
-    var result = await _firestoreService.addPost(QuickStrikeModel(
+    var result = await _firestoreService.addPost(QuickStrikePost(
       fechaQuickstrike: fechaQuickstrike,
         title: title,
         userId: currentUser.uid,

@@ -19,13 +19,5 @@ class FeedWidget extends StatelessWidget {
       print("isnormalpostXD");
       return PostItem(postModel: postModel);
     }
-
-    return Container(
-        child: Text("well that sucked" +
-            "is announcement " +
-            postModel.isAnnouncement.toString() +
-            "   isResult " +
-            postModel.isResult.toString() +
-            postModel.title));
   }
 }

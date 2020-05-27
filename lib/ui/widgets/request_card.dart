@@ -1,4 +1,3 @@
-import 'package:aldea/models/access_request.dart';
 import 'package:aldea/models/community_request.dart';
 import 'package:flutter/material.dart';
 import 'swipe_item.dart';

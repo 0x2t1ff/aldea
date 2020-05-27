@@ -1,8 +1,6 @@
 import 'dart:ui';
 import 'package:aldea/ui/widgets/quickstrike_creation.dart';
 
-import "./event_creation.dart";
-import 'package:aldea/ui/shared/google_navbar.dart';
 import 'package:aldea/ui/widgets/post_creation.dart';
 import 'package:flutter/material.dart';
 import "../shared/ui_helpers.dart" as devicesize;

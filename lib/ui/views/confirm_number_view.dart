@@ -30,7 +30,6 @@ class ConfirmNumberView extends StatelessWidget {
                 ),
               ),
               verticalSpaceLarge,
-              // TODO: Add additional user data here to save (episode 2)
               InputField(
                 placeholder: 'P.E. +34 66666666',
                 controller: numberController,

@@ -166,7 +166,8 @@ class ProfileView extends StatelessWidget {
                         winCount: model.currentUser.winCount.toString(),
                         communitiesCount:
                             model.currentUser.communities.length.toString(),
-                        vouchCount: model.currentUser.vouchCount.toString(),
+                        model: model,
+                        vouchCount: model.currentUser.vouches.length.toString(),
                       ),
                       ClipRect(
                         child: BackdropFilter(

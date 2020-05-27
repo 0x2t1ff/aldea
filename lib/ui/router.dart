@@ -1,4 +1,5 @@
 import 'package:aldea/ui/views/requests_view.dart';
+import 'package:aldea/ui/views/vouch_view.dart';
 
 import './views/home_view.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: RequestsView(requests: settings.arguments),
       );
+
+    case VouchViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: VouchView(),
+      );
+
     case SignUpViewRoute:
       return _getPageRoute(
         routeName: settings.name,

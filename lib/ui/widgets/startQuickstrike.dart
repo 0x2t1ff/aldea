@@ -6,7 +6,6 @@ import "../shared/app_colors.dart" as custcolor;
 import "package:aldea/constants/icondata.dart" as custicon;
 import "package:carousel_slider/carousel_slider.dart";
 
-import 'adaptive_text.dart';
 import 'finishedQuickstrike.dart';
 
 class StartQuickstrike extends StatefulWidget {

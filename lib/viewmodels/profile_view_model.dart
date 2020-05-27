@@ -1,10 +1,11 @@
+import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/models/cloud_storage_result.dart';
 import 'package:aldea/services/cloud_storage_service.dart';
 import 'package:aldea/services/firestore_service.dart';
-
+import 'package:aldea/services/navigation_service.dart';
+import 'package:aldea/ui/views/vouch_view.dart';
 import 'base_model.dart';
 import 'dart:io';
-
 import '../utils/image_selector.dart';
 import '../locator.dart';
 
@@ -13,9 +14,14 @@ class ProfileViewModel extends BaseModel {
   final CloudStorageService _cloudStorageService =
       locator<CloudStorageService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
-
+  final NavigationService _navigationService = locator<NavigationService>();
   File selectedProfileImage;
   File selectedBkdImage;
+
+  Future seeVouches() {
+   _navigationService.navigateTo(VouchViewRoute, false);
+
+  }
 
   Future selectProfileImage() async {
     var tempImage = await _imageSelector.selectImage();

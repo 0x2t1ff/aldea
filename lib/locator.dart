@@ -26,6 +26,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => ProfileView());
   locator.registerLazySingleton(() => FeedView());
   
+  
 }
 
 void registerCurrentUser(Map<String, dynamic> data) {

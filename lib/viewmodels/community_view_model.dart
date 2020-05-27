@@ -3,16 +3,12 @@ import 'package:aldea/models/community_request.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
 import 'package:aldea/viewmodels/base_model.dart';
-import 'package:aldea/models/cloud_storage_result.dart';
 import 'package:aldea/services/cloud_storage_service.dart';
-import 'package:aldea/services/firestore_service.dart';
 
 import 'base_model.dart';
 import 'dart:io';
 
 import '../utils/image_selector.dart';
-import '../locator.dart';
-
 import '../locator.dart';
 
 class CommunityViewModel extends BaseModel {
@@ -32,8 +28,6 @@ class CommunityViewModel extends BaseModel {
     _navigationService.navigateTo(RequestsViewRoute, false, arguments: requests);
   }
   final ImageSelector _imageSelector = locator<ImageSelector>();
-  final CloudStorageService _cloudStorageService =
-      locator<CloudStorageService>();
 
 
   File firstImage;

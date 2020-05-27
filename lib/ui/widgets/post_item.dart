@@ -2,11 +2,9 @@ import 'package:aldea/models/post_model.dart';
 import "package:flutter/material.dart";
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
-import "package:aldea/constants/icondata.dart" as custicon;
 import "package:carousel_slider/carousel_slider.dart";
 
 import 'adaptive_text.dart';
-import 'finishedQuickstrike.dart';
 
 class PostItem extends StatefulWidget {
   final PostModel postModel;
@@ -33,23 +31,9 @@ class _PostItemState extends State<PostItem> {
   int _current = 0;
   @override
   Widget build(BuildContext context) {
-    bool isAnnouncement = false;
-    bool isResult = true;
-    bool isPost = true;
-    String quickstrikeType = "Lista";
 
     String dayTime = "12:04, today";
     Color greyColor = Color(0xff3a464d);
-    String commentText = "67";
-    String likeText = "430";
-    String itemType = "Eagle 2.0 - 5 ganadores";
-    var winners = ["Eskere Jaume", "Isma-él", "ucler", "MA"];
-
-    List imageList = [
-      "https://firebasestorage.googleapis.com/v0/b/aldea-dev-40685.appspot.com/o/communities%2Fpyschomods%2FWhatsApp%20Image%202020-02-26%20at%2011.15.43%20(1).jpeg?alt=media&token=6d64db39-b960-4aa5-8e22-c568293079f0",
-      "https://firebasestorage.googleapis.com/v0/b/aldea-dev-40685.appspot.com/o/communities%2Fpyschomods%2FWhatsApp%20Image%202020-02-26%20at%2011.15.50%20(1).jpeg?alt=media&token=51a79564-096c-4fe7-a66f-a50ceb4e0d3e",
-      "https://firebasestorage.googleapis.com/v0/b/aldea-dev-40685.appspot.com/o/communities%2Fpyschomods%2FWhatsApp%20Image%202020-02-26%20at%2011.15.50%20(2).jpeg?alt=media&token=ca7ca7af-946e-45c2-a988-0173447740da"
-    ];
     return Container(
       decoration: BoxDecoration(
         color: custcolor.blueishGreyColor,
