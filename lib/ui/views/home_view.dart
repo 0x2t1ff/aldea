@@ -1,4 +1,5 @@
 import 'package:aldea/locator.dart';
+import 'package:aldea/ui/views/direct_message_view.dart';
 import 'package:aldea/ui/views/feed_view.dart';
 import 'package:aldea/ui/views/profile_view.dart';
 import 'package:aldea/ui/views/quickstrike_view.dart';
@@ -20,6 +21,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final CommunitiesView _communitiesView = locator<CommunitiesView>();
+  final DirectMessageView _directMessageView = locator<DirectMessageView>();
   final FeedView _feedView = locator<FeedView>();
   final ProfileView _profileView = locator<ProfileView>();
   final QuickSTrikeView _quickSTrikeView = locator<QuickSTrikeView>();
@@ -71,7 +73,7 @@ class _HomeViewState extends State<HomeView> {
       body: Container(
         height: device.screenHeight(context),
         width: double.infinity,
-              child: Column(children: <Widget>[
+        child: Column(children: <Widget>[
           NotchFiller(),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 15),
@@ -87,7 +89,8 @@ class _HomeViewState extends State<HomeView> {
                   style: TextStyle(
                       color: Colors.white, fontFamily: 'Thinoo', fontSize: 40),
                 ),
-                SizedBox(height: 50 ,child: Image.asset('assets/images/hoguera.png'))
+                SizedBox(
+                    height: 50, child: Image.asset('assets/images/hoguera.png'))
               ],
             ),
           ),
@@ -101,7 +104,7 @@ class _HomeViewState extends State<HomeView> {
                 _feedView,
                 _communitiesView,
                 _quickSTrikeView,
-                Container(),
+                _directMessageView,
                 _profileView
               ],
             ),

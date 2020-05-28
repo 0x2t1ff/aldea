@@ -280,4 +280,28 @@ class FirestoreService {
         .document(quickstrikeId)
         .delete();
   }
+
+  Stream<DocumentSnapshot> getChats(String uid)  {
+    try {
+      var stream  =   _userCollectionReference.document(uid).snapshots();
+      return stream;
+    //  List chatRooms;
+    //  stream.asBroadcastStream().listen((event) {
+    //    chatRooms = event.data["chatRooms"];
+    //    print(chatRooms.toString() + "print after adding data");
+    //    return chatRooms;
+    //  });
+    //  stream.asBroadcastStream().listen((event) {
+    //    print(event.data["chatRooms"].runtimeType.toString() +
+    //        " runtimeTpe hope it dont give null shit erro rxD");
+    //  });
+//
+    //
+//
+    //  return chatRooms;
+    } catch (e) {
+      print("error but can't print I guess");
+      return (e.message);
+    }
+  }
 }

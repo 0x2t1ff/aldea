@@ -1,4 +1,6 @@
+import 'package:aldea/services/rtdb_service.dart';
 import 'package:aldea/ui/views/communities_view.dart';
+import 'package:aldea/ui/views/direct_message_view.dart';
 import 'package:get_it/get_it.dart';
 import './services/navigation_service.dart';
 import './services/dialog_service.dart';
@@ -20,11 +22,13 @@ void setupLocator() {
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => FirestoreService());
   locator.registerLazySingleton(() => CloudStorageService());
+  locator.registerLazySingleton(() => RtdbService());
   locator.registerLazySingleton(() => ImageSelector());
   locator.registerLazySingleton(() => CommunitiesView());
   locator.registerLazySingleton(() => QuickSTrikeView());
   locator.registerLazySingleton(() => ProfileView());
   locator.registerLazySingleton(() => FeedView());
+  locator.registerLazySingleton(() => DirectMessageView());
   
   
 }

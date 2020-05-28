@@ -1,3 +1,4 @@
+import 'package:aldea/ui/views/chats_view.dart';
 import 'package:aldea/ui/views/requests_view.dart';
 import 'package:aldea/ui/views/vouch_view.dart';
 
@@ -21,6 +22,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: CommunityView(
           community: settings.arguments,
+        ),
+      );
+    case ChatViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: ChatsView(
+          chatroomId: settings.arguments,
+          
         ),
       );
     case LoginViewRoute:

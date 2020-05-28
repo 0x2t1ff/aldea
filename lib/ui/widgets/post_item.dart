@@ -31,7 +31,6 @@ class _PostItemState extends State<PostItem> {
   int _current = 0;
   @override
   Widget build(BuildContext context) {
-
     String dayTime = "12:04, today";
     Color greyColor = Color(0xff3a464d);
     return Container(

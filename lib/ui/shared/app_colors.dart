@@ -12,3 +12,4 @@ const Color almostWhite = Color (0xffE4E4E4);
 const Color blueTheme = Color(0xff3C8FA7);
 const Color greenTheme = Color(0xff3CA759);
 const Color darkBlue = Color(0xff14222A);
+const Color grey = Color(0xff919191);
