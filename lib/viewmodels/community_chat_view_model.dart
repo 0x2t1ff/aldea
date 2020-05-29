@@ -9,7 +9,7 @@ import 'base_model.dart';
 import '../locator.dart';
 import '../services/dialog_service.dart';
 
-class ChatsViewModel extends BaseModel {
+class CommunityChatViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final RtdbService _firestoreService = locator<RtdbService>();
   final ImageSelector _imageSelector = locator<ImageSelector>();
@@ -19,7 +19,7 @@ class ChatsViewModel extends BaseModel {
   Stream<Event> get messages => _chatStream;
   File selectedImage;
 
- Future<File> selectMessageImage() async {
+  Future<File> selectMessageImage() async {
     var tempImage = await _imageSelector.selectImage();
     if (tempImage != null) {
       selectedImage = tempImage;
@@ -28,33 +28,31 @@ class ChatsViewModel extends BaseModel {
     }
   }
 
-  Future<String> uploadImage({String chatId, File image}) async {
-   
+//TODO later 
+  Future<String> uploadImage({String communityId, File image}) async {
     CloudStorageResult imageResult;
 
     if (selectedImage != null) {
       imageResult = await _cloudStorageService.uploadMessageImage(
-          imageToUpload: image,
-          chatId: chatId,
-          userId: currentUser.uid);
-          return imageResult.imageUrl;
+          imageToUpload: image, chatId: communityId, userId: currentUser.uid);
+      return imageResult.imageUrl;
     }
   }
-
-  Future sendMessage(String text, String senderId, String chatRoomId,
+//
+  Future sendCommunityMessage(String text, String senderId, String communityId,
       String username, String imageUrl, bool isImage) {
-    _firestoreService.sendMessage(
+    _firestoreService.sendCommunityMessage(
         message: text,
         senderId: senderId,
-        chatRoomId: chatRoomId,
+        communityId: communityId,
         username: username,
         imageUrl: imageUrl,
         isImage: isImage);
   }
 
-  Future getMessages(String chatId) async {
+  Future getMessages(String communityId) async {
     setBusy(true);
-    var chatStream = _firestoreService.fetchChatMessages(chatId);
+    var chatStream = _firestoreService.fetchCommunityChatMessages(communityId);
     chatStream.listen((event) {
       print(event.toString());
     });
@@ -67,7 +65,7 @@ class ChatsViewModel extends BaseModel {
       //print(_quickstrikes.length.toString());
       await _dialogService.showDialog(
         title: 'La actualizacion de mensajes ha fallado',
-        description: "ha fallado XD asi al menos no crashea ",
+        description: "Error",
       );
     }
   }

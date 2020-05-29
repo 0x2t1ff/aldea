@@ -2,17 +2,48 @@ import 'package:firebase_database/firebase_database.dart';
 
 class RtdbService {
   FirebaseDatabase _database = FirebaseDatabase.instance;
-
+ 
   Stream<Event> fetchChatMessages(String chatRoomId) {
     return _database.reference().child('messages/$chatRoomId').onValue;
   }
 
+  Stream<Event> fetchCommunityChatMessages(String communityId){
+    return _database.reference().child("communitiesChatRooms/$communityId").onValue;
+  }
+
   String createChatRoom(List<String> userIds) {
     //Crea la CHAT ROOM con los users y devuelve su ID
+     
+
     var ref = _database.reference().child('chatRooms/').push()
       ..set({'users': userIds});
     return ref.key;
   }
+// asignar metodo junto creación de comunidad , comprobar lógica.
+  String createCommunityChatRoom(String cid){
+    var ref = _database.reference().child("communitiesChatRooms/$cid");
+    return ref.key;
+  }
+
+
+  void sendCommunityMessage({String communityId, String message, String senderId, String username, String imageUrl, bool isImage}){
+    var time = DateTime.now().toString();
+    var path =  _database.reference().child("communitiesChatRooms/$communityId").push();
+
+    path.set({
+            'message': message,
+      'senderId': senderId,
+      'isRead': false,
+      'time': time,
+      'username': username,
+      'imageUrl': imageUrl,
+      'isImage': isImage
+
+
+
+    });
+  }
+  
 
   void sendMessage({String chatRoomId, String message, String senderId, String username, String imageUrl, bool isImage}) {
     var time = DateTime.now().toString();

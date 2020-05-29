@@ -9,22 +9,46 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import '../shared/ui_helpers.dart';
 import '../../viewmodels/community_view_model.dart';
+import 'community_chat_view.dart';
 
-class CommunityView extends StatelessWidget {
+class CommunityView extends StatefulWidget {
   final Community community;
   const CommunityView({Key key, this.community}) : super(key: key);
 
   @override
+  _CommunityViewState createState() => _CommunityViewState();
+}
+
+class _CommunityViewState extends State<CommunityView> {
+  ScrollController _scrollController;
+  double height;
+  
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    height =0;
+    _scrollController.addListener((){ 
+      setState(() {
+        height =_scrollController.offset.toDouble();print(height.toString());});
+      });
+      ;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     bool isModerator;
+
     return ViewModelBuilder<CommunityViewModel>.reactive(
         viewModelBuilder: () => CommunityViewModel(),
         onModelReady: (model) {
-          if (community.moderators.contains(model.currentUser.uid))
-            model.getRequests(community.uid);
+          if (widget.community.moderators.contains(model.currentUser.uid))
+            model.getRequests(widget.community.uid);
         },
         builder: (context, model, child) {
-          isModerator = community.moderators.contains(model.currentUser.uid);
+          isModerator =
+              widget.community.moderators.contains(model.currentUser.uid);
           return Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: Color(0xff0F1013),
@@ -41,7 +65,7 @@ class CommunityView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        community.name,
+                        widget.community.name,
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Linguineve',
@@ -69,6 +93,8 @@ class CommunityView extends StatelessWidget {
                           height: communityBodyHeight(context),
                           width: double.infinity,
                           child: SingleChildScrollView(
+                            controller: _scrollController,
+                            
                             child: Column(
                               children: <Widget>[
                                 Container(
@@ -82,7 +108,7 @@ class CommunityView extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             image: DecorationImage(
                                                 image: NetworkImage(
-                                                    community.bkdPicUrl),
+                                                    widget.community.bkdPicUrl),
                                                 fit: BoxFit.cover)),
                                       ),
                                       Positioned(
@@ -103,7 +129,8 @@ class CommunityView extends StatelessWidget {
                                                           context) *
                                                       0.07,
                                                   backgroundImage: NetworkImage(
-                                                      community.iconPicUrl)))),
+                                                      widget.community
+                                                          .iconPicUrl)))),
                                       ClipRect(
                                         child: BackdropFilter(
                                           filter: ImageFilter.blur(
@@ -129,7 +156,8 @@ class CommunityView extends StatelessWidget {
                                                       MainAxisAlignment.center,
                                                   children: <Widget>[
                                                     Text(
-                                                        community.postsCount
+                                                        widget.community
+                                                            .postsCount
                                                             .toString(),
                                                         style: TextStyle(
                                                             color: Colors.white,
@@ -149,7 +177,8 @@ class CommunityView extends StatelessWidget {
                                                       MainAxisAlignment.center,
                                                   children: <Widget>[
                                                     Text(
-                                                        community.postsCount
+                                                        widget.community
+                                                            .postsCount
                                                             .toString(),
                                                         style: TextStyle(
                                                             color: Colors.white,
@@ -169,7 +198,8 @@ class CommunityView extends StatelessWidget {
                                                       MainAxisAlignment.center,
                                                   children: <Widget>[
                                                     Text(
-                                                        community.followerCount
+                                                        widget.community
+                                                            .followerCount
                                                             .toString(),
                                                         style: TextStyle(
                                                             color: Colors.white,
@@ -254,7 +284,7 @@ class CommunityView extends StatelessWidget {
                                 ),
                                 isModerator
                                     ? GestureDetector(
-                                      onTap: () => model.goToRequests(),
+                                        onTap: () => model.goToRequests(),
                                         child: Container(
                                           width: double.infinity,
                                           decoration: BoxDecoration(
@@ -321,12 +351,14 @@ class CommunityView extends StatelessWidget {
                                   width: double.infinity,
                                   child: TabBarView(children: [
                                     CommunityRules(
-                                      community: community,
+                                      community: widget.community,
                                       isEditting: false,
                                     ),
                                     Container(),
-                                    MarketView(community),
-                                    Container(),
+                                    MarketView(widget.community),
+                                    CommunityChatView(
+                                        communityId: this.widget.community.uid,
+                                        height: height),
                                     Container()
                                   ]),
                                 )
