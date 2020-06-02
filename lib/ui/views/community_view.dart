@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:aldea/ui/views/news_view.dart';
 import 'package:aldea/models/community.dart';
 import 'package:aldea/ui/shared/shared_styles.dart';
 import 'package:aldea/ui/views/market_view.dart';
@@ -94,7 +94,6 @@ class _CommunityViewState extends State<CommunityView> {
                           width: double.infinity,
                           child: SingleChildScrollView(
                             controller: _scrollController,
-                            
                             child: Column(
                               children: <Widget>[
                                 Container(
@@ -354,7 +353,7 @@ class _CommunityViewState extends State<CommunityView> {
                                       community: widget.community,
                                       isEditting: false,
                                     ),
-                                    Container(),
+                                    NewsView(community: widget.community),
                                     MarketView(widget.community),
                                     CommunityChatView(
                                         communityId:this.widget.community.uid,

@@ -79,10 +79,29 @@ class FirestoreService {
     }
   }
 
+  Future getNewsPosts(String uid) async {
+    try {
+      var postDocumentSnapshot = await _postsCollectionReference
+          .where("communityId", isEqualTo: uid)
+          .orderBy("fechaQuickstrike", descending: true)
+          .limit(10)
+          .getDocuments();
+
+      var data = postDocumentSnapshot.documents.map((doc) => doc.data);
+      List<PostModel> listData = new List<PostModel>();
+      data.forEach((f) => listData.add(PostModel.fromMap(f)));
+      return listData;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future<bool> likePost(
       List<dynamic> likeList, String postId, bool liked) async {
-   await  _postsCollectionReference.document(postId).updateData({"likes": likeList});
-   return !liked;
+    await _postsCollectionReference
+        .document(postId)
+        .updateData({"likes": likeList});
+    return !liked;
   }
 
   Future getVouch(String userId) async {
