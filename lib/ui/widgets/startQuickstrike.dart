@@ -1,20 +1,23 @@
 import 'package:aldea/models/post_model.dart';
+import 'package:aldea/ui/widgets/posts_carousel.dart';
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
 import "package:aldea/constants/icondata.dart" as custicon;
-import "package:carousel_slider/carousel_slider.dart";
 
 import 'finishedQuickstrike.dart';
+import 'like_button.dart';
 
-class StartQuickstrike extends StatefulWidget {
-     final PostModel postModel;
-  const StartQuickstrike({Key key, this.postModel}) : super(key: key);
-  @override
-  _StartQuickstrikeState createState() => _StartQuickstrikeState();
-}
-String readTimestamp(int timestamp) {
+class StartQuickstrike extends StatelessWidget {
+  final PostModel postModel;
+  final Function likeFunction;
+  final bool isLiked;
+  const StartQuickstrike(
+      {Key key, this.postModel, this.likeFunction, this.isLiked})
+      : super(key: key);
+
+  String readTimestamp(int timestamp) {
     var now = DateTime.now();
     var format = DateFormat('dd/M  hh:mm ');
     var formatToday = DateFormat("hh:mm");
@@ -24,9 +27,11 @@ String readTimestamp(int timestamp) {
 
     if (diff.inHours > 0 && diff.inDays == 0) {
       time = " Today " + formatToday.format(date);
-      
-    }else if(diff.inSeconds <= 0 || diff.inSeconds > 0 && diff.inMinutes == 0 || diff.inMinutes > 0 && diff.inHours == 0 || diff.inHours > 0 && diff.inDays == 1){
-  time = format.format(date);
+    } else if (diff.inSeconds <= 0 ||
+        diff.inSeconds > 0 && diff.inMinutes == 0 ||
+        diff.inMinutes > 0 && diff.inHours == 0 ||
+        diff.inHours > 0 && diff.inDays == 1) {
+      time = format.format(date);
     } else if (diff.inDays > 0 && diff.inDays < 7) {
       if (diff.inDays == 1) {
         time = diff.inDays.toString() + ' DAY AGO';
@@ -37,26 +42,22 @@ String readTimestamp(int timestamp) {
       if (diff.inDays == 7) {
         time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
       } else {
-
         time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
       }
     }
 
     return time;
   }
-int _current = 0;
 
-class _StartQuickstrikeState extends State<StartQuickstrike> {
   @override
   Widget build(BuildContext context) {
     String quickstrikeType = "Lista";
     String dayTime = "12:04, today";
     Color greyColor = Color(0xff3a464d);
     
-    
 
     return Container(
-      color: custcolor.darkGrey,
+      color: Colors.red,
       width: devicesize.screenWidth(context),
       child: Column(
         children: <Widget>[
@@ -104,7 +105,7 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(bottom: 4),
-                              child: Text(widget.postModel.communityName,
+                              child: Text(this.postModel.communityName,
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Raleway',
@@ -130,7 +131,8 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                     IconButton(
                       iconSize: devicesize.screenWidth(context) * 0.08,
                       icon: Icon(Icons.share),
-                      onPressed: () => print("pressed"),
+                      onPressed: () =>
+                          print("pressed but it ain't doing shit for now XD"),
                       color: custcolor.blueTheme,
                     ),
                   ],
@@ -174,7 +176,8 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                                 left: devicesize.screenWidth(context) * 0.15),
                             child: Text(
                               //TODO: formatting daytime
-                            readTimestamp( widget.postModel.fechaQuickstrike.seconds),
+                              readTimestamp(
+                                  this.postModel.fechaQuickstrike.seconds),
                               style: TextStyle(
                                   fontFamily: 'Raleway',
                                   fontWeight: FontWeight.w600,
@@ -189,47 +192,11 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
             ),
           ),
           Container(
-            width: devicesize.screenWidth(context),
-            height: devicesize.screenHeight(context) * 0.362,
-            child: Stack(
-              children: <Widget>[
-                CarouselSlider.builder(
-                  itemCount: widget.postModel.imageUrl.length,
-                  viewportFraction: 1.0,
-                  enableInfiniteScroll: false,
-                  aspectRatio: 4 / 3,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _current = index;
-                    });
-                  },
-                  height: devicesize.screenHeight(context) * 0.4,
-                  itemBuilder: (BuildContext context, int itemIndex) =>
-                      Container(
-                    width: devicesize.screenWidth(context),
-                    height: devicesize.screenHeight(context) * 0.4,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(widget.postModel.imageUrl[itemIndex]),
-                            fit: BoxFit.fill)),
-                  ),
-                ),
-                Positioned(
-                  top: devicesize.screenHeight(context) * 0.31,
-                  left: 0.0,
-                  right: 0.0,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ...widget.postModel.imageUrl
-                            .map((image) =>
-                                countPointer(widget.postModel.imageUrl.indexOf(image)))
-                            .toList()
-                      ]),
-                )
-              ],
-            ),
-          ),
+              width: devicesize.screenWidth(context),
+              height: devicesize.screenHeight(context) * 0.362,
+              child: PostCarousel(
+                imageUrl: this.postModel.imageUrl,
+              )),
           Container(
             padding: EdgeInsets.symmetric(
                 horizontal: devicesize.screenWidth(context) * 0.045),
@@ -256,7 +223,8 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                   ),
                 ),
                 Padding(
-                  padding:  EdgeInsets.only(bottom: devicesize.screenHeight(context) * 0.005),
+                  padding: EdgeInsets.only(
+                      bottom: devicesize.screenHeight(context) * 0.005),
                   child: Row(
                     children: <Widget>[
                       Text(
@@ -266,7 +234,7 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                             fontWeight: FontWeight.w600,
                             color: custcolor.greyColor),
                       ),
-                      Text(widget.postModel.modelo,
+                      Text(postModel.modelo,
                           style: TextStyle(
                               fontFamily: 'Raleway',
                               fontWeight: FontWeight.w600,
@@ -285,7 +253,7 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                           color: custcolor.greyColor),
                     ),
                     Flexible(
-                      child: Text(widget.postModel.description,
+                      child: Text(postModel.description,
                           overflow: TextOverflow.clip,
                           style: TextStyle(
                               fontFamily: 'Raleway',
@@ -325,11 +293,11 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                             border: InputBorder.none,
                             fillColor: custcolor.almostWhite,
                           ),
-                          style:  TextStyle(
-                          color: custcolor.almostWhite,
-                          fontFamily: "Raleway",
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12),
+                          style: TextStyle(
+                              color: custcolor.almostWhite,
+                              fontFamily: "Raleway",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12),
                         ),
                       ),
                     ),
@@ -339,33 +307,15 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                       child: Row(
                         children: <Widget>[
                           Padding(
-                            padding: EdgeInsets.only(
-                              left: devicesize.screenWidth(context) * 0.06,
-                              right: devicesize.screenWidth(context) * 0.138,
-                            ),
-                            child: Column(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.favorite,
-                                  color: custcolor.blueTheme,
-                                  size: devicesize.screenWidth(context) * 0.07,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: devicesize.screenHeight(context) *
-                                          0.005),
-                                  child: Text(
-                                    widget.postModel.likes.toString(),
-                                    style: TextStyle(
-                                        color: greyColor,
-                                        fontFamily: 'Raleway',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                              padding: EdgeInsets.only(
+                                left: devicesize.screenWidth(context) * 0.06,
+                                right: devicesize.screenWidth(context) * 0.138,
+                              ),
+                              child: LikeButton(
+                                liked: isLiked,
+                                likeFunction: likeFunction,
+                                likes: this.postModel.likes,
+                              )),
                           Column(
                             children: <Widget>[
                               Icon(
@@ -377,7 +327,8 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                                 padding: EdgeInsets.only(
                                     top: devicesize.screenHeight(context) *
                                         0.005),
-                                child: Text(widget.postModel.comments.length.toString(),
+                                child: Text(
+                                    postModel.comments.length.toString(),
                                     style: TextStyle(
                                         color: greyColor,
                                         fontFamily: 'Raleway',

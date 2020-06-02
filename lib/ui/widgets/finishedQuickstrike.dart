@@ -1,34 +1,21 @@
 import 'package:aldea/models/post_model.dart';
+import 'package:aldea/ui/widgets/like_button.dart';
+import 'package:aldea/ui/widgets/posts_carousel.dart';
 import "package:flutter/material.dart";
+import 'package:intl/intl.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
 import "package:aldea/constants/icondata.dart" as custicon;
 import "package:carousel_slider/carousel_slider.dart";
 
-class FinishedQuickstrike extends StatefulWidget {
+class FinishedQuickstrike extends StatelessWidget {
   final PostModel postModel;
-  const FinishedQuickstrike({Key key, this.postModel}) : super(key: key);
-  @override
-  _FinishedQuickstrikeState createState() => _FinishedQuickstrikeState();
-}
+  final Function likeFunction;
+  final bool isLiked;
+  const FinishedQuickstrike(
+      {Key key, this.postModel, this.likeFunction, this.isLiked})
+      : super(key: key);
 
-Widget countPointer(int index) {
-  return Container(
-    width: 10.0,
-    height: 10.0,
-    margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      color: _current == index
-          ? Colors.white.withOpacity(0.8)
-          : Colors.grey.withOpacity(0.8),
-    ),
-  );
-}
-
-int _current = 0;
-
-class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
   String quickstrikeType(bool game, bool random, bool lista) {
     if (game) {
       return "game";
@@ -38,7 +25,37 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
       return "lista";
     }
   }
+  String readTimestamp(int timestamp) {
+    var now = DateTime.now();
+    var format = DateFormat('dd/M  hh:mm ');
+    var formatToday = DateFormat("hh:mm");
+    var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    var diff = now.difference(date);
+    var time = '';
 
+    if (diff.inHours > 0 && diff.inDays == 0) {
+      time = " Today " + formatToday.format(date);
+    } else if (diff.inSeconds <= 0 ||
+        diff.inSeconds > 0 && diff.inMinutes == 0 ||
+        diff.inMinutes > 0 && diff.inHours == 0 ||
+        diff.inHours > 0 && diff.inDays == 1) {
+      time = format.format(date);
+    } else if (diff.inDays > 0 && diff.inDays < 7) {
+      if (diff.inDays == 1) {
+        time = diff.inDays.toString() + ' DAY AGO';
+      } else {
+        time = diff.inDays.toString() + ' DAYS AGO';
+      }
+    } else {
+      if (diff.inDays == 7) {
+        time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
+      } else {
+        time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
+      }
+    }
+
+    return time;
+  }
   Widget createWinnerRow(String winners) {
     return Padding(
       padding: EdgeInsets.only(top: 1),
@@ -60,24 +77,14 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
 
   @override
   Widget build(BuildContext context) {
-    String dayTime = "12:04, today";
+    String dayTime = readTimestamp(postModel.fechaQuickstrike.seconds);
     Color greyColor = Color(0xff3a464d);
-    String commentText = "67";
-    String likeText = "430";
-    var winners = ["ucler", "jpavo", "MA", "isma-él", "esteve jaume"];
 
-    List imageList = [
-      "https://firebasestorage.googleapis.com/v0/b/aldea-dev-40685.appspot.com/o/communities%2Fpyschomods%2FWhatsApp%20Image%202020-02-26%20at%2011.15.43%20(1).jpeg?alt=media&token=6d64db39-b960-4aa5-8e22-c568293079f0",
-      "https://firebasestorage.googleapis.com/v0/b/aldea-dev-40685.appspot.com/o/communities%2Fpyschomods%2FWhatsApp%20Image%202020-02-26%20at%2011.15.50%20(1).jpeg?alt=media&token=51a79564-096c-4fe7-a66f-a50ceb4e0d3e",
-      "https://firebasestorage.googleapis.com/v0/b/aldea-dev-40685.appspot.com/o/communities%2Fpyschomods%2FWhatsApp%20Image%202020-02-26%20at%2011.15.50%20(2).jpeg?alt=media&token=ca7ca7af-946e-45c2-a988-0173447740da"
-    ];
     return Container(
       color: custcolor.darkGrey,
       width: devicesize.screenWidth(context),
       height: devicesize.screenHeight(context) * 0.86 +
-          devicesize.screenHeight(context) *
-              0.02 *
-              widget.postModel.winners.length,
+          devicesize.screenHeight(context) * 0.02 * postModel.winners.length,
       child: Column(
         children: <Widget>[
           Container(
@@ -93,7 +100,7 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
                 Row(
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: NetworkImage(widget.postModel.avatarUrl),
+                      backgroundImage: NetworkImage(postModel.avatarUrl),
                       radius: devicesize.screenWidth(context) * 0.06,
                     ),
                     Padding(
@@ -107,7 +114,7 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(bottom: 4),
-                              child: Text(widget.postModel.communityName,
+                              child: Text(postModel.communityName,
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Raleway',
@@ -186,44 +193,7 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
           Container(
             width: devicesize.screenWidth(context),
             height: devicesize.screenHeight(context) * 0.362,
-            child: Stack(
-              children: <Widget>[
-                CarouselSlider.builder(
-                  itemCount: imageList.length,
-                  enableInfiniteScroll: false,
-                  viewportFraction: 1.0,
-                  aspectRatio: 4 / 3,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _current = index;
-                    });
-                  },
-                  height: devicesize.screenHeight(context) * 0.4,
-                  itemBuilder: (BuildContext context, int itemIndex) =>
-                      Container(
-                    width: devicesize.screenWidth(context),
-                    height: devicesize.screenHeight(context) * 0.4,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(imageList[itemIndex]),
-                            fit: BoxFit.fill)),
-                  ),
-                ),
-                Positioned(
-                  top: devicesize.screenHeight(context) * 0.31,
-                  left: 0.0,
-                  right: 0.0,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ...imageList
-                            .map((image) =>
-                                countPointer(imageList.indexOf(image)))
-                            .toList()
-                      ]),
-                )
-              ],
-            ),
+            child: PostCarousel(imageUrl: this.postModel.imageUrl),
           ),
           Container(
             padding: EdgeInsets.symmetric(
@@ -243,10 +213,8 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
                             color: custcolor.greyColor),
                       ),
                       Text(
-                          quickstrikeType(
-                              widget.postModel.isGame,
-                              widget.postModel.isRandom,
-                              widget.postModel.isLista),
+                          quickstrikeType(postModel.isGame, postModel.isRandom,
+                              postModel.isLista),
                           style: TextStyle(
                               fontFamily: 'Raleway',
                               fontWeight: FontWeight.w600,
@@ -263,7 +231,7 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
                           fontWeight: FontWeight.w600,
                           color: custcolor.greyColor),
                     ),
-                    Text(widget.postModel.modelo,
+                    Text(postModel.modelo,
                         style: TextStyle(
                             fontFamily: 'Raleway',
                             fontWeight: FontWeight.w600,
@@ -278,74 +246,78 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
                     height: devicesize.screenHeight(context) * 0.04 +
                         devicesize.screenHeight(context) *
                             0.031 *
-                            widget.postModel.winners.length,
+                            postModel.winners.length,
                     decoration: BoxDecoration(
                         color: custcolor.greenTheme,
                         borderRadius: BorderRadius.circular(25)),
-                    child: Column(children: <Widget>[
-                      Text(
-                        "Enhorabuena a los ganadores!",
-                        style: TextStyle(
-                            fontFamily: 'Raleway',
-                            fontWeight: FontWeight.w800,
-                            fontSize: 15),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            height: devicesize.screenHeight(context) *
-                                0.033 *
-                                widget.postModel.winners.length ,
-                            width: devicesize.screenWidth(context) * 0.4,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Expanded(
-                                  child: SizedBox(
-                                    //   width:
-                                    //          devicesize.screenWidth(context) * 0.88,
-                                    //     height:
-                                    //     devicesize.screenHeight(context) * 0.4,
-                                    child: ListView.builder(
-                                        padding: EdgeInsets.only(top: 2),
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: winners.length,
-                                        itemBuilder:
-                                            (BuildContext ctx, int index) {
-                                          return createWinnerRow(
-                                              widget.postModel.winners[index]);
-                                        }),
-                                  ),
-                                )
-                              ],
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          "Enhorabuena a los ganadores!",
+                          style: TextStyle(
+                              fontFamily: 'Raleway',
+                              fontWeight: FontWeight.w800,
+                              fontSize: 15),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              height: devicesize.screenHeight(context) *
+                                  0.033 *
+                                  postModel.winners.length,
+                              width: devicesize.screenWidth(context) * 0.4,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: SizedBox(
+                                      //   width:
+                                      //          devicesize.screenWidth(context) * 0.88,
+                                      //     height:
+                                      //     devicesize.screenHeight(context) * 0.4,
+                                      child: ListView.builder(
+                                          padding: EdgeInsets.only(top: 2),
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: postModel.winners.length,
+                                          itemBuilder:
+                                              (BuildContext ctx, int index) {
+                                            return createWinnerRow(
+                                                postModel.winners[index]);
+                                          }),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                          Container(                            
-                            width: devicesize.screenWidth(context) * 0.27,
-                            alignment: Alignment.center,
-                            child: Container(
-                                width: devicesize.screenWidth(context) * 0.07 +
-                                    devicesize.screenWidth(context) *
-                                        0.04 *
-                                        widget.postModel.winners.length,
-                                height: devicesize.screenWidth(context) * 0.07 +
-                                    devicesize.screenWidth(context) *
-                                        0.04 *
-                                        widget.postModel.winners.length,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image:
-                                        AssetImage("assets/images/trophy.png"),
-                                  ),
-                                )),
-                          )
-                        ],
-                      ),
-                    ],),
+                            Container(
+                              width: devicesize.screenWidth(context) * 0.27,
+                              alignment: Alignment.center,
+                              child: Container(
+                                  width:
+                                      devicesize.screenWidth(context) * 0.07 +
+                                          devicesize.screenWidth(context) *
+                                              0.04 *
+                                              postModel.winners.length,
+                                  height:
+                                      devicesize.screenWidth(context) * 0.07 +
+                                          devicesize.screenWidth(context) *
+                                              0.04 *
+                                              postModel.winners.length,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: AssetImage(
+                                          "assets/images/trophy.png"),
+                                    ),
+                                  )),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -381,11 +353,11 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
                               border: InputBorder.none,
                               fillColor: custcolor.almostWhite,
                             ),
-                            style:  TextStyle(
-                          color: custcolor.almostWhite,
-                          fontFamily: "Raleway",
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12),
+                            style: TextStyle(
+                                color: custcolor.almostWhite,
+                                fontFamily: "Raleway",
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12),
                           ),
                         ),
                       ),
@@ -395,34 +367,16 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
                         child: Row(
                           children: <Widget>[
                             Padding(
-                              padding: EdgeInsets.only(
-                                left: devicesize.screenWidth(context) * 0.06,
-                                right: devicesize.screenWidth(context) * 0.138,
-                              ),
-                              child: Column(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.favorite,
-                                    color: custcolor.blueTheme,
-                                    size:
-                                        devicesize.screenWidth(context) * 0.07,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top: devicesize.screenHeight(context) *
-                                            0.005),
-                                    child: Text(
-                                      likeText,
-                                      style: TextStyle(
-                                          color: greyColor,
-                                          fontFamily: 'Raleway',
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                padding: EdgeInsets.only(
+                                  left: devicesize.screenWidth(context) * 0.06,
+                                  right:
+                                      devicesize.screenWidth(context) * 0.138,
+                                ),
+                                child: LikeButton(
+                                  likes: postModel.likes,
+                                  likeFunction: likeFunction,
+                                  liked: isLiked,
+                                )),
                             Column(
                               children: <Widget>[
                                 Icon(
@@ -434,7 +388,7 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
                                   padding: EdgeInsets.only(
                                       top: devicesize.screenHeight(context) *
                                           0.005),
-                                  child: Text(commentText,
+                                  child: Text(postModel.comments[0].toString(),
                                       style: TextStyle(
                                           color: greyColor,
                                           fontFamily: 'Raleway',

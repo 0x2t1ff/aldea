@@ -357,7 +357,7 @@ class _CommunityViewState extends State<CommunityView> {
                                     Container(),
                                     MarketView(widget.community),
                                     CommunityChatView(
-                                        communityId: this.widget.community.uid,
+                                        communityId:this.widget.community.uid,
                                         height: height),
                                     Container()
                                   ]),

@@ -19,7 +19,7 @@ class PostModel {
   final String avatarUrl;
   final bool isResult;
   final List<dynamic> winners;
-  final int likes;
+  final List<dynamic> likes;
   final List<dynamic> comments;
   
 

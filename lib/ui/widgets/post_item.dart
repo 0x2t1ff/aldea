@@ -1,37 +1,57 @@
 import 'package:aldea/models/post_model.dart';
+import 'package:aldea/ui/widgets/like_button.dart';
+import 'package:aldea/ui/widgets/posts_carousel.dart';
 import "package:flutter/material.dart";
+import 'package:intl/intl.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
 import "package:carousel_slider/carousel_slider.dart";
 
 import 'adaptive_text.dart';
 
-class PostItem extends StatefulWidget {
+class PostItem extends StatelessWidget {
   final PostModel postModel;
-  const PostItem({Key key, this.postModel}) : super(key: key);
-  @override
-  _PostItemState createState() => _PostItemState();
-}
+  final Function likeFunction;
+  final bool isLiked;
+  const PostItem({Key key, this.postModel, this.likeFunction, this.isLiked})
+      : super(key: key);
 
-class _PostItemState extends State<PostItem> {
-  Widget countPointer(int index) {
-    return Container(
-      width: 10.0,
-      height: 10.0,
-      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: _current == index
-            ? Colors.white.withOpacity(0.8)
-            : Colors.grey.withOpacity(0.8),
-      ),
-    );
+  String readTimestamp(int timestamp) {
+    var now = DateTime.now();
+    var format = DateFormat('dd/M  hh:mm ');
+    var formatToday = DateFormat("hh:mm");
+    var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    var diff = now.difference(date);
+    var time = '';
+
+    if (diff.inHours > 0 && diff.inDays == 0) {
+      time = " Today " + formatToday.format(date);
+    } else if (diff.inSeconds <= 0 ||
+        diff.inSeconds > 0 && diff.inMinutes == 0 ||
+        diff.inMinutes > 0 && diff.inHours == 0 ||
+        diff.inHours > 0 && diff.inDays == 1) {
+      time = format.format(date);
+    } else if (diff.inDays > 0 && diff.inDays < 7) {
+      if (diff.inDays == 1) {
+        time = diff.inDays.toString() + ' DAY AGO';
+      } else {
+        time = diff.inDays.toString() + ' DAYS AGO';
+      }
+    } else {
+      if (diff.inDays == 7) {
+        time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
+      } else {
+        time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
+      }
+    }
+
+    return time;
   }
 
-  int _current = 0;
   @override
   Widget build(BuildContext context) {
-    String dayTime = "12:04, today";
+    bool liked = isLiked;
+    String dayTime = readTimestamp(postModel.fechaQuickstrike.seconds);
     Color greyColor = Color(0xff3a464d);
     return Container(
       decoration: BoxDecoration(
@@ -52,12 +72,7 @@ class _PostItemState extends State<PostItem> {
         children: <Widget>[
           Container(
             width: devicesize.screenWidth(context),
-            height: devicesize.screenHeight(context) * 0.11,
-            color: Colors.red,
-          ),
-          Container(
-            width: devicesize.screenWidth(context),
-            height: devicesize.screenHeight(context) * 0.11,
+            height: devicesize.screenHeight(context) * 0.12,
             child: Row(
               children: <Widget>[
                 Padding(
@@ -65,7 +80,7 @@ class _PostItemState extends State<PostItem> {
                       left: devicesize.screenWidth(context) * 0.06),
                   child: CircleAvatar(
                     radius: devicesize.screenWidth(context) * 0.06,
-                    backgroundImage: NetworkImage(widget.postModel.avatarUrl),
+                    backgroundImage: NetworkImage(postModel.avatarUrl),
                   ),
                 ),
                 Container(
@@ -79,7 +94,7 @@ class _PostItemState extends State<PostItem> {
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(bottom: 4),
-                          child: Text(widget.postModel.communityName,
+                          child: Text(postModel.communityName,
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Raleway',
@@ -112,48 +127,10 @@ class _PostItemState extends State<PostItem> {
           Container(
             width: devicesize.screenWidth(context),
             height: devicesize.screenHeight(context) * 0.4,
-            child: Stack(
-              children: <Widget>[
-                CarouselSlider.builder(
-                  enableInfiniteScroll: false,
-                  itemCount: widget.postModel.imageUrl.length,
-                  viewportFraction: 1.0,
-                  aspectRatio: 4 / 3,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _current = index;
-                    });
-                  },
-                  height: devicesize.screenHeight(context) * 0.4,
-                  itemBuilder: (BuildContext context, int itemIndex) =>
-                      Container(
-                    width: devicesize.screenWidth(context),
-                    height: devicesize.screenHeight(context) * 0.4,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                widget.postModel.imageUrl[itemIndex]),
-                            fit: BoxFit.fill)),
-                  ),
-                ),
-                Positioned(
-                  top: devicesize.screenHeight(context) * 0.35,
-                  left: 0.0,
-                  right: 0.0,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ...widget.postModel.imageUrl
-                            .map((image) => countPointer(
-                                widget.postModel.imageUrl.indexOf(image)))
-                            .toList()
-                      ]),
-                )
-              ],
-            ),
+            child: PostCarousel(imageUrl: this.postModel.imageUrl),
           ),
           AdaptiveText(
-            widget.postModel.description,
+            postModel.description,
             95,
             TextStyle(
                 fontFamily: "Raleway",
@@ -214,23 +191,10 @@ class _PostItemState extends State<PostItem> {
                         ),
                         child: Column(
                           children: <Widget>[
-                            Icon(
-                              Icons.favorite,
-                              color: custcolor.blueTheme,
-                              size: devicesize.screenWidth(context) * 0.07,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top:
-                                      devicesize.screenHeight(context) * 0.005),
-                              child: Text(
-                                widget.postModel.likes.toString(),
-                                style: TextStyle(
-                                    color: greyColor,
-                                    fontFamily: 'Raleway',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14),
-                              ),
+                            LikeButton(
+                              likeFunction: likeFunction,
+                              liked: liked,
+                              likes: postModel.likes,
                             ),
                           ],
                         ),
@@ -245,8 +209,7 @@ class _PostItemState extends State<PostItem> {
                           Padding(
                             padding: EdgeInsets.only(
                                 top: devicesize.screenHeight(context) * 0.005),
-                            child: Text(
-                                widget.postModel.comments.length.toString(),
+                            child: Text(postModel.comments.length.toString(),
                                 style: TextStyle(
                                     color: greyColor,
                                     fontFamily: 'Raleway',

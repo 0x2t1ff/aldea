@@ -6,18 +6,20 @@ import 'package:flutter/material.dart';
 
 class FeedWidget extends StatelessWidget {
   final PostModel postModel;
-  const FeedWidget({this.postModel});
+  final Function likeFunction;
+  final bool isLiked;
+  const FeedWidget({this.postModel, this.likeFunction, this.isLiked});
   @override
   Widget build(BuildContext context) {
     if (postModel.isAnnouncement == true) {
       print("announcement");
-      return StartQuickstrike(postModel: postModel);
+      return StartQuickstrike(postModel: postModel, likeFunction: likeFunction, isLiked: isLiked);
     } else if (postModel.isResult == true) {
       print("isresult");
-      return FinishedQuickstrike(postModel: postModel);
+      return FinishedQuickstrike(postModel: postModel, likeFunction: likeFunction,isLiked: isLiked);
     } else {
       print("isnormalpostXD");
-      return PostItem(postModel: postModel);
+      return PostItem(likeFunction: likeFunction,postModel: postModel,isLiked: isLiked);
     }
   }
 }

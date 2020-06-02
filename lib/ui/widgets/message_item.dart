@@ -155,7 +155,7 @@ class MessageItem extends StatelessWidget {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontFamily: 'Raleway',
-                                              fontSize: 14),
+                                              fontSize: 12),
                                         ),
                                 ),
                                 Padding(

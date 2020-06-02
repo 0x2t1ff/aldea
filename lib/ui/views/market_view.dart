@@ -24,6 +24,7 @@ class _MarketViewState extends State<MarketView> with AutomaticKeepAliveClientMi
   Widget build(BuildContext context) {
     return ViewModelBuilder<MarketViewModel>.reactive(
         viewModelBuilder: () => MarketViewModel(widget.community.uid),
+        
         onModelReady: (m) async {
           await m.fetchProducts();
           m.setFirstProducts();

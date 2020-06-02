@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aldea/models/community.dart';
 import 'package:aldea/models/post_model.dart';
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -42,6 +43,29 @@ class FirestoreService {
     }
   }
 
+  Future<List<dynamic>> getFollowingCommunities(String uid) async {
+    var followingCommunities =
+        await _userCollectionReference.document(uid).get();
+
+    return followingCommunities.data["communities"];
+  }
+
+  Future<List<Community>> getCommunitiesData(
+      List<dynamic> communitiesList, String uid) async {
+    List<Community> infoList = List();
+
+    for (var f in communitiesList) {
+      var communityInfo =
+          await _communitiesCollectionReference.document(f).get();
+
+      var community =
+          Community.fromData(communityInfo.data, communityInfo.data["uid"]);
+      infoList.add(community);
+    }
+
+    return infoList;
+  }
+
   Future createUser(User user) async {
     try {
       await _userCollectionReference.document(user.uid).setData(user.toJson());
@@ -53,6 +77,12 @@ class FirestoreService {
 
       return e.toString();
     }
+  }
+
+  Future<bool> likePost(
+      List<dynamic> likeList, String postId, bool liked) async {
+   await  _postsCollectionReference.document(postId).updateData({"likes": likeList});
+   return !liked;
   }
 
   Future getVouch(String userId) async {
@@ -110,9 +140,7 @@ class FirestoreService {
           .where("id", isEqualTo: eventId)
           .limit(10)
           .getDocuments();
-      print(postDocumentSnapshot.documents.last.data.toString() +
-          "printing length of documents" +
-          eventId);
+
       {
         if (postDocumentSnapshot.documents.isNotEmpty) {
           return QuickStrikePost.fromMap(
@@ -131,13 +159,13 @@ class FirestoreService {
           .orderBy("lastPost", descending: true)
           .limit(10)
           .getDocuments();
-      print(postDocumentSnapshot.documents.toString());
+
       var data = postDocumentSnapshot.documents.map((doc) => doc.data);
       var lastPosts = [];
 
       data.forEach((f) => lastPosts.add(f["posts"][0]["id"]));
       List<PostModel> listData = new List<PostModel>();
-      int count = 0;
+
       for (var f in lastPosts) {
         await _postsCollectionReference
             .where("id", isEqualTo: f)
@@ -146,8 +174,6 @@ class FirestoreService {
             .then((onValue) {
           if (onValue.documents.first.data != null) {
             listData.add(PostModel.fromMap(onValue.documents.first.data));
-            count++;
-            print(count.toString());
           } else {
             print("it was null");
           }
@@ -256,7 +282,8 @@ class FirestoreService {
       List<QuickStrikePost> listData = [];
 
       for (var lastPost in lastPosts) {
-        var doc = await _quickstrikeCollectionReference.document(lastPost).get();
+        var doc =
+            await _quickstrikeCollectionReference.document(lastPost).get();
         listData.add(QuickStrikePost.fromMap(doc.data));
       }
       return listData;
@@ -281,26 +308,11 @@ class FirestoreService {
         .delete();
   }
 
-  Stream<DocumentSnapshot> getChats(String uid)  {
+  Stream<DocumentSnapshot> getChats(String uid) {
     try {
-      var stream  =   _userCollectionReference.document(uid).snapshots();
+      var stream = _userCollectionReference.document(uid).snapshots();
       return stream;
-    //  List chatRooms;
-    //  stream.asBroadcastStream().listen((event) {
-    //    chatRooms = event.data["chatRooms"];
-    //    print(chatRooms.toString() + "print after adding data");
-    //    return chatRooms;
-    //  });
-    //  stream.asBroadcastStream().listen((event) {
-    //    print(event.data["chatRooms"].runtimeType.toString() +
-    //        " runtimeTpe hope it dont give null shit erro rxD");
-    //  });
-//
-    //
-//
-    //  return chatRooms;
     } catch (e) {
-      print("error but can't print I guess");
       return (e.message);
     }
   }
