@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:aldea/ui/views/user_posts_view.dart';
 import 'package:aldea/ui/views/news_view.dart';
 import 'package:aldea/models/community.dart';
 import 'package:aldea/ui/shared/shared_styles.dart';
@@ -358,7 +359,7 @@ class _CommunityViewState extends State<CommunityView> {
                                     CommunityChatView(
                                         communityId:this.widget.community.uid,
                                         height: height),
-                                    Container()
+                                    UserPostsView(community: widget.community),
                                   ]),
                                 )
                               ],

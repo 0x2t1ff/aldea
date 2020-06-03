@@ -19,7 +19,7 @@ class _AdaptiveTextState extends State<AdaptiveText> {
   Widget build(BuildContext context) {
     return Container(
       padding: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-      child: widget.descriptionText.length < 110
+      child:  widget.descriptionText.length < 110
           ? new Text(widget.descriptionText, style: widget.styleText)
           : new Column(
               children: <Widget>[

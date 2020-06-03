@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aldea/models/community.dart';
 import 'package:aldea/models/post_model.dart';
 import 'package:aldea/models/quickstrike_model.dart';
+import 'package:aldea/models/user_post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import '../models/user_model.dart';
@@ -40,6 +41,26 @@ class FirestoreService {
       return data;
     } catch (e) {
       return e.message;
+    }
+  }
+
+  Future<List<UserPostModel>> getUserPosts(String uid) async {
+    try {
+      var result = await _communitiesCollectionReference
+          .document(uid)
+          .collection('userPosts')
+          .orderBy("date", descending: true)
+          .limit(10)
+          .getDocuments();
+
+      var data = result.documents.map((doc) => doc.data);
+      List<UserPostModel> listData = new List<UserPostModel>();
+      data.forEach((f) =>  listData.add(UserPostModel.fromMap(f)));
+      print(listData.toString() + " the print of data");
+      return listData;
+    } catch (e) {
+      print(e.toString() + " error print");
+      return (e.message);
     }
   }
 
