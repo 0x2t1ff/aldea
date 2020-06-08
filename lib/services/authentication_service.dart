@@ -51,7 +51,11 @@ class AuthenticationService {
         'winCount': 0,
         'gender': null,
         'phoneNumber': null,
-        'address': null
+        'address': null,
+        'vouches':[],
+        'communities': [],
+        'chatRooms': [],
+        
       };
       registerCurrentUser(userData);
 

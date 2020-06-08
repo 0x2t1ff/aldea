@@ -55,7 +55,7 @@ class FirestoreService {
 
       var data = result.documents.map((doc) => doc.data);
       List<UserPostModel> listData = new List<UserPostModel>();
-      data.forEach((f) =>  listData.add(UserPostModel.fromMap(f)));
+      data.forEach((f) => listData.add(UserPostModel.fromMap(f)));
       print(listData.toString() + " the print of data");
       return listData;
     } catch (e) {
@@ -69,6 +69,11 @@ class FirestoreService {
         await _userCollectionReference.document(uid).get();
 
     return followingCommunities.data["communities"];
+  }
+
+  Future getUser(String uid) async {
+    var userData = await _userCollectionReference.document(uid).get();
+    return User.fromData(userData.data);
   }
 
   Future<List<Community>> getCommunitiesData(
@@ -91,13 +96,33 @@ class FirestoreService {
     try {
       await _userCollectionReference.document(user.uid).setData(user.toJson());
     } catch (e) {
-      // TODO: Find or create a way to repeat error handling without so much repeated code
+      //TODO: Find or create a way to repeat error handling without so much repeated code
       if (e is PlatformException) {
         return e.message;
       }
 
       return e.toString();
     }
+  }
+
+  Future<List> getVouchList(String uid) async {
+    var user = await _userCollectionReference.document(uid).get();
+    List vouchList = user.data["vouches"];
+    return vouchList;
+  }
+
+  Future giveVouch(List vouchList, String uid) async{
+    await _userCollectionReference.document(uid).updateData({"vouches":vouchList});
+  }
+
+  Future writeNewChatRoom(String id, String otherId, String chatRoomId) async {
+    var postRef = _userCollectionReference.document(id);
+    Firestore.instance.runTransaction((Transaction tx) async {
+      DocumentSnapshot postSnapshot = await tx.get(postRef);
+      List list = postSnapshot.data["chatRooms"];
+      list.add(chatRoomId);
+      await tx.update(postRef, <String, dynamic>{"chatRooms": list});
+    });
   }
 
   Future getNewsPosts(String uid) async {
@@ -123,6 +148,24 @@ class FirestoreService {
         .document(postId)
         .updateData({"likes": likeList});
     return !liked;
+  }
+
+  Future createUserPost(String communityId, List imageUrl, String description,
+      String avatarUrl, String name, String userId, DateTime date) {
+    var ref = _communitiesCollectionReference
+        .document(communityId)
+        .collection("userPosts");
+    ref.document().setData({
+      "avatarUrl": avatarUrl,
+      "description": description,
+      "comments": ({}),
+      "communityId": communityId,
+      "imageUrl": imageUrl,
+      "likes": [],
+      "name": name,
+      "userId": userId,
+      "date":date,
+    });
   }
 
   Future getVouch(String userId) async {

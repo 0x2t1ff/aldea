@@ -5,14 +5,21 @@ import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
-
 import 'adaptive_text.dart';
 
 class UserPostItem extends StatelessWidget {
   final UserPostModel postModel;
   final Function likeFunction;
+  final Function navigate;
   final bool isLiked;
-  const UserPostItem({Key key, this.postModel, this.likeFunction, this.isLiked})
+  final String uid;
+  const UserPostItem(
+      {Key key,
+      this.postModel,
+      this.likeFunction,
+      this.isLiked,
+      this.navigate,
+      this.uid})
       : super(key: key);
 
   String readTimestamp(int timestamp) {
@@ -77,9 +84,12 @@ class UserPostItem extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(
                       left: devicesize.screenWidth(context) * 0.06),
-                  child: CircleAvatar(
-                    radius: devicesize.screenWidth(context) * 0.06,
-                    backgroundImage: NetworkImage(postModel.avatarUrl),
+                  child: GestureDetector(
+                    onTap: navigate,
+                    child: CircleAvatar(
+                      radius: devicesize.screenWidth(context) * 0.06,
+                      backgroundImage: NetworkImage(postModel.avatarUrl),
+                    ),
                   ),
                 ),
                 Container(
@@ -125,8 +135,12 @@ class UserPostItem extends StatelessWidget {
           ),
           Container(
             width: devicesize.screenWidth(context),
-            height: devicesize.screenHeight(context) * 0.4,
-            child: PostCarousel(imageUrl: this.postModel.imageUrl),
+            height: postModel.imageUrl.isEmpty == true
+                ? 0
+                : devicesize.screenHeight(context) * 0.4,
+            child: postModel.imageUrl.isEmpty == true
+                ? Container()
+                : PostCarousel(imageUrl: postModel.imageUrl),
           ),
           AdaptiveText(
             postModel.description,
@@ -208,7 +222,8 @@ class UserPostItem extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(
                                 top: devicesize.screenHeight(context) * 0.005),
-                            child: Text(postModel.comments.entries.length.toString(),
+                            child: Text(
+                                postModel.comments.entries.length.toString(),
                                 style: TextStyle(
                                     color: greyColor,
                                     fontFamily: 'Raleway',

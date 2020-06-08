@@ -13,6 +13,7 @@ class ProfileView extends StatelessWidget {
   final mailController = TextEditingController();
   final genderController = TextEditingController();
   final addressController = TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {

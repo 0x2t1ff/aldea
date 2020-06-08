@@ -15,6 +15,7 @@ class User {
   String address;
   List<dynamic> vouches;
   List<String> onGoingQuickstrikes = [];
+  List<dynamic> chatRooms;
 
   User(
       {this.name,
@@ -32,7 +33,8 @@ class User {
       this.communities,
       this.vouches,
       this.onGoingQuickstrikes,
-      this.requests,});
+      this.requests,
+      this.chatRooms});
 
   User.fromData(Map<String, dynamic> data)
       : name = data['name'],
@@ -49,9 +51,10 @@ class User {
         email = data['email'],
         address = data['address'],
         requests = data['requests'],
+        chatRooms = data["chatRooms"],
         communities = data['communities'],
         onGoingQuickstrikes = data["onGoingQuickstrikes"];
-
+        
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,
@@ -69,6 +72,7 @@ class User {
       'requests': requests,
       'communities': communities,
       'vouches' : vouches,
+      'chatRooms': chatRooms
     };
   }
 }

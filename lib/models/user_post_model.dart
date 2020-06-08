@@ -52,4 +52,6 @@ class UserPostModel {
         likes: map['likes'],
         comments: map['comments']);
   }
+
+  
 }

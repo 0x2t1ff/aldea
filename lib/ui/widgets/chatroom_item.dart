@@ -77,14 +77,20 @@ class _ChatRoomItemState extends State<ChatRoomItem> {
                   Container(
                     height: devicesize.screenHeight(context) * 0.02,
                     width: devicesize.screenWidth(context) * 0.5,
-                    child: widget.model.isImage ? Icon(Icons.image, color: Colors.white,) : Text(
-                      widget.model.message,
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize: devicesize.screenWidth(context) * 0.035,
-                          color: custcolor.grey,
-                          fontFamily: 'Raleway'),
-                    ),
+                    child: widget.model.isImage
+                        ? Icon(
+                            Icons.image,
+                            color: Colors.white,
+                          )
+                        : Text(
+                            widget.model.message,
+                            style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontSize:
+                                    devicesize.screenWidth(context) * 0.035,
+                                color: custcolor.grey,
+                                fontFamily: 'Raleway'),
+                          ),
                   ),
                 ],
               ),

@@ -44,7 +44,7 @@ class DirectMessageViewModel extends BaseModel {
       );
     }
     });
-    print(chatRooms.toString() + " outside the listen ");
+   
 
    
   }

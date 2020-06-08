@@ -40,9 +40,12 @@ class ChatsView extends StatelessWidget {
                             );
                           } else if (snapshot.hasError) {
                             return Text("error");
+                          } else if (snapshot.data.snapshot.value == null) {
+                            return Center(child: Text(" send your first message!"));
                           } else {
                             Map<dynamic, dynamic> messageMaps =
                                 snapshot.data.snapshot.value;
+
                             List messageList = messageMaps.values.toList();
 
                             messageList.sort((a, b) {

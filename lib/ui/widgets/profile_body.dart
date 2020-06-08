@@ -1,9 +1,8 @@
-
 import 'package:aldea/ui/shared/ui_helpers.dart';
+import 'package:aldea/viewmodels/other_profile_view_model.dart';
 import 'package:aldea/viewmodels/profile_view_model.dart';
 import 'package:flutter/material.dart';
 import '../shared/shared_styles.dart';
-
 
 class ProfileBody extends StatelessWidget {
   final String postsCount;
@@ -11,9 +10,15 @@ class ProfileBody extends StatelessWidget {
   final String vouchCount;
   final String winCount;
   final ProfileViewModel model;
+  final OtherProfileViewModel otherModel;
 
   ProfileBody(
-      {this.postsCount, this.communitiesCount, this.vouchCount, this.winCount, this.model});
+      {this.postsCount,
+      this.communitiesCount,
+      this.vouchCount,
+      this.winCount,
+      this.model,
+      this.otherModel});
 
   @override
   Widget build(BuildContext context) {
@@ -71,34 +76,42 @@ class ProfileBody extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         GestureDetector(
-                                                  child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                "Vouch",
-                                style: TextStyle(
-                                    color: Color(0xffB1AFAF),
-                                    fontFamily: "Raleway",
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
-                              ),
-                              Text(
-                                vouchCount.toString(),
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: "Raleway",
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
-                              )
-                            ],
-                          ),
-                          onTap: (){
-                            model.seeVouches();
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  "Vouch",
+                                  style: TextStyle(
+                                      color: Color(0xffB1AFAF),
+                                      fontFamily: "Raleway",
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                                Text(
+                                  vouchCount.toString(),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "Raleway",
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                )
+                              ],
+                            ),
+                            onTap: () {
+                              model == null
+                                  ? otherModel.seeVouches()
+                                  : model.seeVouches();
+                            }),
+                        GestureDetector(
+                          onTap: () {
+                            print("pressed");
+                            otherModel.giveVouch();
                             
-                          }
-  
-                        ),
-                        SizedBox(height: usableScreenWithoughtBars(context) * 0.12 ,child: Image.asset("assets/images/vouch.png"))
+                          },
+                          child: SizedBox(
+                              height: usableScreenWithoughtBars(context) * 0.12,
+                              child: Image.asset("assets/images/vouch.png")),
+                        )
                       ],
                     ),
                   ))

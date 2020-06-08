@@ -30,7 +30,7 @@ class _DirectMessageViewState extends State<DirectMessageView> {
                     stream: model.stream[index].asBroadcastStream(),
                     builder: (ctx, snapshot) {
                       if (!snapshot.hasData) {
-                        return Text(
+                        return Text( 
                           'No Data...',
                         );
                       } else if (snapshot.hasError) {

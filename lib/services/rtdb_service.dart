@@ -11,12 +11,12 @@ class RtdbService {
     return _database.reference().child("communitiesChatRooms/$communityId").onValue;
   }
 
-  String createChatRoom(List<String> userIds) {
+  String createChatRoom(List<dynamic> userIds, List<dynamic> images) {
     //Crea la CHAT ROOM con los users y devuelve su ID
-     
-
+  Map avatarUrls;
+  avatarUrls = { userIds[0]:images[0],userIds[1]:images[1]};
     var ref = _database.reference().child('chatRooms/').push()
-      ..set({'users': userIds});
+      ..set({'users': userIds,"avatarUrl":avatarUrls });
     return ref.key;
   }
 // asignar metodo junto creación de comunidad , comprobar lógica.
