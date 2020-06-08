@@ -3,30 +3,30 @@ import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/ui/widgets/market_landing.dart';
 import 'package:aldea/ui/widgets/product_selected.dart';
 import 'package:aldea/viewmodels/market_view_model.dart';
+import '../../models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 class MarketView extends StatefulWidget {
   final Community community;
+  final Map<String, List<Product>> products;
 
-  const MarketView(this.community);
+  MarketView(this.community, this.products);
 
   @override
   _MarketViewState createState() => _MarketViewState();
 }
 
-class _MarketViewState extends State<MarketView> with AutomaticKeepAliveClientMixin {
-
+class _MarketViewState extends State<MarketView>
+    with AutomaticKeepAliveClientMixin {
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MarketViewModel>.reactive(
-        viewModelBuilder: () => MarketViewModel(widget.community.uid),
-        
-        onModelReady: (m) async {
-          await m.fetchProducts();
+        viewModelBuilder: () => MarketViewModel(widget.community.uid, widget.products),
+        onModelReady: (m) {
           m.setFirstProducts();
         },
         builder: (context, model, child) => Container(
@@ -38,7 +38,9 @@ class _MarketViewState extends State<MarketView> with AutomaticKeepAliveClientMi
                     alignment: Alignment.center,
                     height: communityBodyHeight(context) * 0.08,
                     padding: EdgeInsets.only(
-                        top: communityBodyHeight(context) * 0.025, left: 15, right: 15),
+                        top: communityBodyHeight(context) * 0.025,
+                        left: 15,
+                        right: 15),
                     width: double.infinity,
                     child: Row(
                       children: <Widget>[
@@ -71,10 +73,12 @@ class _MarketViewState extends State<MarketView> with AutomaticKeepAliveClientMi
                       ],
                     ),
                   ),
-
-                  model.isProductSelected ? ProductSelected(product: model.selectedProduct, model: model,
-                  ) :
-                  MarketLanding(model: model) ,
+                  model.isProductSelected
+                      ? ProductSelected(
+                          product: model.selectedProduct,
+                          model: model,
+                        )
+                      : MarketLanding(model: model),
                 ],
               ),
             ));

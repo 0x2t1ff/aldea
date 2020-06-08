@@ -2,37 +2,38 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuickStrikePost {
   final String title;
-  final List<dynamic> imageUrl;
+  int amount;
+  List<dynamic> imageUrl;
   final String userId;
   final double price;
-  final bool isRandom;
-  final bool isLista;
-  final bool isGame;
-  final String modelo;
-  final String description;
-  final Timestamp fechaQuickstrike;
-  final String id;
-  final String communityName;
-  final String profilePic;
+  bool isRandom;
+  bool isQuestion;
+  bool isGame;
+  String modelo;
+  String description;
+  Timestamp fechaQuickstrike;
+  String id;
+  String communityName;
+  String cid;
   final bool isEmpty;
   final bool finished;
-  QuickStrikePost({
-    this.userId,
-    this.title,
-    this.price,
-    this.modelo,
-    this.description,
-    this.fechaQuickstrike,
-    this.profilePic,
-    this.isGame,
-    this.communityName,
-    this.isLista,
-    this.isRandom,
-    this.imageUrl,
-    this.id,
-    this.isEmpty,
-    this.finished
-  });
+  QuickStrikePost(
+      {this.userId,
+      this.title,
+      this.price,
+      this.modelo,
+      this.description,
+      this.fechaQuickstrike,
+      this.isGame,
+      this.communityName,
+      this.isQuestion,
+      this.isRandom,
+      this.imageUrl,
+      this.id,
+      this.isEmpty,
+      this.finished,
+      this.amount,
+      this.cid});
 
   Map<String, dynamic> toMap() {
     return {
@@ -41,36 +42,37 @@ class QuickStrikePost {
       'imageUrl': imageUrl,
       'price': price,
       'isRandom': isRandom,
-      'isLista': isLista,
+      'isQuestion': isQuestion,
       'isGame': isGame,
       'modelo': modelo,
       'description': description,
       'fechaQuickstrike': fechaQuickstrike,
       'id': id,
       'communityName': communityName,
-      'profilePic': profilePic,
       'isEmpty': isEmpty,
       'finished': finished,
+      'cid': cid,
+      'amount': amount
     };
   }
 
   static QuickStrikePost fromMap(Map<String, dynamic> map) {
     return QuickStrikePost(
-      title: map['title'],
-      imageUrl: map['imageUrl'],
-      userId: map['userId'],
-      price: map['price'],
-      isGame: map['isGame'],
-      isRandom: map['isRandom'],
-      isLista: map['isLista'],
-      description: map['description'],
-      modelo: map['modelo'],
-      fechaQuickstrike: map['fechaQuickstrike'],
-      id: map['id'],
-      profilePic: map['profilePic'],
-      communityName: map['communityName'],
-      isEmpty: map['isEmpty'],
-      finished:  map['finished']
-    );
+        title: map['title'],
+        imageUrl: map['imageUrl'],
+        userId: map['userId'],
+        price: map['price'],
+        isGame: map['isGame'],
+        isRandom: map['isRandom'],
+        isQuestion: map['isQuestion'],
+        description: map['description'],
+        modelo: map['modelo'],
+        fechaQuickstrike: map['fechaQuickstrike'],
+        id: map['id'],
+        communityName: map['communityName'],
+        isEmpty: map['isEmpty'],
+        amount: map['amount'],
+        cid: map['cid'],
+        finished: map['finished']);
   }
 }

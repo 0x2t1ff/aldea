@@ -33,7 +33,7 @@ class _DialogManagerState extends State<DialogManager> {
         builder: (context) => AlertDialog(
               title: Text(request.title, style: TextStyle(color: Colors.white)),
               content: !request.hasTextArea
-                  ? Text(request.description)
+                  ? Text(request.description, style: TextStyle(color: Colors.white),)
                   : TextField(
                       controller: controller,
                       style: TextStyle(color: Colors.white),

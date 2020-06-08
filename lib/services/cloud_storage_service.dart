@@ -5,67 +5,91 @@ import 'package:flutter/foundation.dart';
 import '../models/cloud_storage_result.dart';
 
 class CloudStorageService {
+  Future<CloudStorageResult> uploadCommunityMessageImage(
+      {@required File imageToUpload,
+      @required String communityId,
+      @required String userId}) async {
+    String imageFileName = DateTime.now().toString();
+    final StorageReference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
+        .child("/communitiesChatrooms/$communityId/$imageFileName");
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(imageToUpload);
+    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
 
-
-
-
-Future<CloudStorageResult> uploadCommunityMessageImage({
-  
-  @required File imageToUpload,
-  @required String communityId, 
-  @required String userId
-}) async  {
-  
-String imageFileName = DateTime.now().toString();
-final StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("/communitiesChatrooms/$communityId/$imageFileName");
-StorageUploadTask uploadTask = firebaseStorageRef.putFile(imageToUpload);
-StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-
-var downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
+    var downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
     if (uploadTask.isComplete) {
       var url = downloadUrl.toString();
       return CloudStorageResult(
-          imageFileName: "/communitiesChatrooms/$communityId/$imageFileName/", imageUrl: url);
+          imageFileName: "/communitiesChatrooms/$communityId/$imageFileName/",
+          imageUrl: url);
     }
     return null;
+  }
 
+  Future<CloudStorageResult> uploadPostImages(
+      File image, String communityId) async {
+    String fileName = DateTime.now().toString();
+    final StorageReference ref = FirebaseStorage.instance
+        .ref()
+        .child("/communities/$communityId/posts/$fileName");
+    StorageUploadTask uploadTask = ref.putFile(image);
+    StorageTaskSnapshot snapshot = await uploadTask.onComplete;
 
-}
+    var downloadUrl = await snapshot.ref.getDownloadURL();
+    if (uploadTask.isSuccessful) {
+      var url = downloadUrl.toString();
+      return CloudStorageResult(
+          imageFileName: "/communities/$communityId/posts/$fileName",
+          imageUrl: url);
+    }
+    return null;
+  }
 
+  Future<CloudStorageResult> uploadQuickstrikmImages(
+      File image, String communityId) async {
+    String fileName = DateTime.now().toString();
+    final StorageReference ref = FirebaseStorage.instance
+        .ref()
+        .child("/communities/$communityId/quickstrikes/$fileName");
+    StorageUploadTask uploadTask = ref.putFile(image);
+    StorageTaskSnapshot snapshot = await uploadTask.onComplete;
 
-Future<CloudStorageResult> uploadMessageImage({
-  
-  @required File imageToUpload,
-  @required String chatId, 
-  @required String userId
-}) async  {
-  
-String imageFileName = DateTime.now().toString();
-final StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("/chatrooms/$chatId/$imageFileName");
-StorageUploadTask uploadTask = firebaseStorageRef.putFile(imageToUpload);
-StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+    var downloadUrl = await snapshot.ref.getDownloadURL();
+    if (uploadTask.isSuccessful) {
+      var url = downloadUrl.toString();
+      return CloudStorageResult(
+          imageFileName: "/communities/$communityId/quickstrikes/$fileName",
+          imageUrl: url);
+    }
+    return null;
+  }
 
-var downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
-    if (uploadTask.isComplete) {
+  Future<CloudStorageResult> uploadMessageImage(
+      {@required File imageToUpload,
+      @required String chatId,
+      @required String userId}) async {
+    String imageFileName = DateTime.now().toString();
+    final StorageReference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
+        .child("/chatrooms/$chatId/$imageFileName");
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(imageToUpload);
+    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+
+    var downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
+    if (uploadTask.isSuccessful) {
       var url = downloadUrl.toString();
       return CloudStorageResult(
           imageFileName: "/chatrooms/$chatId/$imageFileName/", imageUrl: url);
     }
     return null;
-
-
-}
-
-
+  }
 
   Future<CloudStorageResult> uploadUserImage({
     @required File imageToUpload,
     @required String title,
     @required String userId,
   }) async {
-    var imageFileName =
-
-        title;
+    var imageFileName = title;
     final StorageReference firebaseStorageRef = FirebaseStorage.instance
         .ref()
         .child("/users/$userId/profile/$imageFileName");
@@ -78,7 +102,8 @@ var downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
     if (uploadTask.isComplete) {
       var url = downloadUrl.toString();
       return CloudStorageResult(
-          imageFileName: "/users/$userId/profile/$imageFileName", imageUrl: url);
+          imageFileName: "/users/$userId/profile/$imageFileName",
+          imageUrl: url);
     }
     return null;
   }

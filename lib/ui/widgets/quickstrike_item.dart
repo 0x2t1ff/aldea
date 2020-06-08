@@ -47,12 +47,12 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
       quickstrikeType = "Game";
     }
     if (widget.quickStrikePost.isEmpty) {
-    } else if (widget.quickStrikePost.isLista) {
+    } else if (widget.quickStrikePost.isRandom) {
       quickstrikeType = "Random";
     }
     if (widget.quickStrikePost.isEmpty) {
-    } else if (widget.quickStrikePost.isLista) {
-      quickstrikeType = "Lista";
+    } else if (widget.quickStrikePost.isQuestion) {
+      quickstrikeType = "Pregunta";
     }
     return widget.quickStrikePost.isEmpty
         ? Container(
@@ -102,7 +102,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                     child: CircleAvatar(
                       radius: devicesize.screenWidth(context) * 0.055,
                       backgroundImage:
-                          NetworkImage(widget.quickStrikePost.profilePic),
+                          NetworkImage(widget.quickStrikePost.imageUrl[0]),
                     ),
                   ),
                   Padding(

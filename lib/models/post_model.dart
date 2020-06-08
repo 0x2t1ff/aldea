@@ -21,7 +21,6 @@ class PostModel {
   final List<dynamic> winners;
   final List<dynamic> likes;
   final List<dynamic> comments;
-  
 
   PostModel({
     @required this.userId,
@@ -41,7 +40,7 @@ class PostModel {
     @required this.isLista,
     @required this.isRandom,
     @required this.imageUrl,
-    @required this.id,
+    this.id,
     @required this.likes,
   });
 
@@ -61,15 +60,16 @@ class PostModel {
       'isAnnouncement': isAnnouncement,
       'isResult': isResult,
       'winners': winners,
-      'likes':likes,
-      'comments':comments,
-      'communityName' : communityName,
+      'likes': likes,
+      'comments': comments,
+      'communityName': communityName,
+      'avatarUrl': avatarUrl
     };
   }
 
   static PostModel fromMap(Map<String, dynamic> map) {
     return PostModel(
-      communityName: map['communityName'],
+        communityName: map['communityName'],
         title: map['title'],
         imageUrl: map['imageUrl'],
         userId: map['userId'],

@@ -27,20 +27,18 @@ class FeedViewModel extends BaseModel {
         await _firestoreService.getFollowingPostsOnceOff(currentUser.uid);
     var communities =
         await _firestoreService.getFollowingCommunities(currentUser.uid);
-    setBusy(true);
+
+    print(quickstrikeResults);
     if (communities != null) {
-      _firestoreService
-          .getCommunitiesData(communities, currentUser.uid)
-          .then((value) {
-        communityList = value;
-        notifyListeners();
-      });
+      communityList = await _firestoreService.getCommunitiesData(
+          communities, currentUser.uid);
+      notifyListeners();
     }
+    print(communityList);
     if (quickstrikeResults is List<PostModel>) {
       _posts = quickstrikeResults;
       notifyListeners();
     } else {
-      
       await _dialogService.showDialog(
         title: 'La actualizacion de posts ha fallado',
         description: "ha fallado XD asi al menos no crashea ",
