@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/ui/widgets/profile_body.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,6 @@ class ProfileView extends StatelessWidget {
   final mailController = TextEditingController();
   final genderController = TextEditingController();
   final addressController = TextEditingController();
-  
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +115,27 @@ class ProfileView extends StatelessWidget {
                                             "assets/images/default-profile.png")),
                               ),
                             )),
+                        Positioned(
+                          top: screenHeight(context) * 0.02,
+                          right: screenWidth(context) * 0.04,
+                          child: GestureDetector(
+                            onTap: () => model.seeSettings(),
+                            child: Stack(
+                              children: <Widget>[
+                                Positioned(
+                                  left: 1.0,
+                                  top: 1.0,
+                                  child: Icon(
+                                    Icons.settings,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                                Icon(Icons.settings, color: blueTheme),
+                              ],
+                            ),
+                          ),
+                         
+                        ),
                         Positioned(
                             child: ClipRect(
                           child: BackdropFilter(

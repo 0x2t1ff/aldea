@@ -26,7 +26,6 @@ class CloudStorageService {
     return null;
   }
 
-
   Future<CloudStorageResult> uploadPostImages(
       File image, String communityId) async {
     String fileName = DateTime.now().toString();
@@ -38,13 +37,14 @@ class CloudStorageService {
 
     var downloadUrl = await snapshot.ref.getDownloadURL();
     if (uploadTask.isSuccessful) {
-var url = downloadUrl.toString();
+      var url = downloadUrl.toString();
       return CloudStorageResult(
           imageFileName: "/communities/$communityId/posts/$fileName",
           imageUrl: url);
     }
     return null;
   }
+
   Future<List> uploadUserPostsImages(
       {File firstImage,
       @required String communityId,
@@ -67,6 +67,23 @@ var url = downloadUrl.toString();
           .then((value) => urlsList.add(value));
     }
     return urlsList;
+  }
+
+  Future<String> uploadCommunityRequestImage({
+    @required File imageToUpload,
+    @required String communityId,
+  }) async {
+    String imageFileName = DateTime.now().toString();
+    final StorageReference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
+        .child("/communities/$communityId/$imageFileName");
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(imageToUpload);
+    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+    var downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
+    if (uploadTask.isSuccessful) {
+      var url = downloadUrl.toString();
+      return url;
+    }
   }
 
   Future<String> uploadUserPostImage({
@@ -99,15 +116,13 @@ var url = downloadUrl.toString();
     StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
 
     var downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
-    if (uploadTask.isComplete) { var url = downloadUrl.toString();
+    if (uploadTask.isComplete) {
+      var url = downloadUrl.toString();
       return CloudStorageResult(
           imageFileName: "/chatrooms/$chatId/$imageFileName/", imageUrl: url);
     }
     return null;
   }
-
-
-      
 
   Future<CloudStorageResult> uploadQuickstrikmImages(
       File image, String communityId) async {
@@ -127,8 +142,6 @@ var url = downloadUrl.toString();
     }
     return null;
   }
-
-
 
   Future<CloudStorageResult> uploadUserImage({
     @required File imageToUpload,
@@ -177,4 +190,3 @@ var url = downloadUrl.toString();
     return null;
   }
 }
-      

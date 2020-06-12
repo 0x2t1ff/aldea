@@ -23,15 +23,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
   bool isEnlisted;
   String animationSelector = "";
 
-  @override
-  void initState() {
-    if (!widget.quickStrikePost.isEmpty) {
-      isEnlisted = widget.model.currentUser.onGoingQuickstrikes
-          .contains(widget.quickStrikePost.id);
-      isEnlisted ? animationSelector = 'RTOG' : animationSelector = 'GTOR';
-    }
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {

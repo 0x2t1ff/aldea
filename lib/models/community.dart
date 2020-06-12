@@ -28,4 +28,18 @@ class Community {
         postsCount = data['postsCount'],
         followerCount = data['followerCount'],
         moderators = data['moderators'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'uid': uid,
+      'name': name,
+      'description': description,
+      'rules': rules,
+      'iconPicUrl': iconPicUrl,
+      'bkdPicUrl': bkdPicUrl,
+      'postsCount': postsCount,
+      'followerCount': followerCount,
+      'moderators': moderators,
+    };
+  }
 }

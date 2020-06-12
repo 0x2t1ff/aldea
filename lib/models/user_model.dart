@@ -7,7 +7,7 @@ class User {
   String bkdPicName;
   final int postsCount;
   final int winCount;
-  List<dynamic> communities; 
+  List<dynamic> communities;
   List<dynamic> requests;
   String gender;
   String phoneNumber;
@@ -16,6 +16,7 @@ class User {
   List<dynamic> vouches;
   List<String> onGoingQuickstrikes = [];
   List<dynamic> chatRooms;
+  bool isGodAdmin;
 
   User(
       {this.name,
@@ -34,7 +35,8 @@ class User {
       this.vouches,
       this.onGoingQuickstrikes,
       this.requests,
-      this.chatRooms});
+      this.chatRooms,
+      this.isGodAdmin});
 
   User.fromData(Map<String, dynamic> data)
       : name = data['name'],
@@ -53,8 +55,8 @@ class User {
         requests = data['requests'],
         chatRooms = data["chatRooms"],
         communities = data['communities'],
-        onGoingQuickstrikes = data["onGoingQuickstrikes"];
-        
+      //  onGoingQuickstrikes = data["onGoingQuickstrikes"],
+        isGodAdmin = data["isGodAdmin"];
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,
@@ -71,8 +73,9 @@ class User {
       'address': address,
       'requests': requests,
       'communities': communities,
-      'vouches' : vouches,
-      'chatRooms': chatRooms
+      'vouches': vouches,
+      'chatRooms': chatRooms,
+      'isGodAdmin': isGodAdmin
     };
   }
 }

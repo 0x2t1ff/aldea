@@ -3,7 +3,6 @@ import 'package:aldea/models/cloud_storage_result.dart';
 import 'package:aldea/services/cloud_storage_service.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
-import 'package:aldea/ui/views/vouch_view.dart';
 import 'base_model.dart';
 import 'dart:io';
 import '../utils/image_selector.dart';
@@ -19,8 +18,12 @@ class ProfileViewModel extends BaseModel {
   File selectedBkdImage;
 
   Future seeVouches() {
-   _navigationService.navigateTo(VouchViewRoute, false);
+    _navigationService.navigateTo(VouchViewRoute, false);
+  }
 
+  Future seeSettings() {
+    _navigationService.navigateTo(ProfileSettingsViewRoute, false,
+        arguments: currentUser.isGodAdmin);
   }
 
   Future selectProfileImage() async {

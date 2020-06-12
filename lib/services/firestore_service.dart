@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:aldea/models/community.dart';
+import 'package:aldea/models/community_creation_request.dart';
 import 'package:aldea/models/post_model.dart';
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/models/user_post_model.dart';
@@ -21,6 +22,8 @@ class FirestoreService {
       Firestore.instance.collection('communities');
   final CollectionReference _followingPostsCollectionReference =
       Firestore.instance.collection('followers');
+  final CollectionReference _communitiesCreationRequestsReference =
+      Firestore.instance.collection('communityRequests');
 
   //      **USER METHODS**
   Future<Map<String, dynamic>> getUserData(String uid) async {
@@ -62,6 +65,60 @@ class FirestoreService {
       print(e.toString() + " error print");
       return (e.message);
     }
+  }
+
+  Future denyCommunityCreation(String id) async {
+    await _communitiesCreationRequestsReference.document(id).delete();
+  }
+
+  Future createCommunity(Community community, String id) async {
+    try {
+      await _communitiesCollectionReference
+          .document(community.uid)
+          .setData(community.toJson());
+    } catch (e) {
+      //TODO: Find or create a way to repeat error handling without so much repeated code
+      if (e is PlatformException) {
+        return e.message;
+      }
+
+      return e.toString();
+    }
+  }
+  Future<DocumentReference> createRequestId() async {
+     var documentPath = await _communitiesCreationRequestsReference.document();
+     return documentPath;
+  }
+
+  Future createCommunityCreationRequest(
+      User user,
+      String messageRequest,
+      String bkdPicUrl,
+      String name,
+      String communityRules,
+      String description,
+      String iconPicUrl,
+      DocumentReference documentPath) async {
+    
+    documentPath.setData({
+      'user': user.toJson(),
+      'messageRequest': messageRequest,
+      'bkdPicUrl': bkdPicUrl,
+      'name': name,
+      'communityRules': communityRules,
+      'description': description,
+      'iconPicUrl': iconPicUrl,
+      'id': documentPath.documentID
+    });
+  }
+
+  Future<List<CommunityCreationRequest>> getAdminRequests() async {
+    List<CommunityCreationRequest> requestsList = [];
+    var requests = await _communitiesCreationRequestsReference.getDocuments();
+    requests.documents.forEach((element) {
+      requestsList.add(CommunityCreationRequest.fromData(element.data));
+    });
+    return requestsList;
   }
 
   Future<List<dynamic>> getFollowingCommunities(String uid) async {
@@ -111,8 +168,10 @@ class FirestoreService {
     return vouchList;
   }
 
-  Future giveVouch(List vouchList, String uid) async{
-    await _userCollectionReference.document(uid).updateData({"vouches":vouchList});
+  Future giveVouch(List vouchList, String uid) async {
+    await _userCollectionReference
+        .document(uid)
+        .updateData({"vouches": vouchList});
   }
 
   Future writeNewChatRoom(String id, String otherId, String chatRoomId) async {
@@ -164,7 +223,7 @@ class FirestoreService {
       "likes": [],
       "name": name,
       "userId": userId,
-      "date":date,
+      "date": date,
     });
   }
 
@@ -250,10 +309,7 @@ class FirestoreService {
       List<PostModel> listData = new List<PostModel>();
       print(lastPosts);
       for (var f in lastPosts) {
-        await _postsCollectionReference
-            .document(f)
-            .get()
-            .then((onValue) {
+        await _postsCollectionReference.document(f).get().then((onValue) {
           if (onValue.data != null) {
             listData.add(PostModel.fromMap(onValue.data));
           } else {
@@ -263,9 +319,9 @@ class FirestoreService {
       }
       //TODO: HACER RETURN UNA VEZ ACABADA LA CARGA DE POSTS
       listData.sort((a, b) {
-       return a.fechaQuickstrike.compareTo(b.fechaQuickstrike);
+        return a.fechaQuickstrike.compareTo(b.fechaQuickstrike);
       });
-      
+
       return listData.reversed.toList();
     } catch (e) {
       print(e.toString());

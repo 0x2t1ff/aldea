@@ -1,8 +1,11 @@
+import 'package:aldea/ui/views/admin_screen_view.dart';
 import 'package:aldea/ui/views/chats_view.dart';
+import 'package:aldea/ui/views/community_creation_view.dart';
+import 'package:aldea/ui/views/detailed_community_creation_request_view.dart';
 import 'package:aldea/ui/views/other_profile_view.dart';
 import 'package:aldea/ui/views/requests_view.dart';
 import 'package:aldea/ui/views/vouch_view.dart';
-
+import './views/profile_settings_view.dart';
 import './views/home_view.dart';
 import 'package:flutter/material.dart';
 import '../constants/route_names.dart';
@@ -30,7 +33,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: ChatsView(
           chatroomId: settings.arguments,
-          
         ),
       );
     case LoginViewRoute:
@@ -51,10 +53,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
 
     case OtherProfileViewRoute:
-    return _getPageRoute(
-      routeName: settings.name,
-      viewToShow: OtherProfileView(targetUser: settings.arguments,)
-    );
+      return _getPageRoute(
+          routeName: settings.name,
+          viewToShow: OtherProfileView(
+            targetUser: settings.arguments,
+          ));
 
     case SignUpViewRoute:
       return _getPageRoute(
@@ -65,6 +68,23 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: HomeView(),
+      );
+    case ProfileSettingsViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: ProfileSettingsView(settings.arguments),
+      );
+      case DetailedCommunityCreationViewRoute:
+      return _getPageRoute(routeName: settings.name, viewToShow: DetailedCommunityCreationView(settings.arguments));
+    case CommunityCreationViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: CommunityCreationView(),
+      );
+    case AdminScreenViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: AdminScreenView(),
       );
     default:
       return MaterialPageRoute(

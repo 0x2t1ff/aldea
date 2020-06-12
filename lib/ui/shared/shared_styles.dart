@@ -20,7 +20,7 @@ BoxDecoration profilePicDecoration = BoxDecoration(
       width: 4,
     ),
     borderRadius: BorderRadius.circular(100),
-    boxShadow: [BoxShadow(offset: Offset(5, 5), blurRadius: 10)]);
+    boxShadow: [BoxShadow(offset: Offset(2, 2), blurRadius: 12)]);
 
 BoxDecoration profileBoxesDecoration = BoxDecoration(
     borderRadius: BorderRadius.circular(19),
