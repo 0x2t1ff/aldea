@@ -45,7 +45,7 @@ class _PostCarouselState extends State<PostCarousel> {
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: NetworkImage(widget.imageUrl[itemIndex]),
-                  fit: BoxFit.fill)),
+                  fit: BoxFit.cover)),
         ),
       ),
       Positioned(

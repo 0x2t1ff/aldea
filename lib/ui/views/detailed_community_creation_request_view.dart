@@ -96,7 +96,7 @@ class DetailedCommunityCreationView extends StatelessWidget {
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: NetworkImage(request.bkdPicUrl),
-                                    fit: BoxFit.fill),
+                                    fit: BoxFit.cover),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15))),
                             child: Stack(

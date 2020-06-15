@@ -70,7 +70,7 @@ class CommunityMessageItem extends StatelessWidget {
                                               child: Image(
                                                 image:
                                                     NetworkImage(model.message),
-                                                fit: BoxFit.fill,
+                                                fit: BoxFit.cover,
                                               ))
                                           : Text(
                                               model.message,
@@ -176,7 +176,7 @@ class CommunityMessageItem extends StatelessWidget {
                                               child: Image(
                                                 image:
                                                     NetworkImage(model.message),
-                                                fit: BoxFit.fill,
+                                                fit: BoxFit.cover,
                                               ))
                                         : Text(
                                             model.message,

@@ -9,13 +9,14 @@ import 'package:stacked/stacked.dart';
 import "../shared/app_colors.dart";
 
 class RequestsView extends StatelessWidget {
-  final List<CommunityRequest> requests;
+  final Object arguments;
 
-  const RequestsView({this.requests});
-  @override
+  const RequestsView({this.arguments});
+  @override 
   Widget build(BuildContext context) {
     return ViewModelBuilder<RequestsViewModel>.reactive(
-      viewModelBuilder: () => RequestsViewModel(requests),
+      viewModelBuilder: () => RequestsViewModel(arguments),
+      onModelReady: (model) => model.setArguments(),
       builder: (ctx, model, child) => Scaffold(
         backgroundColor: Color(0xff0F1013),
         body: Column(
@@ -35,10 +36,17 @@ class RequestsView extends StatelessWidget {
                 width: double.infinity,
                 height: usableScreenHeight(context) * 0.46,
                 child: ListView.builder(
-                  padding: EdgeInsets.all(0),
-                    itemCount: requests.length,
+                    padding: EdgeInsets.all(0),
+                    itemCount: model.requests.length,
                     itemBuilder: (context, i) {
-                      return SwipeItem(data: requests[i], isEven: i.isEven );
+                      return SwipeItem(
+                          data: model.requests[i],
+                          isEven: i.isEven,
+                          deny: () => model.removeRequest(
+                              model.requests[i].uid, i),
+                              accept: () => model.acceptRequest(
+                                model.requests[i].uid,i
+                              ),);
                     })),
             Container(
               height: usableScreenHeight(context) * 0.46,

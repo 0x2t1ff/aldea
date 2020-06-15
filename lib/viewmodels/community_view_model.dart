@@ -11,10 +11,8 @@ import 'package:aldea/services/navigation_service.dart';
 import 'package:aldea/viewmodels/base_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import 'base_model.dart';
 import 'dart:io';
-
 import '../utils/image_selector.dart';
 import '../locator.dart';
 
@@ -55,7 +53,12 @@ class CommunityViewModel extends BaseModel {
 
   void goToRequests() {
     _navigationService.navigateTo(RequestsViewRoute, false,
-        arguments: requests);
+        arguments: ({"requests": requests, "uid": community.uid}));
+  }
+
+  void goToSettings(Community community) {
+    _navigationService.navigateTo(CommunitySettingsViewRoute, false,
+        arguments: community);
   }
 
   void setIsQuickstrike(bool value) {
@@ -260,7 +263,7 @@ class CommunityViewModel extends BaseModel {
           buttonTitle: "Entendido");
       return null;
     }
-    if (modelDropdown ==  null) {
+    if (modelDropdown == null) {
       _dialogService.showDialog(
           title: "Error",
           description: "Debes elegir el modelo de producto.",

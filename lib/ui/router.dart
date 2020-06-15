@@ -13,6 +13,7 @@ import './views/login_view.dart';
 import './views/signup_view.dart';
 import './views/confirm_number_view.dart';
 import 'views/community_view.dart';
+import './views/community_settings_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -43,7 +44,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case RequestsViewRoute:
       return _getPageRoute(
         routeName: settings.name,
-        viewToShow: RequestsView(requests: settings.arguments),
+        viewToShow: RequestsView(
+          arguments: settings.arguments,
+        ),
       );
 
     case VouchViewRoute:
@@ -74,8 +77,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: ProfileSettingsView(settings.arguments),
       );
-      case DetailedCommunityCreationViewRoute:
-      return _getPageRoute(routeName: settings.name, viewToShow: DetailedCommunityCreationView(settings.arguments));
+    case DetailedCommunityCreationViewRoute:
+      return _getPageRoute(
+          routeName: settings.name,
+          viewToShow: DetailedCommunityCreationView(settings.arguments));
     case CommunityCreationViewRoute:
       return _getPageRoute(
         routeName: settings.name,
@@ -86,6 +91,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: AdminScreenView(),
       );
+    case CommunitySettingsViewRoute:
+      return _getPageRoute(
+          routeName: settings.name, viewToShow: CommunitySettingsView(settings.arguments));
     default:
       return MaterialPageRoute(
           builder: (_) => Scaffold(

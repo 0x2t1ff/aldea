@@ -47,6 +47,56 @@ class FirestoreService {
     }
   }
 
+  Future removeRequest(String communityId, String uid) async {
+    var reference = await _communitiesCollectionReference
+        .document(communityId)
+        .collection("requests")
+        .where("uid", isEqualTo: uid)
+        .getDocuments();
+
+    await reference.documents.first.reference.delete();
+  }
+
+  Future removeRequestUser(String communityId, String uid) async {
+    var userInfo = await _userCollectionReference.document(uid).get();
+    List userRequests = userInfo.data["requests"];
+    print(userRequests);
+    userRequests.remove(communityId);
+    print(userRequests);
+    _userCollectionReference
+        .document(uid)
+        .updateData({"requests": userRequests});
+  }
+
+  Future addCommunityFromRequest(String uid, String communityId) async {
+    var userInfo = await _userCollectionReference.document(uid).get();
+    List userRequests = userInfo.data["communities"];
+    userRequests.add(uid);
+    _userCollectionReference
+        .document(uid)
+        .updateData({"communities": userRequests});
+  }
+
+  Future followCommunity(String uid, String communityId) async {
+    var followDoc =
+        await _followingPostsCollectionReference.document(communityId).get();
+    List followers = followDoc.data["followers"];
+
+    followers.add(communityId);
+    await _followingPostsCollectionReference
+        .document(communityId)
+        .updateData({"followers": followers});
+  }
+
+  Future updateCommunitySettings(String rules, bool isMarketplace,
+      bool isPublic, String communityId) async {
+    await _communitiesCollectionReference.document(communityId).updateData({
+      'rules': rules,
+      'isMarketplace': isMarketplace,
+      'isPublic': isPublic,
+    });
+  }
+
   Future<List<UserPostModel>> getUserPosts(String uid) async {
     try {
       var result = await _communitiesCollectionReference
@@ -85,9 +135,10 @@ class FirestoreService {
       return e.toString();
     }
   }
+
   Future<DocumentReference> createRequestId() async {
-     var documentPath = await _communitiesCreationRequestsReference.document();
-     return documentPath;
+    var documentPath = await _communitiesCreationRequestsReference.document();
+    return documentPath;
   }
 
   Future createCommunityCreationRequest(
@@ -99,7 +150,6 @@ class FirestoreService {
       String description,
       String iconPicUrl,
       DocumentReference documentPath) async {
-    
     documentPath.setData({
       'user': user.toJson(),
       'messageRequest': messageRequest,
@@ -355,13 +405,29 @@ class FirestoreService {
           .document(communityUid)
           .collection('requests')
           .document(user.uid)
-          .setData({'isFromFB': isFromFB, 'text': text, 'user': user.toJson()});
+          .setData({
+        'isFromFB': isFromFB,
+        "uid": user.uid,
+        'text': text,
+        'user': user.toJson()
+      });
       await _userCollectionReference
           .document(user.uid)
           .updateData({'requests': user.requests..add(communityUid)});
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<Map<String, dynamic>> getSettings(String communityId) async {
+    var snapshot =
+        await _communitiesCollectionReference.document(communityId).get();
+    var map = ({
+      'isPublic': snapshot.data["isPublic"],
+      'isMarketplace': snapshot.data["isMarketplace"],
+      'rules': snapshot.data["rules"]
+    });
+    return map;
   }
 
   Future<List<DocumentSnapshot>> getFirstCommunities() async {

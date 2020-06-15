@@ -437,7 +437,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                                       devicesize.screenWidth(context) * 0.1921,
                                   child: FlareActor(
                                     'assets/animations/quickstrikeAnimation.flr',
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.cover,
                                     animation: animationSelector,
                                   ),
                                 ),

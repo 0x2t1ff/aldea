@@ -94,7 +94,7 @@ class _CommunityViewState extends State<CommunityView> {
                     : Stack(
                         children: <Widget>[
                           DefaultTabController(
-                            length: 5,
+                            length: widget.community.isMarketplace ? 5 : 4,
                             child: Container(
                               height: communityBodyHeight(context),
                               width: double.infinity,
@@ -273,6 +273,26 @@ class _CommunityViewState extends State<CommunityView> {
                                                       color: Colors.white,
                                                     ),
                                                   ))
+                                              : Container(),
+                                          isModerator
+                                              ? Positioned(
+                                                  top: communityBodyHeight(
+                                                          context) *
+                                                      0.2,
+                                                  right: communityBodyHeight(
+                                                          context) *
+                                                      0.01,
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      model.goToSettings(
+                                                          widget.community);
+                                                    },
+                                                    icon: Icon(
+                                                      Icons.settings,
+                                                      size: 45,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ))
                                               : Container()
                                         ],
                                       ),
@@ -288,41 +308,71 @@ class _CommunityViewState extends State<CommunityView> {
                                       height:
                                           communityBodyHeight(context) * 0.08,
                                       width: double.infinity,
-                                      child: TabBar(
-                                        indicatorColor: Colors.white,
-                                        tabs: [
-                                          SizedBox(
-                                              height:
-                                                  communityBodyHeight(context) *
-                                                      0.04,
-                                              child: Image.asset(
-                                                  "assets/images/reglas.png")),
-                                          SizedBox(
-                                              height:
-                                                  communityBodyHeight(context) *
-                                                      0.04,
-                                              child: Image.asset(
-                                                  "assets/images/posts.png")),
-                                          SizedBox(
-                                              height:
-                                                  communityBodyHeight(context) *
-                                                      0.04,
-                                              child: Image.asset(
-                                                  "assets/images/cart.png")),
-                                          SizedBox(
-                                              height:
-                                                  communityBodyHeight(context) *
-                                                      0.04,
-                                              child: Image.asset(
-                                                  "assets/images/community-chat.png")),
-                                          SizedBox(
-                                              height:
-                                                  communityBodyHeight(context) *
-                                                      0.04,
-                                              child: Image.asset(
-                                                  "assets/images/user-posts.png")),
-                                        ],
-                                      ),
+                                      child: widget.community.isMarketplace
+                                          ? TabBar(
+                                              indicatorColor: Colors.white,
+                                              tabs: [
+                                                SizedBox(
+                                                    height: communityBodyHeight(
+                                                            context) *
+                                                        0.04,
+                                                    child: Image.asset(
+                                                        "assets/images/reglas.png")),
+                                                SizedBox(
+                                                    height: communityBodyHeight(
+                                                            context) *
+                                                        0.04,
+                                                    child: Image.asset(
+                                                        "assets/images/posts.png")),
+                                                SizedBox(
+                                                    height: communityBodyHeight(
+                                                            context) *
+                                                        0.04,
+                                                    child: Image.asset(
+                                                        "assets/images/cart.png")),
+                                                SizedBox(
+                                                    height: communityBodyHeight(
+                                                            context) *
+                                                        0.04,
+                                                    child: Image.asset(
+                                                        "assets/images/community-chat.png")),
+                                                SizedBox(
+                                                    height: communityBodyHeight(
+                                                            context) *
+                                                        0.04,
+                                                    child: Image.asset(
+                                                        "assets/images/user-posts.png")),
+                                              ],
+                                            )
+                                          : TabBar(
+                                              indicatorColor: Colors.white,
+                                              tabs: [
+                                                SizedBox(
+                                                    height: communityBodyHeight(
+                                                            context) *
+                                                        0.04,
+                                                    child: Image.asset(
+                                                        "assets/images/reglas.png")),
+                                                SizedBox(
+                                                    height: communityBodyHeight(
+                                                            context) *
+                                                        0.04,
+                                                    child: Image.asset(
+                                                        "assets/images/posts.png")),
+                                                SizedBox(
+                                                    height: communityBodyHeight(
+                                                            context) *
+                                                        0.04,
+                                                    child: Image.asset(
+                                                        "assets/images/community-chat.png")),
+                                                SizedBox(
+                                                    height: communityBodyHeight(
+                                                            context) *
+                                                        0.04,
+                                                    child: Image.asset(
+                                                        "assets/images/user-posts.png")),
+                                              ],
+                                            ),
                                     ),
                                     isModerator
                                         ? GestureDetector(
@@ -399,21 +449,37 @@ class _CommunityViewState extends State<CommunityView> {
                                       height:
                                           communityBodyHeight(context) * 0.92,
                                       width: double.infinity,
-                                      child: TabBarView(children: [
-                                        CommunityRules(
-                                          community: widget.community,
-                                          isEditting: false,
-                                        ),
-                                        NewsView(community: widget.community),
-                                        MarketView(
-                                            widget.community, model.products),
-                                        CommunityChatView(
-                                            communityId:
-                                                this.widget.community.uid,
-                                            height: height),
-                                        UserPostsView(
-                                            community: widget.community),
-                                      ]),
+                                      child: widget.community.isMarketplace
+                                          ? TabBarView(children: [
+                                              CommunityRules(
+                                                community: widget.community,
+                                                isEditting: false,
+                                              ),
+                                              NewsView(
+                                                  community: widget.community),
+                                              MarketView(widget.community,
+                                                  model.products),
+                                              CommunityChatView(
+                                                  communityId:
+                                                      this.widget.community.uid,
+                                                  height: height),
+                                              UserPostsView(
+                                                  community: widget.community),
+                                            ])
+                                          : TabBarView(children: [
+                                              CommunityRules(
+                                                community: widget.community,
+                                                isEditting: false,
+                                              ),
+                                              NewsView(
+                                                  community: widget.community),
+                                              CommunityChatView(
+                                                  communityId:
+                                                      this.widget.community.uid,
+                                                  height: height),
+                                              UserPostsView(
+                                                  community: widget.community),
+                                            ]),
                                     )
                                   ],
                                 ),

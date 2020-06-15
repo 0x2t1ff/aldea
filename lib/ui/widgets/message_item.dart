@@ -71,7 +71,7 @@ class MessageItem extends StatelessWidget {
                                               child: Image(
                                                 image:
                                                     NetworkImage(model.message),
-                                                fit: BoxFit.fill,
+                                                fit: BoxFit.cover,
                                               ))
                                           : Text(
                                               model.message,
@@ -177,7 +177,7 @@ class MessageItem extends StatelessWidget {
                                             child: Image(
                                               image:
                                                   NetworkImage(model.message),
-                                              fit: BoxFit.fill,
+                                              fit: BoxFit.cover,
                                             ))
                                         : Text(
                                             model.message,

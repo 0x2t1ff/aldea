@@ -42,7 +42,7 @@ class FeedView extends StatelessWidget {
                                       child: ClipOval(
                                         child: Image.network(
                                           model.communityList[index].iconPicUrl,
-                                          fit: BoxFit.fill,
+                                          fit: BoxFit.cover,
                                         ),
                                       )));
                             }),

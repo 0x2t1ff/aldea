@@ -12,6 +12,8 @@ enum SwipeAction { remove, accept }
 class SwipeItem extends StatefulWidget {
   static const double swipeDistance = 80.0;
   static const double nominalHeight = 100.0;
+  final Function deny;
+  final Function accept;
 
   // Exposed as a static helper method so it can also be used by RemovedSwipeItem:
   static LinearGradient getGradient(Color color, double ratio, double sign) {
@@ -33,9 +35,15 @@ class SwipeItem extends StatefulWidget {
 
   final CommunityRequest data;
   final bool isEven;
-  final Function(GlobalKey, {SwipeAction action}) onSwipe; // called when a row is swiped left.
+  final Function(GlobalKey, {SwipeAction action})
+      onSwipe; // called when a row is swiped left.
 
-  SwipeItem({@required this.data, this.onSwipe, @required this.isEven});
+  SwipeItem(
+      {@required this.data,
+      this.onSwipe,
+      @required this.isEven,
+      this.deny,
+      this.accept});
 
   @override
   State<SwipeItem> createState() {
@@ -61,7 +69,8 @@ class SwipeItemState extends State<SwipeItem> {
   Widget build(BuildContext context) {
     // Determine the swipe state. How far, what direction, etc.
     final bool lToR = _swipeDistance < 0.0;
-    final double swipeRatio = math.min(1.0, _swipeDistance.abs() / SwipeItem.swipeDistance);
+    final double swipeRatio =
+        math.min(1.0, _swipeDistance.abs() / SwipeItem.swipeDistance);
     final double swipeSign = _swipeDistance.sign;
     final double swipeDistance = _swipeDistance.abs();
 
@@ -94,11 +103,15 @@ class SwipeItemState extends State<SwipeItem> {
                   height: 28,
                   decoration: BoxDecoration(
                       boxShadow: [
-                        if (widget.data.isFromFB&& lToR)
-                          BoxShadow(color: Colors.white70.withOpacity(swipeRatio), blurRadius: 18)
+                        if (widget.data.isFromFB && lToR)
+                          BoxShadow(
+                              color: Colors.white70.withOpacity(swipeRatio),
+                              blurRadius: 18)
                       ],
                       borderRadius: BorderRadius.circular(50),
-                      color: widget.data.isFromFB || !lToR ? Colors.white : Colors.transparent),
+                      color: widget.data.isFromFB || !lToR
+                          ? Colors.white
+                          : Colors.transparent),
                 ),
                 Icon(
                   lToR ? Icons.check : Icons.cancel,
@@ -123,7 +136,8 @@ class SwipeItemState extends State<SwipeItem> {
                   scale: 1.0 - swipeRatio * 0.1,
                   child: RequestCard(
                     request: widget.data,
-                    backgroundColor: widget.isEven ? Color(0xff0F1013) : Color(0xff17191E),
+                    backgroundColor:
+                        widget.isEven ? Color(0xff0F1013) : Color(0xff17191E),
                   )),
             )),
       ]),
@@ -140,15 +154,19 @@ class SwipeItemState extends State<SwipeItem> {
   void _handleSwipe() {
     double d = _scrollController.position.pixels;
     if (d > SwipeItem.swipeDistance && !_isPerformingAction) {
+      _isPerformingAction = true;
       // Completed a left swipe. Call onRemove, and reset the scroll controller to release the swipe.
+      widget.deny();
       widget.onSwipe?.call(_key, action: SwipeAction.remove);
       _resetScrollController();
     } else if (d < -SwipeItem.swipeDistance && !_isPerformingAction) {
-      _isPerformingAction = true;
+      widget.accept();
       // Right swipe.
       widget.onSwipe?.call(_key, action: SwipeAction.accept);
       _scrollController
-          .animateTo(0, duration: Duration(milliseconds: 800), curve: Interval(.25, 1, curve: Curves.easeOutQuad))
+          .animateTo(0,
+              duration: Duration(milliseconds: 800),
+              curve: Interval(.25, 1, curve: Curves.easeOutQuad))
           .whenComplete(() => _isPerformingAction = false);
     }
     // Redraw the item with the new swipe distance:

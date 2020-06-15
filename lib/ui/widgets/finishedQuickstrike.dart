@@ -308,7 +308,7 @@ class FinishedQuickstrike extends StatelessWidget {
                                               postModel.winners.length,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.cover,
                                       image: AssetImage(
                                           "assets/images/trophy.png"),
                                     ),

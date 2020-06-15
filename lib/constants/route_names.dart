@@ -11,3 +11,4 @@ const String ProfileSettingsViewRoute = "ProfileSettingsView";
 const String CommunityCreationViewRoute = "CommunityCreationView";
 const String AdminScreenViewRoute = 'AdminScreenView';
 const String DetailedCommunityCreationViewRoute = 'DetailedCommunityCreationView';
+const String CommunitySettingsViewRoute = 'CommunitySettingsViewRoute';

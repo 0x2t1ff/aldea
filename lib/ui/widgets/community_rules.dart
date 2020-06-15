@@ -1,4 +1,5 @@
 import 'package:aldea/models/community.dart';
+import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
 
 class CommunityRules extends StatefulWidget {
@@ -19,7 +20,6 @@ class _CommunityRulesState extends State<CommunityRules> {
     controller.text = widget.community.description;
     super.initState();
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +45,18 @@ class _CommunityRulesState extends State<CommunityRules> {
                       )),
                 )
               : Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Color(0xff17191E),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                  child: Text(widget.community.rules, style: TextStyle(color: Colors.white),),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Color(0xff17191E),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Text(
+                    widget.community.rules,
+                    style: TextStyle(color: Colors.white),
+                  ),
                   width: double.infinity,
-                  constraints: BoxConstraints(minHeight: 200),
+                  constraints:
+                      BoxConstraints(minHeight: screenHeight(context) * 0.7),
                 )
         ],
       ),
