@@ -1,3 +1,4 @@
+import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 
@@ -18,8 +19,11 @@ class _AdaptiveTextState extends State<AdaptiveText> {
   @override
   Widget build(BuildContext context) {
     return Container(
+constraints: BoxConstraints(
+  maxWidth: screenWidth(context) * 0.96,
+),
       padding: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-      child:  widget.descriptionText.length < 110
+      child: widget.descriptionText.length < 110
           ? new Text(widget.descriptionText, style: widget.styleText)
           : new Column(
               children: <Widget>[
@@ -33,12 +37,13 @@ class _AdaptiveTextState extends State<AdaptiveText> {
                   ),
                   child: GestureDetector(
                     child: Text(
-                        flag
-                            ? widget.descriptionText
-                                    .substring(0, widget.maxLength) +
-                                " ...show more"
-                            : widget.descriptionText,
-                        style: widget.styleText),
+                      flag
+                          ? widget.descriptionText
+                                  .substring(0, widget.maxLength) +
+                              " ...show more"
+                          : widget.descriptionText,
+                      style: widget.styleText,
+                    ),
                     onTap: () {
                       setState(() {
                         flag = !flag;

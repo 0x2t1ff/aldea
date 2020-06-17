@@ -1,4 +1,5 @@
 import 'package:aldea/locator.dart';
+import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/views/direct_message_view.dart';
 import 'package:aldea/ui/views/feed_view.dart';
 import 'package:aldea/ui/views/profile_view.dart';
@@ -117,21 +118,31 @@ class _HomeViewState extends State<HomeView> {
                 height: device.usableScreenHeight(context) * 0.1,
                 decoration: BoxDecoration(
                   color: theme.blueishGreyColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: darkGrey.withOpacity(1),
+                      spreadRadius: 5,
+                      blurRadius: 11,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: MediaQuery.of(context).size.width * 0.05,
                     vertical: MediaQuery.of(context).size.height * 0.01,
                   ),
-                  child: GNav(
-                      tabs: tabs,
-                      selectedIndex: selectedIndex,
-                      onTabChange: (index) {
-                        setState(() {
-                          selectedIndex = index;
-                        });
-                        controller.jumpToPage(index);
-                      }),
+                  child: Container(
+                    child: GNav(
+                        tabs: tabs,
+                        selectedIndex: selectedIndex,
+                        onTabChange: (index) {
+                          setState(() {
+                            selectedIndex = index;
+                          });
+                          controller.jumpToPage(index);
+                        }),
+                  ),
                 ),
               ),
               BottomFiller()

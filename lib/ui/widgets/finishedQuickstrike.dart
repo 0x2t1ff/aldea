@@ -25,6 +25,7 @@ class FinishedQuickstrike extends StatelessWidget {
       return "lista";
     }
   }
+
   String readTimestamp(int timestamp) {
     var now = DateTime.now();
     var format = DateFormat('dd/M  hh:mm ');
@@ -56,6 +57,7 @@ class FinishedQuickstrike extends StatelessWidget {
 
     return time;
   }
+
   Widget createWinnerRow(String winners) {
     return Padding(
       padding: EdgeInsets.only(top: 1),
@@ -363,7 +365,7 @@ class FinishedQuickstrike extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            bottom: devicesize.screenHeight(context) * 0.01),
+                            bottom: devicesize.screenHeight(context) * 0.02),
                         child: Row(
                           children: <Widget>[
                             Padding(
@@ -388,7 +390,7 @@ class FinishedQuickstrike extends StatelessWidget {
                                   padding: EdgeInsets.only(
                                       top: devicesize.screenHeight(context) *
                                           0.005),
-                                  child: Text(postModel.comments[0].toString(),
+                                  child: Text(postModel.commentCount.toString(),
                                       style: TextStyle(
                                           color: greyColor,
                                           fontFamily: 'Raleway',

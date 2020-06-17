@@ -80,27 +80,24 @@ class ProfileView extends StatelessWidget {
                                   )
                                 : Container()),
                         Positioned(
-                            left: screenWidth(context) * 0.05,
-                            top: usableScreenWithoughtBars(context) * 0.04,
+                            left: screenWidth(context) * 0.055,
+                            top: usableScreenWithoughtBars(context) * 0.025,
                             child: Container(
                               decoration: profilePicDecoration,
                               child: CircleAvatar(
                                 child: (model.isEditting &&
                                         model.selectedProfileImage == null)
-                                    ? GestureDetector(
-                                        onTap: () => model.selectProfileImage(),
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.black45),
-                                          child: Icon(
-                                            Icons.add,
-                                            color: Colors.white,
-                                            size: 30,
-                                          ),
+                                    ? Container(
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.black45),
+                                        child: Icon(
+                                          Icons.add,
+                                          color: Colors.white,
+                                          size: 30,
                                         ),
                                       )
                                     : Container(),
@@ -115,6 +112,49 @@ class ProfileView extends StatelessWidget {
                                             "assets/images/default-profile.png")),
                               ),
                             )),
+                        Positioned(
+                          left: screenWidth(context) * 0.038,
+                          top: usableScreenWithoughtBars(context) * 0.029,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(200),
+                                ),
+                              ),
+                              width: screenWidth(context) * 0.26,
+                              height: screenWidth(context) * 0.26,
+                              child: getDecoration(model.currentUser.winCount)),
+                        ),
+
+                        Positioned(
+                            left: screenWidth(context) * 0.075,
+                            top: usableScreenWithoughtBars(context) * 0.03,
+                            child: Container(
+                              width: screenWidth(context) * 0.18,
+                              height: screenHeight(context) * 0.09,
+                              child: GestureDetector(
+                                onTap: () => model.selectProfileImage(),
+                              ),
+                            )),
+                        //      Positioned(
+                        //        left: screenWidth(context) * 0.05,
+                        //        top: usableScreenWithoughtBars(context) * 0.04,
+                        //        child: Container(
+                        //          decoration: BoxDecoration(
+                        //            border: Border.all(
+                        //              color: Color(0xff0F1013),
+                        //              width: 0,
+                        //            ),
+                        //            borderRadius: BorderRadius.circular(100),
+                        //          ),
+                        //          child: CircleAvatar(
+                        //              backgroundColor: Colors.transparent,
+                        //              radius:
+                        //                  usableScreenWithoughtBars(context) * 0.08,
+                        //              backgroundImage:
+                        //                  AssetImage("assets/images/laureles.png")),
+                        //        ),
+                        //      ),
                         Positioned(
                           top: screenHeight(context) * 0.02,
                           right: screenWidth(context) * 0.04,
@@ -134,7 +174,6 @@ class ProfileView extends StatelessWidget {
                               ],
                             ),
                           ),
-                         
                         ),
                         Positioned(
                             child: ClipRect(
@@ -430,5 +469,20 @@ class ProfileView extends StatelessWidget {
             ],
           )),
     );
+  }
+
+  Widget getDecoration(int wins) {
+    if (wins >= 1 && wins < 5) {
+      return Image.asset("assets/images/laureles.png");
+    } else if (wins >= 5 && wins < 10) {
+      return Image.asset("assets/iamges/bronce.png");
+    } else if (wins >= 10 && wins < 20) {
+      return Image.asset("assets/images/plata.png");
+    } else if (wins >= 20 && wins < 30) {
+      return Image.asset("assets/images/oro.png");
+    } else if (wins >= 30) {
+      return Image.asset("assets/images/platino.png");
+    }
+    return Container();
   }
 }

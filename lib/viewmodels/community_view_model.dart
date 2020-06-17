@@ -210,7 +210,7 @@ class CommunityViewModel extends BaseModel {
     PostModel post = PostModel(
       fechaQuickstrike: Timestamp.now(),
       amount: null,
-      comments: [],
+      commentCount: 0,
       communityId: community.uid,
       communityName: community.name,
       avatarUrl: community.iconPicUrl,

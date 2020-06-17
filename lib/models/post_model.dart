@@ -20,7 +20,7 @@ class PostModel {
   final bool isResult;
   final List<dynamic> winners;
   final List<dynamic> likes;
-  final List<dynamic> comments;
+  final int commentCount;
 
   PostModel({
     @required this.userId,
@@ -30,7 +30,7 @@ class PostModel {
     @required this.modelo,
     @required this.description,
     @required this.fechaQuickstrike,
-    @required this.comments,
+    @required this.commentCount,
     @required this.amount,
     @required this.avatarUrl,
     @required this.isResult,
@@ -61,7 +61,7 @@ class PostModel {
       'isResult': isResult,
       'winners': winners,
       'likes': likes,
-      'comments': comments,
+      'comments': commentCount,
       'communityName': communityName,
       'avatarUrl': avatarUrl
     };
@@ -86,7 +86,7 @@ class PostModel {
         amount: map['amount'],
         avatarUrl: map['avatarUrl'],
         likes: map['likes'],
-        comments: map['comments'],
+        commentCount: map['commentCount'],
         winners: map['winners']);
   }
 }

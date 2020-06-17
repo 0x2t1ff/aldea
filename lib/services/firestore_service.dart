@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aldea/models/comment_model.dart';
 import 'package:aldea/models/community.dart';
 import 'package:aldea/models/community_creation_request.dart';
 import 'package:aldea/models/post_model.dart';
@@ -55,6 +56,105 @@ class FirestoreService {
         .getDocuments();
 
     await reference.documents.first.reference.delete();
+  }
+
+  Future<List<CommentModel>> getUserComments(
+      String postId, String communityId) async {
+    try {
+      var result = await _communitiesCollectionReference
+          .document(communityId)
+          .collection("userPosts")
+          .document(postId)
+          .collection("comments")
+          .getDocuments();
+
+      var data = result.documents.map((doc) => doc.data);
+      List<CommentModel> listData = new List<CommentModel>();
+      data.forEach((f) => listData.add(CommentModel.fromData(f)));
+      print(listData.toString() + " the print of data");
+      print(data.length.toString());
+      listData.sort((a, b) {
+        return a.date.compareTo(b.date);
+      });
+      return listData;
+    } catch (e) {
+      print(e.toString() + " printing the error data");
+    }
+  }
+
+  Future<List<CommentModel>> getComments(String postId) async {
+    try {
+      var result = await _postsCollectionReference
+          .document(postId)
+          .collection("comments")
+          .getDocuments();
+
+      var data = result.documents.map((doc) => doc.data);
+      List<CommentModel> listData = new List<CommentModel>();
+      data.forEach((f) => listData.add(CommentModel.fromData(f)));
+      print(listData.toString() + " the print of data");
+      print(data.length.toString());
+      listData.sort((a, b) {
+        return a.date.compareTo(b.date);
+      });
+      return listData;
+    } catch (e) {
+      print(e.toString() + " printing the error data");
+    }
+  }
+
+  Future postComment(
+      String postId, String text, String name, String uid) async {
+    _postsCollectionReference
+        .document(postId)
+        .collection("comments")
+        .document()
+        .setData({
+      'text': text,
+      'name': name,
+      'uid': uid,
+      'date': DateTime.now().toString()
+    });
+    int number;
+    await _postsCollectionReference
+        .document(postId)
+        .collection("comments")
+        .getDocuments()
+        .then((value) => number = value.documents.length);
+
+    await _postsCollectionReference
+        .document(postId)
+        .updateData({"commentCount": number});
+  }
+
+  Future postUserComment(String communityId, String postId, String text,
+      String name, String uid) async {
+    _communitiesCollectionReference
+        .document(communityId)
+        .collection("userPosts")
+        .document(postId)
+        .collection("comments")
+        .document()
+        .setData({
+      'text': text,
+      'name': name,
+      'uid': uid,
+      'date': DateTime.now().toString()
+    });
+    int number;
+    await _communitiesCollectionReference
+        .document(communityId)
+        .collection("userPosts")
+        .document(postId)
+        .collection("comments")
+        .getDocuments()
+        .then((value) => number = value.documents.length);
+
+    await _communitiesCollectionReference
+        .document(communityId)
+        .collection("userPosts")
+        .document(postId)
+        .updateData({"commentCount": number});
   }
 
   Future removeRequestUser(String communityId, String uid) async {
@@ -274,6 +374,7 @@ class FirestoreService {
       "name": name,
       "userId": userId,
       "date": date,
+      "commentCount": 0
     });
   }
 

@@ -13,8 +13,13 @@ class StartQuickstrike extends StatelessWidget {
   final PostModel postModel;
   final Function likeFunction;
   final bool isLiked;
+  final bool goToComments;
   const StartQuickstrike(
-      {Key key, this.postModel, this.likeFunction, this.isLiked})
+      {Key key,
+      this.postModel,
+      this.likeFunction,
+      this.isLiked,
+      this.goToComments})
       : super(key: key);
 
   String readTimestamp(int timestamp) {
@@ -54,7 +59,6 @@ class StartQuickstrike extends StatelessWidget {
     String quickstrikeType = "Lista";
     String dayTime = "12:04, today";
     Color greyColor = Color(0xff3a464d);
-    
 
     return Container(
       color: Colors.red,
@@ -242,65 +246,32 @@ class StartQuickstrike extends StatelessWidget {
                     ],
                   ),
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Descripción:",
-                      style: TextStyle(
-                          fontFamily: 'Raleway',
-                          fontWeight: FontWeight.w600,
-                          color: custcolor.greyColor),
-                    ),
-                    Flexible(
-                      child: Text(postModel.description,
-                          overflow: TextOverflow.clip,
-                          style: TextStyle(
-                              fontFamily: 'Raleway',
-                              fontWeight: FontWeight.w600,
-                              color: custcolor.blueTheme)),
-                    ),
-                  ],
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: devicesize.screenWidth(context) * 0.04),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Descripción:",
+                        style: TextStyle(
+                            fontFamily: 'Raleway',
+                            fontWeight: FontWeight.w600,
+                            color: custcolor.greyColor),
+                      ),
+                      Flexible(
+                        child: Text(postModel.description,
+                            overflow: TextOverflow.clip,
+                            style: TextStyle(
+                                fontFamily: 'Raleway',
+                                fontWeight: FontWeight.w600,
+                                color: custcolor.blueTheme)),
+                      ),
+                    ],
+                  ),
                 ),
                 Column(
                   children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: devicesize.screenHeight(context) * 0.02),
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            left: devicesize.screenWidth(context) * 0.02),
-                        width: devicesize.screenWidth(context) * 0.88,
-                        height: devicesize.screenHeight(context) * 0.035,
-                        decoration: BoxDecoration(
-                          color: Color(0xff15232B),
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.edit,
-                              size: 16,
-                              color: Color(0xff3a464d),
-                            ),
-                            hintText: "Escribe un comentario",
-                            hintStyle: TextStyle(
-                                color: Color(0xff3a464d),
-                                fontFamily: "Raleway",
-                                fontWeight: FontWeight.w600,
-                                fontStyle: FontStyle.italic,
-                                fontSize: 12),
-                            border: InputBorder.none,
-                            fillColor: custcolor.almostWhite,
-                          ),
-                          style: TextStyle(
-                              color: custcolor.almostWhite,
-                              fontFamily: "Raleway",
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12),
-                        ),
-                      ),
-                    ),
                     Padding(
                       padding: EdgeInsets.only(
                           bottom: devicesize.screenHeight(context) * 0.02),
@@ -310,6 +281,7 @@ class StartQuickstrike extends StatelessWidget {
                               padding: EdgeInsets.only(
                                 left: devicesize.screenWidth(context) * 0.06,
                                 right: devicesize.screenWidth(context) * 0.138,
+                                bottom: devicesize.screenHeight(context) * 0.04,
                               ),
                               child: LikeButton(
                                 liked: isLiked,
@@ -327,8 +299,7 @@ class StartQuickstrike extends StatelessWidget {
                                 padding: EdgeInsets.only(
                                     top: devicesize.screenHeight(context) *
                                         0.005),
-                                child: Text(
-                                    postModel.comments.length.toString(),
+                                child: Text(postModel.commentCount.toString(),
                                     style: TextStyle(
                                         color: greyColor,
                                         fontFamily: 'Raleway',

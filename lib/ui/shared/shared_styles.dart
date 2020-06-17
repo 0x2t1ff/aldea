@@ -17,7 +17,7 @@ BoxDecoration disabledFieldDecortaion = BoxDecoration(
 BoxDecoration profilePicDecoration = BoxDecoration(
     border: Border.all(
       color: Color(0xff0F1013),
-      width: 4,
+      width: 3,
     ),
     borderRadius: BorderRadius.circular(100),
     boxShadow: [BoxShadow(offset: Offset(2, 2), blurRadius: 12)]);

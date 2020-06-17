@@ -10,10 +10,16 @@ import "package:carousel_slider/carousel_slider.dart";
 import 'adaptive_text.dart';
 
 class PostItem extends StatelessWidget {
+  final Function navigateToComments;
   final PostModel postModel;
   final Function likeFunction;
   final bool isLiked;
-  const PostItem({Key key, this.postModel, this.likeFunction, this.isLiked})
+  const PostItem(
+      {Key key,
+      this.postModel,
+      this.likeFunction,
+      this.isLiked,
+      this.navigateToComments})
       : super(key: key);
 
   String readTimestamp(int timestamp) {
@@ -129,59 +135,31 @@ class PostItem extends StatelessWidget {
             height: devicesize.screenHeight(context) * 0.4,
             child: PostCarousel(imageUrl: this.postModel.imageUrl),
           ),
-          AdaptiveText(
-            postModel.description,
-            95,
-            TextStyle(
-                fontFamily: "Raleway",
-                color: custcolor.almostWhite,
-                fontWeight: FontWeight.w600,
-                fontStyle: FontStyle.italic,
-                fontSize: 14),
+          Padding(
+            padding:
+                EdgeInsets.only(left: devicesize.screenWidth(context) * 0.04),
+            child: Row(
+              children: <Widget>[
+                AdaptiveText(
+                  postModel.description,
+                  95,
+                  TextStyle(
+                      fontFamily: "Raleway",
+                      color: custcolor.almostWhite,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 14),
+                ),
+              ],
+            ),
           ),
           Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: devicesize.screenHeight(context) * 0.02),
-                  child: Container(
-                    padding: EdgeInsets.only(
-                        left: devicesize.screenWidth(context) * 0.02),
-                    width: devicesize.screenWidth(context) * 0.88,
-                    height: devicesize.screenHeight(context) * 0.035,
-                    decoration: BoxDecoration(
-                      color: Color(0xff15232B),
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.edit,
-                          size: 16,
-                          color: Color(0xff3a464d),
-                        ),
-                        hintText: "Escribe un comentario",
-                        hintStyle: TextStyle(
-                            color: Color(0xff3a464d),
-                            fontFamily: "Raleway",
-                            fontWeight: FontWeight.w600,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 12),
-                        border: InputBorder.none,
-                      ),
-                      style: TextStyle(
-                          color: custcolor.almostWhite,
-                          fontFamily: "Raleway",
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12),
-                    ),
-                  ),
-                ),
-                Padding(
                   padding: EdgeInsets.only(
-                      bottom: devicesize.screenHeight(context) * 0.01),
+                      bottom: devicesize.screenHeight(context) * 0.02),
                   child: Row(
                     children: <Widget>[
                       Padding(
@@ -201,15 +179,18 @@ class PostItem extends StatelessWidget {
                       ),
                       Column(
                         children: <Widget>[
-                          Icon(
-                            Icons.comment,
-                            color: custcolor.blueTheme,
-                            size: devicesize.screenWidth(context) * 0.07,
+                          GestureDetector(
+                            onTap: navigateToComments,
+                            child: Icon(
+                              Icons.comment,
+                              color: custcolor.blueTheme,
+                              size: devicesize.screenWidth(context) * 0.07,
+                            ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(
                                 top: devicesize.screenHeight(context) * 0.005),
-                            child: Text(postModel.comments.length.toString(),
+                            child: Text(postModel.commentCount.toString(),
                                 style: TextStyle(
                                     color: greyColor,
                                     fontFamily: 'Raleway',

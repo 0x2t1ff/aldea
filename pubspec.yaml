@@ -114,6 +114,11 @@ flutter:
     - assets/images/add-to-cart.png
     - assets/animations/quickstrikeAnimation.flr
     - assets/images/trophy.png
+    - assets/images/laureles.png
+    - assets/images/oro.png
+    - assets/images/bronce.png
+    - assets/images/plata.png
+    - assets/images/platino.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

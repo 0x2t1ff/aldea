@@ -43,7 +43,6 @@ class UserPostsViewModel extends BaseModel {
   }
 
   Future navigate(String uid) {
-    
     if (uid == currentUser.uid) {
     } else {
       _navigationService.navigateTo(OtherProfileViewRoute, false,
@@ -113,5 +112,12 @@ class UserPostsViewModel extends BaseModel {
     var urlList = await uploadImages(communityId);
     _firestoreService.createUserPost(communityId, urlList, description,
         currentUser.picUrl, currentUser.name, currentUser.uid, DateTime.now());
+  }
+
+  void goToComments(String postId, String communityId) async {
+    Map mapArgument = ({"postId": postId, "communityId": communityId});
+
+    _navigationService.navigateTo(CommentsViewRoute, false,
+        arguments: mapArgument);
   }
 }

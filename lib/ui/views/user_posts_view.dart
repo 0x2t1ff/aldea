@@ -46,6 +46,9 @@ class _UserPostsViewState extends State<UserPostsView> {
                       padding: EdgeInsets.all(0),
                       itemCount: model.posts.length,
                       itemBuilder: (context, index) => UserPostItem(
+                        goToComments: () => model.goToComments(
+                            model.posts[index].id,
+                            model.posts[index].communityId),
                         uid: model.posts[index].userId,
                         navigate: () =>
                             model.navigate(model.posts[index].userId),

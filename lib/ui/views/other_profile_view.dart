@@ -74,9 +74,9 @@ class OtherProfileView extends StatelessWidget {
                                   width: double.infinity,
                                 ),
                                 Positioned(
-                                    left: screenWidth(context) * 0.05,
+                                    left: screenWidth(context) * 0.055,
                                     top: usableScreenWithoughtBars(context) *
-                                        0.04,
+                                        0.025,
                                     child: Container(
                                       decoration: profilePicDecoration,
                                       child: CircleAvatar(
@@ -86,6 +86,21 @@ class OtherProfileView extends StatelessWidget {
                                           backgroundImage: NetworkImage(
                                               model.userData.picUrl)),
                                     )),
+                                Positioned(
+                                  left: screenWidth(context) * 0.038,
+                                  top: usableScreenWithoughtBars(context) *
+                                      0.029,
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(200),
+                                        ),
+                                      ),
+                                      width: screenWidth(context) * 0.26,
+                                      height: screenWidth(context) * 0.26,
+                                      child: getDecoration(
+                                          model.userData.winCount)),
+                                ),
                                 Positioned(
                                     child: ClipRect(
                                   child: BackdropFilter(
@@ -157,5 +172,21 @@ class OtherProfileView extends StatelessWidget {
                     ],
                   ))),
     );
+  }
+
+  Widget getDecoration(int wins) {
+    if (wins >= 1 && wins < 5) {
+      return Image.asset("assets/images/laureles.png");
+    } else if (wins >= 5 && wins < 10) {
+      return Image.asset("assets/images/bronce.png");
+    } else if (wins >= 10 && wins < 20) {
+      return Image.asset("assets/images/plata.png");
+    } else if (wins >= 20 && wins < 30) {
+      return Image.asset("assets/images/oro.png");
+    } else if (wins >= 30) {
+      return Image.asset("assets/images/platino.png");
+    }
+    print("it was 0");
+    return Container();
   }
 }

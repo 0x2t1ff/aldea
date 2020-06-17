@@ -11,7 +11,7 @@ class UserPostModel {
   final String id;
   final String avatarUrl;
   final List<dynamic> likes;
-  final Map comments;
+  final int commentCount;
 
   UserPostModel({
     @required this.name, 
@@ -19,7 +19,7 @@ class UserPostModel {
     @required this.communityId,
     @required this.description,
     @required this.date,
-    @required this.comments,
+    @required this.commentCount,
     @required this.avatarUrl,
     @required this.imageUrl,
     @required this.id,
@@ -35,7 +35,7 @@ class UserPostModel {
       'description': description,
       'date': date,
       'likes': likes,
-      'comments': comments,
+      'commentCount': commentCount,
     };
   }
 
@@ -50,7 +50,7 @@ class UserPostModel {
         communityId: map['communityId'],
         avatarUrl: map['avatarUrl'],
         likes: map['likes'],
-        comments: map['comments']);
+        commentCount: map['commentCount']);
   }
 
   

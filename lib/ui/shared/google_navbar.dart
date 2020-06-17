@@ -17,6 +17,7 @@ class _GNavState extends State<GNav> {
   Widget build(BuildContext context) {
     selectedIndex = widget.selectedIndex;
     return Container(
+      
         // padding: EdgeInsets.all(12),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

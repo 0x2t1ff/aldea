@@ -1,6 +1,4 @@
 import 'dart:math' as math;
-
-import 'package:aldea/models/access_request.dart';
 import 'package:aldea/models/community_request.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constrained_scroll_physics.dart';

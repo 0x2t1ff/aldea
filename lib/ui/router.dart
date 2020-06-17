@@ -1,5 +1,6 @@
 import 'package:aldea/ui/views/admin_screen_view.dart';
 import 'package:aldea/ui/views/chats_view.dart';
+import 'package:aldea/ui/views/comments_view.dart';
 import 'package:aldea/ui/views/community_creation_view.dart';
 import 'package:aldea/ui/views/detailed_community_creation_request_view.dart';
 import 'package:aldea/ui/views/other_profile_view.dart';
@@ -90,6 +91,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: AdminScreenView(),
+      );
+      case CommentsViewRoute:
+      return _getPageRoute(
+        routeName: settings.name, 
+        viewToShow:CommentsView(settings.arguments),
       );
     case CommunitySettingsViewRoute:
       return _getPageRoute(
