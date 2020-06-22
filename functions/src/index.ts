@@ -28,4 +28,4 @@ export const checkQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(as
 
     });
     return null;
-});     
+});   
