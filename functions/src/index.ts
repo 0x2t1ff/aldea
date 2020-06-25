@@ -28,4 +28,38 @@ export const checkQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(as
 
     });
     return null;
-});   
+});
+
+export const chatNotification = functions.database
+    .ref('/messages/{chatroomId}/{messageId}').onCreate(
+        async (snap, context) => {
+            console.log("start of the chat notification")
+            const messageData = snap.val();
+            const message = messageData.message;
+            const otherId = messageData.otherId;
+            await db.collection("users").doc(otherId).get().then(querySnapshot => {
+                const docData = querySnapshot.data();
+                if (docData !== undefined) {
+                    const token = docData["pushToken"]
+                    const payload = {
+                        notification: {
+                            title: `Tienes un mensaje de ${docData["name"]}`,
+                            body: message,
+                        }
+                    }
+                    admin
+                        .messaging()
+                        .sendToDevice(token, payload)
+                        .then(response => {
+                            console.log('Successfully sent message:', response)
+                        })
+                        .catch(error => {
+                            console.log('Error sending message:', error)
+                        })
+                }
+
+            })
+        })
+
+
+
