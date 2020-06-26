@@ -632,10 +632,12 @@ class FirestoreService {
       var data = postDocumentSnapshot.documents.map((doc) => doc.data).toList();
       var lastPosts = [];
       data.forEach((value) {
-        for (var quickstrike in value['quickstrikes']) {
-          if ((quickstrike['date'] as Timestamp).seconds >
-              Timestamp.now().seconds) {
-            lastPosts.add(quickstrike["id"]);
+        if (value.containsKey("quickstrikes")) {
+          for (var quickstrike in value['quickstrikes']) {
+            if ((quickstrike['date'] as Timestamp).seconds >
+                Timestamp.now().seconds) {
+              lastPosts.add(quickstrike["id"]);
+            }
           }
         }
       });

@@ -23,8 +23,6 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
   bool isEnlisted;
   String animationSelector = "";
 
-
-
   @override
   Widget build(BuildContext context) {
     final commentController = TextEditingController();

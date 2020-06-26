@@ -1,4 +1,3 @@
-
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/ui/widgets/quickstrike_item.dart';
 import 'package:aldea/viewmodels/quickstrike_view_model.dart';
@@ -8,13 +7,14 @@ import "../shared/app_colors.dart" as custcolor;
 
 class QuickSTrikeView extends StatelessWidget {
   final QuickStrikePost emptyQuickstrike = new QuickStrikePost(
-      isEmpty: true,
-    );
+    isEmpty: true,
+  );
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<QuickStrikeViewModel>.reactive(
         viewModelBuilder: () => QuickStrikeViewModel(),
         onModelReady: (model) => model.fetchPosts(),
+        createNewModelOnInsert: true,
         builder: (context, model, child) => Scaffold(
             body: !model.busy
                 ? Container(
