@@ -640,7 +640,6 @@ class FirestoreService {
         }
       });
       List<QuickStrikePost> listData = [];
-
       for (var lastPost in lastPosts) {
         var doc =
             await _quickstrikeCollectionReference.document(lastPost).get();

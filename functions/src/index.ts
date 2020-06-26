@@ -62,4 +62,17 @@ export const chatNotification = functions.database
         })
 
 
+        export const buttonQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(async (context) => {
+            const now = admin.firestore.Timestamp.now();
+            const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isGame', '==', true);
+            const quickStrikes = await query.get();
+            quickStrikes.forEach(async (snapshot) => {
+                const doc = snapshot.data();
+                const docId = snapshot.id;
+                await snapshot.ref.update({ 'active': true});
+        
+            });
+            return null;
+        });
+
 
