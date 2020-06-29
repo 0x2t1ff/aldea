@@ -20,10 +20,8 @@ class QuickStrikeItem extends StatefulWidget {
 
 class _QuickStrikeItemState extends State<QuickStrikeItem> {
   bool isExpanded = false;
-  bool isEnlisted;
+  bool isEnlisted = false;
   String animationSelector = "";
-
-
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,9 @@ import 'package:aldea/models/post_model.dart';
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/models/user_post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
+import 'package:rxdart/rxdart.dart';
 import '../models/user_model.dart';
 
 class FirestoreService {
@@ -641,13 +643,57 @@ class FirestoreService {
       });
       List<QuickStrikePost> listData = [];
       for (var lastPost in lastPosts) {
-        var doc =
-            await _quickstrikeCollectionReference.document(lastPost).get();
-        listData.add(QuickStrikePost.fromMap(doc.data));
+        var doc = _quickstrikeCollectionReference
+            .document(lastPost)
+            .snapshots(); //.get();
+        doc.listen((querySnapshot) {
+          listData.add(QuickStrikePost.fromMap(querySnapshot.data));
+        });
+
+        //listData.add(QuickStrikePost.fromMap( doc.data));
       }
       return listData;
     } catch (e) {
-      print(e.toString() + " the error");
+      print(e.toString() + " the error ");
+    }
+  }
+
+  Future getQuickstrike(String uid) async {
+    try {
+      var postDocumentSnapshot = await _followingPostsCollectionReference
+          .where("followers", arrayContains: uid)
+          .orderBy("lastQuickstrike", descending: true)
+          .limit(20)
+          .getDocuments();
+      var data = postDocumentSnapshot.documents.map((doc) => doc.data).toList();
+
+      var lastPosts = [];
+      data.forEach((value) {
+        for (var quickstrike in value['quickstrikes']) {
+          if ((quickstrike['date'] as Timestamp).seconds >
+              Timestamp.now().seconds) {
+            lastPosts.add(quickstrike["id"]);
+          }
+        }
+      });
+
+      List<Stream> listData = [];
+      //Stream.fromFuture(postDocumentSnapshot).doOnEach((notification) {});
+      for (var lastPost in lastPosts) {
+        listData.add(_quickstrikeCollectionReference
+            .document(lastPost)
+            .snapshots()); //.get();
+
+        //listData.add(QuickStrikePost.fromMap( doc.data));
+      }
+
+      // Stream<dynamic> mergedStream = Rx.merge(listData);
+      // return mergedStream;
+      var mergedStream = Rx.combineLatestList(listData);
+
+      return mergedStream;
+    } catch (e) {
+      print(e.toString());
     }
   }
 

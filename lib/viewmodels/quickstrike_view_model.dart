@@ -10,15 +10,35 @@ class QuickStrikeViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
-  List<QuickStrikePost> _quickstrikes;
-  List<QuickStrikePost> get posts => _quickstrikes;
+  // List<QuickStrikePost> _quickstrikes;
+  // List<QuickStrikePost> get posts => _quickstrikes;
+//
+  // Future fetchPosts() async {
+  //   setBusy(true);
+  //   var quickstrikeResults =
+  //       await _firestoreService.getQuickstrikes(currentUser.uid);
+//
+  //   if (quickstrikeResults is List<QuickStrikePost>) {
+  //     _quickstrikes = quickstrikeResults;
+  //     setBusy(false);
+  //     notifyListeners();
+  //   } else {
+  //     //print(_quickstrikes.length.toString());
+  //     await _dialogService.showDialog(
+  //       title: 'La actualizacion de quickstrikes ha fallado',
+  //       description: "ha fallado XD asi al menos no crashea ",
+  //     );
+  //   }
+  // }
+  Stream _quickstrikes;
+  Stream get posts => _quickstrikes;
 
   Future fetchPosts() async {
     setBusy(true);
     var quickstrikeResults =
-        await _firestoreService.getQuickstrikes(currentUser.uid);
+        await _firestoreService.getQuickstrike(currentUser.uid);
 
-    if (quickstrikeResults is List<QuickStrikePost>) {
+    if (quickstrikeResults is Stream<dynamic>) {
       _quickstrikes = quickstrikeResults;
       setBusy(false);
       notifyListeners();
@@ -35,8 +55,7 @@ class QuickStrikeViewModel extends BaseModel {
     Map<String, dynamic> _quickstrike = quickstrike.toMap();
     _quickstrike.putIfAbsent("randomId", () => RandomIdGenerator.generateId());
     _quickstrike.putIfAbsent("user", () => currentUser.toJson());
-    await _firestoreService.joinQuickstrike(
-        currentUser.uid, _quickstrike);
+    await _firestoreService.joinQuickstrike(currentUser.uid, _quickstrike);
     currentUser.onGoingQuickstrikes.add(quickstrike.id);
   }
 
