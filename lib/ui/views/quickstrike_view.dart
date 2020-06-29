@@ -17,6 +17,7 @@ class QuickSTrikeView extends StatelessWidget {
     return ViewModelBuilder<QuickStrikeViewModel>.reactive(
         viewModelBuilder: () => QuickStrikeViewModel(),
         onModelReady: (model) => model.fetchPosts(),
+        createNewModelOnInsert: true,
         builder: (context, model, child) => Scaffold(
             body: !model.busy
                 ? Container(
