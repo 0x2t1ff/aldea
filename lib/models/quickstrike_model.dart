@@ -15,12 +15,14 @@ class QuickStrikePost {
   String id;
   String communityName;
   String cid;
+  bool isActive = false;
   final bool isEmpty;
   final bool finished;
   QuickStrikePost(
       {this.userId,
       this.title,
       this.price,
+      this.isActive,
       this.modelo,
       this.description,
       this.fechaQuickstrike,
@@ -37,6 +39,7 @@ class QuickStrikePost {
 
   Map<String, dynamic> toMap() {
     return {
+      'isActive': isActive,
       'userId': userId,
       'title': title,
       'imageUrl': imageUrl,
@@ -58,6 +61,7 @@ class QuickStrikePost {
 
   static QuickStrikePost fromMap(Map<String, dynamic> map) {
     return QuickStrikePost(
+        isActive: map['isActive'],
         title: map['title'],
         imageUrl: map['imageUrl'],
         userId: map['userId'],

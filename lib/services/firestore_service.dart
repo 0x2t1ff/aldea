@@ -675,6 +675,7 @@ class FirestoreService {
           if ((quickstrike['date'] as Timestamp).seconds >
               Timestamp.now().seconds) {
             lastPosts.add(quickstrike["id"]);
+            
           }
         }
       });

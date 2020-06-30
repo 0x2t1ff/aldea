@@ -10,26 +10,6 @@ class QuickStrikeViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
-  // List<QuickStrikePost> _quickstrikes;
-  // List<QuickStrikePost> get posts => _quickstrikes;
-//
-  // Future fetchPosts() async {
-  //   setBusy(true);
-  //   var quickstrikeResults =
-  //       await _firestoreService.getQuickstrikes(currentUser.uid);
-//
-  //   if (quickstrikeResults is List<QuickStrikePost>) {
-  //     _quickstrikes = quickstrikeResults;
-  //     setBusy(false);
-  //     notifyListeners();
-  //   } else {
-  //     //print(_quickstrikes.length.toString());
-  //     await _dialogService.showDialog(
-  //       title: 'La actualizacion de quickstrikes ha fallado',
-  //       description: "ha fallado XD asi al menos no crashea ",
-  //     );
-  //   }
-  // }
   Stream _quickstrikes;
   Stream get posts => _quickstrikes;
 
