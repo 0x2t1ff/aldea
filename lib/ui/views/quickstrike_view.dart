@@ -16,8 +16,9 @@ class QuickSTrikeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool quickstrikeActive = true;
-    double buttonWidth = getRandomWidth();
-    double buttonHeight = getRandomHeight();
+    String activeQuickstrike = "nSuYDhE9rbJbNGKRbQVS";
+    final double buttonWidth = getRandomWidth();
+    final double buttonHeight = getRandomHeight();
     return ViewModelBuilder<QuickStrikeViewModel>.reactive(
         viewModelBuilder: () => QuickStrikeViewModel(),
         onModelReady: (model) => model.fetchPosts(),
@@ -54,13 +55,19 @@ class QuickSTrikeView extends StatelessWidget {
                               quickstrikepostList
                                   .add(QuickStrikePost.fromMap(quickstrikeMap));
                             });
-                            return quickstrikepostList.length > 8
+                            return quickstrikepostList.length >= 8
                                 ? ListView.builder(
                                     padding: EdgeInsets.all(0),
                                     itemCount: quickstrikepostList.length,
                                     itemBuilder: (context, index) {
+                                      //si el quickstrike esta activo comprueba que el usuario esta participando.
                                       if (quickstrikepostList[index].isActive) {
-                                        quickstrikeActive = true;
+                                        model
+                                            .checkParticipatingQuickstrike(
+                                                quickstrikepostList[index].id)
+                                            .then((value) => value
+                                                ? quickstrikeActive = true
+                                                : null);
                                       }
                                       return QuickStrikeItem(
                                           model: model,
@@ -71,19 +78,30 @@ class QuickSTrikeView extends StatelessWidget {
                                 : ListView.builder(
                                     padding: EdgeInsets.all(0),
                                     itemCount: 8,
-                                    itemBuilder: (context, index) =>
-                                        quickstrikepostList.length > index
-                                            ? QuickStrikeItem(
-                                                model: model,
-                                                quickStrikePost:
-                                                    quickstrikepostList[index],
-                                                index: index)
-                                            : QuickStrikeItem(
-                                                index: index,
-                                                quickStrikePost:
-                                                    emptyQuickstrike,
-                                                model: model,
-                                              ));
+                                    itemBuilder: (context, index) {
+                                      if (quickstrikepostList.length > index) {
+                                        if (quickstrikepostList[index]
+                                            .isActive) {
+                                          model
+                                              .checkParticipatingQuickstrike(
+                                                  quickstrikepostList[index].id)
+                                              .then((value) => value
+                                                  ? quickstrikeActive = true
+                                                  : null);
+                                        }
+                                        return QuickStrikeItem(
+                                            model: model,
+                                            quickStrikePost:
+                                                quickstrikepostList[index],
+                                            index: index);
+                                      } else {
+                                        return QuickStrikeItem(
+                                          index: index,
+                                          quickStrikePost: emptyQuickstrike,
+                                          model: model,
+                                        );
+                                      }
+                                    });
                           }
                         },
                       ),
@@ -97,8 +115,8 @@ class QuickSTrikeView extends StatelessWidget {
                                 height: screenWidth(context) * 0.2,
                                 child: GestureDetector(
                                   onTap: () {
-                                    buttonWidth = getRandomWidth();
-                                    buttonHeight = getRandomHeight();
+                                    model.checkParticipatingQuickstrike(
+                                        activeQuickstrike);
                                   },
                                   child: Container(
                                       child: Image.asset(

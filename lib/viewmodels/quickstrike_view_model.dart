@@ -43,4 +43,13 @@ class QuickStrikeViewModel extends BaseModel {
     currentUser.onGoingQuickstrikes.remove(quickstrike.id);
     await _firestoreService.quitQuickstrike(currentUser.uid, quickstrike.id);
   }
+
+  Future<bool> checkParticipatingQuickstrike(String qid) async {
+    bool result = await _firestoreService.getParticipatingQuickstrikes(
+        currentUser.uid, qid);
+    print(result);
+    return result;
+  }
+
+
 }

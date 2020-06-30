@@ -618,45 +618,10 @@ class FirestoreService {
   Future<String> addQuickstrike(QuickStrikePost post) async {
     try {
       var doc = await _quickstrikeCollectionReference.add(post.toMap());
+      doc.updateData({'id': doc.documentID});
       return doc.documentID;
     } catch (e) {
       return e.toString();
-    }
-  }
-
-  Future getQuickstrikes(String uid) async {
-    try {
-      var postDocumentSnapshot = await _followingPostsCollectionReference
-          .where("followers", arrayContains: uid)
-          .orderBy("lastQuickstrike", descending: true)
-          .limit(20)
-          .getDocuments();
-      var data = postDocumentSnapshot.documents.map((doc) => doc.data).toList();
-      var lastPosts = [];
-      data.forEach((value) {
-        if (value.containsKey("quickstrikes")) {
-          for (var quickstrike in value['quickstrikes']) {
-            if ((quickstrike['date'] as Timestamp).seconds >
-                Timestamp.now().seconds) {
-              lastPosts.add(quickstrike["id"]);
-            }
-          }
-        }
-      });
-      List<QuickStrikePost> listData = [];
-      for (var lastPost in lastPosts) {
-        var doc = _quickstrikeCollectionReference
-            .document(lastPost)
-            .snapshots(); //.get();
-        doc.listen((querySnapshot) {
-          listData.add(QuickStrikePost.fromMap(querySnapshot.data));
-        });
-
-        //listData.add(QuickStrikePost.fromMap( doc.data));
-      }
-      return listData;
-    } catch (e) {
-      print(e.toString() + " the error ");
     }
   }
 
@@ -668,30 +633,22 @@ class FirestoreService {
           .limit(20)
           .getDocuments();
       var data = postDocumentSnapshot.documents.map((doc) => doc.data).toList();
-
       var lastPosts = [];
       data.forEach((value) {
         for (var quickstrike in value['quickstrikes']) {
           if ((quickstrike['date'] as Timestamp).seconds >
               Timestamp.now().seconds) {
             lastPosts.add(quickstrike["id"]);
-            
           }
         }
       });
 
       List<Stream> listData = [];
-      //Stream.fromFuture(postDocumentSnapshot).doOnEach((notification) {});
       for (var lastPost in lastPosts) {
-        listData.add(_quickstrikeCollectionReference
-            .document(lastPost)
-            .snapshots()); //.get();
-
-        //listData.add(QuickStrikePost.fromMap( doc.data));
+        listData.add(
+            _quickstrikeCollectionReference.document(lastPost).snapshots());
       }
 
-      // Stream<dynamic> mergedStream = Rx.merge(listData);
-      // return mergedStream;
       var mergedStream = Rx.combineLatestList(listData);
 
       return mergedStream;
@@ -714,6 +671,38 @@ class FirestoreService {
         .collection("pQuickstrikes")
         .document(quickstrikeId)
         .delete();
+  }
+
+  Future submitQuickstrikeResult(String id, String userId) async {
+    var docRef = _quickstrikeCollectionReference.document(id);
+
+    Firestore.instance.runTransaction((Transaction tx) async {
+      DocumentSnapshot postSnapshot = await tx.get(docRef);
+      int amount = postSnapshot.data["amount"];
+      List winners = postSnapshot.data["winners"];
+      if (postSnapshot.data["finished"] == false || winners.length < amount) {
+        winners.add(userId);
+        tx.update(docRef, <String, dynamic>{"chatRooms": winners});
+        if (winners.length == amount) {
+          tx.update(docRef, <String, dynamic>{"finished": true});
+        }
+      } else {}
+    });
+
+  }
+
+  Future getParticipatingQuickstrikes(String uid, String qid) async {
+    var docRef = await _userCollectionReference
+        .document(uid)
+        .collection("pQuickstrikes")
+        .document(qid)
+        .get();
+
+    if (docRef.data == null) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   Stream<DocumentSnapshot> getChats(String uid) {
