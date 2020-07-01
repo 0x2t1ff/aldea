@@ -675,20 +675,20 @@ class FirestoreService {
 
   Future submitQuickstrikeResult(String id, String userId) async {
     var docRef = _quickstrikeCollectionReference.document(id);
-
     Firestore.instance.runTransaction((Transaction tx) async {
       DocumentSnapshot postSnapshot = await tx.get(docRef);
+      print(postSnapshot.data);
       int amount = postSnapshot.data["amount"];
       List winners = postSnapshot.data["winners"];
-      if (postSnapshot.data["finished"] == false || winners.length < amount) {
+      if (postSnapshot.data["finished"] == false && winners.length < amount) {
         winners.add(userId);
-        tx.update(docRef, <String, dynamic>{"chatRooms": winners});
-        if (winners.length == amount) {
-          tx.update(docRef, <String, dynamic>{"finished": true});
+        print(winners);
+        tx.update(docRef, {"winners": winners});
+        if (winners.length >= amount) {
+          tx.update(docRef, {"finished": true});
         }
       } else {}
-    });
-
+    }).catchError((error) => print(error.toString()));
   }
 
   Future getParticipatingQuickstrikes(String uid, String qid) async {

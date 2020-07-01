@@ -47,9 +47,11 @@ class QuickStrikeViewModel extends BaseModel {
   Future<bool> checkParticipatingQuickstrike(String qid) async {
     bool result = await _firestoreService.getParticipatingQuickstrikes(
         currentUser.uid, qid);
-    print(result);
+    print(" the result of the check is" + result.toString() + qid);
     return result;
   }
 
-
+  Future submitResult(String id) {
+    _firestoreService.submitQuickstrikeResult(id, currentUser.uid);
+  }
 }

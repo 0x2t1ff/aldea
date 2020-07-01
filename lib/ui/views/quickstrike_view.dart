@@ -6,19 +6,41 @@ import 'package:aldea/ui/widgets/quickstrike_item.dart';
 import 'package:aldea/viewmodels/quickstrike_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
+import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
 import "../shared/app_colors.dart" as custcolor;
 
-class QuickSTrikeView extends StatelessWidget {
+class QuickSTrikeView extends StatefulWidget {
+  @override
+  _QuickSTrikeViewState createState() => _QuickSTrikeViewState();
+}
+
+class _QuickSTrikeViewState extends State<QuickSTrikeView> {
   final QuickStrikePost emptyQuickstrike = new QuickStrikePost(
     isEmpty: true,
   );
+
+  static double getRandomWidth() {
+    final _random = new Random();
+    double randomNumber = _random.nextDouble();
+    randomNumber = randomNumber * 0.8;
+    return randomNumber.toDouble();
+  }
+
+  static double getRandomHeight() {
+    final _random = new Random();
+    double randomNumber = _random.nextDouble();
+    randomNumber = randomNumber * 0.66;
+    return randomNumber.toDouble();
+  }
+
+  final double buttonWidth = getRandomWidth();
+  final double buttonHeight = getRandomHeight();
+  bool quickstrikeActive = false;
+  String activeQuickstrike = "";
   @override
+  // if there was a necessity of modifying this piece of code I take all responibility since I don't even know what the fuck it is anymore
   Widget build(BuildContext context) {
-    bool quickstrikeActive = true;
-    String activeQuickstrike = "nSuYDhE9rbJbNGKRbQVS";
-    final double buttonWidth = getRandomWidth();
-    final double buttonHeight = getRandomHeight();
     return ViewModelBuilder<QuickStrikeViewModel>.reactive(
         viewModelBuilder: () => QuickStrikeViewModel(),
         onModelReady: (model) => model.fetchPosts(),
@@ -61,14 +83,22 @@ class QuickSTrikeView extends StatelessWidget {
                                     itemCount: quickstrikepostList.length,
                                     itemBuilder: (context, index) {
                                       //si el quickstrike esta activo comprueba que el usuario esta participando.
-                                      if (quickstrikepostList[index].isActive) {
+                                      if (quickstrikepostList[index].isActive &&
+                                          quickstrikeActive == false) {
                                         model
                                             .checkParticipatingQuickstrike(
                                                 quickstrikepostList[index].id)
-                                            .then((value) => value
-                                                ? quickstrikeActive = true
-                                                : null);
+                                            .then((value) {
+                                          if (value) {
+                                            setState(() {
+                                              quickstrikeActive = true;
+                                              activeQuickstrike =
+                                                  quickstrikepostList[index].id;
+                                            });
+                                          } else {}
+                                        });
                                       }
+
                                       return QuickStrikeItem(
                                           model: model,
                                           quickStrikePost:
@@ -81,20 +111,31 @@ class QuickSTrikeView extends StatelessWidget {
                                     itemBuilder: (context, index) {
                                       if (quickstrikepostList.length > index) {
                                         if (quickstrikepostList[index]
-                                            .isActive) {
+                                                .isActive &&
+                                            quickstrikeActive == false) {
                                           model
                                               .checkParticipatingQuickstrike(
                                                   quickstrikepostList[index].id)
-                                              .then((value) => value
-                                                  ? quickstrikeActive = true
-                                                  : null);
+                                              .then((value) {
+                                            if (value == true) {
+                                              setState(() {
+                                                quickstrikeActive = true;
+                                                activeQuickstrike =
+                                                    quickstrikepostList[index]
+                                                        .id;
+                                              });
+                                            } else {}
+                                          });
                                         }
+
                                         return QuickStrikeItem(
                                             model: model,
                                             quickStrikePost:
                                                 quickstrikepostList[index],
                                             index: index);
                                       } else {
+                                        if (index == 7 &&
+                                            quickstrikeActive == true) {}
                                         return QuickStrikeItem(
                                           index: index,
                                           quickStrikePost: emptyQuickstrike,
@@ -114,9 +155,13 @@ class QuickSTrikeView extends StatelessWidget {
                                 width: screenWidth(context) * 0.2,
                                 height: screenWidth(context) * 0.2,
                                 child: GestureDetector(
-                                  onTap: () {
-                                    model.checkParticipatingQuickstrike(
-                                        activeQuickstrike);
+                                  onTap: () async {
+                                    
+                                    setState(() {
+                                      quickstrikeActive = false;
+                                    });
+                                    model.submitResult(activeQuickstrike);
+                                    
                                   },
                                   child: Container(
                                       child: Image.asset(
@@ -138,19 +183,5 @@ class QuickSTrikeView extends StatelessWidget {
                           AlwaysStoppedAnimation(custcolor.blueishGreyColor),
                     ),
                   )));
-  }
-
-  double getRandomWidth() {
-    final _random = new Random();
-    double randomNumber = _random.nextDouble();
-    randomNumber = randomNumber * 0.8;
-    return randomNumber.toDouble();
-  }
-
-  double getRandomHeight() {
-    final _random = new Random();
-    double randomNumber = _random.nextDouble();
-    randomNumber = randomNumber * 0.66;
-    return randomNumber.toDouble();
   }
 }
