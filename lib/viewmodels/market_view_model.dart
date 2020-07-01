@@ -5,7 +5,9 @@ import 'package:aldea/services/firestore_service.dart';
 import 'base_model.dart';
 
 class MarketViewModel extends BaseModel {
+  Map<Product, int> cart = {};
   MarketViewModel(this.uid, this.products);
+  var totalItems = 0;
   final Map<String, List<Product>> products;
   Product selectedProduct;
   String firstCategory;
@@ -16,6 +18,16 @@ class MarketViewModel extends BaseModel {
   final String uid;
 
   final FirestoreService _firestoreService = locator<FirestoreService>();
+
+  void addProductToCart(Product product) {
+    if (cart.containsKey(product)) {
+      cart[product] += 1;
+    } else {
+      cart.putIfAbsent(product, () => 1);
+    }
+    totalItems += 1;
+    notifyListeners();
+  }
 
   void showMore() {
     isShowingMore = true;

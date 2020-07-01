@@ -25,7 +25,8 @@ class _MarketViewState extends State<MarketView>
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MarketViewModel>.reactive(
-        viewModelBuilder: () => MarketViewModel(widget.community.uid, widget.products),
+        viewModelBuilder: () =>
+            MarketViewModel(widget.community.uid, widget.products),
         onModelReady: (m) {
           m.setFirstProducts();
         },
@@ -68,7 +69,34 @@ class _MarketViewState extends State<MarketView>
                         horizontalSpaceMedium,
                         SizedBox(
                           height: communityBodyHeight(context) * 0.045,
-                          child: Image.asset("assets/images/white-cart.png"),
+                          child: Stack(
+                            overflow: Overflow.visible,
+                            alignment: Alignment.bottomRight,
+                            children: <Widget>[
+                              Image.asset("assets/images/white-cart.png"),
+                              if (model.cart.length > 0)
+                                Positioned(
+                                  bottom: -5,
+                                  right: -5,
+                                  child: Container(
+                                    child: FittedBox(
+                                        child: Text(
+                                      model.totalItems.toString(),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600),
+                                    )),
+                                    height:
+                                        communityBodyHeight(context) * 0.025,
+                                    width: communityBodyHeight(context) * 0.025,
+                                    decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                  ),
+                                )
+                            ],
+                          ),
                         ),
                       ],
                     ),

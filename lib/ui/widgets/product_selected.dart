@@ -67,6 +67,7 @@ class ProductSelected extends StatelessWidget {
                               fontWeight: FontWeight.w600),
                         ),
                         GestureDetector(
+                          onTap: () => model.addProductToCart(product),
                           child: SizedBox(
                               height: 32,
                               child:
