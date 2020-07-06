@@ -62,17 +62,70 @@ export const chatNotification = functions.database
         })
 
 
-        export const buttonQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(async (context) => {
-            const now = admin.firestore.Timestamp.now();
-            const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isGame', '==', true);
-            const quickStrikes = await query.get();
-            quickStrikes.forEach(async (snapshot) => {
-                const doc = snapshot.data();
-                const docId = snapshot.id;
-                await snapshot.ref.update({ 'active': true});
-        
-            });
-            return null;
-        });
+export const buttonQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(async (context) => {
+    const now = admin.firestore.Timestamp.now();
+    const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isGame', '==', true);
+    const quickStrikes = await query.get();
+    quickStrikes.forEach(async (snapshot) => {
+        await snapshot.ref.update({ 'active': true });
+
+    });
+    return null;
+});
+
+export const questionQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(async (context) => {
+    const now = admin.firestore.Timestamp.now();
+    const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isGame', '==', true);
+    const quickStrikes = await query.get();
+    quickStrikes.forEach(async (snapshot) => {
+        await snapshot.ref.update({ 'active': true });
+
+    });
+    return null;
+});
+
+export const finishedQuickstrike = functions.firestore.document("quickstrikes/{quickstrikeId}").onUpdate(async (snap, context,) => {
+    const quickstrikeId = snap.after.id;
+    const query = db.collection("quickstrikes").doc(quickstrikeId);
+    const quickstrike = await query.get();
+    const now = admin.firestore.Timestamp.now();
+    const quickstrikeData = quickstrike.data();
+    if (quickstrikeData !== undefined) {
+        if (quickstrikeData['winners'].length >= quickstrikeData['amount']) {
+            const post = {
+                "communityId": quickstrikeData["cid"],
+                "communityName": quickstrikeData["communityName"],
+                "fechaQuickstrike": quickstrikeData["fechaQuickstrike"],
+                "amount": quickstrikeData["amount"],
+                "description": quickstrikeData["description"],
+                "imageUrl": quickstrikeData["imageUrl"],
+                "isGame": quickstrikeData["isGame"],
+                "isRandom": quickstrikeData["isRandom"],
+                "isResult": true,
+                "isAnnouncement": false,
+                "modelo": quickstrikeData["modelo"],
+                "title": quickstrikeData["title"],
+                "winners": quickstrikeData["winners"]
+            }
+            const path = await db.collection("posts").add(post);
+            const id = path.toString().substring(7);
+            const followerRef = db.collection("followers").doc(quickstrikeData["cid"]);
+            const follower = await followerRef.get();
+            const followerData = follower.data();
+            if (followerData !== undefined) {
+                const posts = followerData["posts"];
+                posts.push({ "date": now, "id": id });
+                followerRef.update({ "posts": posts });
+            //   const quickstrikes = followerData["quickstrikes"]
+            //   quickstrikes.foreach((element , index  ) => {
+            //       console.log(element);
+            //       console.log(index);
+            //   })
+            }
+        }
+
+    }
+
+})
 
 
