@@ -108,7 +108,7 @@ export const finishedQuickstrike = functions.firestore.document("quickstrikes/{q
                 "winners": quickstrikeData["winners"]
             }
             const path = await db.collection("posts").add(post);
-            const id = path.toString().substring(7);
+            const id = path.id;
             const followerRef = db.collection("followers").doc(quickstrikeData["cid"]);
             const follower = await followerRef.get();
             const followerData = follower.data();
@@ -116,11 +116,14 @@ export const finishedQuickstrike = functions.firestore.document("quickstrikes/{q
                 const posts = followerData["posts"];
                 posts.push({ "date": now, "id": id });
                 followerRef.update({ "posts": posts });
-            //   const quickstrikes = followerData["quickstrikes"]
-            //   quickstrikes.foreach((element , index  ) => {
-            //       console.log(element);
-            //       console.log(index);
-            //   })
+                const quickstrikes = followerData["quickstrikes"] as Array<[]>;
+                quickstrikes.forEach((element: any) => {
+                    if (quickstrikeId == element["id"]) {
+                        quickstrikes.filter(x => x !== element);
+                        followerRef.update({ "quickstrikes": quickstrikes });
+                    }
+
+                })
             }
         }
 
