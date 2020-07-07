@@ -58,7 +58,7 @@ class FinishedQuickstrike extends StatelessWidget {
     return time;
   }
 
-  Widget createWinnerRow(String winners) {
+  Widget createWinnerRow(String winners, BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: 1),
       child: Row(
@@ -67,10 +67,16 @@ class FinishedQuickstrike extends StatelessWidget {
             Icons.star,
             color: Color(0xffDBE276),
           ),
-          Text(
-            winners,
-            style:
-                TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.w600),
+          Padding(
+            padding:
+                EdgeInsets.only(left: devicesize.screenWidth(context) * 0.01),
+            child: Text(
+              winners,
+              style: TextStyle(
+                  fontFamily: 'Raleway',
+                  fontWeight: FontWeight.w700,
+                  color: custcolor.almostWhite),
+            ),
           )
         ],
       ),
@@ -84,9 +90,7 @@ class FinishedQuickstrike extends StatelessWidget {
 
     return Container(
       color: custcolor.darkGrey,
-      width: devicesize.screenWidth(context),
-      height: devicesize.screenHeight(context) * 0.86 +
-          devicesize.screenHeight(context) * 0.02 * postModel.winners.length,
+
       child: Column(
         children: <Widget>[
           Container(
@@ -203,8 +207,9 @@ class FinishedQuickstrike extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: devicesize.screenHeight(context) * 0.01),
+                  padding: EdgeInsets.only(
+                      top: devicesize.screenHeight(context) * 0.02,
+                      bottom: devicesize.screenHeight(context) * 0.01),
                   child: Row(
                     children: <Widget>[
                       Text(
@@ -242,10 +247,10 @@ class FinishedQuickstrike extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      top: devicesize.screenHeight(context) * 0.015),
+                      top: devicesize.screenHeight(context) * 0.02),
                   child: Container(
-                    width: devicesize.screenWidth(context) * 0.88,
-                    height: devicesize.screenHeight(context) * 0.04 +
+                    width: devicesize.screenWidth(context) * 0.9,
+                    height: devicesize.screenHeight(context) * 0.07 +
                         devicesize.screenHeight(context) *
                             0.031 *
                             postModel.winners.length,
@@ -253,49 +258,62 @@ class FinishedQuickstrike extends StatelessWidget {
                         color: custcolor.greenTheme,
                         borderRadius: BorderRadius.circular(25)),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          "Enhorabuena a los ganadores!",
-                          style: TextStyle(
-                              fontFamily: 'Raleway',
-                              fontWeight: FontWeight.w800,
-                              fontSize: 15),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: devicesize.screenWidth(context) * 0.06,
+                              top: devicesize.screenHeight(context) * 0.02),
+                          child: Text(
+                            "Enhorabuena a los ganadores!",
+                            style: TextStyle(
+                                fontFamily: 'Raleway',
+                                fontWeight: FontWeight.w800,
+                                fontSize: 15),
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Container(
-                              height: devicesize.screenHeight(context) *
-                                  0.033 *
-                                  postModel.winners.length,
-                              width: devicesize.screenWidth(context) * 0.4,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: SizedBox(
-                                      //   width:
-                                      //          devicesize.screenWidth(context) * 0.88,
-                                      //     height:
-                                      //     devicesize.screenHeight(context) * 0.4,
-                                      child: ListView.builder(
-                                          padding: EdgeInsets.only(top: 2),
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemCount: postModel.winners.length,
-                                          itemBuilder:
-                                              (BuildContext ctx, int index) {
-                                            return createWinnerRow(
-                                                postModel.winners[index]);
-                                          }),
-                                    ),
-                                  )
-                                ],
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: devicesize.screenWidth(context) * 0.06),
+                              child: Container(
+                                height: devicesize.screenHeight(context) *
+                                    0.033 *
+                                    postModel.winners.length,
+                                width: devicesize.screenWidth(context) * 0.58,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: SizedBox(
+                                        //   width:
+                                        //          devicesize.screenWidth(context) * 0.88,
+                                        //     height:
+                                        //     devicesize.screenHeight(context) * 0.4,
+                                        child: ListView.builder(
+                                            padding: EdgeInsets.only(top: 2),
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: postModel.winners.length,
+                                            itemBuilder:
+                                                (BuildContext ctx, int index) {
+                                              return createWinnerRow(
+                                                "Javi Moreno",
+                                                context,
+                                              );
+                                              // postModel.winners[index]);
+                                            }),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                             Container(
-                              width: devicesize.screenWidth(context) * 0.27,
+                              width: devicesize.screenWidth(context) * 0.25,
                               alignment: Alignment.center,
                               child: Container(
                                   width:

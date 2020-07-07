@@ -456,9 +456,16 @@ class FirestoreService {
           .limit(10)
           .getDocuments();
       var data = postDocumentSnapshot.documents.map((doc) => doc.data);
-      var lastPosts = [];
+      List lastPostsList = [];
 
-      data.forEach((f) => lastPosts.add(f["posts"][0]["id"]));
+      data.forEach((f) => lastPostsList.add(f["posts"]));
+      var lastPosts = [];
+      lastPostsList.forEach((element) {
+        element.forEach((element) {
+          lastPosts.add(element["id"]);
+        });
+      });
+
       List<PostModel> listData = new List<PostModel>();
       print(lastPosts);
       for (var f in lastPosts) {

@@ -6,7 +6,7 @@ const db = admin.firestore();
 
 export const checkQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(async (context) => {
     const now = admin.firestore.Timestamp.now();
-    const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isRandom', '==', true);
+    const query = db.collection('quickstrikes').where('feºchaQuickstrike', '<=', now).where('finished', '==', false).where('isRandom', '==', true);
     const quickStrikes = await query.get();
     quickStrikes.forEach(async (snapshot) => {
         const winners: any[] = [];
@@ -92,6 +92,22 @@ export const finishedQuickstrike = functions.firestore.document("quickstrikes/{q
     const quickstrikeData = quickstrike.data();
     if (quickstrikeData !== undefined) {
         if (quickstrikeData['winners'].length >= quickstrikeData['amount']) {
+            var winnersList: any[] = [];
+
+            quickstrikeData["winners"].forEach(async (element: string) => {
+                const userPath = db.collection("users").doc(element);
+                const userQuery = await userPath.get();
+                const userData = userQuery.data();
+                if (userData !== undefined) {
+                    winnersList.push(userData["name"])
+                    var wins = userData["winCount"];
+                    wins++;
+                    await userPath.update({ "winCount": wins });
+
+                }
+
+            });
+            //TODO: update del avatarUrl una vez la creación de quickstrike pase ese dato
             const post = {
                 "communityId": quickstrikeData["cid"],
                 "communityName": quickstrikeData["communityName"],
@@ -105,8 +121,11 @@ export const finishedQuickstrike = functions.firestore.document("quickstrikes/{q
                 "isAnnouncement": false,
                 "modelo": quickstrikeData["modelo"],
                 "title": quickstrikeData["title"],
-                "winners": quickstrikeData["winners"]
+                "winners": winnersList,
+                "likes": [],
+                "avatarUrl": "placeholder",
             }
+
             const path = await db.collection("posts").add(post);
             const id = path.id;
             const followerRef = db.collection("followers").doc(quickstrikeData["cid"]);
@@ -126,6 +145,7 @@ export const finishedQuickstrike = functions.firestore.document("quickstrikes/{q
                 })
             }
         }
+
 
     }
 
