@@ -122,10 +122,9 @@ class ProfileView extends StatelessWidget {
                                 ),
                               ),
                               width: screenWidth(context) * 0.26,
-                              height: screenWidth(context) * 0.26,
+                              height: screenWidth(context) * 0.22,
                               child: getDecoration(model.currentUser.winCount)),
                         ),
-
                         Positioned(
                             left: screenWidth(context) * 0.075,
                             top: usableScreenWithoughtBars(context) * 0.03,
@@ -136,25 +135,6 @@ class ProfileView extends StatelessWidget {
                                 onTap: () => model.selectProfileImage(),
                               ),
                             )),
-                        //      Positioned(
-                        //        left: screenWidth(context) * 0.05,
-                        //        top: usableScreenWithoughtBars(context) * 0.04,
-                        //        child: Container(
-                        //          decoration: BoxDecoration(
-                        //            border: Border.all(
-                        //              color: Color(0xff0F1013),
-                        //              width: 0,
-                        //            ),
-                        //            borderRadius: BorderRadius.circular(100),
-                        //          ),
-                        //          child: CircleAvatar(
-                        //              backgroundColor: Colors.transparent,
-                        //              radius:
-                        //                  usableScreenWithoughtBars(context) * 0.08,
-                        //              backgroundImage:
-                        //                  AssetImage("assets/images/laureles.png")),
-                        //        ),
-                        //      ),
                         Positioned(
                           top: screenHeight(context) * 0.02,
                           right: screenWidth(context) * 0.04,
