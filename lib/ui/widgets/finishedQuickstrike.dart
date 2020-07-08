@@ -89,8 +89,20 @@ class FinishedQuickstrike extends StatelessWidget {
     Color greyColor = Color(0xff3a464d);
 
     return Container(
-      color: custcolor.darkGrey,
-
+      decoration: BoxDecoration(
+        color: custcolor.blueishGreyColor,
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xff0f1013),
+            blurRadius: 5.0,
+            spreadRadius: 5.0,
+            offset: Offset(
+              5.0,
+              5.0,
+            ),
+          )
+        ],
+      ),
       child: Column(
         children: <Widget>[
           Container(

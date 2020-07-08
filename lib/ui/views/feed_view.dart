@@ -149,11 +149,11 @@ class _FeedViewState extends State<FeedView> {
                                         : Container(
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
-                                              color: Colors.red,
+                                              color: custcolor.blueishGreyColor,
                                             ),
                                             width: devicesize
                                                     .screenHeight(context) *
-                                                0.1,
+                                                0.097,
                                           );
                                   })
                               : ListView.builder(

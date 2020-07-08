@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/ui/shared/shared_styles.dart';
 import 'package:aldea/viewmodels/quickstrike_view_model.dart';
@@ -11,7 +13,13 @@ class QuickStrikeItem extends StatefulWidget {
   final QuickStrikeViewModel model;
   final QuickStrikePost quickStrikePost;
   final int index;
-  const QuickStrikeItem({Key key, this.quickStrikePost, this.index, this.model})
+  final bool isParticipating;
+  const QuickStrikeItem(
+      {Key key,
+      this.quickStrikePost,
+      this.index,
+      this.model,
+      this.isParticipating})
       : super(key: key);
 
   @override
@@ -19,14 +27,18 @@ class QuickStrikeItem extends StatefulWidget {
 }
 
 class _QuickStrikeItemState extends State<QuickStrikeItem> {
-  bool isExpanded = false;
   bool isEnlisted = false;
+  bool isExpanded = false;
   String animationSelector = "";
+  @override
+  void initState() {
+    print("duibgoau");
+    isEnlisted = widget.isParticipating;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final commentController = TextEditingController();
-
     var quickstrikeType = "";
     int estimateTs = widget.quickStrikePost.isEmpty
         ? null
@@ -52,7 +64,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                   : custcolor.backgroundColor,
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black,
+                    color: isExpanded ? Colors.red : Colors.black,
                     blurRadius: 4.0,
                     spreadRadius: 0,
                     offset: Offset(
@@ -75,12 +87,22 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
         : Column(children: <Widget>[
             Container(
               decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 4.0,
+                      spreadRadius: 0,
+                      offset: Offset(
+                        0,
+                        0,
+                      )),
+                ],
                 color: widget.index % 2 == 0
                     ? custcolor.darkGrey
                     : custcolor.backgroundColor,
               ),
               width: devicesize.screenWidth(context),
-              height: devicesize.screenHeight(context) * 0.101,
+              height: devicesize.screenHeight(context) * 0.103,
               child: Row(
                 children: <Widget>[
                   Padding(
@@ -238,7 +260,6 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                         alignment: Alignment.bottomLeft,
                         icon: Icon(Icons.expand_more),
                         onPressed: () => setState(() {
-                          print("xd");
                           isExpanded = !isExpanded;
                         }),
                       ),
@@ -253,33 +274,28 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                       color: widget.index % 2 == 0
                           ? custcolor.backgroundColor
                           : custcolor.darkGrey,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black,
-                          blurRadius: 4.0,
-                          spreadRadius: 1,
-                          offset: Offset(0, 1),
-                        ),
-                      ],
                     ),
-                    //height: devicesize.screenHeight(context) * 0.315,
-
                     padding: EdgeInsets.only(
                         bottom: devicesize.screenHeight(context) * 0.0185),
                     width: devicesize.screenWidth(context),
                     child: Column(
                       children: <Widget>[
                         Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal:
+                                  devicesize.screenWidth(context) * 0.05),
                           width: devicesize.screenWidth(context),
                           color: widget.index % 2 == 0
                               ? custcolor.backgroundColor
                               : custcolor.darkGrey,
                           padding: EdgeInsets.only(
-                              top: devicesize.screenHeight(context) * 0.02,
-                              left: devicesize.screenWidth(context) * 0.04),
+                            top: devicesize.screenHeight(context) * 0.02,
+                          ),
                           child: Text(
                             widget.quickStrikePost.description,
                             style: TextStyle(
+                                fontSize:
+                                    devicesize.screenWidth(context) * 0.03,
                                 color: Color(0xff3C8FA7),
                                 fontFamily: "Raleway",
                                 fontWeight: FontWeight.w600),
@@ -312,9 +328,6 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                                                     .screenHeight(context) *
                                                 0.0775,
                                             decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 1,
-                                                  color: Colors.black),
                                               borderRadius:
                                                   BorderRadius.circular(
                                                       devicesize.screenWidth(
@@ -351,9 +364,16 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                                                     .screenHeight(context) *
                                                 0.0775,
                                             decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 1,
-                                                  color: Colors.black),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.7),
+                                                  spreadRadius: 5,
+                                                  blurRadius: 7,
+                                                  offset: Offset(1,
+                                                      0), // changes position of shadow
+                                                ),
+                                              ],
                                               borderRadius:
                                                   BorderRadius.circular(
                                                       devicesize.screenWidth(
@@ -384,8 +404,16 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                                               devicesize.screenHeight(context) *
                                                   0.0775,
                                           decoration: BoxDecoration(
-                                            border: Border.all(
-                                                width: 1, color: Colors.black),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.7),
+                                                spreadRadius: 5,
+                                                blurRadius: 7,
+                                                offset: Offset(1,
+                                                    0), // changes position of shadow
+                                              ),
+                                            ],
                                             borderRadius: BorderRadius.circular(
                                                 devicesize
                                                         .screenWidth(context) *
@@ -415,18 +443,26 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                               child: GestureDetector(
                                 //TODO: metodo de participacion con el servicio de firebase y aviso de compra en caso de ser ganador
                                 onTap: () {
-                                  setState(() {
-                                    print("pulsaste we");
-                                    isEnlisted
-                                        ? widget.model.quitQuickstrike(
-                                            widget.quickStrikePost)
-                                        : widget.model.joinQuickstrike(
-                                            widget.quickStrikePost);
-                                    isEnlisted = !isEnlisted;
-                                    isEnlisted
-                                        ? animationSelector = 'RTOG'
-                                        : animationSelector = 'GTOR';
-                                  });
+                                  isEnlisted
+                                      ? widget.model.quitQuickstrike(
+                                          widget.quickStrikePost)
+                                      : widget.model.joinQuickstrike(
+                                          widget.quickStrikePost);
+                                  isEnlisted = !isEnlisted;
+                                  if (isEnlisted) {
+                                    animationSelector = 'RTOG';
+                                    Future.delayed(Duration(milliseconds: 400),
+                                        () {
+                                      animationSelector = "GREEN";
+                                    });
+                                  } else {
+                                    animationSelector = 'GTOR';
+                                    Future.delayed(Duration(milliseconds: 400),
+                                        () {
+                                      animationSelector = "RED";
+                                    });
+                                  }
+                                  setState(() {});
                                 },
                                 child: Container(
                                   height:
@@ -442,43 +478,6 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                               ),
                             ),
                           ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: devicesize.screenHeight(context) * 0.025),
-                          child: Container(
-                            height: devicesize.screenHeight(context) * 0.0357,
-                            width: devicesize.screenWidth(context) * 0.912,
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                hintText: 'Escribe un comentario',
-                                hintStyle: TextStyle(
-                                    color: Colors.grey,
-                                    fontFamily: 'Raleway',
-                                    fontSize: devicesize.screenHeight(context) *
-                                        0.018,
-                                    fontStyle: FontStyle.italic),
-                                contentPadding: EdgeInsets.only(
-                                    top: devicesize.screenHeight(context) *
-                                        0.01),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                fillColor: Color(0xff15232B),
-                                filled: true,
-                                prefixIcon: Icon(Icons.add_comment,
-                                    color: Colors.white,
-                                    size: devicesize.screenHeight(context) *
-                                        0.023),
-                              ),
-                              controller: commentController,
-                              style: TextStyle(
-                                  color: custcolor.almostWhite,
-                                  fontFamily: "Raleway",
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12),
-                            ),
-                          ),
                         ),
                       ],
                     ),

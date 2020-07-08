@@ -82,6 +82,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                     padding: EdgeInsets.all(0),
                                     itemCount: quickstrikepostList.length,
                                     itemBuilder: (context, index) {
+                                      bool participating;
                                       //si el quickstrike esta activo comprueba que el usuario esta participando.
                                       if (quickstrikepostList[index].isActive &&
                                           quickstrikeActive == false) {
@@ -89,6 +90,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                             .checkParticipatingQuickstrike(
                                                 quickstrikepostList[index].id)
                                             .then((value) {
+                                          participating = value;
                                           if (value) {
                                             setState(() {
                                               quickstrikeActive = true;
@@ -100,6 +102,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                       }
 
                                       return QuickStrikeItem(
+                                          isParticipating: true,
                                           model: model,
                                           quickStrikePost:
                                               quickstrikepostList[index],
@@ -109,6 +112,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                     padding: EdgeInsets.all(0),
                                     itemCount: 8,
                                     itemBuilder: (context, index) {
+                                      bool participating;
                                       if (quickstrikepostList.length > index) {
                                         if (quickstrikepostList[index]
                                                 .isActive &&
@@ -117,6 +121,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                               .checkParticipatingQuickstrike(
                                                   quickstrikepostList[index].id)
                                               .then((value) {
+                                            participating = value;
                                             if (value == true) {
                                               setState(() {
                                                 quickstrikeActive = true;
@@ -129,6 +134,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                         }
 
                                         return QuickStrikeItem(
+                                            isParticipating: true,
                                             model: model,
                                             quickStrikePost:
                                                 quickstrikepostList[index],
@@ -137,6 +143,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                         if (index == 7 &&
                                             quickstrikeActive == true) {}
                                         return QuickStrikeItem(
+                                          isParticipating: false,
                                           index: index,
                                           quickStrikePost: emptyQuickstrike,
                                           model: model,
@@ -156,12 +163,10 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                 height: screenWidth(context) * 0.2,
                                 child: GestureDetector(
                                   onTap: () async {
-                                    
                                     setState(() {
                                       quickstrikeActive = false;
                                     });
                                     model.submitResult(activeQuickstrike);
-                                    
                                   },
                                   child: Container(
                                       child: Image.asset(
