@@ -34,6 +34,11 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
   void initState() {
     print("duibgoau");
     isEnlisted = widget.isParticipating;
+    if (widget.isParticipating) {
+      animationSelector = "GREEN";
+    } else {
+      animationSelector = "RED";
+    }
     super.initState();
   }
 
