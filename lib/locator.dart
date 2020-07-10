@@ -2,6 +2,7 @@ import 'package:aldea/services/push_notification_service.dart';
 import 'package:aldea/services/rtdb_service.dart';
 import 'package:aldea/ui/views/communities_view.dart';
 import 'package:aldea/ui/views/direct_message_view.dart';
+import 'package:aldea/ui/views/login_view.dart';
 import 'package:get_it/get_it.dart';
 import './services/navigation_service.dart';
 import './services/dialog_service.dart';
@@ -31,6 +32,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => FeedView());
   locator.registerLazySingleton(() => DirectMessageView());
   locator.registerLazySingleton(() => PushNotificationService());
+  locator.registerLazySingleton(() => LoginView());
   
 }
 

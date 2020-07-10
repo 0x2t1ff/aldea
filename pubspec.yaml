@@ -1,6 +1,7 @@
 name: aldea
 description: A new Flutter project.
 
+
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
 # followed by an optional build number separated by a +.
@@ -39,12 +40,25 @@ dependencies:
   image_picker: ^0.6.3+4
   firebase_messaging: ^6.0.16
   rxdart: ^0.24.1
-
+  flutter_launcher_icons: ^0.7.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+
+
+  
+
+flutter_icons:
+  ios: true
+  android: "launcher_icon"
+  image_path: "assets/images/launching-icon.png"
+  
+
+  
+  
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -100,10 +114,11 @@ flutter:
         - asset: assets/fonts/Raleway_ExtraBold.ttf
           weight: 900
         - asset: assets/fonts/Raleway_Italic.ttf
-  #
+  
 
   assets:
     - assets/images/hoguera.png
+    - assets/images/launching-icon.png
     - assets/images/vouch.png
     - assets/images/hoguera-azul.png
     - assets/images/posts.png

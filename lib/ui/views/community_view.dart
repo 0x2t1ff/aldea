@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/views/user_posts_view.dart';
 import 'package:aldea/ui/views/news_view.dart';
 import 'package:aldea/models/community.dart';
@@ -391,6 +392,8 @@ class _CommunityViewState extends State<CommunityView>
                                       ? GestureDetector(
                                           onTap: () => model.goToRequests(),
                                           child: Container(
+                                            height:
+                                                screenHeight(context) * 0.052,
                                             width: double.infinity,
                                             decoration: BoxDecoration(
                                               color: Colors.transparent,
@@ -422,7 +425,9 @@ class _CommunityViewState extends State<CommunityView>
                                                       style: TextStyle(
                                                           fontStyle:
                                                               FontStyle.italic,
-                                                          fontSize: 16,
+                                                          fontSize: screenWidth(
+                                                                  context) *
+                                                              0.04,
                                                           color: Colors.white,
                                                           fontFamily:
                                                               'Raleway'),
@@ -430,9 +435,13 @@ class _CommunityViewState extends State<CommunityView>
                                                     Text(
                                                       "${model.requests.length} peticiones ",
                                                       style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                           fontStyle:
                                                               FontStyle.italic,
-                                                          fontSize: 16,
+                                                          fontSize: screenWidth(
+                                                                  context) *
+                                                              0.04,
                                                           fontFamily: 'Raleway',
                                                           color: Color(
                                                               0xff3CA759)),
@@ -456,7 +465,8 @@ class _CommunityViewState extends State<CommunityView>
                                         )
                                       : Container(),
                                   Container(
-                                    height: communityBodyHeight(context) * 0.92,
+                                    
+                                    height: communityBodyHeight(context) * 0.86,
                                     width: double.infinity,
                                     child: widget.community.isMarketplace
                                         ? TabBarView(
@@ -472,6 +482,8 @@ class _CommunityViewState extends State<CommunityView>
                                                 MarketView(widget.community,
                                                     model.products),
                                                 CommunityChatView(
+                                                    petitionsShowing:
+                                                        isModerator,
                                                     communityId: this
                                                         .widget
                                                         .community

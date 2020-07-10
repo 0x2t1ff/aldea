@@ -112,7 +112,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                     padding: EdgeInsets.all(0),
                                     itemCount: 8,
                                     itemBuilder: (context, index) {
-                                      bool participating;
+                                      
                                       if (quickstrikepostList.length > index) {
                                         if (quickstrikepostList[index]
                                                 .isActive &&
@@ -121,7 +121,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                               .checkParticipatingQuickstrike(
                                                   quickstrikepostList[index].id)
                                               .then((value) {
-                                            participating = value;
+                                            
                                             if (value == true) {
                                               setState(() {
                                                 quickstrikeActive = true;

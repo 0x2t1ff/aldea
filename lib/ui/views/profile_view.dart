@@ -115,15 +115,29 @@ class ProfileView extends StatelessWidget {
                         Positioned(
                           left: screenWidth(context) * 0.038,
                           top: usableScreenWithoughtBars(context) * 0.029,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(200),
+                          child: model.currentUser.winCount == 1
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(200),
+                                    ),
+                                  ),
+                                  width: screenWidth(context) * 0.26,
+                                  height: screenWidth(context) * 0.22,
+                                  child:
+                                      getDecoration(model.currentUser.winCount),
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(200),
+                                    ),
+                                  ),
+                                  width: screenWidth(context) * 0.26,
+                                  height: screenWidth(context) * 0.26,
+                                  child:
+                                      getDecoration(model.currentUser.winCount),
                                 ),
-                              ),
-                              width: screenWidth(context) * 0.26,
-                              height: screenWidth(context) * 0.22,
-                              child: getDecoration(model.currentUser.winCount)),
                         ),
                         Positioned(
                             left: screenWidth(context) * 0.075,
@@ -455,7 +469,7 @@ class ProfileView extends StatelessWidget {
     if (wins >= 1 && wins < 5) {
       return Image.asset("assets/images/laureles.png");
     } else if (wins >= 5 && wins < 10) {
-      return Image.asset("assets/iamges/bronce.png");
+      return Image.asset("assets/images/bronce.png");
     } else if (wins >= 10 && wins < 20) {
       return Image.asset("assets/images/plata.png");
     } else if (wins >= 20 && wins < 30) {

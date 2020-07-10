@@ -77,7 +77,7 @@ class MarketLanding extends StatelessWidget {
                 ),
                 Container(
                   width: double.infinity,
-                  height: communityBodyHeight(context) * 0.52,
+                  height: communityBodyHeight(context) * 0.5,
                   child: Column(
                     children: <Widget>[
                       Container(
@@ -138,7 +138,7 @@ class MarketLanding extends StatelessWidget {
                               padding: EdgeInsets.symmetric(
                                   vertical:
                                       communityBodyHeight(context) * 0.025),
-                              height: communityBodyHeight(context) * 0.46,
+                              height: communityBodyHeight(context) * 0.44,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[

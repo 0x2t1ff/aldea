@@ -32,7 +32,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
   String animationSelector = "";
   @override
   void initState() {
-    print("duibgoau");
+   
     isEnlisted = widget.isParticipating;
     if (widget.isParticipating) {
       animationSelector = "GREEN";

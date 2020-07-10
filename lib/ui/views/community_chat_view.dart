@@ -11,12 +11,14 @@ import "../shared/app_colors.dart" as custcolor;
 class CommunityChatView extends StatelessWidget {
   final String communityId;
   final double height;
+  final bool petitionsShowing;
 
-  const CommunityChatView({Key key, this.communityId, this.height})
+  const CommunityChatView(
+      {Key key, this.communityId, this.height, this.petitionsShowing})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    ScrollController _controller;
     final messageController = TextEditingController();
     return ViewModelBuilder<CommunityChatViewModel>.reactive(
       viewModelBuilder: () => CommunityChatViewModel(),
@@ -25,13 +27,15 @@ class CommunityChatView extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         resizeToAvoidBottomPadding: false,
         body: Container(
+          color: custcolor.almostBlack,
           child: Column(
             children: <Widget>[
               Container(
-                height:
-                    //  devicesize.screenHeight(context) * 0.68728 -
-                    //    devicesize.screenHeight(context) * 0.00291343789 * height
-                    devicesize.screenHeight(context) * 0.395 +
+                height: petitionsShowing
+                    ? devicesize.screenHeight(context) * 0.34314 +
+                        height * 0.988 -
+                        MediaQuery.of(context).viewInsets.bottom
+                    : devicesize.screenHeight(context) * 0.395 +
                         height * 0.988 -
                         MediaQuery.of(context).viewInsets.bottom,
                 color: custcolor.darkBlue,
@@ -62,7 +66,6 @@ class CommunityChatView extends StatelessWidget {
                             // hace que cuando envias mensaje baje
                             //TODO intentar hacer un singlechildscrollview y en vez de usar el listView.builder usar un .forEach() donde devuelva los mensajes , al singlechildscrollview meterle un ScrollController y que con cada resize/mensaje haga scroll hacia abajo
                             return ListView.builder(
-                                controller: _controller,
                                 reverse: false,
                                 itemCount: messageList.length,
                                 itemBuilder: (context, index) {
@@ -83,7 +86,13 @@ class CommunityChatView extends StatelessWidget {
                       ),
               ),
               Container(
-                  color: custcolor.almostBlack,
+                  decoration:
+                      BoxDecoration(color: custcolor.almostBlack, boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.8),
+                        offset: Offset(0, -2),
+                        blurRadius: 10)
+                  ]),
                   width: devicesize.screenWidth(context),
                   height: devicesize.screenHeight(context) * 0.09,
                   child: Row(
