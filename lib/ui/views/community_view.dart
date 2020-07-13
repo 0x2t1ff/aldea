@@ -43,9 +43,13 @@ class _CommunityViewState extends State<CommunityView>
     _scrollController = ScrollController();
     height = 0;
     _scrollController.addListener(() {
-      setState(() {
-        height = _scrollController.offset.toDouble();
-      });
+      if (_tabController.indexIsChanging &&
+          height != _scrollController.position.maxScrollExtent) {
+        setState(() {
+          height = _scrollController
+              .position.maxScrollExtent; //_scrollController.offset.toDouble();
+        });
+      }
     });
   }
 
@@ -465,7 +469,6 @@ class _CommunityViewState extends State<CommunityView>
                                         )
                                       : Container(),
                                   Container(
-                                    
                                     height: communityBodyHeight(context) * 0.86,
                                     width: double.infinity,
                                     child: widget.community.isMarketplace

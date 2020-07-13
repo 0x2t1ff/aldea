@@ -104,8 +104,7 @@ class _HomeViewState extends State<HomeView> {
               physics: NeverScrollableScrollPhysics(),
               controller: controller,
               children: <Widget>[
-                // _feedView,
-                _loginView,
+                _feedView,
                 _communitiesView,
                 _quickSTrikeView,
                 _directMessageView,
