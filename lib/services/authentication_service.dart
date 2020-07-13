@@ -16,6 +16,10 @@ class AuthenticationService {
     return await _firebaseAuth.currentUser();
   }
 
+  Future logOut(){
+    _firebaseAuth.signOut();
+  }
+
   Future loginWithEmail({
     @required String email,
     @required String password,

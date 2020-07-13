@@ -16,7 +16,7 @@ class LoginViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
   void navigateRegister() {
-    _navigationService.navigateTo(SignUpViewRoute, true);
+    _navigationService.navigateTo(SignUpViewRoute, false);
   }
 
   Future login({
@@ -31,10 +31,10 @@ class LoginViewModel extends BaseModel {
     setBusy(false);
     if (result is bool) {
       if (result) {
-      var userUid = await _authenticationService.getUserUID();
-      var userData = await _firestoreService.getUserData(userUid);
-      registerCurrentUser(userData);
-      _navigationService.navigateTo(HomeViewRoute, true);
+        var userUid = await _authenticationService.getUserUID();
+        var userData = await _firestoreService.getUserData(userUid);
+        registerCurrentUser(userData);
+        _navigationService.navigateTo(HomeViewRoute, true);
       } else {
         await _dialogService.showDialog(
             title: 'Error',
