@@ -17,9 +17,10 @@ class ChatsViewModel extends BaseModel {
       locator<CloudStorageService>();
   Stream<Event> _chatStream;
   Stream<Event> get messages => _chatStream;
-  File selectedImage;
+  // ignore: avoid_init_to_null
+  File selectedImage = null;
 
- Future<File> selectMessageImage() async {
+  Future<File> selectMessageImage() async {
     var tempImage = await _imageSelector.selectImage();
     if (tempImage != null) {
       selectedImage = tempImage;
@@ -29,15 +30,12 @@ class ChatsViewModel extends BaseModel {
   }
 
   Future<String> uploadImage({String chatId, File image}) async {
-   
     CloudStorageResult imageResult;
 
-    if (selectedImage != null) {
+    if (await image.exists()) {
       imageResult = await _cloudStorageService.uploadMessageImage(
-          imageToUpload: image,
-          chatId: chatId,
-          userId: currentUser.uid);
-          return imageResult.imageUrl;
+          imageToUpload: image, chatId: chatId, userId: currentUser.uid);
+      return imageResult.imageUrl;
     }
   }
 

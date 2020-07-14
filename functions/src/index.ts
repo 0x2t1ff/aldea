@@ -6,7 +6,7 @@ const db = admin.firestore();
 
 export const checkQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(async (context) => {
     const now = admin.firestore.Timestamp.now();
-    const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isRandom', '==', true);
+    const query = db.collection('quickstrikes').where('feºchaQuickstrike', '<=', now).where('finished', '==', false).where('isRandom', '==', true);
     const quickStrikes = await query.get();
     quickStrikes.forEach(async (snapshot) => {
         const winners: any[] = [];
@@ -61,5 +61,94 @@ export const chatNotification = functions.database
             })
         })
 
+
+export const buttonQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(async (context) => {
+    const now = admin.firestore.Timestamp.now();
+    const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isGame', '==', true);
+    const quickStrikes = await query.get();
+    quickStrikes.forEach(async (snapshot) => {
+        await snapshot.ref.update({ 'active': true });
+
+    });
+    return null;
+});
+
+export const questionQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(async (context) => {
+    const now = admin.firestore.Timestamp.now();
+    const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isGame', '==', true);
+    const quickStrikes = await query.get();
+    quickStrikes.forEach(async (snapshot) => {
+        await snapshot.ref.update({ 'active': true });
+
+    });
+    return null;
+});
+
+export const finishedQuickstrike = functions.firestore.document("quickstrikes/{quickstrikeId}").onUpdate(async (snap, context,) => {
+    const quickstrikeId = snap.after.id;
+    const query = db.collection("quickstrikes").doc(quickstrikeId);
+    const quickstrike = await query.get();
+    const now = admin.firestore.Timestamp.now();
+    const quickstrikeData = quickstrike.data();
+    if (quickstrikeData !== undefined) {
+        if (quickstrikeData['winners'].length >= quickstrikeData['amount']) {
+            var winnersList: any[] = [];
+
+            quickstrikeData["winners"].forEach(async (element: string) => {
+                const userPath = db.collection("users").doc(element);
+                const userQuery = await userPath.get();
+                const userData = userQuery.data();
+                if (userData !== undefined) {
+                    winnersList.push(userData["name"])
+                    var wins = userData["winCount"];
+                    wins++;
+                    await userPath.update({ "winCount": wins });
+
+                }
+
+            });
+            //TODO: update del avatarUrl una vez la creación de quickstrike pase ese dato
+            const post = {
+                "communityId": quickstrikeData["cid"],
+                "communityName": quickstrikeData["communityName"],
+                "fechaQuickstrike": quickstrikeData["fechaQuickstrike"],
+                "amount": quickstrikeData["amount"],
+                "description": quickstrikeData["description"],
+                "imageUrl": quickstrikeData["imageUrl"],
+                "isGame": quickstrikeData["isGame"],
+                "isRandom": quickstrikeData["isRandom"],
+                "isResult": true,
+                "isAnnouncement": false,
+                "modelo": quickstrikeData["modelo"],
+                "title": quickstrikeData["title"],
+                "winners": winnersList,
+                "likes": [],
+                "avatarUrl": "placeholder",
+            }
+
+            const path = await db.collection("posts").add(post);
+            const id = path.id;
+            const followerRef = db.collection("followers").doc(quickstrikeData["cid"]);
+            const follower = await followerRef.get();
+            const followerData = follower.data();
+            if (followerData !== undefined) {
+                const posts = followerData["posts"];
+                posts.push({ "date": now, "id": id });
+                followerRef.update({ "posts": posts });
+                const quickstrikes = followerData["quickstrikes"] as Array<[]>;
+                quickstrikes.forEach((element: any) => {
+                    if (quickstrikeId == element["id"]) {
+                        quickstrikes.filter(x => x !== element);
+                        followerRef.update({ "quickstrikes": quickstrikes });
+                    }
+
+                })
+            }
+        }
+
+
+    }
+
+})
 
 

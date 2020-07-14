@@ -77,6 +77,7 @@ class UserPostItem extends StatelessWidget {
         ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
             width: devicesize.screenWidth(context),
@@ -145,24 +146,35 @@ class UserPostItem extends StatelessWidget {
                 : PostCarousel(imageUrl: postModel.imageUrl),
           ),
           Padding(
-            padding: EdgeInsets.only(
-              left: devicesize.screenWidth(context) * 0.04,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                AdaptiveText(
-                  postModel.description,
-                  95,
-                  TextStyle(
-                      fontFamily: "Raleway",
-                      color: custcolor.almostWhite,
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 14),
-                ),
-              ],
-            ),
+            padding: postModel.imageUrl.isEmpty
+                ? EdgeInsets.only(
+                    left: devicesize.screenWidth(context) * 0.04,
+                  )
+                : EdgeInsets.only(
+                    left: devicesize.screenWidth(context) * 0.04,
+                    top: devicesize.screenHeight(context) * 0.01,
+                  ),
+            child: postModel.imageUrl.isEmpty
+                ? AdaptiveText(
+                    postModel.description,
+                    600,
+                    TextStyle(
+                        fontFamily: "Raleway",
+                        color: custcolor.almostWhite,
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 14),
+                  )
+                : AdaptiveText(
+                    postModel.description,
+                    95,
+                    TextStyle(
+                        fontFamily: "Raleway",
+                        color: custcolor.almostWhite,
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 14),
+                  ),
           ),
           Container(
             child: Column(

@@ -11,12 +11,14 @@ import "../shared/app_colors.dart" as custcolor;
 class CommunityChatView extends StatelessWidget {
   final String communityId;
   final double height;
+  final bool petitionsShowing;
 
-  const CommunityChatView({Key key, this.communityId, this.height})
+  const CommunityChatView(
+      {Key key, this.communityId, this.height, this.petitionsShowing})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    ScrollController _controller;
     final messageController = TextEditingController();
     return ViewModelBuilder<CommunityChatViewModel>.reactive(
       viewModelBuilder: () => CommunityChatViewModel(),
@@ -25,13 +27,15 @@ class CommunityChatView extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         resizeToAvoidBottomPadding: false,
         body: Container(
+          color: custcolor.almostBlack,
           child: Column(
             children: <Widget>[
               Container(
-                height:
-                    //  devicesize.screenHeight(context) * 0.68728 -
-                    //    devicesize.screenHeight(context) * 0.00291343789 * height
-                    devicesize.screenHeight(context) * 0.395 +
+                height: petitionsShowing
+                    ? devicesize.screenHeight(context) * 0.34314 +
+                        height * 0.988 -
+                        MediaQuery.of(context).viewInsets.bottom
+                    : devicesize.screenHeight(context) * 0.395 +
                         height * 0.988 -
                         MediaQuery.of(context).viewInsets.bottom,
                 color: custcolor.darkBlue,
@@ -62,7 +66,6 @@ class CommunityChatView extends StatelessWidget {
                             // hace que cuando envias mensaje baje
                             //TODO intentar hacer un singlechildscrollview y en vez de usar el listView.builder usar un .forEach() donde devuelva los mensajes , al singlechildscrollview meterle un ScrollController y que con cada resize/mensaje haga scroll hacia abajo
                             return ListView.builder(
-                                controller: _controller,
                                 reverse: false,
                                 itemCount: messageList.length,
                                 itemBuilder: (context, index) {
@@ -83,24 +86,34 @@ class CommunityChatView extends StatelessWidget {
                       ),
               ),
               Container(
-                  color: custcolor.almostBlack,
-                  width: devicesize.screenWidth(context),
-                  height: devicesize.screenHeight(context) * 0.09,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
+                constraints: BoxConstraints(
+                  maxWidth: devicesize.screenWidth(context),
+                ),
+                height: devicesize.screenHeight(context) * 0.09,
+                color: custcolor.almostBlack,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: devicesize.screenHeight(context) * 0.01),
+                      child: Container(
+                        width: devicesize.screenWidth(context) * 0.58,
                         padding: EdgeInsets.only(
                             left: devicesize.screenWidth(context) * 0.02),
-                        width: devicesize.screenWidth(context) * 0.7,
-                        height: devicesize.screenHeight(context) * 0.04,
                         decoration: BoxDecoration(
                           color: custcolor.blueTheme,
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: TextFormField(
+                          enableSuggestions: true,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
                           controller: messageController,
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal:
+                                    devicesize.screenWidth(context) * 0.025),
                             hintText: "   Envia un mensaje...",
                             hintStyle: TextStyle(
                                 color: Color(0xff3a464d),
@@ -114,13 +127,19 @@ class CommunityChatView extends StatelessWidget {
                               color: custcolor.almostWhite,
                               fontFamily: "Raleway",
                               fontWeight: FontWeight.w600,
-                              fontSize: 12),
+                              fontSize: 14),
                         ),
                       ),
-                      IconButton(
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: devicesize.screenWidth(context) * 0.04,
+                          bottom: devicesize.screenWidth(context) * 0.02),
+                      child: IconButton(
                         icon: Icon(
                           Icons.image,
                           color: custcolor.blueTheme,
+                          size: devicesize.screenWidth(context) * 0.1,
                         ),
                         onPressed: () async {
                           print(" button pressed");
@@ -137,9 +156,15 @@ class CommunityChatView extends StatelessWidget {
                                   true)));
                         },
                       ),
-                      IconButton(
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          bottom: devicesize.screenWidth(context) * 0.01,
+                          left: devicesize.screenWidth(context) * 0.04),
+                      child: IconButton(
                         icon: Icon(
                           Icons.send,
+                          size: devicesize.screenWidth(context) * 0.09,
                           color: custcolor.blueTheme,
                         ),
                         onPressed: () {
@@ -155,8 +180,10 @@ class CommunityChatView extends StatelessWidget {
                           messageController.clear();
                         },
                       ),
-                    ],
-                  )),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

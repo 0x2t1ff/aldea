@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/views/user_posts_view.dart';
 import 'package:aldea/ui/views/news_view.dart';
 import 'package:aldea/models/community.dart';
@@ -21,21 +22,42 @@ class CommunityView extends StatefulWidget {
   _CommunityViewState createState() => _CommunityViewState();
 }
 
-class _CommunityViewState extends State<CommunityView> {
+class _CommunityViewState extends State<CommunityView>
+    with SingleTickerProviderStateMixin {
   ScrollController _scrollController;
+  TabController _tabController;
   double height;
 
   @override
   void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: 5, initialIndex: 0);
+    _tabController.addListener(() => {
+          print(_scrollController.position.maxScrollExtent),
+          setState(() {
+            _scrollController.animateTo(240,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.ease);
+          })
+        });
     _scrollController = ScrollController();
     height = 0;
     _scrollController.addListener(() {
-      setState(() {
-        height = _scrollController.offset.toDouble();
-        print(height.toString());
-      });
+      if (_tabController.indexIsChanging &&
+          height != _scrollController.position.maxScrollExtent) {
+        setState(() {
+          height = _scrollController
+              .position.maxScrollExtent; //_scrollController.offset.toDouble();
+        });
+      }
     });
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -93,396 +115,403 @@ class _CommunityViewState extends State<CommunityView> {
                     ? Center(child: const CircularProgressIndicator())
                     : Stack(
                         children: <Widget>[
-                          DefaultTabController(
-                            length: widget.community.isMarketplace ? 5 : 4,
-                            child: Container(
-                              height: communityBodyHeight(context),
-                              width: double.infinity,
-                              child: SingleChildScrollView(
-                                controller: _scrollController,
-                                child: Column(
-                                  children: <Widget>[
-                                    Container(
-                                      width: double.infinity,
-                                      color: Colors.white,
-                                      height:
-                                          communityBodyHeight(context) * 0.35,
-                                      child: Stack(
-                                        alignment: Alignment.bottomCenter,
-                                        children: <Widget>[
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: NetworkImage(widget
-                                                        .community.bkdPicUrl),
-                                                    fit: BoxFit.cover)),
-                                          ),
-                                          Positioned(
-                                              top:
-                                                  communityBodyHeight(context) *
-                                                      0.04,
-                                              child: Container(
-                                                  decoration:
-                                                      profilePicDecoration,
-                                                  child: CircleAvatar(
-                                                      child: Container(
-                                                        width: double.infinity,
-                                                        height: double.infinity,
-                                                        alignment:
-                                                            Alignment.center,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                        ),
-                                                      ),
-                                                      radius:
-                                                          communityBodyHeight(
-                                                                  context) *
-                                                              0.07,
-                                                      backgroundImage:
-                                                          NetworkImage(widget
-                                                              .community
-                                                              .iconPicUrl)))),
-                                          ClipRect(
-                                            child: BackdropFilter(
-                                              filter: ImageFilter.blur(
-                                                  sigmaX: 5.0, sigmaY: 5.0),
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal:
-                                                      communityBodyHeight(
-                                                              context) *
-                                                          0.06,
-                                                ),
-                                                width: double.infinity,
-                                                height: communityBodyHeight(
-                                                        context) *
-                                                    0.08,
-                                                color: Colors.black38,
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: <Widget>[
-                                                    Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        Text(
-                                                            model
-                                                                .followersDoc[
-                                                                    'posts']
-                                                                .length
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 18)),
-                                                        Text("Publicaciones",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w300,
-                                                                fontSize: 16))
-                                                      ],
-                                                    ),
-                                                    Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        Text(
-                                                            model
-                                                                .followersDoc[
-                                                                    'posts']
-                                                                .length
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 18)),
-                                                        Text("Likes",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w300,
-                                                                fontSize: 16))
-                                                      ],
-                                                    ),
-                                                    Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        Text(
-                                                            model
-                                                                .followersDoc[
-                                                                    "followers"]
-                                                                .length
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 18)),
-                                                        Text("Seguidores",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w300,
-                                                                fontSize: 16))
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          isModerator
-                                              ? Positioned(
-                                                  top: communityBodyHeight(
-                                                          context) *
-                                                      0.01,
-                                                  right: communityBodyHeight(
-                                                          context) *
-                                                      0.01,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      model.setIsShowingPopup(
-                                                          true);
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.note_add,
-                                                      size: 45,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ))
-                                              : Container(),
-                                          isModerator
-                                              ? Positioned(
-                                                  top: communityBodyHeight(
-                                                          context) *
-                                                      0.2,
-                                                  right: communityBodyHeight(
-                                                          context) *
-                                                      0.01,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      model.goToSettings(
-                                                          widget.community);
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.settings,
-                                                      size: 45,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ))
-                                              : Container()
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: Color(0xff17191E),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.black26,
-                                                offset: Offset(0, 4))
-                                          ]),
-                                      height:
-                                          communityBodyHeight(context) * 0.08,
-                                      width: double.infinity,
-                                      child: widget.community.isMarketplace
-                                          ? TabBar(
-                                              indicatorColor: Colors.white,
-                                              tabs: [
-                                                SizedBox(
-                                                    height: communityBodyHeight(
-                                                            context) *
-                                                        0.04,
-                                                    child: Image.asset(
-                                                        "assets/images/reglas.png")),
-                                                SizedBox(
-                                                    height: communityBodyHeight(
-                                                            context) *
-                                                        0.04,
-                                                    child: Image.asset(
-                                                        "assets/images/posts.png")),
-                                                SizedBox(
-                                                    height: communityBodyHeight(
-                                                            context) *
-                                                        0.04,
-                                                    child: Image.asset(
-                                                        "assets/images/cart.png")),
-                                                SizedBox(
-                                                    height: communityBodyHeight(
-                                                            context) *
-                                                        0.04,
-                                                    child: Image.asset(
-                                                        "assets/images/community-chat.png")),
-                                                SizedBox(
-                                                    height: communityBodyHeight(
-                                                            context) *
-                                                        0.04,
-                                                    child: Image.asset(
-                                                        "assets/images/user-posts.png")),
-                                              ],
-                                            )
-                                          : TabBar(
-                                              indicatorColor: Colors.white,
-                                              tabs: [
-                                                SizedBox(
-                                                    height: communityBodyHeight(
-                                                            context) *
-                                                        0.04,
-                                                    child: Image.asset(
-                                                        "assets/images/reglas.png")),
-                                                SizedBox(
-                                                    height: communityBodyHeight(
-                                                            context) *
-                                                        0.04,
-                                                    child: Image.asset(
-                                                        "assets/images/posts.png")),
-                                                SizedBox(
-                                                    height: communityBodyHeight(
-                                                            context) *
-                                                        0.04,
-                                                    child: Image.asset(
-                                                        "assets/images/community-chat.png")),
-                                                SizedBox(
-                                                    height: communityBodyHeight(
-                                                            context) *
-                                                        0.04,
-                                                    child: Image.asset(
-                                                        "assets/images/user-posts.png")),
-                                              ],
-                                            ),
-                                    ),
-                                    isModerator
-                                        ? GestureDetector(
-                                            onTap: () => model.goToRequests(),
+                          Container(
+                            height: communityBodyHeight(context),
+                            width: double.infinity,
+                            child: SingleChildScrollView(
+                              controller: _scrollController,
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    width: double.infinity,
+                                    color: Colors.white,
+                                    height: communityBodyHeight(context) * 0.35,
+                                    child: Stack(
+                                      alignment: Alignment.bottomCenter,
+                                      children: <Widget>[
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: NetworkImage(widget
+                                                      .community.bkdPicUrl),
+                                                  fit: BoxFit.cover)),
+                                        ),
+                                        Positioned(
+                                            top: communityBodyHeight(context) *
+                                                0.04,
                                             child: Container(
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: Colors.transparent,
-                                                boxShadow: [
-                                                  const BoxShadow(
-                                                    color: Colors.black38,
-                                                    offset:
-                                                        const Offset(0.0, 0.0),
-                                                  ),
-                                                  const BoxShadow(
-                                                    color: Color(0xff17191E),
-                                                    offset:
-                                                        const Offset(0.0, 0.0),
-                                                    spreadRadius: -4.0,
-                                                    blurRadius: 12.0,
-                                                  ),
-                                                ],
+                                                decoration:
+                                                    profilePicDecoration,
+                                                child: CircleAvatar(
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                    ),
+                                                    radius: communityBodyHeight(
+                                                            context) *
+                                                        0.07,
+                                                    backgroundImage:
+                                                        NetworkImage(widget
+                                                            .community
+                                                            .iconPicUrl)))),
+                                        ClipRect(
+                                          child: BackdropFilter(
+                                            filter: ImageFilter.blur(
+                                                sigmaX: 5.0, sigmaY: 5.0),
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: communityBodyHeight(
+                                                        context) *
+                                                    0.06,
                                               ),
-                                              padding: EdgeInsets.all(12),
+                                              width: double.infinity,
+                                              height:
+                                                  communityBodyHeight(context) *
+                                                      0.08,
+                                              color: Colors.black38,
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: <Widget>[
-                                                  Row(
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: <Widget>[
                                                       Text(
-                                                        "Tienes ",
+                                                          model
+                                                              .followersDoc[
+                                                                  'posts']
+                                                              .length
+                                                              .toString(),
+                                                          style:
+                                                              TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      18)),
+                                                      Text("Publicaciones",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              fontSize: 16))
+                                                    ],
+                                                  ),
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      Text(
+                                                          model
+                                                              .followersDoc[
+                                                                  'posts']
+                                                              .length
+                                                              .toString(),
+                                                          style:
+                                                              TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      18)),
+                                                      Text("Likes",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              fontSize: 16))
+                                                    ],
+                                                  ),
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      Text(
+                                                          model
+                                                              .followersDoc[
+                                                                  "followers"]
+                                                              .length
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 18)),
+                                                      Text("Seguidores",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              fontSize: 16))
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        isModerator
+                                            ? Positioned(
+                                                top: communityBodyHeight(
+                                                        context) *
+                                                    0.01,
+                                                right: communityBodyHeight(
+                                                        context) *
+                                                    0.01,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    model.setIsShowingPopup(
+                                                        true);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.note_add,
+                                                    size: 45,
+                                                    color: Colors.white,
+                                                  ),
+                                                ))
+                                            : Container(),
+                                        isModerator
+                                            ? Positioned(
+                                                top: communityBodyHeight(
+                                                        context) *
+                                                    0.2,
+                                                right: communityBodyHeight(
+                                                        context) *
+                                                    0.01,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    model.goToSettings(
+                                                        widget.community);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.settings,
+                                                    size: 45,
+                                                    color: Colors.white,
+                                                  ),
+                                                ))
+                                            : Container()
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: Color(0xff17191E),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.black26,
+                                              offset: Offset(0, 4))
+                                        ]),
+                                    height: communityBodyHeight(context) * 0.08,
+                                    width: double.infinity,
+                                    child: widget.community.isMarketplace
+                                        ? TabBar(
+                                            controller: _tabController,
+                                            indicatorColor: Colors.white,
+                                            tabs: [
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/reglas.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/posts.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/cart.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/community-chat.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/user-posts.png")),
+                                            ],
+                                          )
+                                        : TabBar(
+                                            indicatorColor: Colors.white,
+                                            tabs: [
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/reglas.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/posts.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/community-chat.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/user-posts.png")),
+                                            ],
+                                          ),
+                                  ),
+                                  isModerator
+                                      ? GestureDetector(
+                                          onTap: () => model.goToRequests(),
+                                          child: Container(
+                                            height:
+                                                screenHeight(context) * 0.052,
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              color: Colors.transparent,
+                                              boxShadow: [
+                                                const BoxShadow(
+                                                  color: Colors.black38,
+                                                  offset:
+                                                      const Offset(0.0, 0.0),
+                                                ),
+                                                const BoxShadow(
+                                                  color: Color(0xff17191E),
+                                                  offset:
+                                                      const Offset(0.0, 0.0),
+                                                  spreadRadius: -4.0,
+                                                  blurRadius: 12.0,
+                                                ),
+                                              ],
+                                            ),
+                                            padding: EdgeInsets.all(12),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Row(
+                                                  children: <Widget>[
+                                                    Text(
+                                                      "Tienes ",
+                                                      style: TextStyle(
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          fontSize: screenWidth(
+                                                                  context) *
+                                                              0.04,
+                                                          color: Colors.white,
+                                                          fontFamily:
+                                                              'Raleway'),
+                                                    ),
+                                                    Text(
+                                                      "${model.requests.length} peticiones ",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          fontSize: screenWidth(
+                                                                  context) *
+                                                              0.04,
+                                                          fontFamily: 'Raleway',
+                                                          color: Color(
+                                                              0xff3CA759)),
+                                                    ),
+                                                    Text(
+                                                        "de admision pendientes.",
                                                         style: TextStyle(
                                                             fontStyle: FontStyle
                                                                 .italic,
                                                             fontSize: 16,
                                                             color: Colors.white,
                                                             fontFamily:
-                                                                'Raleway'),
-                                                      ),
-                                                      Text(
-                                                        "${model.requests.length} peticiones ",
-                                                        style: TextStyle(
-                                                            fontStyle: FontStyle
-                                                                .italic,
-                                                            fontSize: 16,
-                                                            fontFamily:
-                                                                'Raleway',
-                                                            color: Color(
-                                                                0xff3CA759)),
-                                                      ),
-                                                      Text(
-                                                          "de admision pendientes.",
-                                                          style: TextStyle(
-                                                              fontStyle:
-                                                                  FontStyle
-                                                                      .italic,
-                                                              fontSize: 16,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily:
-                                                                  'Raleway'))
-                                                    ],
-                                                  ),
-                                                  Icon(Icons.add,
-                                                      color: Color(0xff3CA759)),
-                                                ],
-                                              ),
+                                                                'Raleway'))
+                                                  ],
+                                                ),
+                                                Icon(Icons.add,
+                                                    color: Color(0xff3CA759)),
+                                              ],
                                             ),
-                                          )
-                                        : Container(),
-                                    Container(
-                                      height:
-                                          communityBodyHeight(context) * 0.92,
-                                      width: double.infinity,
-                                      child: widget.community.isMarketplace
-                                          ? TabBarView(children: [
-                                              CommunityRules(
-                                                community: widget.community,
-                                                isEditting: false,
-                                              ),
-                                              NewsView(
-                                                  community: widget.community),
-                                              MarketView(widget.community,
-                                                  model.products),
-                                              CommunityChatView(
-                                                  communityId:
-                                                      this.widget.community.uid,
-                                                  height: height),
-                                              UserPostsView(
-                                                  community: widget.community),
-                                            ])
-                                          : TabBarView(children: [
-                                              CommunityRules(
-                                                community: widget.community,
-                                                isEditting: false,
-                                              ),
-                                              NewsView(
-                                                  community: widget.community),
-                                              CommunityChatView(
-                                                  communityId:
-                                                      this.widget.community.uid,
-                                                  height: height),
-                                              UserPostsView(
-                                                  community: widget.community),
-                                            ]),
-                                    )
-                                  ],
-                                ),
+                                          ),
+                                        )
+                                      : Container(),
+                                  Container(
+                                    height: communityBodyHeight(context) * 0.86,
+                                    width: double.infinity,
+                                    child: widget.community.isMarketplace
+                                        ? TabBarView(
+                                            controller: _tabController,
+                                            children: [
+                                                CommunityRules(
+                                                  community: widget.community,
+                                                  isEditting: false,
+                                                ),
+                                                NewsView(
+                                                    community:
+                                                        widget.community),
+                                                MarketView(widget.community,
+                                                    model.products),
+                                                CommunityChatView(
+                                                    petitionsShowing:
+                                                        isModerator,
+                                                    communityId: this
+                                                        .widget
+                                                        .community
+                                                        .uid,
+                                                    height: height),
+                                                UserPostsView(
+                                                    community:
+                                                        widget.community),
+                                              ])
+                                        : TabBarView(children: [
+                                            CommunityRules(
+                                              community: widget.community,
+                                              isEditting: false,
+                                            ),
+                                            NewsView(
+                                                community: widget.community),
+                                            CommunityChatView(
+                                                communityId:
+                                                    this.widget.community.uid,
+                                                height: height),
+                                            UserPostsView(
+                                                community: widget.community),
+                                          ]),
+                                  )
+                                ],
                               ),
                             ),
                           ),

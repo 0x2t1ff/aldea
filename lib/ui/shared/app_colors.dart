@@ -13,3 +13,4 @@ const Color blueTheme = Color(0xff3C8FA7);
 const Color greenTheme = Color(0xff3CA759);
 const Color darkBlue = Color(0xff14222A);
 const Color grey = Color(0xff919191);
+const Color loginColor = Color(0xff0F1013);

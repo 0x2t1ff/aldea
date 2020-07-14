@@ -9,13 +9,14 @@ import "../shared/app_colors.dart" as custcolor;
 import "../shared/ui_helpers.dart" as devicesize;
 
 class VouchView extends StatelessWidget {
-
+  final String uid;
+  const VouchView(this.uid);
   @override
   Widget build(BuildContext context) {
-      final double screenHeight = devicesize.screenHeight(context) * 0.1043;
+    final double screenHeight = devicesize.screenHeight(context) * 0.1043;
     return ViewModelBuilder<VouchViewModel>.reactive(
         viewModelBuilder: () => VouchViewModel(),
-        onModelReady: (model) => model.fetchPosts(),
+        onModelReady: (model) => model.fetchPosts(uid),
         builder: (context, model, child) => Scaffold(
                 body: Stack(
               children: <Widget>[
@@ -62,7 +63,7 @@ class VouchView extends StatelessWidget {
                           ),
                           Container(
                             width: devicesize.screenWidth(context),
-                            height:screenHeight,
+                            height: screenHeight,
                             color: custcolor.backgroundColor,
                           ),
                           Container(
@@ -83,17 +84,37 @@ class VouchView extends StatelessWidget {
                             width: devicesize.screenWidth(context),
                             height: devicesize.screenHeight(context) * 0.103,
                             color: custcolor.darkGrey,
-                            child:Row(children: <Widget>[
-                              Padding(
-                                padding:  EdgeInsets.only(right: devicesize.screenWidth(context) * 0.015),
-                                child: Image.asset("assets/images/vouch.png", color: custcolor.blueTheme, height: devicesize.screenHeight(context) * 0.07,),
-                              ),
-                              Padding(
-                                padding:  EdgeInsets.only(top: devicesize.screenHeight(context) * 0.035),
-                                child: Text("Vouch", style: TextStyle( color: custcolor.almostWhite, fontFamily: 'Raleway', fontWeight: FontWeight.w600, fontSize:devicesize.screenHeight(context) * 0.026),),
-                              )
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.center,),
+                            child: Row(
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      right: devicesize.screenWidth(context) *
+                                          0.015),
+                                  child: Image.asset(
+                                    "assets/images/vouch.png",
+                                    color: custcolor.blueTheme,
+                                    height:
+                                        devicesize.screenHeight(context) * 0.07,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: devicesize.screenHeight(context) *
+                                          0.035),
+                                  child: Text(
+                                    "Vouch",
+                                    style: TextStyle(
+                                        color: custcolor.almostWhite,
+                                        fontFamily: 'Raleway',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize:
+                                            devicesize.screenHeight(context) *
+                                                0.026),
+                                  ),
+                                )
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.center,
+                            ),
                           ),
                           Expanded(
                             child: ListView.builder(

@@ -196,7 +196,9 @@ class ProfileSettingsView extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             vertical: devicesize.screenHeight(context) * 0.024),
                         child: GestureDetector(
-                          onTap: () => print("pressed"),
+                          onTap: () {
+                            model.logOut();
+                          },
                           child: Row(
                             children: <Widget>[
                               Icon(

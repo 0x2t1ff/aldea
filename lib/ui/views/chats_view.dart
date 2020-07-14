@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:aldea/models/message_model.dart';
 import 'package:aldea/ui/widgets/message_item.dart';
+import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:aldea/viewmodels/chats_view_model.dart';
 import '../shared/ui_helpers.dart' as devicesize;
 import 'package:firebase_database/firebase_database.dart';
@@ -21,12 +22,14 @@ class ChatsView extends StatelessWidget {
       onModelReady: (model) => model.getMessages(chatroomId),
       createNewModelOnInsert: true,
       builder: (context, model, child) => Scaffold(
+        backgroundColor: custcolor.darkBlue,
         resizeToAvoidBottomPadding: false,
         body: Container(
           child: Column(
             children: <Widget>[
+              NotchFiller(),
               Container(
-                height: devicesize.screenHeight(context) * 0.91 -
+                height: devicesize.screenHeight(context) * 0.8487 -
                     MediaQuery.of(context).viewInsets.bottom,
                 color: custcolor.darkBlue,
                 width: devicesize.screenWidth(context),
@@ -41,7 +44,8 @@ class ChatsView extends StatelessWidget {
                           } else if (snapshot.hasError) {
                             return Text("error");
                           } else if (snapshot.data.snapshot.value == null) {
-                            return Center(child: Text(" send your first message!"));
+                            return Center(
+                                child: Text(" send your first message!"));
                           } else {
                             Map<dynamic, dynamic> messageMaps =
                                 snapshot.data.snapshot.value;
@@ -60,18 +64,23 @@ class ChatsView extends StatelessWidget {
                                 Duration(milliseconds: 10),
                                 () => _controller.jumpTo(_controller.position
                                     .maxScrollExtent)); // hace que cuando envias mensaje baje
-                            return ListView.builder(
-                                // reverse: true, //esta literalmente al reves , jugar con la base de datos par que cargue como toca
-                                controller: _controller,
-                                reverse: false,
-                                itemCount: messageList.length,
-                                itemBuilder: (context, index) {
-                                  return MessageItem(
-                                    model: MessageModel.fromMap(
-                                        messageList[index]),
-                                    currentUser: model.currentUser.uid,
-                                  );
-                                });
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  bottom:
+                                      devicesize.screenHeight(context) * 0.01),
+                              child: ListView.builder(
+                                  // reverse: true, //esta literalmente al reves , jugar con la base de datos par que cargue como toca
+                                  controller: _controller,
+                                  reverse: false,
+                                  itemCount: messageList.length,
+                                  itemBuilder: (context, index) {
+                                    return MessageItem(
+                                      model: MessageModel.fromMap(
+                                          messageList[index]),
+                                      currentUser: model.currentUser.uid,
+                                    );
+                                  }),
+                            );
                           }
                         },
                       )
@@ -83,76 +92,101 @@ class ChatsView extends StatelessWidget {
                       ),
               ),
               Container(
-                  color: custcolor.almostBlack,
-                  width: devicesize.screenWidth(context),
+                  constraints: BoxConstraints(
+                    maxWidth: devicesize.screenWidth(context),
+                  ),
                   height: devicesize.screenHeight(context) * 0.09,
+                  color: custcolor.almostBlack,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.only(
-                            left: devicesize.screenWidth(context) * 0.02),
-                        width: devicesize.screenWidth(context) * 0.7,
-                        height: devicesize.screenHeight(context) * 0.04,
-                        decoration: BoxDecoration(
-                          color: custcolor.blueTheme,
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: TextFormField(
-                          controller: messageController,
-                          decoration: InputDecoration(
-                            hintText: "   Envia un mensaje...",
-                            hintStyle: TextStyle(
-                                color: Color(0xff3a464d),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: devicesize.screenHeight(context) * 0.01),
+                        child: Container(
+                          width: devicesize.screenWidth(context) * 0.58,
+                          padding: EdgeInsets.only(
+                              left: devicesize.screenWidth(context) * 0.02),
+                          decoration: BoxDecoration(
+                            color: custcolor.blueTheme,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: TextFormField(
+                            enableSuggestions: true,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            controller: messageController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      devicesize.screenWidth(context) * 0.025),
+                              hintText: "   Envia un mensaje...",
+                              hintStyle: TextStyle(
+                                  color: Color(0xff3a464d),
+                                  fontFamily: "Raleway",
+                                  fontWeight: FontWeight.w600,
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 12),
+                              border: InputBorder.none,
+                            ),
+                            style: TextStyle(
+                                color: custcolor.almostWhite,
                                 fontFamily: "Raleway",
                                 fontWeight: FontWeight.w600,
-                                fontStyle: FontStyle.italic,
-                                fontSize: 12),
-                            border: InputBorder.none,
+                                fontSize: 14),
                           ),
-                          style: TextStyle(
-                              color: custcolor.almostWhite,
-                              fontFamily: "Raleway",
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12),
                         ),
                       ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.image,
-                          color: custcolor.blueTheme,
-                        ),
-                        onPressed: () async {
-                          print(" button pressed");
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: devicesize.screenWidth(context) * 0.04,
+                            bottom: devicesize.screenWidth(context) * 0.02),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.image,
+                            color: custcolor.blueTheme,
+                            size: devicesize.screenWidth(context) * 0.1,
+                          ),
+                          onPressed: () async {
+                            print(" button pressed");
 
-                          await model.selectMessageImage().then((value) => model
-                              .uploadImage(image: value, chatId: chatroomId)
-                              .then((value) => model.sendMessage(
-                                  value,
-                                  model.currentUser.uid,
-                                  chatroomId,
-                                  model.currentUser.name,
-                                  model.currentUser.picUrl,
-                                  true)));
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.send,
-                          color: custcolor.blueTheme,
+                            await model.selectMessageImage().then((value) =>
+                                model
+                                    .uploadImage(
+                                        image: value, chatId: chatroomId)
+                                    .then((value) => model.sendMessage(
+                                        value,
+                                        model.currentUser.uid,
+                                        chatroomId,
+                                        model.currentUser.name,
+                                        model.currentUser.picUrl,
+                                        true)));
+                          },
                         ),
-                        onPressed: () {
-                          messageController.text != ""
-                              ? model.sendMessage(
-                                  messageController.text,
-                                  model.currentUser.uid,
-                                  this.chatroomId,
-                                  model.currentUser.name,
-                                  model.currentUser.picUrl,
-                                  false)
-                              : print("");
-                          messageController.clear();
-                        },
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            bottom: devicesize.screenWidth(context) * 0.01,
+                            left: devicesize.screenWidth(context) * 0.04),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.send,
+                            size: devicesize.screenWidth(context) * 0.09,
+                            color: custcolor.blueTheme,
+                          ),
+                          onPressed: () {
+                            messageController.text != ""
+                                ? model.sendMessage(
+                                    messageController.text,
+                                    model.currentUser.uid,
+                                    this.chatroomId,
+                                    model.currentUser.name,
+                                    model.currentUser.picUrl,
+                                    false)
+                                : print("");
+                            messageController.clear();
+                          },
+                        ),
                       ),
                     ],
                   )),

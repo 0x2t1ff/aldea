@@ -56,7 +56,7 @@ class _CommunityRulesState extends State<CommunityRules> {
                   ),
                   width: double.infinity,
                   constraints:
-                      BoxConstraints(minHeight: screenHeight(context) * 0.7),
+                      BoxConstraints(minHeight: screenHeight(context) * 0.67),
                 )
         ],
       ),

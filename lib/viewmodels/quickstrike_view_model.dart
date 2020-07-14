@@ -10,15 +10,15 @@ class QuickStrikeViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
-  List<QuickStrikePost> _quickstrikes;
-  List<QuickStrikePost> get posts => _quickstrikes;
+  Stream _quickstrikes;
+  Stream get posts => _quickstrikes;
 
   Future fetchPosts() async {
     setBusy(true);
     var quickstrikeResults =
-        await _firestoreService.getQuickstrikes(currentUser.uid);
+        await _firestoreService.getQuickstrike(currentUser.uid);
 
-    if (quickstrikeResults is List<QuickStrikePost>) {
+    if (quickstrikeResults is Stream<dynamic>) {
       _quickstrikes = quickstrikeResults;
       setBusy(false);
       notifyListeners();
@@ -35,13 +35,23 @@ class QuickStrikeViewModel extends BaseModel {
     Map<String, dynamic> _quickstrike = quickstrike.toMap();
     _quickstrike.putIfAbsent("randomId", () => RandomIdGenerator.generateId());
     _quickstrike.putIfAbsent("user", () => currentUser.toJson());
-    await _firestoreService.joinQuickstrike(
-        currentUser.uid, _quickstrike);
+    await _firestoreService.joinQuickstrike(currentUser.uid, _quickstrike);
     currentUser.onGoingQuickstrikes.add(quickstrike.id);
   }
 
   Future quitQuickstrike(QuickStrikePost quickstrike) async {
     currentUser.onGoingQuickstrikes.remove(quickstrike.id);
     await _firestoreService.quitQuickstrike(currentUser.uid, quickstrike.id);
+  }
+
+  Future<bool> checkParticipatingQuickstrike(String qid) async {
+    bool result = await _firestoreService.getParticipatingQuickstrikes(
+        currentUser.uid, qid);
+    print(" the result of the check is" + result.toString() + qid);
+    return result;
+  }
+
+  Future submitResult(String id) {
+    _firestoreService.submitQuickstrikeResult(id, currentUser.uid);
   }
 }

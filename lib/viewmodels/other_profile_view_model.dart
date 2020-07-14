@@ -36,31 +36,35 @@ class OtherProfileViewModel extends BaseModel {
     }
   }
 
-  Future seeVouches() {
-    _navigationService.navigateTo(VouchViewRoute, false);
+  Future seeVouches(String c) {
+    _navigationService.navigateTo(VouchViewRoute, false, arguments: c);
   }
 
   void openExistingChat(String c) {
     _navigationService.navigateTo(ChatViewRoute, false, arguments: c);
   }
 
+  Future seeCommunities(String c) {
+    _navigationService.navigateTo(CommunitiesProfileViewRoute, false,
+        arguments: c);
+  }
+
   Future openChat(String id) async {
     bool existsChat = false;
     currentUser.chatRooms.forEach((element) {
       if (user.chatRooms.contains(element)) {
-        print("it existed");
         existsChat = true;
         openExistingChat(element);
       }
     });
     if (existsChat) {
-      print(existsChat.toString());
       return;
     } else {
       print("ah y es this shouldnt happen");
       List userIds = [currentUser.uid, user.uid];
       List userImages = [currentUser.picUrl, user.picUrl];
-      var chatId = _rtdb.createChatRoom(userIds, userImages);
+      List username = [currentUser.name, user.name];
+      var chatId = _rtdb.createChatRoom(userIds, userImages, username);
       _firestoreService.writeNewChatRoom(currentUser.uid, id, chatId);
       _firestoreService.writeNewChatRoom(id, currentUser.uid, chatId);
       openExistingChat(chatId);
@@ -68,8 +72,7 @@ class OtherProfileViewModel extends BaseModel {
   }
 
   Future giveVouch() async {
-   
-   List vouchList = await _firestoreService.getVouchList(user.uid);
+    List vouchList = await _firestoreService.getVouchList(user.uid);
     if (vouchList.contains(currentUser.uid)) {
       vouchList.remove(currentUser.uid);
       await _firestoreService.giveVouch(vouchList, user.uid);
@@ -79,5 +82,6 @@ class OtherProfileViewModel extends BaseModel {
       await _firestoreService.giveVouch(vouchList, user.uid);
       user.vouches = vouchList;
     }
+    notifyListeners();
   }
 }

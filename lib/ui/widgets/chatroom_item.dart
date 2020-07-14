@@ -1,6 +1,5 @@
 import 'package:aldea/models/chat_room_model.dart';
 import "package:flutter/material.dart";
-import 'package:aldea/models/message_model.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
 
@@ -11,6 +10,8 @@ class ChatRoomItem extends StatefulWidget {
   final List users;
   final String currentUser;
   final Map<dynamic, dynamic> urls;
+  final Map<dynamic, dynamic> username;
+
   const ChatRoomItem({
     this.currentUser,
     this.users,
@@ -19,6 +20,7 @@ class ChatRoomItem extends StatefulWidget {
     this.index,
     this.model,
     this.openChat,
+    this.username,
   }) : super(key: key);
 
   @override
@@ -65,7 +67,7 @@ class _ChatRoomItemState extends State<ChatRoomItem> {
                       width: devicesize.screenWidth(context) * 0.5,
                       height: devicesize.screenHeight(context) * 0.025,
                       child: Text(
-                        widget.model.username,
+                        widget.username[otherUser],
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,

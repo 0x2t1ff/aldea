@@ -14,9 +14,9 @@ class VouchViewModel extends BaseModel{
   List<User> _vouches;
   List<User> get posts => _vouches;
 
-  Future fetchPosts() async {
+  Future fetchPosts(String uid) async {
    setBusy(true);
-   var vouches = await _firestoreService.getVouch(currentUser.uid);
+   var vouches = await _firestoreService.getVouch(uid);
     setBusy(true);
 
   if(vouches is List<User> || vouches is User){

@@ -7,7 +7,9 @@ import 'package:aldea/models/post_model.dart';
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/models/user_post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
+import 'package:rxdart/rxdart.dart';
 import '../models/user_model.dart';
 
 class FirestoreService {
@@ -41,7 +43,7 @@ class FirestoreService {
       }
       Map<dynamic, dynamic> data = userData.data;
       data.putIfAbsent("onGoingQuickstrikes", () => onGoingQuickstrikes);
-      print(data);
+
       return data;
     } catch (e) {
       return e.message;
@@ -71,8 +73,7 @@ class FirestoreService {
       var data = result.documents.map((doc) => doc.data);
       List<CommentModel> listData = new List<CommentModel>();
       data.forEach((f) => listData.add(CommentModel.fromData(f)));
-      print(listData.toString() + " the print of data");
-      print(data.length.toString());
+
       listData.sort((a, b) {
         return a.date.compareTo(b.date);
       });
@@ -92,8 +93,6 @@ class FirestoreService {
       var data = result.documents.map((doc) => doc.data);
       List<CommentModel> listData = new List<CommentModel>();
       data.forEach((f) => listData.add(CommentModel.fromData(f)));
-      print(listData.toString() + " the print of data");
-      print(data.length.toString());
       listData.sort((a, b) {
         return a.date.compareTo(b.date);
       });
@@ -160,9 +159,9 @@ class FirestoreService {
   Future removeRequestUser(String communityId, String uid) async {
     var userInfo = await _userCollectionReference.document(uid).get();
     List userRequests = userInfo.data["requests"];
-    print(userRequests);
+
     userRequests.remove(communityId);
-    print(userRequests);
+
     _userCollectionReference
         .document(uid)
         .updateData({"requests": userRequests});
@@ -209,7 +208,6 @@ class FirestoreService {
       var data = result.documents.map((doc) => doc.data);
       List<UserPostModel> listData = new List<UserPostModel>();
       data.forEach((f) => listData.add(UserPostModel.fromMap(f)));
-      print(listData.toString() + " the print of data");
       return listData;
     } catch (e) {
       print(e.toString() + " error print");
@@ -382,7 +380,7 @@ class FirestoreService {
     var userDocument = await _userCollectionReference.document(userId).get();
     var userIdList = userDocument.data["vouches"];
     List<User> userList = new List<User>();
-    print(userIdList);
+
     for (var f in userIdList) {
       await _userCollectionReference
           .where("uid", isEqualTo: f)
@@ -393,6 +391,17 @@ class FirestoreService {
 
       return userList;
     }
+  }
+
+  Future<List> getCommunitiesList(String uid) async {
+    var user = await _userCollectionReference.document(uid).get();
+    List communityList = user.data["communities"];
+    List<Community> communities = [];
+    for (var f in communityList) {
+      var community = await _communitiesCollectionReference.document(f).get();
+      communities.add(Community.fromData(community.data, f));
+    }
+    return communities;
   }
 
   Future updateUser(
@@ -454,9 +463,16 @@ class FirestoreService {
           .limit(10)
           .getDocuments();
       var data = postDocumentSnapshot.documents.map((doc) => doc.data);
-      var lastPosts = [];
+      List lastPostsList = [];
 
-      data.forEach((f) => lastPosts.add(f["posts"][0]["id"]));
+      data.forEach((f) => lastPostsList.add(f["posts"]));
+      var lastPosts = [];
+      lastPostsList.forEach((element) {
+        element.forEach((element) {
+          lastPosts.add(element["id"]);
+        });
+      });
+
       List<PostModel> listData = new List<PostModel>();
       print(lastPosts);
       for (var f in lastPosts) {
@@ -616,13 +632,14 @@ class FirestoreService {
   Future<String> addQuickstrike(QuickStrikePost post) async {
     try {
       var doc = await _quickstrikeCollectionReference.add(post.toMap());
+      doc.updateData({'id': doc.documentID});
       return doc.documentID;
     } catch (e) {
       return e.toString();
     }
   }
 
-  Future getQuickstrikes(String uid) async {
+  Future getQuickstrike(String uid) async {
     try {
       var postDocumentSnapshot = await _followingPostsCollectionReference
           .where("followers", arrayContains: uid)
@@ -639,16 +656,18 @@ class FirestoreService {
           }
         }
       });
-      List<QuickStrikePost> listData = [];
 
+      List<Stream> listData = [];
       for (var lastPost in lastPosts) {
-        var doc =
-            await _quickstrikeCollectionReference.document(lastPost).get();
-        listData.add(QuickStrikePost.fromMap(doc.data));
+        listData.add(
+            _quickstrikeCollectionReference.document(lastPost).snapshots());
       }
-      return listData;
+
+      var mergedStream = Rx.combineLatestList(listData);
+
+      return mergedStream;
     } catch (e) {
-      print(e.toString() + " the error");
+      print(e.toString());
     }
   }
 
@@ -666,6 +685,38 @@ class FirestoreService {
         .collection("pQuickstrikes")
         .document(quickstrikeId)
         .delete();
+  }
+
+  Future submitQuickstrikeResult(String id, String userId) async {
+    var docRef = _quickstrikeCollectionReference.document(id);
+    Firestore.instance.runTransaction((Transaction tx) async {
+      DocumentSnapshot postSnapshot = await tx.get(docRef);
+
+      int amount = postSnapshot.data["amount"];
+      List winners = postSnapshot.data["winners"];
+      if (postSnapshot.data["finished"] == false && winners.length < amount) {
+        winners.add(userId);
+
+        tx.update(docRef, {"winners": winners});
+        if (winners.length >= amount) {
+          tx.update(docRef, {"finished": true});
+        }
+      } else {}
+    }).catchError((error) => print(error.toString()));
+  }
+
+  Future getParticipatingQuickstrikes(String uid, String qid) async {
+    var docRef = await _userCollectionReference
+        .document(uid)
+        .collection("pQuickstrikes")
+        .document(qid)
+        .get();
+
+    if (docRef.data == null) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   Stream<DocumentSnapshot> getChats(String uid) {
