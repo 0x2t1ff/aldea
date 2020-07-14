@@ -14,12 +14,15 @@ class RtdbService {
         .onValue;
   }
 
-  String createChatRoom(List<dynamic> userIds, List<dynamic> images) {
+  String createChatRoom(
+      List<dynamic> userIds, List<dynamic> images, List usernameList) {
     //Crea la CHAT ROOM con los users y devuelve su ID
     Map avatarUrls;
+    Map username;
     avatarUrls = {userIds[0]: images[0], userIds[1]: images[1]};
+    username = {userIds[0]: usernameList[0], userIds[1]: usernameList[1]};
     var ref = _database.reference().child('chatRooms/').push()
-      ..set({'users': userIds, "avatarUrl": avatarUrls});
+      ..set({'users': userIds, "avatarUrl": avatarUrls, "username": username});
     return ref.key;
   }
 

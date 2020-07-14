@@ -14,7 +14,7 @@ class MessageItem extends StatelessWidget {
     return comparation == 0
         ? Padding(
             padding: EdgeInsets.only(
-                left:  devicesize.screenWidth(context) * 0.38,
+                left: devicesize.screenWidth(context) * 0.38,
                 top: devicesize.screenHeight(context) * 0.02),
             child: Container(
               width: devicesize.screenWidth(context) * 0.662,
@@ -68,10 +68,18 @@ class MessageItem extends StatelessWidget {
                                                   topRight: Radius.circular(10),
                                                   bottomLeft:
                                                       Radius.circular(10)),
-                                              child: Image(
-                                                image:
-                                                    NetworkImage(model.message),
-                                                fit: BoxFit.cover,
+                                              child: ConstrainedBox(
+                                                constraints: BoxConstraints(
+                                                  maxWidth:
+                                                      devicesize.screenWidth(
+                                                              context) *
+                                                          0.9,
+                                                ),
+                                                child: Image(
+                                                  image: NetworkImage(
+                                                      model.message),
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ))
                                           : Text(
                                               model.message,
@@ -128,15 +136,16 @@ class MessageItem extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                  bottomRight: Radius.circular(10)),
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
                               color: custcolor.blueTheme),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                               horizontal: model.isImage
                                   ? 0
-                                  : devicesize.screenWidth(context) * 0.06,
+                                  : devicesize.screenWidth(context) * 0.04,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,8 +174,8 @@ class MessageItem extends StatelessWidget {
                                           : devicesize.screenHeight(context) *
                                               0.015),
                                   child: Container(
-                                 //   width:
-                                 //       devicesize.screenWidth(context) * 0.662,
+                                    //   width:
+                                    //       devicesize.screenWidth(context) * 0.662,
                                     child: model.isImage
                                         ? ClipRRect(
                                             borderRadius: BorderRadius.only(
@@ -174,10 +183,17 @@ class MessageItem extends StatelessWidget {
                                                 topRight: Radius.circular(10),
                                                 bottomRight:
                                                     Radius.circular(10)),
-                                            child: Image(
-                                              image:
-                                                  NetworkImage(model.message),
-                                              fit: BoxFit.cover,
+                                            child: ConstrainedBox(
+                                              constraints: BoxConstraints(
+                                                  maxWidth:
+                                                      devicesize.screenWidth(
+                                                              context) *
+                                                          0.8),
+                                              child: Image(
+                                                image:
+                                                    NetworkImage(model.message),
+                                                fit: BoxFit.cover,
+                                              ),
                                             ))
                                         : Text(
                                             model.message,

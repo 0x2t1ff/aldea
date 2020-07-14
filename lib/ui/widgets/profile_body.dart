@@ -99,14 +99,15 @@ class ProfileBody extends StatelessWidget {
                             ),
                             onTap: () {
                               model == null
-                                  ? otherModel.seeVouches()
-                                  : model.seeVouches();
+                                  ? otherModel
+                                      .seeVouches(otherModel.targetUserId)
+                                  : model.seeVouches(model.currentUser.uid);
                             }),
                         GestureDetector(
                           onTap: () {
-                            print("pressed");
-                            otherModel.giveVouch();
-                            
+                            model == null
+                                ? otherModel.giveVouch()
+                                : print("pressed");
                           },
                           child: SizedBox(
                               height: usableScreenWithoughtBars(context) * 0.12,
@@ -140,9 +141,17 @@ class ProfileBody extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
                       ),
-                      SizedBox(
-                        height: usableScreenWithoughtBars(context) * 0.1,
-                        child: Image.asset('assets/images/hoguera-azul.png'),
+                      GestureDetector(
+                        onTap: () {
+                          model == null
+                              ? otherModel
+                                  .seeCommunities(otherModel.targetUserId)
+                              : model.seeCommunities(model.currentUser.uid);
+                        },
+                        child: SizedBox(
+                          height: usableScreenWithoughtBars(context) * 0.1,
+                          child: Image.asset('assets/images/hoguera-azul.png'),
+                        ),
                       ),
                       Text(
                         communitiesCount.toString(),

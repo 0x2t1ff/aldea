@@ -86,30 +86,34 @@ class CommunityChatView extends StatelessWidget {
                       ),
               ),
               Container(
-                  decoration:
-                      BoxDecoration(color: custcolor.almostBlack, boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.8),
-                        offset: Offset(0, -2),
-                        blurRadius: 10)
-                  ]),
-                  width: devicesize.screenWidth(context),
-                  height: devicesize.screenHeight(context) * 0.09,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
+                constraints: BoxConstraints(
+                  maxWidth: devicesize.screenWidth(context),
+                ),
+                height: devicesize.screenHeight(context) * 0.09,
+                color: custcolor.almostBlack,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: devicesize.screenHeight(context) * 0.01),
+                      child: Container(
+                        width: devicesize.screenWidth(context) * 0.58,
                         padding: EdgeInsets.only(
                             left: devicesize.screenWidth(context) * 0.02),
-                        width: devicesize.screenWidth(context) * 0.7,
-                        height: devicesize.screenHeight(context) * 0.04,
                         decoration: BoxDecoration(
                           color: custcolor.blueTheme,
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: TextFormField(
+                          enableSuggestions: true,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
                           controller: messageController,
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal:
+                                    devicesize.screenWidth(context) * 0.025),
                             hintText: "   Envia un mensaje...",
                             hintStyle: TextStyle(
                                 color: Color(0xff3a464d),
@@ -123,13 +127,19 @@ class CommunityChatView extends StatelessWidget {
                               color: custcolor.almostWhite,
                               fontFamily: "Raleway",
                               fontWeight: FontWeight.w600,
-                              fontSize: 12),
+                              fontSize: 14),
                         ),
                       ),
-                      IconButton(
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: devicesize.screenWidth(context) * 0.04,
+                          bottom: devicesize.screenWidth(context) * 0.02),
+                      child: IconButton(
                         icon: Icon(
                           Icons.image,
                           color: custcolor.blueTheme,
+                          size: devicesize.screenWidth(context) * 0.1,
                         ),
                         onPressed: () async {
                           print(" button pressed");
@@ -146,9 +156,15 @@ class CommunityChatView extends StatelessWidget {
                                   true)));
                         },
                       ),
-                      IconButton(
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          bottom: devicesize.screenWidth(context) * 0.01,
+                          left: devicesize.screenWidth(context) * 0.04),
+                      child: IconButton(
                         icon: Icon(
                           Icons.send,
+                          size: devicesize.screenWidth(context) * 0.09,
                           color: custcolor.blueTheme,
                         ),
                         onPressed: () {
@@ -164,8 +180,10 @@ class CommunityChatView extends StatelessWidget {
                           messageController.clear();
                         },
                       ),
-                    ],
-                  )),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

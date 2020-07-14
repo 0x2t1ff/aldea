@@ -12,7 +12,6 @@ class DirectMessageView extends StatefulWidget {
 }
 
 class _DirectMessageViewState extends State<DirectMessageView> {
-
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<DirectMessageViewModel>.reactive(
@@ -30,7 +29,7 @@ class _DirectMessageViewState extends State<DirectMessageView> {
                     stream: model.stream[index].asBroadcastStream(),
                     builder: (ctx, snapshot) {
                       if (!snapshot.hasData) {
-                        return Text( 
+                        return Text(
                           'No Data...',
                         );
                       } else if (snapshot.hasError) {
@@ -41,9 +40,10 @@ class _DirectMessageViewState extends State<DirectMessageView> {
                             snapshot.data.snapshot.value["lastMessage"]);
                         print(chatModel);
                         return ChatRoomItem(
-                          currentUser: model.currentUser.uid,
-                          urls: snapshot.data.snapshot.value["avatarUrl"],
-                          users: snapshot.data.snapshot.value["users"],
+                            currentUser: model.currentUser.uid,
+                            urls: snapshot.data.snapshot.value["avatarUrl"],
+                            users: snapshot.data.snapshot.value["users"],
+                            username: snapshot.data.snapshot.value["username"],
                             index: index,
                             model: chatModel,
                             openChat: () {

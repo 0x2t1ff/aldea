@@ -2,6 +2,7 @@ import 'package:aldea/ui/views/admin_screen_view.dart';
 import 'package:aldea/ui/views/chats_view.dart';
 import 'package:aldea/ui/views/comments_view.dart';
 import 'package:aldea/ui/views/community_creation_view.dart';
+import 'package:aldea/ui/views/community_profile_view.dart';
 import 'package:aldea/ui/views/detailed_community_creation_request_view.dart';
 import 'package:aldea/ui/views/other_profile_view.dart';
 import 'package:aldea/ui/views/requests_view.dart';
@@ -53,7 +54,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case VouchViewRoute:
       return _getPageRoute(
         routeName: settings.name,
-        viewToShow: VouchView(),
+        viewToShow: VouchView(settings.arguments),
       );
 
     case OtherProfileViewRoute:
@@ -92,14 +93,19 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: AdminScreenView(),
       );
-      case CommentsViewRoute:
+    case CommentsViewRoute:
       return _getPageRoute(
-        routeName: settings.name, 
-        viewToShow:CommentsView(settings.arguments),
+        routeName: settings.name,
+        viewToShow: CommentsView(settings.arguments),
       );
     case CommunitySettingsViewRoute:
       return _getPageRoute(
-          routeName: settings.name, viewToShow: CommunitySettingsView(settings.arguments));
+          routeName: settings.name,
+          viewToShow: CommunitySettingsView(settings.arguments));
+    case CommunitiesProfileViewRoute:
+      return _getPageRoute(
+          routeName: settings.name,
+          viewToShow: CommunityProfileView(settings.arguments));
     default:
       return MaterialPageRoute(
           builder: (_) => Scaffold(

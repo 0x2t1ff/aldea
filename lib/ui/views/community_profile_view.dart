@@ -1,21 +1,22 @@
 import 'package:aldea/ui/widgets/bottom_filler.dart';
+import 'package:aldea/ui/widgets/community_profile_item.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:aldea/ui/widgets/vouch_item.dart';
-import 'package:aldea/viewmodels/vouch_view_model.dart';
+import 'package:aldea/viewmodels/community_profile_view_model.dart';
 import "package:flutter/material.dart";
 import 'package:stacked/stacked.dart';
 
-import "../shared/app_colors.dart" as custcolor;
-import "../shared/ui_helpers.dart" as devicesize;
+import '../shared/app_colors.dart' as custcolor;
+import '../shared/ui_helpers.dart' as devicesize;
 
-class VouchView extends StatelessWidget {
+class CommunityProfileView extends StatelessWidget {
   final String uid;
-  const VouchView(this.uid);
+  const CommunityProfileView(this.uid);
   @override
   Widget build(BuildContext context) {
     final double screenHeight = devicesize.screenHeight(context) * 0.1043;
-    return ViewModelBuilder<VouchViewModel>.reactive(
-        viewModelBuilder: () => VouchViewModel(),
+    return ViewModelBuilder<CommunityProfileViewModel>.reactive(
+        viewModelBuilder: () => CommunityProfileViewModel(),
         onModelReady: (model) => model.fetchPosts(uid),
         builder: (context, model, child) => Scaffold(
                 body: Stack(
@@ -120,8 +121,9 @@ class VouchView extends StatelessWidget {
                             child: ListView.builder(
                               padding: EdgeInsets.all(0),
                               itemCount: model.posts.length,
-                              itemBuilder: (context, index) => VouchItem(
-                                vouch: model.posts[index],
+                              itemBuilder: (context, index) =>
+                                  CommunityProfileItem(
+                                community: model.posts[index],
                                 index: index,
                               ),
                             ),

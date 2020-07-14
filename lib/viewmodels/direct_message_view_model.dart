@@ -26,48 +26,23 @@ class DirectMessageViewModel extends BaseModel {
   Future getStream() async {
     var stream = _firestoreService.getChats(currentUser.uid);
 
-    stream.listen((event) async{
+    stream.listen((event) async {
       chatRooms = event.data["chatRooms"];
       print(chatRooms.toString());
       chatStreams = _rtdbService.getChats(chatRooms);
       chatStreams[0].listen((event) {
         print(event.snapshot.value.toString() + "porfadsxafsd");
       });
-       if (chatStreams is List<Stream<Event>>) {
-      _chatStream = chatStreams;
-      notifyListeners();
-    } else {
-      //print(_quickstrikes.length.toString());
-      await _dialogService.showDialog(
-        title: 'La actualizacion de chats ha fallado',
-        description: "ha fallado XD asi al menos no crashea ",
-      );
-    }
+      if (chatStreams is List<Stream<Event>>) {
+        _chatStream = chatStreams;
+        notifyListeners();
+      } else {
+        //print(_quickstrikes.length.toString());
+        await _dialogService.showDialog(
+          title: 'La actualizacion de chats ha fallado',
+          description: "ha fallado XD asi al menos no crashea ",
+        );
+      }
     });
-   
-
-   
   }
-
-  // Future getStream() async {
-  //   chatRooms = getChatList(currentUser.uid);
-  //   print(chatRooms.toString());
-  //   setBusy(true);
-  //   var chatStreams = _rtdbService.getChats(chatRooms);
-//
-  //   setBusy(true);
-  //   chatStreams[0].listen((event) {
-  //     print(event.snapshot.value.toString() + "porfadsxafsd");
-  //   });
-  //   if (chatStreams is List<Stream<Event>>) {
-  //     _chatStream = chatStreams;
-  //     notifyListeners();
-  //   } else {
-  //     //print(_quickstrikes.length.toString());
-  //     await _dialogService.showDialog(
-  //       title: 'La actualizacion de chats ha fallado',
-  //       description: "ha fallado XD asi al menos no crashea ",
-  //     );
-  //   }
-  // }
 }

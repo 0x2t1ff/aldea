@@ -10,6 +10,8 @@ const String OtherProfileViewRoute = "OtherProfileView";
 const String ProfileSettingsViewRoute = "ProfileSettingsView";
 const String CommunityCreationViewRoute = "CommunityCreationView";
 const String AdminScreenViewRoute = 'AdminScreenView';
-const String DetailedCommunityCreationViewRoute = 'DetailedCommunityCreationView';
+const String DetailedCommunityCreationViewRoute =
+    'DetailedCommunityCreationView';
 const String CommunitySettingsViewRoute = 'CommunitySettingsView';
 const String CommentsViewRoute = 'CommentsView';
+const String CommunitiesProfileViewRoute = 'CommunitiesProfileView';

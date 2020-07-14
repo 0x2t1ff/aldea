@@ -2,9 +2,9 @@ import 'package:aldea/locator.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/views/direct_message_view.dart';
 import 'package:aldea/ui/views/feed_view.dart';
-import 'package:aldea/ui/views/login_view.dart';
 import 'package:aldea/ui/views/profile_view.dart';
 import 'package:aldea/ui/views/quickstrike_view.dart';
+import 'package:aldea/ui/views/startup_view.dart';
 import 'package:aldea/ui/widgets/bottom_filler.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final CommunitiesView _communitiesView = locator<CommunitiesView>();
   final DirectMessageView _directMessageView = locator<DirectMessageView>();
-  final LoginView _loginView = locator<LoginView>();
   final FeedView _feedView = locator<FeedView>();
   final ProfileView _profileView = locator<ProfileView>();
   final QuickSTrikeView _quickSTrikeView = locator<QuickSTrikeView>();

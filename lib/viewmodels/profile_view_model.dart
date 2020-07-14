@@ -17,8 +17,13 @@ class ProfileViewModel extends BaseModel {
   File selectedProfileImage;
   File selectedBkdImage;
 
-  Future seeVouches() {
-    _navigationService.navigateTo(VouchViewRoute, false);
+  Future seeVouches(String c) {
+    _navigationService.navigateTo(VouchViewRoute, false, arguments: c);
+  }
+
+  Future seeCommunities(String c) {
+    _navigationService.navigateTo(CommunitiesProfileViewRoute, false,
+        arguments: c);
   }
 
   Future seeSettings() {
