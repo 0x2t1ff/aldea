@@ -1,6 +1,5 @@
 import 'package:aldea/models/chat_room_model.dart';
 import "package:flutter/material.dart";
-import 'package:aldea/models/message_model.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
 
