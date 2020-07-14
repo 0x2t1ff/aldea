@@ -32,7 +32,7 @@ class CommunityChatViewModel extends BaseModel {
   Future<String> uploadImage({String communityId, File image}) async {
     CloudStorageResult imageResult;
 
-    if (selectedImage != null) {
+    if (await image.exists()) {
       imageResult = await _cloudStorageService.uploadMessageImage(
           imageToUpload: image, chatId: communityId, userId: currentUser.uid);
       return imageResult.imageUrl;
