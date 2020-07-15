@@ -42,6 +42,7 @@ class QuickStrikeViewModel extends BaseModel {
   Future quitQuickstrike(QuickStrikePost quickstrike) async {
     currentUser.onGoingQuickstrikes.remove(quickstrike.id);
     await _firestoreService.quitQuickstrike(currentUser.uid, quickstrike.id);
+    notifyListeners();
   }
 
   Future<bool> checkParticipatingQuickstrike(String qid) async {
@@ -53,5 +54,10 @@ class QuickStrikeViewModel extends BaseModel {
 
   Future submitResult(String id) {
     _firestoreService.submitQuickstrikeResult(id, currentUser.uid);
+  }
+
+  Future failedQuickstrike() async {
+    await _dialogService.showDialog(
+        title: "Wrong Answer", description: "Sorry! Try again next time.");
   }
 }

@@ -75,7 +75,7 @@ export const buttonQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(a
 
 export const questionQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(async (context) => {
     const now = admin.firestore.Timestamp.now();
-    const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isGame', '==', true);
+    const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isQuestion', '==', true);
     const quickStrikes = await query.get();
     quickStrikes.forEach(async (snapshot) => {
         await snapshot.ref.update({ 'active': true });
