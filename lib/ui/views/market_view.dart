@@ -1,5 +1,6 @@
 import 'package:aldea/models/community.dart';
 import 'package:aldea/ui/shared/ui_helpers.dart';
+import 'package:aldea/ui/widgets/cart_view.dart';
 import 'package:aldea/ui/widgets/market_landing.dart';
 import 'package:aldea/ui/widgets/product_selected.dart';
 import 'package:aldea/viewmodels/market_view_model.dart';
@@ -67,46 +68,52 @@ class _MarketViewState extends State<MarketView>
                               )),
                         )),
                         horizontalSpaceMedium,
-                        SizedBox(
-                          height: communityBodyHeight(context) * 0.045,
-                          child: Stack(
-                            overflow: Overflow.visible,
-                            alignment: Alignment.bottomRight,
-                            children: <Widget>[
-                              Image.asset("assets/images/white-cart.png"),
-                              if (model.cart.length > 0)
-                                Positioned(
-                                  bottom: -5,
-                                  right: -5,
-                                  child: Container(
-                                    child: FittedBox(
-                                        child: Text(
-                                      model.totalItems.toString(),
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600),
-                                    )),
-                                    height:
-                                        communityBodyHeight(context) * 0.025,
-                                    width: communityBodyHeight(context) * 0.025,
-                                    decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
-                                  ),
-                                )
-                            ],
+                        GestureDetector(
+                          onTap: () => model.navigateToCartView(),
+                          child: SizedBox(
+                            height: communityBodyHeight(context) * 0.045,
+                            child: Stack(
+                              overflow: Overflow.visible,
+                              alignment: Alignment.bottomRight,
+                              children: <Widget>[
+                                Image.asset("assets/images/white-cart.png"),
+                                if (model.cart.length > 0)
+                                  Positioned(
+                                    bottom: -5,
+                                    right: -5,
+                                    child: Container(
+                                      child: FittedBox(
+                                          child: Text(
+                                        model.totalItems.toString(),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
+                                      )),
+                                      height:
+                                          communityBodyHeight(context) * 0.025,
+                                      width:
+                                          communityBodyHeight(context) * 0.025,
+                                      decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                    ),
+                                  )
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  model.isProductSelected
-                      ? ProductSelected(
-                          product: model.selectedProduct,
-                          model: model,
-                        )
-                      : MarketLanding(model: model),
+                  model.isShowingCart
+                      ? CartView(model)
+                      : model.isProductSelected
+                          ? ProductSelected(
+                              product: model.selectedProduct,
+                              model: model,
+                            )
+                          : MarketLanding(model: model),
                 ],
               ),
             ));

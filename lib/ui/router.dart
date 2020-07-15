@@ -1,4 +1,5 @@
 import 'package:aldea/ui/views/admin_screen_view.dart';
+import 'package:aldea/ui/views/cart_view.dart';
 import 'package:aldea/ui/views/chats_view.dart';
 import 'package:aldea/ui/views/comments_view.dart';
 import 'package:aldea/ui/views/community_creation_view.dart';
@@ -100,6 +101,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case CommunitySettingsViewRoute:
       return _getPageRoute(
           routeName: settings.name, viewToShow: CommunitySettingsView(settings.arguments));
+    case CartViewRoute:
+      return _getPageRoute(
+          routeName: settings.name, viewToShow: CartView(model: settings.arguments));
     default:
       return MaterialPageRoute(
           builder: (_) => Scaffold(

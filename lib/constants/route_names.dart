@@ -13,3 +13,4 @@ const String AdminScreenViewRoute = 'AdminScreenView';
 const String DetailedCommunityCreationViewRoute = 'DetailedCommunityCreationView';
 const String CommunitySettingsViewRoute = 'CommunitySettingsView';
 const String CommentsViewRoute = 'CommentsView';
+const String CartViewRoute = 'CartView';
