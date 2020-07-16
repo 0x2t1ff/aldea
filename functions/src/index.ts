@@ -121,7 +121,7 @@ export const finishedQuickstrike = functions.firestore.document("quickstrikes/{q
                 "isAnnouncement": false,
                 "modelo": quickstrikeData["modelo"],
                 "title": quickstrikeData["title"],
-                "winners": winnersList,
+                "winners": quickstrikeData["winners"],
                 "likes": [],
                 "avatarUrl": "placeholder",
             }

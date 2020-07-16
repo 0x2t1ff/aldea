@@ -261,8 +261,9 @@ class FinishedQuickstrike extends StatelessWidget {
                   padding: EdgeInsets.only(
                       top: devicesize.screenHeight(context) * 0.02),
                   child: Container(
+
                     width: devicesize.screenWidth(context) * 0.9,
-                    height: devicesize.screenHeight(context) * 0.07 +
+                    height: devicesize.screenHeight(context) * 0.08 +
                         devicesize.screenHeight(context) *
                             0.031 *
                             postModel.winners.length,
@@ -275,13 +276,15 @@ class FinishedQuickstrike extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(
                               left: devicesize.screenWidth(context) * 0.06,
-                              top: devicesize.screenHeight(context) * 0.02),
+                              top: devicesize.screenHeight(context) * 0.02,
+                              bottom: devicesize.screenHeight(context) * 0.005),
                           child: Text(
                             "Enhorabuena a los ganadores!",
                             style: TextStyle(
                                 fontFamily: 'Raleway',
                                 fontWeight: FontWeight.w800,
-                                fontSize: 15),
+                                fontSize:
+                                    devicesize.screenWidth(context) * 0.04),
                           ),
                         ),
                         Row(
@@ -325,6 +328,7 @@ class FinishedQuickstrike extends StatelessWidget {
                               ),
                             ),
                             Container(
+                              
                               width: devicesize.screenWidth(context) * 0.25,
                               alignment: Alignment.center,
                               child: Container(
@@ -420,7 +424,7 @@ class FinishedQuickstrike extends StatelessWidget {
                                   padding: EdgeInsets.only(
                                       top: devicesize.screenHeight(context) *
                                           0.005),
-                                  child: Text(postModel.commentCount.toString(),
+                                  child: Text( postModel.commentCount == null ? "0":postModel.commentCount.toString(),
                                       style: TextStyle(
                                           color: greyColor,
                                           fontFamily: 'Raleway',

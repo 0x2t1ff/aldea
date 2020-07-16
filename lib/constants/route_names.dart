@@ -15,3 +15,4 @@ const String DetailedCommunityCreationViewRoute =
 const String CommunitySettingsViewRoute = 'CommunitySettingsView';
 const String CommentsViewRoute = 'CommentsView';
 const String CommunitiesProfileViewRoute = 'CommunitiesProfileView';
+const String HeroScreenRoute = 'HeroScreen';

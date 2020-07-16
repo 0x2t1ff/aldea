@@ -115,6 +115,10 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                         });
                                       }
                                       return QuickStrikeItem(
+                                          heroFunction: () =>
+                                              model.heroAnimation(
+                                                  quickstrikepostList[index]
+                                                      .imageUrl[0]),
                                           isParticipating: true,
                                           model: model,
                                           quickStrikePost:
@@ -144,6 +148,10 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                         }
 
                                         return QuickStrikeItem(
+                                            heroFunction: () =>
+                                                model.heroAnimation(
+                                                    quickstrikepostList[index]
+                                                        .imageUrl),
                                             isParticipating: true,
                                             model: model,
                                             quickStrikePost:
