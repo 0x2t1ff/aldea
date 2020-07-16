@@ -5,8 +5,6 @@ import 'package:intl/intl.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
 import "package:aldea/constants/icondata.dart" as custicon;
-
-import 'finishedQuickstrike.dart';
 import 'like_button.dart';
 
 class StartQuickstrike extends StatelessWidget {
@@ -61,11 +59,12 @@ class StartQuickstrike extends StatelessWidget {
     Color greyColor = Color(0xff3a464d);
 
     return Container(
-      color: Colors.red,
+      color: custcolor.blueishGreyColor,
       width: devicesize.screenWidth(context),
       child: Column(
         children: <Widget>[
           Container(
+            color: custcolor.loginColor,
             height: devicesize.screenHeight(context) * 0.2,
             width: devicesize.screenWidth(context),
             padding: EdgeInsets.only(
@@ -95,14 +94,14 @@ class StartQuickstrike extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(
                             "https://firebasestorage.googleapis.com/v0/b/aldea-dev-40685.appspot.com/o/users%2FwRCrNE3t8ne8h4pagZXYY8TFaHs1%2Fprofile%2FprofilePic1583145377119?alt=media&token=efd31978-9d91-4682-af35-106c9994e8de"),
-                        radius: devicesize.screenWidth(context) * 0.06,
+                        radius: devicesize.screenWidth(context) * 0.07,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(
                           left: devicesize.screenWidth(context) * 0.074),
                       child: Container(
-                        width: devicesize.screenWidth(context) * 0.55,
+                        width: devicesize.screenWidth(context) * 0.54,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +125,7 @@ class StartQuickstrike extends StatelessWidget {
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Raleway',
                                   fontSize:
-                                      devicesize.screenWidth(context) * 0.03),
+                                      devicesize.screenWidth(context) * 0.035),
                             ),
                           ],
                         ),

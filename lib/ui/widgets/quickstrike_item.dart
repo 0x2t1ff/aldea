@@ -316,7 +316,9 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: devicesize.screenWidth(context) * 0.04),
+                                  left: devicesize.screenWidth(context) * 0.04,
+                                  bottom:
+                                      devicesize.screenHeight(context) * 0.01),
                               child: Stack(
                                 children: <Widget>[
                                   Padding(
@@ -441,7 +443,8 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                                                         .screenWidth(context) *
                                                     0.03),
                                             child: GestureDetector(
-                                              onTap: () => widget.heroFunction(),
+                                              onTap: () =>
+                                                  widget.heroFunction(),
                                               child: Image.network(
                                                 widget.quickStrikePost
                                                     .imageUrl[0],

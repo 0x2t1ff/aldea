@@ -90,7 +90,7 @@ class FinishedQuickstrike extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: custcolor.blueishGreyColor,
+        color: custcolor.loginColor,
         boxShadow: [
           BoxShadow(
             color: Color(0xff0f1013),
@@ -106,6 +106,7 @@ class FinishedQuickstrike extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
+            color: custcolor.blueishGreyColor,
             height: devicesize.screenHeight(context) * 0.18,
             width: devicesize.screenWidth(context),
             padding: EdgeInsets.only(
@@ -119,13 +120,13 @@ class FinishedQuickstrike extends StatelessWidget {
                   children: <Widget>[
                     CircleAvatar(
                       backgroundImage: NetworkImage(postModel.avatarUrl),
-                      radius: devicesize.screenWidth(context) * 0.06,
+                      radius: devicesize.screenWidth(context) * 0.065,
                     ),
                     Padding(
                       padding: EdgeInsets.only(
                           left: devicesize.screenWidth(context) * 0.074),
                       child: Container(
-                        width: devicesize.screenWidth(context) * 0.55,
+                        width: devicesize.screenWidth(context) * 0.54,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +150,7 @@ class FinishedQuickstrike extends StatelessWidget {
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Raleway',
                                   fontSize:
-                                      devicesize.screenWidth(context) * 0.03),
+                                      devicesize.screenWidth(context) * 0.035),
                             ),
                           ],
                         ),
@@ -209,7 +210,6 @@ class FinishedQuickstrike extends StatelessWidget {
             ),
           ),
           Container(
-            width: devicesize.screenWidth(context),
             height: devicesize.screenHeight(context) * 0.362,
             child: PostCarousel(imageUrl: this.postModel.imageUrl),
           ),
@@ -261,7 +261,6 @@ class FinishedQuickstrike extends StatelessWidget {
                   padding: EdgeInsets.only(
                       top: devicesize.screenHeight(context) * 0.02),
                   child: Container(
-
                     width: devicesize.screenWidth(context) * 0.9,
                     height: devicesize.screenHeight(context) * 0.08 +
                         devicesize.screenHeight(context) *
@@ -328,7 +327,6 @@ class FinishedQuickstrike extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              
                               width: devicesize.screenWidth(context) * 0.25,
                               alignment: Alignment.center,
                               child: Container(
@@ -424,7 +422,10 @@ class FinishedQuickstrike extends StatelessWidget {
                                   padding: EdgeInsets.only(
                                       top: devicesize.screenHeight(context) *
                                           0.005),
-                                  child: Text( postModel.commentCount == null ? "0":postModel.commentCount.toString(),
+                                  child: Text(
+                                      postModel.commentCount == null
+                                          ? "0"
+                                          : postModel.commentCount.toString(),
                                       style: TextStyle(
                                           color: greyColor,
                                           fontFamily: 'Raleway',

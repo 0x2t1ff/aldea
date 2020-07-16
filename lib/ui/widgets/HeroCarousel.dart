@@ -27,41 +27,45 @@ Widget countPointer(int index) {
 class _HeroCarouselState extends State<HeroCarousel> {
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
-      CarouselSlider.builder(
-        height: screenHeight(context) * 0.875,
-        itemCount: widget.imageUrl.length,
-        viewportFraction: 1.0,
-        enableInfiniteScroll: false,
-        onPageChanged: (index) {
-          setState(() {
-            _current = index;
-          });
-        },
-        itemBuilder: (BuildContext context, int itemIndex) => Container(
-          width: screenWidth(context),
+    return Stack(
+      children: <Widget>[
+        CarouselSlider.builder(
           height: screenHeight(context) * 0.875,
-          decoration: BoxDecoration(
+          itemCount: widget.imageUrl.length,
+          viewportFraction: 1.0,
+          enableInfiniteScroll: false,
+          onPageChanged: (index) {
+            setState(() {
+              _current = index;
+            });
+          },
+          itemBuilder: (BuildContext context, int itemIndex) => Container(
+            width: screenWidth(context),
+            height: screenHeight(context) * 0.875,
+            decoration: BoxDecoration(
               image: DecorationImage(
                   image: NetworkImage(widget.imageUrl[itemIndex]),
-                  fit: BoxFit.contain)),
+                  fit: BoxFit.contain),
+            ),
+          ),
         ),
-      ),
-      Positioned(
-        bottom: screenHeight(context) * 0,
-        left: 0.0,
-        right: 0.0,
-        child: widget.imageUrl.length == 1
-            ? Container()
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+        Positioned(
+          bottom: screenHeight(context) * 0,
+          left: 0.0,
+          right: 0.0,
+          child: widget.imageUrl.length == 1
+              ? Container()
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
                     ...widget.imageUrl
                         .map((image) =>
                             countPointer(widget.imageUrl.indexOf(image)))
                         .toList()
-                  ]),
-      )
-    ]);
+                  ],
+                ),
+        ),
+      ],
+    );
   }
 }

@@ -173,11 +173,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                       ),
                       quickstrikeActive
                           ? getQuickstrike(activeQuickstrike, model)
-                          : Container(
-                              width: 50,
-                              height: 50,
-                              color: Colors.red,
-                            ),
+                          : Container(),
                     ]),
                   )
                 : Center(

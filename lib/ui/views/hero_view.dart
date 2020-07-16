@@ -16,44 +16,46 @@ class HeroScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     String tag = "Hero";
     return ViewModelBuilder<HeroViewModel>.reactive(
-        viewModelBuilder: () => HeroViewModel(),
-        createNewModelOnInsert: true,
-        builder: (context, model, child) => Scaffold(
-            backgroundColor: backgroundColor,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                NotchFiller(),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: screenHeight(context) * 0.01,
-                      left: screenWidth(context) * 0.01),
-                  child: GestureDetector(
-                    child: Icon(
-                      Icons.clear,
-                      size: screenWidth(context) * 0.1,
-                      color: blueTheme,
+      viewModelBuilder: () => HeroViewModel(),
+      createNewModelOnInsert: true,
+      builder: (context, model, child) => Scaffold(
+        backgroundColor: backgroundColor,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            NotchFiller(),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: screenHeight(context) * 0.01,
+                  left: screenWidth(context) * 0.01),
+              child: GestureDetector(
+                child: Icon(
+                  Icons.clear,
+                  size: screenWidth(context) * 0.1,
+                  color: blueTheme,
+                ),
+                onTap: () => model.popScreen(),
+              ),
+            ),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                  maxWidth: screenWidth(context),
+                  maxHeight: screenHeight(context) * 0.875),
+              child: GestureDetector(
+                child: Center(
+                  child: Hero(
+                    tag: tag,
+                    child: HeroCarousel(
+                      imageUrl: url,
                     ),
-                    onTap: () => model.popScreen(),
                   ),
                 ),
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                      maxWidth: screenWidth(context),
-                      maxHeight: screenHeight(context) * 0.875),
-                  child: GestureDetector(
-                    child: Center(
-                      child: Hero(
-                        tag: tag,
-                        child: HeroCarousel(
-                          imageUrl: url,
-                        ),
-                      ),
-                    ),
-                    onTap: () => model.popScreen(),
-                  ),
-                ),
-              ],
-            )));
+                onTap: () => model.popScreen(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

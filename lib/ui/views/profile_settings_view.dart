@@ -273,10 +273,69 @@ class ProfileSettingsView extends StatelessWidget {
                               ],
                             ),
                       isGodAdmin
-                          ? Padding(
-                              padding: EdgeInsets.only(top: 15),
+                          ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(top: 15),
+                                  child: GestureDetector(
+                                    onTap: () => model.goAdminScreen(),
+                                    child: Container(
+                                      width: devicesize.screenWidth(context) *
+                                          0.321,
+                                      height: devicesize.screenHeight(context) *
+                                          0.05,
+                                      decoration: BoxDecoration(
+                                          color: blueTheme,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(200))),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Moderar",
+                                        style: TextStyle(
+                                            fontFamily: 'Raleway',
+                                            fontSize: 22,
+                                            color: almostWhite,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 11.8),
+                                  child: GestureDetector(
+                                    onTap: () =>
+                                        model.goCreateCommunityScreen(),
+                                    child: Container(
+                                      width: devicesize.screenWidth(context) *
+                                          0.321,
+                                      height: devicesize.screenHeight(context) *
+                                          0.05,
+                                      decoration: BoxDecoration(
+                                          color: blueTheme,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(200))),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "¡Crear!",
+                                        style: TextStyle(
+                                            fontFamily: 'Raleway',
+                                            fontSize: 22,
+                                            color: almostWhite,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
+                      isGodAdmin
+                          ? Container()
+                          : Padding(
+                              padding: EdgeInsets.only(top: 11.8),
                               child: GestureDetector(
-                                onTap: () => model.goAdminScreen(),
+                                onTap: () => model.goCreateCommunityScreen(),
                                 child: Container(
                                   width:
                                       devicesize.screenWidth(context) * 0.321,
@@ -288,7 +347,7 @@ class ProfileSettingsView extends StatelessWidget {
                                           Radius.circular(200))),
                                   alignment: Alignment.center,
                                   child: Text(
-                                    "Moderar",
+                                    "¡Crear!",
                                     style: TextStyle(
                                         fontFamily: 'Raleway',
                                         fontSize: 22,
@@ -297,31 +356,7 @@ class ProfileSettingsView extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            )
-                          : Container(),
-                      Padding(
-                        padding: EdgeInsets.only(top: 11.8),
-                        child: GestureDetector(
-                          onTap: () => model.goCreateCommunityScreen(),
-                          child: Container(
-                            width: devicesize.screenWidth(context) * 0.321,
-                            height: devicesize.screenHeight(context) * 0.05,
-                            decoration: BoxDecoration(
-                                color: blueTheme,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(200))),
-                            alignment: Alignment.center,
-                            child: Text(
-                              "¡Crear!",
-                              style: TextStyle(
-                                  fontFamily: 'Raleway',
-                                  fontSize: 22,
-                                  color: almostWhite,
-                                  fontWeight: FontWeight.w600),
                             ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 )),

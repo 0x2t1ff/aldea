@@ -61,7 +61,7 @@ class PostItem extends StatelessWidget {
     Color greyColor = Color(0xff3a464d);
     return Container(
       decoration: BoxDecoration(
-        color: custcolor.blueishGreyColor,
+        color: custcolor.loginColor,
         boxShadow: [
           BoxShadow(
             color: Color(0xff0f1013),
@@ -77,6 +77,9 @@ class PostItem extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
+            decoration: BoxDecoration(
+              color: custcolor.blueishGreyColor,
+            ),
             width: devicesize.screenWidth(context),
             height: devicesize.screenHeight(context) * 0.12,
             child: Row(
@@ -85,7 +88,7 @@ class PostItem extends StatelessWidget {
                   padding: EdgeInsets.only(
                       left: devicesize.screenWidth(context) * 0.06),
                   child: CircleAvatar(
-                    radius: devicesize.screenWidth(context) * 0.06,
+                    radius: devicesize.screenWidth(context) * 0.07,
                     backgroundImage: NetworkImage(postModel.avatarUrl),
                   ),
                 ),
@@ -115,7 +118,8 @@ class PostItem extends StatelessWidget {
                               color: Color(0xff3a464d),
                               fontWeight: FontWeight.w600,
                               fontFamily: 'Raleway',
-                              fontSize: devicesize.screenWidth(context) * 0.03),
+                              fontSize:
+                                  devicesize.screenWidth(context) * 0.035),
                         ),
                       ],
                     ),
