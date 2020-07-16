@@ -22,4 +22,5 @@ class ProfileSettingsViewModel extends BaseModel {
     _navigationService.navigateTo(LoginViewRoute, true);
     _authenticationService.logOut();
   }
+  
 }

@@ -691,17 +691,20 @@ class FirestoreService {
     var docRef = _quickstrikeCollectionReference.document(id);
     Firestore.instance.runTransaction((Transaction tx) async {
       DocumentSnapshot postSnapshot = await tx.get(docRef);
-
+      print(postSnapshot.data);
+      List winners = [];
       int amount = postSnapshot.data["amount"];
-      List winners = postSnapshot.data["winners"];
+      postSnapshot.data["winners"] == null
+          ? null
+          : winners = postSnapshot.data["winners"];
       if (postSnapshot.data["finished"] == false && winners.length < amount) {
         winners.add(userId);
-
         tx.update(docRef, {"winners": winners});
         if (winners.length >= amount) {
           tx.update(docRef, {"finished": true});
         }
-      } else {}
+        return true;
+      } else { return false;}
     }).catchError((error) => print(error.toString()));
   }
 

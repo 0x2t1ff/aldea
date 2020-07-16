@@ -86,13 +86,23 @@ class _HomeViewState extends State<HomeView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  'ALDEA',
-                  style: TextStyle(
-                      color: Colors.white, fontFamily: 'Thinoo', fontSize: 40),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: device.screenHeight(context) * 0.01,
+                      left: device.screenWidth(context) * 0.01),
+                  child: Text(
+                    'ALDEA',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Thinoo',
+                        fontSize: device.screenWidth(context) * 0.11,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 3),
+                  ),
                 ),
                 SizedBox(
-                    height: 50, child: Image.asset('assets/images/hoguera.png'))
+                    height: device.screenHeight(context) * 0.06,
+                    child: Image.asset('assets/images/hoguera.png'))
               ],
             ),
           ),

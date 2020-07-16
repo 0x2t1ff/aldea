@@ -131,6 +131,17 @@ class _FeedViewState extends State<FeedView> {
                                             onTap: () => model.goToCommunity(
                                                 model.communityList[index]),
                                             child: Container(
+                                                decoration:
+                                                    BoxDecoration(boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(1),
+                                                    spreadRadius: 3,
+                                                    blurRadius: 7,
+                                                    offset: Offset(2,
+                                                        3), // changes position of shadow
+                                                  ),
+                                                ], shape: BoxShape.circle),
                                                 padding: EdgeInsets.symmetric(
                                                     horizontal:
                                                         devicesize.screenWidth(
@@ -148,9 +159,19 @@ class _FeedViewState extends State<FeedView> {
                                                 )))
                                         : Container(
                                             decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: custcolor.blueishGreyColor,
-                                            ),
+                                                shape: BoxShape.circle,
+                                                color:
+                                                    custcolor.blueishGreyColor,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.5),
+                                                    spreadRadius: 3,
+                                                    blurRadius: 7,
+                                                    offset: Offset(2,
+                                                        3), // changes position of shadow
+                                                  ),
+                                                ]),
                                             width: devicesize
                                                     .screenHeight(context) *
                                                 0.097,

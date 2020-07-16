@@ -1,5 +1,7 @@
+import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/services/firestore_service.dart';
+import 'package:aldea/services/navigation_service.dart';
 import 'package:aldea/utils/random_id_generator.dart';
 
 import 'base_model.dart';
@@ -9,6 +11,7 @@ import '../services/dialog_service.dart';
 class QuickStrikeViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
+  final NavigationService _navigationService = locator<NavigationService>();
 
   Stream _quickstrikes;
   Stream get posts => _quickstrikes;
@@ -42,6 +45,10 @@ class QuickStrikeViewModel extends BaseModel {
   Future quitQuickstrike(QuickStrikePost quickstrike) async {
     currentUser.onGoingQuickstrikes.remove(quickstrike.id);
     await _firestoreService.quitQuickstrike(currentUser.uid, quickstrike.id);
+    notifyListeners();
+  }
+  Future heroAnimation(List url){
+    _navigationService.navigateTo(HeroScreenRoute, false, arguments: url);
   }
 
   Future<bool> checkParticipatingQuickstrike(String qid) async {
@@ -53,5 +60,10 @@ class QuickStrikeViewModel extends BaseModel {
 
   Future submitResult(String id) {
     _firestoreService.submitQuickstrikeResult(id, currentUser.uid);
+  }
+
+  Future failedQuickstrike() async {
+    await _dialogService.showDialog(
+        title: "Wrong Answer", description: "Sorry! Try again next time.");
   }
 }

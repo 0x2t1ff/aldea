@@ -13,9 +13,12 @@ class ChatsView extends StatelessWidget {
   final String chatroomId;
 
   const ChatsView({Key key, this.chatroomId}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    ScrollController _controller = ScrollController();
+    print("rebuilded");
+    ScrollController _controller = new ScrollController();
+
     final messageController = TextEditingController();
     return ViewModelBuilder<ChatsViewModel>.reactive(
       viewModelBuilder: () => ChatsViewModel(),
@@ -23,7 +26,7 @@ class ChatsView extends StatelessWidget {
       createNewModelOnInsert: true,
       builder: (context, model, child) => Scaffold(
         backgroundColor: custcolor.darkBlue,
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomPadding: true,
         body: Container(
           child: Column(
             children: <Widget>[
@@ -60,20 +63,22 @@ class ChatsView extends StatelessWidget {
                               return r;
                             });
 
-                            Timer(
-                                Duration(milliseconds: 10),
-                                () => _controller.jumpTo(_controller.position
-                                    .maxScrollExtent)); // hace que cuando envias mensaje baje
                             return Padding(
                               padding: EdgeInsets.only(
                                   bottom:
                                       devicesize.screenHeight(context) * 0.01),
                               child: ListView.builder(
-                                  // reverse: true, //esta literalmente al reves , jugar con la base de datos par que cargue como toca
                                   controller: _controller,
-                                  reverse: false,
                                   itemCount: messageList.length,
                                   itemBuilder: (context, index) {
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((timeStamp) {
+                                      _controller.animateTo(
+                                          _controller.position.maxScrollExtent,
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          curve: Curves.easeOut);
+                                    });
                                     return MessageItem(
                                       model: MessageModel.fromMap(
                                           messageList[index]),

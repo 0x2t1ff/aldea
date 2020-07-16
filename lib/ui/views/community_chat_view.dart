@@ -20,6 +20,7 @@ class CommunityChatView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final messageController = TextEditingController();
+    ScrollController _controller = new ScrollController();
     return ViewModelBuilder<CommunityChatViewModel>.reactive(
       viewModelBuilder: () => CommunityChatViewModel(),
       onModelReady: (model) => model.getMessages(communityId),
@@ -67,8 +68,17 @@ class CommunityChatView extends StatelessWidget {
                             //TODO intentar hacer un singlechildscrollview y en vez de usar el listView.builder usar un .forEach() donde devuelva los mensajes , al singlechildscrollview meterle un ScrollController y que con cada resize/mensaje haga scroll hacia abajo
                             return ListView.builder(
                                 reverse: false,
+                                controller: _controller,
                                 itemCount: messageList.length,
                                 itemBuilder: (context, index) {
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((timeStamp) {
+                                    _controller.animateTo(
+                                        _controller.position.maxScrollExtent,
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeOut);
+                                  });
                                   return CommunityMessageItem(
                                     model: MessageModel.fromMap(
                                         messageList[index]),

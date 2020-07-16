@@ -14,8 +14,10 @@ class QuickStrikeItem extends StatefulWidget {
   final QuickStrikePost quickStrikePost;
   final int index;
   final bool isParticipating;
+  final Function heroFunction;
   const QuickStrikeItem(
       {Key key,
+      this.heroFunction,
       this.quickStrikePost,
       this.index,
       this.model,
@@ -32,7 +34,6 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
   String animationSelector = "";
   @override
   void initState() {
-   
     isEnlisted = widget.isParticipating;
     if (widget.isParticipating) {
       animationSelector = "GREEN";
@@ -315,7 +316,9 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: devicesize.screenWidth(context) * 0.04),
+                                  left: devicesize.screenWidth(context) * 0.04,
+                                  bottom:
+                                      devicesize.screenHeight(context) * 0.01),
                               child: Stack(
                                 children: <Widget>[
                                   Padding(
@@ -340,17 +343,23 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                                                           0.03),
                                             ),
                                             child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      devicesize.screenWidth(
-                                                              context) *
-                                                          0.03),
-                                              child: Image.network(
-                                                widget.quickStrikePost
-                                                    .imageUrl[2],
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        devicesize.screenWidth(
+                                                                context) *
+                                                            0.03),
+                                                child: GestureDetector(
+                                                  onTap: () =>
+                                                      widget.heroFunction(),
+                                                  child: Hero(
+                                                    tag: 'imageHero',
+                                                    child: Image.network(
+                                                      widget.quickStrikePost
+                                                          .imageUrl[2],
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                )),
                                           )
                                         : Container(),
                                   ),
@@ -391,10 +400,14 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                                                       devicesize.screenWidth(
                                                               context) *
                                                           0.03),
-                                              child: Image.network(
-                                                widget.quickStrikePost
-                                                    .imageUrl[1],
-                                                fit: BoxFit.cover,
+                                              child: GestureDetector(
+                                                onTap: () =>
+                                                    widget.heroFunction(),
+                                                child: Image.network(
+                                                  widget.quickStrikePost
+                                                      .imageUrl[1],
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
                                           )
@@ -429,10 +442,14 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                                                 devicesize
                                                         .screenWidth(context) *
                                                     0.03),
-                                            child: Image.network(
-                                              widget
-                                                  .quickStrikePost.imageUrl[0],
-                                              fit: BoxFit.cover,
+                                            child: GestureDetector(
+                                              onTap: () =>
+                                                  widget.heroFunction(),
+                                              child: Image.network(
+                                                widget.quickStrikePost
+                                                    .imageUrl[0],
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                           ),
                                         )

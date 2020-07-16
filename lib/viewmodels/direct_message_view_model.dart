@@ -31,7 +31,7 @@ class DirectMessageViewModel extends BaseModel {
       print(chatRooms.toString());
       chatStreams = _rtdbService.getChats(chatRooms);
       chatStreams[0].listen((event) {
-        print(event.snapshot.value.toString() + "porfadsxafsd");
+
       });
       if (chatStreams is List<Stream<Event>>) {
         _chatStream = chatStreams;
