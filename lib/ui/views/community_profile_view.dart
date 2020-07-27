@@ -1,7 +1,6 @@
 import 'package:aldea/ui/widgets/bottom_filler.dart';
 import 'package:aldea/ui/widgets/community_profile_item.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
-import 'package:aldea/ui/widgets/vouch_item.dart';
 import 'package:aldea/viewmodels/community_profile_view_model.dart';
 import "package:flutter/material.dart";
 import 'package:stacked/stacked.dart';

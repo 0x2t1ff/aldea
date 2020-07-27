@@ -37,7 +37,6 @@ class DirectMessageViewModel extends BaseModel {
         _chatStream = chatStreams;
         notifyListeners();
       } else {
-        //print(_quickstrikes.length.toString());
         await _dialogService.showDialog(
           title: 'La actualizacion de chats ha fallado',
           description: "ha fallado XD asi al menos no crashea ",

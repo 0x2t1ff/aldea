@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/views/user_posts_view.dart';
 import 'package:aldea/ui/views/news_view.dart';
 import 'package:aldea/models/community.dart';
@@ -8,11 +7,13 @@ import 'package:aldea/ui/views/market_view.dart';
 import 'package:aldea/ui/widgets/community_rules.dart';
 import 'package:aldea/ui/widgets/creation_popup.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import '../shared/ui_helpers.dart';
 import '../../viewmodels/community_view_model.dart';
 import 'community_chat_view.dart';
+import 'community_chat_web_view.dart';
 
 class CommunityView extends StatefulWidget {
   final Community community;
@@ -46,8 +47,7 @@ class _CommunityViewState extends State<CommunityView>
       if (_tabController.indexIsChanging &&
           height != _scrollController.position.maxScrollExtent) {
         setState(() {
-          height = _scrollController
-              .position.maxScrollExtent; //_scrollController.offset.toDouble();
+          height = _scrollController.position.maxScrollExtent;
         });
       }
     });
@@ -474,42 +474,93 @@ class _CommunityViewState extends State<CommunityView>
                                     child: widget.community.isMarketplace
                                         ? TabBarView(
                                             controller: _tabController,
-                                            children: [
-                                                CommunityRules(
-                                                  community: widget.community,
-                                                  isEditting: false,
-                                                ),
-                                                NewsView(
-                                                    community:
-                                                        widget.community),
-                                                MarketView(widget.community,
-                                                    model.products),
-                                                CommunityChatView(
-                                                    petitionsShowing:
-                                                        isModerator,
-                                                    communityId: this
-                                                        .widget
-                                                        .community
-                                                        .uid,
-                                                    height: height),
-                                                UserPostsView(
-                                                    community:
-                                                        widget.community),
-                                              ])
-                                        : TabBarView(children: [
-                                            CommunityRules(
-                                              community: widget.community,
-                                              isEditting: false,
-                                            ),
-                                            NewsView(
-                                                community: widget.community),
-                                            CommunityChatView(
-                                                communityId:
-                                                    this.widget.community.uid,
-                                                height: height),
-                                            UserPostsView(
-                                                community: widget.community),
-                                          ]),
+                                            children: kIsWeb
+                                                ? [
+                                                    CommunityRules(
+                                                      community:
+                                                          widget.community,
+                                                      isEditting: false,
+                                                    ),
+                                                    NewsView(
+                                                        community:
+                                                            widget.community),
+                                                    MarketView(widget.community,
+                                                        model.products),
+                                                    CommunityChatWebView(
+                                                        petitionsShowing:
+                                                            isModerator,
+                                                        communityId: this
+                                                            .widget
+                                                            .community
+                                                            .uid,
+                                                        height: height),
+                                                    UserPostsView(
+                                                        community:
+                                                            widget.community),
+                                                  ]
+                                                : [
+                                                    CommunityRules(
+                                                      community:
+                                                          widget.community,
+                                                      isEditting: false,
+                                                    ),
+                                                    NewsView(
+                                                        community:
+                                                            widget.community),
+                                                    MarketView(widget.community,
+                                                        model.products),
+                                                    CommunityChatView(
+                                                        petitionsShowing:
+                                                            isModerator,
+                                                        communityId: this
+                                                            .widget
+                                                            .community
+                                                            .uid,
+                                                        height: height),
+                                                    UserPostsView(
+                                                        community:
+                                                            widget.community),
+                                                  ])
+                                        : TabBarView(
+                                            children: kIsWeb
+                                                ? [
+                                                    CommunityRules(
+                                                      community:
+                                                          widget.community,
+                                                      isEditting: false,
+                                                    ),
+                                                    NewsView(
+                                                        community:
+                                                            widget.community),
+                                                    CommunityChatWebView(
+                                                        communityId: this
+                                                            .widget
+                                                            .community
+                                                            .uid,
+                                                        height: height),
+                                                    UserPostsView(
+                                                        community:
+                                                            widget.community),
+                                                  ]
+                                                : [
+                                                    CommunityRules(
+                                                      community:
+                                                          widget.community,
+                                                      isEditting: false,
+                                                    ),
+                                                    NewsView(
+                                                        community:
+                                                            widget.community),
+                                                    CommunityChatView(
+                                                        communityId: this
+                                                            .widget
+                                                            .community
+                                                            .uid,
+                                                        height: height),
+                                                    UserPostsView(
+                                                        community:
+                                                            widget.community),
+                                                  ]),
                                   )
                                 ],
                               ),

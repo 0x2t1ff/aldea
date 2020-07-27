@@ -1,9 +1,7 @@
 import 'package:aldea/services/push_notification_service.dart';
-import 'package:aldea/ui/views/community_view.dart';
 
 import '../locator.dart';
 import './base_model.dart';
-import '../locator.dart';
 import '../constants/route_names.dart';
 import '../services/authentication_service.dart';
 import '../services/firestore_service.dart';

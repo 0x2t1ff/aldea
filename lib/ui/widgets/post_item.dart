@@ -5,7 +5,6 @@ import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
-import "package:carousel_slider/carousel_slider.dart";
 
 import 'adaptive_text.dart';
 
@@ -205,7 +204,7 @@ class PostItem extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          left: devicesize.screenWidth(context) * 0.545,
+                           left: devicesize.screenWidth(context) * 0.518,
                         ),
                         child: IconButton(
                           icon: Icon(

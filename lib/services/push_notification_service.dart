@@ -1,4 +1,3 @@
-import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/locator.dart';
 import 'package:aldea/services/navigation_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

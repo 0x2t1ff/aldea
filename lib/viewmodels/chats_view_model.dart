@@ -2,21 +2,21 @@ import 'dart:io';
 
 import 'package:aldea/models/cloud_storage_result.dart';
 import 'package:aldea/services/cloud_storage_service.dart';
-import 'package:aldea/services/rtdb_service.dart';
+import 'package:aldea/services/web_firebase_service.dart';
 import 'package:aldea/utils/image_selector.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase/firebase.dart';
 import 'base_model.dart';
 import '../locator.dart';
 import '../services/dialog_service.dart';
 
 class ChatsViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
-  final RtdbService _firestoreService = locator<RtdbService>();
+  final WebRTDBService _firestoreService = locator<WebRTDBService>();
   final ImageSelector _imageSelector = locator<ImageSelector>();
   final CloudStorageService _cloudStorageService =
       locator<CloudStorageService>();
-  Stream<Event> _chatStream;
-  Stream<Event> get messages => _chatStream;
+  Stream<QueryEvent> _chatStream;
+  Stream<QueryEvent> get messages => _chatStream;
   // ignore: avoid_init_to_null
   File selectedImage = null;
 
@@ -58,7 +58,7 @@ class ChatsViewModel extends BaseModel {
     });
     setBusy(true);
 
-    if (chatStream is Stream<Event>) {
+    if (chatStream is Stream<QueryEvent>) {
       _chatStream = chatStream;
       notifyListeners();
     } else {

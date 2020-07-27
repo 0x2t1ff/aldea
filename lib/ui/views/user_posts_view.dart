@@ -1,5 +1,4 @@
 import 'package:aldea/ui/widgets/create_user_post_widget.dart';
-import 'package:aldea/ui/widgets/feed_widget.dart';
 import 'package:aldea/ui/widgets/user_post_item.dart';
 import 'package:aldea/viewmodels/user_post_view_model.dart';
 import "package:flutter/material.dart";

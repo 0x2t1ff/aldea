@@ -1,8 +1,9 @@
 import 'package:aldea/services/push_notification_service.dart';
 import 'package:aldea/services/rtdb_service.dart';
+import 'package:aldea/services/web_firebase_service.dart';
 import 'package:aldea/ui/views/communities_view.dart';
 import 'package:aldea/ui/views/direct_message_view.dart';
-import 'package:aldea/ui/views/startup_view.dart';
+import 'package:aldea/ui/views/direct_message_web_view.dart';
 import 'package:get_it/get_it.dart';
 import './services/navigation_service.dart';
 import './services/dialog_service.dart';
@@ -22,6 +23,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => FirestoreService());
+  locator.registerLazySingleton(() => WebRTDBService());
   locator.registerLazySingleton(() => CloudStorageService());
   locator.registerLazySingleton(() => RtdbService());
   locator.registerLazySingleton(() => ImageSelector());
@@ -31,6 +33,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => FeedView());
   locator.registerLazySingleton(() => DirectMessageView());
   locator.registerLazySingleton(() => PushNotificationService());
+  locator.registerLazySingleton(() => DirectMessageWebView());
 }
 
 void registerCurrentUser(Map<String, dynamic> data) {

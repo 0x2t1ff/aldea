@@ -48,7 +48,7 @@ class _LikeButtonState extends State<LikeButton> {
                 color: Color(0xff3a464d),
                 fontFamily: 'Raleway',
                 fontWeight: FontWeight.w600,
-                fontSize: 14),
+                fontSize: devicesize.screenHeight(context) * 0.02),
           ),
         ),
       ],

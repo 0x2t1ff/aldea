@@ -1,18 +1,18 @@
 import 'package:aldea/locator.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
-import 'package:aldea/ui/views/direct_message_view.dart';
 import 'package:aldea/ui/views/feed_view.dart';
 import 'package:aldea/ui/views/profile_view.dart';
 import 'package:aldea/ui/views/quickstrike_view.dart';
-import 'package:aldea/ui/views/startup_view.dart';
 import 'package:aldea/ui/widgets/bottom_filler.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../views/communities_view.dart';
 import '../shared/google_navbar.dart';
 import "../shared/ui_helpers.dart" as device;
 import "../shared/app_colors.dart" as theme;
 import "../../constants/icondata.dart" as custicon;
+import 'direct_message_web_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key key}) : super(key: key);
@@ -23,10 +23,13 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final CommunitiesView _communitiesView = locator<CommunitiesView>();
-  final DirectMessageView _directMessageView = locator<DirectMessageView>();
+  final DirectMessageWebView _directMessageView =
+      locator<DirectMessageWebView>();
   final FeedView _feedView = locator<FeedView>();
   final ProfileView _profileView = locator<ProfileView>();
   final QuickSTrikeView _quickSTrikeView = locator<QuickSTrikeView>();
+  final DirectMessageWebView _directMessageWebView =
+      locator<DirectMessageWebView>();
   int selectedIndex = 0;
   PageController controller = PageController();
 
@@ -112,13 +115,21 @@ class _HomeViewState extends State<HomeView> {
             child: PageView(
               physics: NeverScrollableScrollPhysics(),
               controller: controller,
-              children: <Widget>[
-                _feedView,
-                _communitiesView,
-                _quickSTrikeView,
-                _directMessageView,
-                _profileView
-              ],
+              children: kIsWeb
+                  ? <Widget>[
+                      _feedView,
+                      _communitiesView,
+                      _quickSTrikeView,
+                      _directMessageWebView,
+                      _profileView
+                    ]
+                  : <Widget>[
+                      _feedView,
+                      _communitiesView,
+                      _quickSTrikeView,
+                      _directMessageView,
+                      _profileView
+                    ],
             ),
           ),
           Column(

@@ -1,6 +1,5 @@
 import 'package:aldea/models/message_model.dart';
 import 'package:aldea/ui/widgets/community_message_item.dart';
-import 'package:aldea/ui/widgets/message_item.dart';
 import 'package:aldea/viewmodels/community_chat_view_model.dart';
 import '../shared/ui_helpers.dart' as devicesize;
 import 'package:firebase_database/firebase_database.dart';

@@ -1,12 +1,12 @@
-import 'dart:async';
 import 'package:aldea/models/message_model.dart';
 import 'package:aldea/ui/widgets/message_item.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:aldea/viewmodels/chats_view_model.dart';
+import 'package:firebase/firebase.dart';
 import '../shared/ui_helpers.dart' as devicesize;
-import 'package:firebase_database/firebase_database.dart';
 import "package:flutter/material.dart";
 import 'package:stacked/stacked.dart';
+import "package:flutter/foundation.dart";
 import "../shared/app_colors.dart" as custcolor;
 
 class ChatsView extends StatelessWidget {
@@ -16,7 +16,6 @@ class ChatsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("rebuilded");
     ScrollController _controller = new ScrollController();
 
     final messageController = TextEditingController();
@@ -37,7 +36,7 @@ class ChatsView extends StatelessWidget {
                 color: custcolor.darkBlue,
                 width: devicesize.screenWidth(context),
                 child: model.messages != null
-                    ? StreamBuilder<Event>(
+                    ? StreamBuilder<QueryEvent>(
                         stream: model.messages,
                         builder: (ctx, snapshot) {
                           if (!snapshot.hasData) {
@@ -46,12 +45,12 @@ class ChatsView extends StatelessWidget {
                             );
                           } else if (snapshot.hasError) {
                             return Text("error");
-                          } else if (snapshot.data.snapshot.value == null) {
+                          } else if (snapshot.data.snapshot.val() == null) {
                             return Center(
                                 child: Text(" send your first message!"));
                           } else {
                             Map<dynamic, dynamic> messageMaps =
-                                snapshot.data.snapshot.value;
+                                snapshot.data.snapshot.val();
 
                             List messageList = messageMaps.values.toList();
 

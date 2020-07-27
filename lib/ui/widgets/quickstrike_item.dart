@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/ui/shared/shared_styles.dart';
@@ -258,17 +257,19 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                               }),
                         ),
                       ),
-                      IconButton(
-                        padding: EdgeInsets.only(
-                            top: devicesize.screenHeight(context) * 0.05),
-                        iconSize: 25,
-                        color: Colors.white,
-                        alignment: Alignment.bottomLeft,
-                        icon: Icon(Icons.expand_more),
-                        onPressed: () => setState(() {
-                          isExpanded = !isExpanded;
-                        }),
-                      ),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              top: devicesize.screenHeight(context) * 0.05),
+                          child: GestureDetector(
+                            child: Icon(
+                              Icons.expand_more,
+                              size: 25,
+                              color: Colors.white,
+                            ),
+                            onTap: () => setState(() {
+                              isExpanded = !isExpanded;
+                            }),
+                          )),
                     ],
                   ),
                 ],

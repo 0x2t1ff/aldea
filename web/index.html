@@ -14,10 +14,12 @@
   <!-- Favicon -->
   <link rel="shortcut icon" type="image/png" href="favicon.png"/>
 
-  <title>aldea</title>
+  <title>Aldea</title>
   <link rel="manifest" href="manifest.json">
 </head>
-<body>
+<body style="background-color:black;">
+    <script src="https://www.gstatic.com/firebase/7.16.1/firebase-app.js"></script>
+
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
@@ -28,22 +30,26 @@
       });
     }
   </script>
-  <script src="main.dart.js" type="application/javascript"></script>
   <!-- The core Firebase JS SDK is always required and must be listed first -->
-  <script src="/__/firebase/7.16.0/firebase-app.js"></script>
 
 <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+
+     <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
 <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-analytics.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-functions.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-messaging.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-messaging.js"></script> 
+<!-- <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-database.js"></script> -->
 <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-storage.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase.js"></script>
 
+
 <script>
+  
   // Your web app's Firebase configuration
   var firebaseConfig = {
     apiKey: "AIzaSyDCimuTCu7myEYsfeIaLFBZvbznXsPpPbY",
@@ -55,9 +61,11 @@
     appId: "1:34471012076:web:ff27b45c5f5ae3b6aaa7c9",
     measurementId: "G-6E7F2F17JR"
   };
+  firebase.initializeApp(firebaseConfig);</script>
   // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  firebase.analytics();
-</script>
+  <script src="main.dart.js" type="application/javascript"></script>
+
+
+
 </body>
 </html>

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import '../../viewmodels/community_settings_view_model.dart';
 import "../shared/ui_helpers.dart";
-import "../shared/shared_styles.dart";
 
 class CommunitySettingsView extends StatefulWidget {
   final Community community;

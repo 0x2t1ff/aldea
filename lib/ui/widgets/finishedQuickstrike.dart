@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
 import "package:aldea/constants/icondata.dart" as custicon;
-import "package:carousel_slider/carousel_slider.dart";
 
 class FinishedQuickstrike extends StatelessWidget {
   final PostModel postModel;
@@ -60,25 +59,35 @@ class FinishedQuickstrike extends StatelessWidget {
 
   Widget createWinnerRow(String winners, BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 1),
-      child: Row(
-        children: <Widget>[
-          Icon(
-            Icons.star,
-            color: Color(0xffDBE276),
-          ),
-          Padding(
-            padding:
-                EdgeInsets.only(left: devicesize.screenWidth(context) * 0.01),
-            child: Text(
-              winners,
-              style: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontWeight: FontWeight.w700,
-                  color: custcolor.almostWhite),
+      padding: EdgeInsets.only(top: 2),
+      child: Container(
+        width: devicesize.screenWidth(context) * 0.55,
+        child: Row(
+          children: <Widget>[
+            Icon(
+              Icons.star,
+              color: Color(0xffDBE276),
+              size: devicesize.screenWidth(context) * 0.05,
             ),
-          )
-        ],
+            Padding(
+              padding:
+                  EdgeInsets.only(left: devicesize.screenWidth(context) * 0.01),
+              child: SizedBox(
+                width: devicesize.screenWidth(context) * 0.48,
+                child: Text(
+                  winners,
+                  style: TextStyle(
+                    fontSize: devicesize.screenWidth(context) * 0.03,
+                    fontFamily: 'Raleway',
+                    fontWeight: FontWeight.w700,
+                    color: custcolor.almostWhite,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -126,7 +135,7 @@ class FinishedQuickstrike extends StatelessWidget {
                       padding: EdgeInsets.only(
                           left: devicesize.screenWidth(context) * 0.074),
                       child: Container(
-                        width: devicesize.screenWidth(context) * 0.54,
+                        width: devicesize.screenWidth(context) * 0.5,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,12 +193,19 @@ class FinishedQuickstrike extends StatelessWidget {
                               children: <Widget>[
                                 Icon(custicon.QuickStrike.quickstrike,
                                     color: custcolor.almostWhite),
-                                Text("Quick",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontFamily: 'Raleway',
-                                        fontWeight: FontWeight.w600,
-                                        color: custcolor.almostWhite))
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      right: devicesize.screenWidth(context) *
+                                          0.01),
+                                  child: Text("Quick",
+                                      style: TextStyle(
+                                          fontSize:
+                                              devicesize.screenWidth(context) *
+                                                  0.045,
+                                          fontFamily: 'Raleway',
+                                          fontWeight: FontWeight.w600,
+                                          color: custcolor.almostWhite)),
+                                )
                               ]),
                         ),
                         Padding(
@@ -200,7 +216,8 @@ class FinishedQuickstrike extends StatelessWidget {
                             style: TextStyle(
                                 fontFamily: 'Raleway',
                                 fontWeight: FontWeight.w600,
-                                fontSize: 19,
+                                fontSize:
+                                    devicesize.screenWidth(context) * 0.045,
                                 color: custcolor.almostWhite),
                           ),
                         ),
@@ -297,33 +314,18 @@ class FinishedQuickstrike extends StatelessWidget {
                                 height: devicesize.screenHeight(context) *
                                     0.033 *
                                     postModel.winners.length,
-                                width: devicesize.screenWidth(context) * 0.58,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: SizedBox(
-                                        //   width:
-                                        //          devicesize.screenWidth(context) * 0.88,
-                                        //     height:
-                                        //     devicesize.screenHeight(context) * 0.4,
-                                        child: ListView.builder(
-                                            padding: EdgeInsets.only(top: 2),
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            itemCount: postModel.winners.length,
-                                            itemBuilder:
-                                                (BuildContext ctx, int index) {
-                                              return createWinnerRow(
-                                                "Javi Moreno",
-                                                context,
-                                              );
-                                              // postModel.winners[index]);
-                                            }),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                width: devicesize.screenWidth(context) * 0.55,
+                                child: ListView.builder(
+                                    padding: EdgeInsets.only(top: 2),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: postModel.winners.length,
+                                    itemBuilder: (context, int index) {
+                                      return createWinnerRow(
+                                        postModel.winners[index],
+                                        context,
+                                      );
+                                    }),
                               ),
                             ),
                             Container(
@@ -359,45 +361,9 @@ class FinishedQuickstrike extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: devicesize.screenHeight(context) * 0.02),
-                        child: Container(
-                          padding: EdgeInsets.only(
-                              left: devicesize.screenWidth(context) * 0.02),
-                          width: devicesize.screenWidth(context) * 0.88,
-                          height: devicesize.screenHeight(context) * 0.035,
-                          decoration: BoxDecoration(
-                            color: Color(0xff15232B),
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              icon: Icon(
-                                Icons.edit,
-                                size: 16,
-                                color: Color(0xff3a464d),
-                              ),
-                              hintText: "Escribe un comentario",
-                              hintStyle: TextStyle(
-                                  color: Color(0xff3a464d),
-                                  fontFamily: "Raleway",
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 12),
-                              border: InputBorder.none,
-                              fillColor: custcolor.almostWhite,
-                            ),
-                            style: TextStyle(
-                                color: custcolor.almostWhite,
-                                fontFamily: "Raleway",
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12),
-                          ),
-                        ),
-                      ),
-                      Padding(
                         padding: EdgeInsets.only(
-                            bottom: devicesize.screenHeight(context) * 0.02),
+                            bottom: devicesize.screenHeight(context) * 0.02,
+                            top: devicesize.screenHeight(context) * 0.02),
                         child: Row(
                           children: <Widget>[
                             Padding(
@@ -430,13 +396,15 @@ class FinishedQuickstrike extends StatelessWidget {
                                           color: greyColor,
                                           fontFamily: 'Raleway',
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 14)),
+                                          fontSize:
+                                              devicesize.screenHeight(context) *
+                                                  0.02)),
                                 ),
                               ],
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                left: devicesize.screenWidth(context) * 0.455,
+                                left: devicesize.screenWidth(context) * 0.438,
                               ),
                               child: IconButton(
                                 icon: Icon(
