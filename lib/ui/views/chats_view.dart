@@ -15,9 +15,11 @@ class ChatsView extends StatelessWidget {
   const ChatsView({Key key, this.chatroomId}) : super(key: key);
 
   @override
+
   Widget build(BuildContext context) {
     print("rebuilded");
     ScrollController _controller = new ScrollController();
+    bool flag = false;
 
     final messageController = TextEditingController();
     return ViewModelBuilder<ChatsViewModel>.reactive(
@@ -73,11 +75,13 @@ class ChatsView extends StatelessWidget {
                                   itemBuilder: (context, index) {
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((timeStamp) {
+                                          if(flag == false){
                                       _controller.animateTo(
                                           _controller.position.maxScrollExtent,
                                           duration:
                                               const Duration(milliseconds: 300),
                                           curve: Curves.easeOut);
+                                          flag = true;}
                                     });
                                     return MessageItem(
                                       model: MessageModel.fromMap(

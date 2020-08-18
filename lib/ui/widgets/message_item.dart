@@ -188,11 +188,13 @@ class MessageItem extends StatelessWidget {
                                                   maxWidth:
                                                       devicesize.screenWidth(
                                                               context) *
-                                                          0.8),
+                                                          0.8, 
+                                                          minHeight: devicesize.screenHeight(context) * 0.2),
                                               child: Image(
                                                 image:
                                                     NetworkImage(model.message),
                                                 fit: BoxFit.cover,
+                                                
                                               ),
                                             ))
                                         : Text(

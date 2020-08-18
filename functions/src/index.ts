@@ -40,14 +40,16 @@ export const chatNotification = functions.database
             await db.collection("users").doc(otherId).get().then(querySnapshot => {
                 const docData = querySnapshot.data();
                 if (docData !== undefined) {
+                    
                     const token = docData["pushToken"]
-                    const payload = {
-                        notification: {
-                            title: `Tienes un mensaje de ${docData["name"]}`,
-                            body: message,
+                    if (messageData["isImage"] == true) {
+                        const payload = {
+                            notification: {
+                                title: `Tienes un mensaje de ${docData["name"]}`,
+                                body: "Image",
+                            }
                         }
-                    }
-                    admin
+                        admin
                         .messaging()
                         .sendToDevice(token, payload)
                         .then(response => {
@@ -56,6 +58,27 @@ export const chatNotification = functions.database
                         .catch(error => {
                             console.log('Error sending message:', error)
                         })
+                    } else {
+                        console.log("isImage wasnt true")
+                        console.log(docData["isImage"]);
+                        const payload = {
+                            
+                            notification: {
+                                title: `Tienes un mensaje de ${docData["name"]}`,
+                                body: message,
+                            }
+                        }
+                        admin
+                        .messaging()
+                        .sendToDevice(token, payload)
+                        .then(response => {
+                            console.log('Successfully sent message:', response)
+                        })
+                        .catch(error => {
+                            console.log('Error sending message:', error)
+                        })
+                    }
+                    
                 }
 
             })
@@ -123,7 +146,7 @@ export const finishedQuickstrike = functions.firestore.document("quickstrikes/{q
                 "title": quickstrikeData["title"],
                 "winners": quickstrikeData["winners"],
                 "likes": [],
-                "avatarUrl": "placeholder",
+                "avatarUrl": quickstrikeData["communityUrl"],
             }
 
             const path = await db.collection("posts").add(post);
