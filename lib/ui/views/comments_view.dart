@@ -139,7 +139,7 @@ class CommentsView extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            model.postComment(textController.text);
+                            model.postComment(textController.text); 
                             textController.text = "";
                           },
                           child: Container(

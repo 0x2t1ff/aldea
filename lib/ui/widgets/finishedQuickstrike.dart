@@ -6,14 +6,14 @@ import 'package:intl/intl.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
 import "package:aldea/constants/icondata.dart" as custicon;
-import "package:carousel_slider/carousel_slider.dart";
 
 class FinishedQuickstrike extends StatelessWidget {
   final PostModel postModel;
+  final Function navigateToComments;
   final Function likeFunction;
   final bool isLiked;
   const FinishedQuickstrike(
-      {Key key, this.postModel, this.likeFunction, this.isLiked})
+      {Key key, this.postModel, this.likeFunction, this.isLiked, this.navigateToComments})
       : super(key: key);
 
   String quickstrikeType(bool game, bool random, bool lista) {
@@ -355,49 +355,11 @@ class FinishedQuickstrike extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
+                  child: 
+                      
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: devicesize.screenHeight(context) * 0.02),
-                        child: Container(
-                          padding: EdgeInsets.only(
-                              left: devicesize.screenWidth(context) * 0.02),
-                          width: devicesize.screenWidth(context) * 0.88,
-                          height: devicesize.screenHeight(context) * 0.035,
-                          decoration: BoxDecoration(
-                            color: Color(0xff15232B),
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              icon: Icon(
-                                Icons.edit,
-                                size: 16,
-                                color: Color(0xff3a464d),
-                              ),
-                              hintText: "Escribe un comentario",
-                              hintStyle: TextStyle(
-                                  color: Color(0xff3a464d),
-                                  fontFamily: "Raleway",
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 12),
-                              border: InputBorder.none,
-                              fillColor: custcolor.almostWhite,
-                            ),
-                            style: TextStyle(
-                                color: custcolor.almostWhite,
-                                fontFamily: "Raleway",
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            bottom: devicesize.screenHeight(context) * 0.02),
+                        padding: EdgeInsets.only(top: devicesize.screenHeight(context) * 0.01,
+                            bottom: devicesize.screenHeight(context) * 0.01),
                         child: Row(
                           children: <Widget>[
                             Padding(
@@ -413,10 +375,13 @@ class FinishedQuickstrike extends StatelessWidget {
                                 )),
                             Column(
                               children: <Widget>[
-                                Icon(
-                                  Icons.comment,
-                                  color: custcolor.blueTheme,
-                                  size: devicesize.screenWidth(context) * 0.07,
+                                GestureDetector(
+                                  onTap:navigateToComments,
+                                                                  child: Icon(
+                                    Icons.comment,
+                                    color: custcolor.blueTheme,
+                                    size: devicesize.screenWidth(context) * 0.07,
+                                  ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(
@@ -450,8 +415,7 @@ class FinishedQuickstrike extends StatelessWidget {
                           ],
                         ),
                       )
-                    ],
-                  ),
+                    
                 ),
               ],
             ),

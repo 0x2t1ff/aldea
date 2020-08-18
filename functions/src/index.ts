@@ -147,6 +147,8 @@ export const finishedQuickstrike = functions.firestore.document("quickstrikes/{q
                 "winners": quickstrikeData["winners"],
                 "likes": [],
                 "avatarUrl": quickstrikeData["communityUrl"],
+                "id": quickstrikeData["id"],
+                //added the id variable to the post it does , needs testing on the comments of the new posts
             }
 
             const path = await db.collection("posts").add(post);

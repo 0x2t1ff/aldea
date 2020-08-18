@@ -23,7 +23,7 @@ class FeedWidget extends StatelessWidget {
     } else if (postModel.isResult == true) {
       print("isresult");
       return FinishedQuickstrike(
-          postModel: postModel, likeFunction: likeFunction, isLiked: isLiked);
+          postModel: postModel, likeFunction: likeFunction, isLiked: isLiked, navigateToComments: navigateToComments,);
     } else {
       print("isnormalpostXD");
       return PostItem(

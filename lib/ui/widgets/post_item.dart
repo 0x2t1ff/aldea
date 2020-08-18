@@ -194,7 +194,9 @@ class PostItem extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(
                                 top: devicesize.screenHeight(context) * 0.005),
-                            child: Text(postModel.commentCount.toString(),
+                            child: Text(postModel.commentCount == null
+                                          ? "0"
+                                          : postModel.commentCount.toString(),
                                 style: TextStyle(
                                     color: greyColor,
                                     fontFamily: 'Raleway',

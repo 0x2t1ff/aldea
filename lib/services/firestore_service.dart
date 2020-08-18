@@ -114,12 +114,17 @@ class FirestoreService {
       'uid': uid,
       'date': DateTime.now().toString()
     });
-    int number;
+    int number = 0;
+
+    try{
     await _postsCollectionReference
         .document(postId)
         .collection("comments")
         .getDocuments()
         .then((value) => number = value.documents.length);
+    }catch( e){
+      print(e.toString() + "print del error al intentar pillar el document.length para saber la cantidad de comentarios q hay ");
+    }
 
     await _postsCollectionReference
         .document(postId)
