@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:aldea/models/message_model.dart';
 import 'package:aldea/ui/widgets/message_item.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';

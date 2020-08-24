@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 
 class AllCommunities extends StatefulWidget {
   final CommunitiesViewModel model;
-
-  const AllCommunities({Key key, this.model}) : super(key: key);
+  final Function unselectCommunity;
+  final Function selectCommunity;
+  const AllCommunities(
+      {Key key, this.unselectCommunity, this.selectCommunity, this.model})
+      : super(key: key);
 
   @override
   _AllCommunitiesState createState() => _AllCommunitiesState();
@@ -17,68 +20,51 @@ class _AllCommunitiesState extends State<AllCommunities> {
   ScrollController controller = ScrollController();
 
   @override
-  void initState() {
-    super.initState();
-    controller.addListener(() {
-      if (controller.position.pixels == controller.position.maxScrollExtent)
-        widget.model.loadMoreCommunities();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      primary: true,
-      child: Container(
-        height: usableScreenHeight(context),
-        width: double.infinity,
-        padding: EdgeInsets.only(bottom: 15, left: 15, right: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            verticalSpaceSmall,
-            Text("Comunidades",
-                style: TextStyle(
-                  color: Color(0xffb5b5b5),
-                  fontSize: 29,
-                )),
-            CommunityPreview(
-              community: widget.model.selectedCommunity,
-              model: widget.model,
-              cancel: () {
-                setState(() {
-                  widget.model.selectedCommunity = null;
-                });
-              },
-            ),
-            Expanded(
-                child: ListView.builder(
-              primary: false,
-              padding: EdgeInsets.all(0),
-              itemCount: (widget.model.communitiesList.length / 3).ceil(),
-              itemBuilder: (context, index) {
-                return CommunitiesRow(
-                    model: widget.model,
-                    list: widget.model.communitiesList
-                        .getRange(
-                            index * 3,
-                            widget.model.communitiesList.length >
-                                    (index * 3 + 3)
-                                ? (index * 3 + 3)
-                                : widget.model.communitiesList.length)
-                        .toList());
-              },
-            ))
-          ],
-        ),
+    var height = (widget.model.communitiesList.length / 3) * 0.21;
+    return Container(
+      height: usableScreenHeight(context) * height,
+      width: double.infinity,
+      padding: EdgeInsets.only(bottom: 15, left: 15, right: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          verticalSpaceSmall,
+          Text("Comunidades",
+              style: TextStyle(
+                color: Color(0xffb5b5b5),
+                fontSize: 29,
+              )),
+          Expanded(
+              child: ListView.builder(
+            primary: false,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.all(0),
+            itemCount: (widget.model.communitiesList.length / 3).ceil(),
+            itemBuilder: (context, index) {
+              return CommunitiesRow(
+                  selectCommunity: widget.selectCommunity,
+                  model: widget.model,
+                  list: widget.model.communitiesList
+                      .getRange(
+                          index * 3,
+                          widget.model.communitiesList.length > (index * 3 + 3)
+                              ? (index * 3 + 3)
+                              : widget.model.communitiesList.length)
+                      .toList());
+            },
+          )),
+        ],
       ),
     );
   }
 }
 
 class CommunitiesRow extends StatefulWidget {
-  const CommunitiesRow({Key key, this.list, this.model}) : super(key: key);
+  const CommunitiesRow({Key key, this.selectCommunity, this.list, this.model})
+      : super(key: key);
   final CommunitiesViewModel model;
+  final Function selectCommunity;
 
   @override
   _CommunitiesRowState createState() => _CommunitiesRowState();
@@ -87,13 +73,11 @@ class CommunitiesRow extends StatefulWidget {
 
 class _CommunitiesRowState extends State<CommunitiesRow> {
   Community selectedCommunity;
-
+  Function unselectCommunity;
   Widget buildCommunity(Community c) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          selectedCommunity = c;
-        });
+        widget.selectCommunity(c);
       },
       child: AspectRatio(
         aspectRatio: 1,
@@ -130,12 +114,6 @@ class _CommunitiesRowState extends State<CommunitiesRow> {
         ),
       ),
     );
-  }
-
-  void unselectCommunity() {
-    setState(() {
-      selectedCommunity = null;
-    });
   }
 
   @override

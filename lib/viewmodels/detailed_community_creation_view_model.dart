@@ -17,10 +17,14 @@ class DetailedCommunityCreationViewModel extends BaseModel {
   Future acceptRequest(CommunityCreationRequest request) async {
     var community = Community.fromData(request.toJson(), request.id);
     _firestoreService.createCommunity(community, request.id).then(
-        (_) => _firestoreService.denyCommunityCreation(request.id));
+          (_) => _firestoreService.denyCommunityCreation(request.id).then(
+                (value) => _firestoreService.registerCommunityActivity(
+                    request.id, request.bkdPicUrl),
+              ),
+        );
   }
 
-  void goBack(){
+  void goBack() {
     _navigationService.pop();
   }
 }

@@ -18,6 +18,7 @@ class CommunityPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
+      
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: Colors.white,
@@ -28,9 +29,10 @@ class CommunityPreview extends StatelessWidget {
                     colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.1), BlendMode.srcOver))
                 : null),
-        duration: Duration(milliseconds: 250),
-        height: community != null ? screenWidth(context) - 30 : 0,
-        width: double.infinity,
+        duration: Duration(milliseconds: 100),
+      
+        height: community != null ? screenWidth(context) : 0,
+        width: screenWidth(context) *0.8,
         child: community != null
             ? Column(
                 children: <Widget>[

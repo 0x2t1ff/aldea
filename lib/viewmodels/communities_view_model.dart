@@ -9,6 +9,8 @@ import 'base_model.dart';
 import '../services/firestore_service.dart';
 
 class CommunitiesViewModel extends BaseModel {
+  int height = 0;
+
   final List<Community> communitiesList = List();
   bool isLoadingMore = false;
   bool isShowingMore = false;
@@ -23,33 +25,27 @@ class CommunitiesViewModel extends BaseModel {
 
   Future fetchCommunities() async {
     setBusy(true);
-    var topDocuemnt = await _firestoreService.getTopCommunities();
+    var topDocument = await _firestoreService.getTopCommunities();
     var communities = await _firestoreService.getFirstCommunities();
     communities.forEach((c) {
       lastDoc = c;
       communitiesList.add(Community.fromData(c.data, c.documentID));
     });
-    var topList = topDocuemnt['topCommunities'];
+    var topList = topDocument;
     topCommunities.add(topList[0]);
     topCommunities.add(topList[1]);
     topCommunities.add(topList[2]);
     setBusy(false);
   }
 
-  void goToCommunity(Community c) {
-    _navigationService.navigateTo(CommunityViewRoute, false, arguments: c);
+  Future<Community> getTopCommunity(String id) async {
+    Map<String, dynamic> queryData = await _firestoreService.getCommunity(id);
+    var community = Community.fromData(queryData, id);
+    return community;
   }
 
-  void showAllCommunities({Community c}) async {
-    setBusy(true);
-    selectedCommunity = c;
-    var docs = await _firestoreService.getMoreCommunities(lastDoc);
-    docs.forEach((d) {
-      lastDoc = d;
-      communitiesList.add(Community.fromData(d.data, d.documentID));
-    });
-    isShowingMore = true;
-    setBusy(false);
+  void goToCommunity(Community c) {
+    _navigationService.navigateTo(CommunityViewRoute, false, arguments: c);
   }
 
   Future requestCommunityAcces(Community c) async {
@@ -58,7 +54,7 @@ class CommunitiesViewModel extends BaseModel {
     if (response.confirmed) {
       isSendingRequest = true;
       notifyListeners();
-     await _firestoreService.requestCommunityAccess(
+      await _firestoreService.requestCommunityAccess(
           c.uid, currentUser, response.textField, false);
     }
     isSendingRequest = false;
@@ -66,6 +62,7 @@ class CommunitiesViewModel extends BaseModel {
   }
 
   void loadMoreCommunities() async {
+    print("loading more communities");
     isLoadingMore = true;
     notifyListeners();
     var docs = await _firestoreService.getMoreCommunities(lastDoc, limit: 15);
@@ -74,6 +71,18 @@ class CommunitiesViewModel extends BaseModel {
       communitiesList.add(Community.fromData(d.data, d.documentID));
     });
     isLoadingMore = false;
+    notifyListeners();
+  }
+
+  void unselectCommunity() {
+    selectedCommunity = null;
+    height = 0;
+    notifyListeners();
+  }
+
+  void selectCommunity(Community c) {
+    selectedCommunity = c;
+    height = 1;
     notifyListeners();
   }
 }

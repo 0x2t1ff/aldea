@@ -95,6 +95,7 @@ class DetailedCommunityCreationView extends StatelessWidget {
                             height: screenHeight(context) * 0.21,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
+                                  
                                     image: NetworkImage(request.bkdPicUrl),
                                     fit: BoxFit.cover),
                                 borderRadius:
@@ -108,6 +109,7 @@ class DetailedCommunityCreationView extends StatelessWidget {
                                     width: screenWidth(context) * 0.25,
                                     height: screenWidth(context) * 0.25,
                                     decoration: BoxDecoration(
+                                      
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.black87,
@@ -118,7 +120,7 @@ class DetailedCommunityCreationView extends StatelessWidget {
                                       ],
                                       border:
                                           Border.all(width: 5, color: darkGrey),
-                                      image: DecorationImage(
+                                      image: DecorationImage(fit: BoxFit.cover,
                                           image:
                                               NetworkImage(request.iconPicUrl)),
                                       borderRadius: BorderRadius.all(
