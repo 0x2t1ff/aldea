@@ -23,7 +23,7 @@ class _CommunitiesViewState extends State<CommunitiesView>
   bool get wantKeepAlive => true;
   var isShowingMore = false;
 
- 
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,77 +40,80 @@ class _CommunitiesViewState extends State<CommunitiesView>
           });
         }
       },
-      builder: (context, model, child) => Stack(children: <Widget>[
-        SingleChildScrollView(
-          controller: controller,
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.only(left: 20, top: 20, right: 20),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.star,
-                          color: Color(0xff3C8FA7),
-                        ),
-                        horizontalSpaceSmall,
-                        Text(
-                          "Top de la semana",
-                          style:
-                              TextStyle(color: Color(0xffb5b5b5), fontSize: 29),
-                        ),
-                      ],
-                    ),
-                    CommunitiesCarousel(
-                      busy: model.busy,
-                      url1:
-                          model.busy ? null : model.topCommunities[0],
-                      url2:
-                          model.busy ? null : model.topCommunities[1],
-                      url3:
-                          model.busy ? null : model.topCommunities[2],
-                          model: model,
-                    ),
-                    AllCommunities(
-                      model: model,
-                      selectCommunity: model.selectCommunity,
-                      unselectCommunity: model.unselectCommunity,
-                    )
-                  ],
+      builder: (context, model, child) => WillPopScope(
+        onWillPop: model.onWillPop,
+              child: Stack(children: <Widget>[
+          SingleChildScrollView(
+            controller: controller,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.only(left: 20, top: 20, right: 20),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.star,
+                            color: Color(0xff3C8FA7),
+                          ),
+                          horizontalSpaceSmall,
+                          Text(
+                            "Top de la semana",
+                            style:
+                                TextStyle(color: Color(0xffb5b5b5), fontSize: 29),
+                          ),
+                        ],
+                      ),
+                      CommunitiesCarousel(
+                        busy: model.busy,
+                        url1:
+                            model.busy ? null : model.topCommunities[0],
+                        url2:
+                            model.busy ? null : model.topCommunities[1],
+                        url3:
+                            model.busy ? null : model.topCommunities[2],
+                            model: model,
+                      ),
+                      AllCommunities(
+                        model: model,
+                        selectCommunity: model.selectCommunity,
+                        unselectCommunity: model.unselectCommunity,
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Stack(
+            children: [
+              GestureDetector(
+                onTap: model.unselectCommunity,
+                child: Container(
+                    width: screenWidth(context) * model.height,
+                    height: screenHeight(context) * model.height,
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                      child: Container(
+                        color: Colors.white.withOpacity(0.1),
+                        width: screenWidth(context),
+                        height: screenHeight(context),
+                      ),
+                    )),
+              ),
+              Center(
+                child: CommunityPreview(
+                  community: model.selectedCommunity != null ? model.selectedCommunity : null,
+                  cancel: model.unselectCommunity,
+                  model: model,
                 ),
               ),
             ],
           ),
-        ),
-        Stack(
-          children: [
-            GestureDetector(
-              onTap: model.unselectCommunity,
-              child: Container(
-                  width: screenWidth(context) * model.height,
-                  height: screenHeight(context) * model.height,
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                    child: Container(
-                      color: Colors.white.withOpacity(0.1),
-                      width: screenWidth(context),
-                      height: screenHeight(context),
-                    ),
-                  )),
-            ),
-            Center(
-              child: CommunityPreview(
-                community: model.selectedCommunity != null ? model.selectedCommunity : null,
-                cancel: model.unselectCommunity,
-                model: model,
-              ),
-            ),
-          ],
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 }

@@ -52,7 +52,7 @@ class FirestoreService {
     }
   }
 
-  Future getCommunity ( String id) async{
+  Future<Map<String,dynamic>> getCommunity ( String id) async{
     var community  = await _communitiesCollectionReference.document(id).get();
     return community.data;
   }
@@ -216,11 +216,12 @@ class FirestoreService {
   }
 
   Future updateCommunitySettings(String rules, bool isMarketplace,
-      bool isPublic, String communityId) async {
+      bool isPublic, String communityId, String description) async {
     await _communitiesCollectionReference.document(communityId).updateData({
       'rules': rules,
       'isMarketplace': isMarketplace,
       'isPublic': isPublic,
+        'description': description
     });
   }
 
@@ -488,11 +489,10 @@ class FirestoreService {
       var postDocumentSnapshot = await _followingPostsCollectionReference
           .where("followers", arrayContains: uid)
           .orderBy("lastPost", descending: true)
-          .limit(10)
+          .limit(5)
           .getDocuments();
       var data = postDocumentSnapshot.documents.map((doc) => doc.data);
       List lastPostsList = [];
-
       data.forEach((f) => lastPostsList.add(f["posts"]));
       var lastPosts = [];
       lastPostsList.forEach((element) {

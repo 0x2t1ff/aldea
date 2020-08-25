@@ -21,6 +21,7 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
   final TextStyle optionsStyle =
       TextStyle(fontFamily: 'Raleway', fontSize: 22, color: almostWhite);
   final rulesController = TextEditingController();
+  final descriptionController = TextEditingController();
   String rulesPlaceholder;
   @override
   Widget build(BuildContext context) {
@@ -65,99 +66,271 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
                   Container(
                     margin: EdgeInsets.symmetric(
                         horizontal: screenWidth(context) * 0.1),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: screenHeight(context) * 0.02,
-                            bottom: screenHeight(context) * 0.02,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Configuración",
-                              style: TextStyle(
-                                  color: almostWhite,
-                                  fontFamily: 'Raleway',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 25),
-                            ),
-                          ),
-                        ),
-                        Container(
-                            height: 2,
-                            width: screenWidth(context) * 0.8,
-                            color: almostWhite),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: screenHeight(context) * 0.03),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Posts públicos",
-                                style: optionsStyle,
-                              ),
-                              GestureDetector(
-                                onTap: () => setState(() {
-                                  model.isPublic = !model.isPublic;
-                                }),
-                                child: Container(
-                                    width: screenWidth(context) * 0.066,
-                                    height: screenHeight(context) * 0.03,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: grey,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(6))),
-                                    child: model.isPublic
-                                        ? Icon(Icons.check, color: almostBlack)
-                                        : Container()),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: screenHeight(context) * 0.03),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Marketplace",
-                                style: optionsStyle,
-                              ),
-                              GestureDetector(
-                                onTap: () => setState(() {
-                                  model.isMarketplace = !model.isMarketplace;
-                                }),
-                                child: Container(
-                                    width: screenWidth(context) * 0.066,
-                                    height: screenHeight(context) * 0.03,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: grey,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(6))),
-                                    child: model.isMarketplace
-                                        ? Icon(Icons.check, color: almostBlack)
-                                        : Container()),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
+                    child: Container(
+                      height: screenHeight(context) * 0.8385 -
+                          MediaQuery.of(context).viewInsets.bottom,
+                      child: SingleChildScrollView(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              " Normas comunidad",
-                              style: optionsStyle,
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: screenHeight(context) * 0.02,
+                                bottom: screenHeight(context) * 0.02,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Configuración",
+                                  style: TextStyle(
+                                      color: almostWhite,
+                                      fontFamily: 'Raleway',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 25),
+                                ),
+                              ),
                             ),
+                            Container(
+                                height: 2,
+                                width: screenWidth(context) * 0.8,
+                                color: almostWhite),
                             Padding(
                               padding: EdgeInsets.only(
                                   top: screenHeight(context) * 0.03),
                               child: Container(
-                                height: screenHeight(context) * 0.4,
+                                width: screenWidth(context) * 0.8,
+                                height: screenHeight(context) * 0.21,
+                                decoration: model.bkdPic != null
+                                    ? BoxDecoration(
+                                        color: blueTheme,
+                                        image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: FileImage(model.bkdPic)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15)))
+                                    : BoxDecoration(
+                                        color: blueTheme,
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(
+                                              widget.community.bkdPicUrl),
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      width: screenWidth(context) * 0.8,
+                                      height: screenHeight(context) * 0.21,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(15))),
+                                    ),
+                                    Positioned(
+                                      top: screenHeight(context) * 0.04,
+                                      right: screenWidth(context) * 0.31,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          model.selectProfileImage();
+                                        },
+                                        child: Container(
+                                          width: screenWidth(context) * 0.185,
+                                          height: screenWidth(context) * 0.185,
+                                          decoration: model.profilePic != null
+                                              ? BoxDecoration(
+                                                  image: DecorationImage(
+                                                      fit: BoxFit.cover,
+                                                      image: FileImage(
+                                                          model.profilePic)),
+                                                  border: Border.all(
+                                                      color: almostBlack,
+                                                      width: 3),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(80),
+                                                  ),
+                                                )
+                                              : BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                        widget.community
+                                                            .iconPicUrl,
+                                                      ),
+                                                      fit: BoxFit.cover),
+                                                  border: Border.all(
+                                                      color: almostBlack,
+                                                      width: 3),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(80),
+                                                  ),
+                                                ),
+                                          child: Icon(Icons.add,
+                                              color: blueTheme, size: 30),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: screenHeight(context) * 0.04,
+                                      right: screenWidth(context) * 0.31,
+                                      child: Container(
+                                        width: screenWidth(context) * 0.185,
+                                        height: screenWidth(context) * 0.185,
+                                        decoration: BoxDecoration(
+                                          color: model.profilePic != null
+                                              ? Colors.black.withOpacity(0)
+                                              : Colors.black.withOpacity(0.4),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(80),
+                                          ),
+                                        ),
+                                        child: Icon(Icons.add,
+                                            color: Colors.white, size: 30),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      width: screenWidth(context) * 0.1,
+                                      height: screenWidth(context) * 0.1,
+                                      child: GestureDetector(
+                                        onTap: () => model.selectBkdImage(),
+                                        child: Icon(
+                                          Icons.add,
+                                          color: almostWhite,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: screenHeight(context) * 0.03),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    "Posts públicos",
+                                    style: optionsStyle,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => setState(() {
+                                      model.isPublic = !model.isPublic;
+                                    }),
+                                    child: Container(
+                                        width: screenWidth(context) * 0.066,
+                                        height: screenHeight(context) * 0.03,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            color: grey,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(6))),
+                                        child: model.isPublic
+                                            ? Icon(Icons.check,
+                                                color: almostBlack)
+                                            : Container()),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: screenHeight(context) * 0.03),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    "Marketplace",
+                                    style: optionsStyle,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => setState(() {
+                                      model.isMarketplace =
+                                          !model.isMarketplace;
+                                    }),
+                                    child: Container(
+                                        width: screenWidth(context) * 0.066,
+                                        height: screenHeight(context) * 0.03,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            color: grey,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(6))),
+                                        child: model.isMarketplace
+                                            ? Icon(Icons.check,
+                                                color: almostBlack)
+                                            : Container()),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Text(
+                              "Descripcion",
+                              style: optionsStyle,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: screenHeight(context) * 0.02),
+                              child: Container(
+                                height: screenHeight(context) * 0.15,
+                                width: screenWidth(context) * 0.8,
+                                decoration: BoxDecoration(
+                                  color: Color(0xff17191E),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30)),
+                                ),
+                                child: TextFormField(
+                                  maxLength: 80,
+                                  buildCounter: (BuildContext context,
+                                      {int currentLength,
+                                      int maxLength,
+                                      bool isFocused}) {
+                                    return isFocused
+                                        ? Text(
+                                            ' $currentLength/$maxLength ',
+                                            style: new TextStyle(
+                                                fontFamily: 'Raleway',
+                                                fontSize: 10,
+                                                color: blueTheme),
+                                            semanticsLabel: 'Input constraints',
+                                          )
+                                        : null;
+                                  },
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: null,
+                                  controller: descriptionController,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.only(
+                                          top: screenHeight(context) * 0.04,
+                                          left: screenHeight(context) * 0.04,
+                                          right: screenHeight(context) * 0.04,
+                                          bottom: screenHeight(context) * 0.01),
+                                      filled: false,
+                                      enabledBorder: InputBorder.none,
+                                      border: InputBorder.none),
+                                  style: TextStyle(
+                                      color: grey,
+                                      fontFamily: "Raleway",
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: screenHeight(context) * 0.03),
+                              child: Text(
+                                "Normas comunidad",
+                                style: optionsStyle,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: screenHeight(context) * 0.02,
+                              ),
+                              child: Container(
+                                height: screenHeight(context) * 0.20,
                                 width: screenWidth(context) * 0.8,
                                 decoration: BoxDecoration(
                                   color: Color(0xff17191E),
@@ -178,7 +351,7 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
                                       enabledBorder: InputBorder.none,
                                       border: InputBorder.none),
                                   style: TextStyle(
-                                      color: almostWhite,
+                                      color: grey,
                                       fontFamily: "Raleway",
                                       fontWeight: FontWeight.w600,
                                       fontSize: 15),
@@ -187,7 +360,8 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: screenHeight(context) * 0.04),
+                                  top: screenHeight(context) * 0.04,
+                                  bottom: screenHeight(context) * 0.04),
                               child: Center(
                                 child: GestureDetector(
                                   onTap: () {
@@ -195,7 +369,8 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
                                         rulesController.text,
                                         model.isMarketplace,
                                         model.isPublic,
-                                        widget.community.uid);
+                                        widget.community.uid,
+                                        descriptionController.text);
 
                                     model.popWindow();
                                   },
@@ -216,8 +391,8 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
                               ),
                             ),
                           ],
-                        )
-                      ],
+                        ),
+                      ),
                     ),
                   )
                 ],

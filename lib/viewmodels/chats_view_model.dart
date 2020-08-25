@@ -69,4 +69,6 @@ class ChatsViewModel extends BaseModel {
       );
     }
   }
+
+
 }

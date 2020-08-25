@@ -77,12 +77,27 @@ class _ChatRoomItemState extends State<ChatRoomItem> {
                     ),
                   ),
                   Container(
-                    height: devicesize.screenHeight(context) * 0.02,
+                    height: devicesize.screenHeight(context) * 0.022,
                     width: devicesize.screenWidth(context) * 0.5,
                     child: widget.model.isImage
-                        ? Icon(
-                            Icons.image,
-                            color: Colors.white,
+                        ? Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Image  ",
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontSize:
+                                        devicesize.screenWidth(context) * 0.035,
+                                    color: custcolor.grey,
+                                    fontFamily: 'Raleway'),
+                              ),
+                              Icon(
+                                Icons.image,
+                                color: Colors.white,
+                                size:20
+                              )
+                            ],
                           )
                         : Text(
                             widget.model.message,
@@ -98,29 +113,32 @@ class _ChatRoomItemState extends State<ChatRoomItem> {
               ),
             ),
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text(
-                    widget.model.time.substring(0, 10),
-                    style: TextStyle(
-                        fontFamily: 'Raleway',
-                        color: custcolor.grey,
-                        fontStyle: FontStyle.italic,
-                        fontSize: 10),
-                  ),
-                  Container(
-                      width: devicesize.screenWidth(context) * 0.1,
-                      height: devicesize.screenWidth(context) * 0.1,
-                      decoration: BoxDecoration(
-                        color: custcolor.lightBlueColor,
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                      child: Icon(
-                        Icons.send,
-                        color: custcolor.blueTheme,
-                      ))
-                ],
+              child: Padding(
+                padding: EdgeInsets.only(top: devicesize.screenHeight(context) * 0.025),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      widget.model.time.substring(0, 10),
+                      style: TextStyle(
+                          fontFamily: 'Raleway',
+                          color: custcolor.grey,
+                          fontStyle: FontStyle.italic,
+                          fontSize: 10),
+                    ),
+                 //   Container(
+                 //       width: devicesize.screenWidth(context) * 0.1,
+                 //       height: devicesize.screenWidth(context) * 0.1,
+                 //       decoration: BoxDecoration(
+                 //         color: custcolor.lightBlueColor,
+                 //         borderRadius: BorderRadius.circular(32),
+                 //       ),
+                 //       child: Icon(
+                 //         Icons.send,
+                 //         color: custcolor.blueTheme,
+                 //       ))
+                  ],
+                ),
               ),
             )
           ],

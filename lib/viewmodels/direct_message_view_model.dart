@@ -45,4 +45,13 @@ class DirectMessageViewModel extends BaseModel {
       }
     });
   }
+
+    Future<bool> onWillPop() async {
+    var response = await _dialogService.showConfirmationDialog(
+        description: "",
+        confirmationTitle: "Si",
+        cancelTitle: "No",
+        title: "¿Estas seguro que quieres salir de la app?");
+    return response.confirmed;
+  }
 }

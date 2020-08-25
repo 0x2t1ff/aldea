@@ -74,10 +74,11 @@ class CommunitiesViewModel extends BaseModel {
     notifyListeners();
   }
 
-  void unselectCommunity() {
+  bool unselectCommunity() {
     selectedCommunity = null;
     height = 0;
     notifyListeners();
+    return false;
   }
 
   void selectCommunity(Community c) {
@@ -85,4 +86,24 @@ class CommunitiesViewModel extends BaseModel {
     height = 1;
     notifyListeners();
   }
+
+  Future<bool> onWillPop() async {
+    
+    if (selectedCommunity == null) {
+      var response = await _dialogService
+          .showConfirmationDialog(
+              description: "",
+              confirmationTitle: "Si",
+              cancelTitle: "No",
+              title: "¿Estas seguro que quieres salir de la app?"
+          );
+          return response.confirmed;
+    } else {
+       unselectCommunity();
+       return false;
+    }
+
+  }
+
+
 }

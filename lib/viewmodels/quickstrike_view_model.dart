@@ -66,4 +66,13 @@ class QuickStrikeViewModel extends BaseModel {
     await _dialogService.showDialog(
         title: "Wrong Answer", description: "Sorry! Try again next time.");
   }
+
+    Future<bool> onWillPop() async {
+    var response = await _dialogService.showConfirmationDialog(
+        description: "",
+        confirmationTitle: "Si",
+        cancelTitle: "No",
+        title: "¿Estas seguro que quieres salir de la app?");
+    return response.confirmed;
+  }
 }

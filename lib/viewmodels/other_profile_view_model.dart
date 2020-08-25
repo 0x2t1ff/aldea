@@ -84,4 +84,5 @@ class OtherProfileViewModel extends BaseModel {
     }
     notifyListeners();
   }
+  
 }

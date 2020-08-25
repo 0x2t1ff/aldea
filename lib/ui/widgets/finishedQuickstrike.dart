@@ -11,9 +11,15 @@ class FinishedQuickstrike extends StatelessWidget {
   final PostModel postModel;
   final Function navigateToComments;
   final Function likeFunction;
+  final Function goToCommunity;
   final bool isLiked;
   const FinishedQuickstrike(
-      {Key key, this.postModel, this.likeFunction, this.isLiked, this.navigateToComments})
+      {Key key,
+      this.postModel,
+      this.likeFunction,
+      this.isLiked,
+      this.navigateToComments,
+      this.goToCommunity})
       : super(key: key);
 
   String quickstrikeType(bool game, bool random, bool lista) {
@@ -118,9 +124,12 @@ class FinishedQuickstrike extends StatelessWidget {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(postModel.avatarUrl),
-                      radius: devicesize.screenWidth(context) * 0.065,
+                    GestureDetector(
+                      onTap:() => goToCommunity(),
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(postModel.avatarUrl),
+                        radius: devicesize.screenWidth(context) * 0.065,
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(
@@ -355,68 +364,63 @@ class FinishedQuickstrike extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  child: 
-                      
+                    child: Padding(
+                  padding: EdgeInsets.only(
+                      top: devicesize.screenHeight(context) * 0.01,
+                      bottom: devicesize.screenHeight(context) * 0.01),
+                  child: Row(
+                    children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(top: devicesize.screenHeight(context) * 0.01,
-                            bottom: devicesize.screenHeight(context) * 0.01),
-                        child: Row(
-                          children: <Widget>[
-                            Padding(
-                                padding: EdgeInsets.only(
-                                  left: devicesize.screenWidth(context) * 0.06,
-                                  right:
-                                      devicesize.screenWidth(context) * 0.138,
-                                ),
-                                child: LikeButton(
-                                  likes: postModel.likes,
-                                  likeFunction: likeFunction,
-                                  liked: isLiked,
-                                )),
-                            Column(
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap:navigateToComments,
-                                                                  child: Icon(
-                                    Icons.comment,
-                                    color: custcolor.blueTheme,
-                                    size: devicesize.screenWidth(context) * 0.07,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: devicesize.screenHeight(context) *
-                                          0.005),
-                                  child: Text(
-                                      postModel.commentCount == null
-                                          ? "0"
-                                          : postModel.commentCount.toString(),
-                                      style: TextStyle(
-                                          color: greyColor,
-                                          fontFamily: 'Raleway',
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14)),
-                                ),
-                              ],
+                          padding: EdgeInsets.only(
+                            left: devicesize.screenWidth(context) * 0.06,
+                            right: devicesize.screenWidth(context) * 0.138,
+                          ),
+                          child: LikeButton(
+                            likes: postModel.likes,
+                            likeFunction: likeFunction,
+                            liked: isLiked,
+                          )),
+                      Column(
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: navigateToComments,
+                            child: Icon(
+                              Icons.comment,
+                              color: custcolor.blueTheme,
+                              size: devicesize.screenWidth(context) * 0.07,
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: devicesize.screenWidth(context) * 0.455,
-                              ),
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.more_vert,
-                                  color: custcolor.blueTheme,
-                                  size: devicesize.screenWidth(context) * 0.07,
-                                ),
-                                onPressed: () => print("pressed"),
-                              ),
-                            )
-                          ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: devicesize.screenHeight(context) * 0.005),
+                            child: Text(
+                                postModel.commentCount == null
+                                    ? "0"
+                                    : postModel.commentCount.toString(),
+                                style: TextStyle(
+                                    color: greyColor,
+                                    fontFamily: 'Raleway',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14)),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: devicesize.screenWidth(context) * 0.455,
+                        ),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: custcolor.blueTheme,
+                            size: devicesize.screenWidth(context) * 0.07,
+                          ),
+                          onPressed: () => print("pressed"),
                         ),
                       )
-                    
-                ),
+                    ],
+                  ),
+                )),
               ],
             ),
           )

@@ -18,10 +18,9 @@ class CommunityPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: Colors.white,
+            color: Colors.transparent,
             image: community != null
                 ? DecorationImage(
                     image: NetworkImage(community.bkdPicUrl),
@@ -29,10 +28,12 @@ class CommunityPreview extends StatelessWidget {
                     colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.1), BlendMode.srcOver))
                 : null),
-        duration: Duration(milliseconds: 100),
-      
+        duration: community != null
+            ? Duration(milliseconds: 600)
+            : Duration(milliseconds: 000),
+        curve: Curves.easeOutExpo,
         height: community != null ? screenWidth(context) : 0,
-        width: screenWidth(context) *0.8,
+        width: screenWidth(context) * 0.8,
         child: community != null
             ? Column(
                 children: <Widget>[
@@ -104,78 +105,93 @@ class CommunityPreview extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            community.description,
-                            style: TextStyle(
-                                color: Color(0xffB1AFAF),
-                                fontSize: 16,
-                                fontFamily: 'Raleway',
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Profile.profile,
-                                        color: Color(0xff3C8FA7),
-                                      ),
-                                      horizontalSpaceTiny,
-                                      Text(
-                                        community.followerCount.toString(),
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontFamily: 'Raleway',
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  horizontalSpaceMedium,
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.photo_filter,
-                                        color: Color(0xff3C8FA7),
-                                        size: 30,
-                                      ),
-                                      horizontalSpaceTiny,
-                                      Text(
-                                        community.postsCount.toString(),
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontFamily: 'Raleway',
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                          Padding(
+                            padding:  EdgeInsets.only(left:screenWidth(context) * 0.023),
+                            child: Container(
+                              height: screenHeight(context) * 0.074,
+                              
+                              child: Text(
+                                community.description,
+                                style: TextStyle(
+                                    color: Color(0xffB1AFAF),
+                                    fontSize: 16,
+                                    fontFamily: 'Raleway',
+                                    fontWeight: FontWeight.w600),
                               ),
-                              IconButton(
-                                  icon: model.isSendingRequest
-                                      ? CircularProgressIndicator()
-                                      : Icon(
-                                          model.currentUser.communities
-                                                  .contains(community.uid)
-                                              ? Icons.input
-                                              : Icons.person_add,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                right: screenWidth(context) * 0.01),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          left: screenWidth(context) * 0.03),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Icon(
+                                            Profile.profile,
+                                            color: Color(0xff3C8FA7),
+                                          ),
+                                          horizontalSpaceTiny,
+                                          Text(
+                                            community.followerCount.toString(),
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontFamily: 'Raleway',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    horizontalSpaceMedium,
+                                    Row(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.photo_filter,
                                           color: Color(0xff3C8FA7),
-                                          size: 35,
+                                          size: 30,
                                         ),
-                                  onPressed: () {
-                                    if (model.currentUser.communities
-                                        .contains(community.uid))
-                                      model.goToCommunity(community);
-                                    else
-                                      model.requestCommunityAcces(community);
-                                  })
-                            ],
+                                        horizontalSpaceTiny,
+                                        Text(
+                                          community.postsCount.toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontFamily: 'Raleway',
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                IconButton(
+                                    icon: model.isSendingRequest
+                                        ? CircularProgressIndicator()
+                                        : Icon(
+                                            model.currentUser.communities
+                                                    .contains(community.uid)
+                                                ? Icons.input
+                                                : Icons.person_add,
+                                            color: Color(0xff3C8FA7),
+                                            size: 35,
+                                          ),
+                                    onPressed: () {
+                                      if (model.currentUser.communities
+                                          .contains(community.uid))
+                                        model.goToCommunity(community);
+                                      else
+                                        model.requestCommunityAcces(community);
+                                    })
+                              ],
+                            ),
                           )
                         ],
                       ),
