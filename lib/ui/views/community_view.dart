@@ -31,7 +31,9 @@ class _CommunityViewState extends State<CommunityView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 5, initialIndex: 0);
+    _tabController = widget.community.isMarketplace
+        ? TabController(vsync: this, length: 5, initialIndex: 0)
+        : TabController(vsync: this, length: 4, initialIndex: 0);
     _tabController.addListener(() => {
           print(_scrollController.position.maxScrollExtent),
           setState(() {
@@ -342,6 +344,7 @@ class _CommunityViewState extends State<CommunityView>
                                             ],
                                           )
                                         : TabBar(
+                                            controller: _tabController,
                                             indicatorColor: Colors.white,
                                             tabs: [
                                               SizedBox(
@@ -481,20 +484,28 @@ class _CommunityViewState extends State<CommunityView>
                                                     community:
                                                         widget.community),
                                               ])
-                                        : TabBarView(children: [
-                                            CommunityRules(
-                                              community: widget.community,
-                                              isEditting: false,
-                                            ),
-                                            NewsView(
-                                                community: widget.community),
-                                            CommunityChatView(
-                                                communityId:
-                                                    this.widget.community.uid,
-                                                height: height),
-                                            UserPostsView(
-                                                community: widget.community),
-                                          ]),
+                                        : TabBarView(
+                                            controller: _tabController,
+                                            children: [
+                                                CommunityRules(
+                                                  community: widget.community,
+                                                  isEditting: false,
+                                                ),
+                                                NewsView(
+                                                    community:
+                                                        widget.community),
+                                                CommunityChatView(
+                                                    petitionsShowing:
+                                                        isModerator,
+                                                    communityId: this
+                                                        .widget
+                                                        .community
+                                                        .uid,
+                                                    height: height),
+                                                UserPostsView(
+                                                    community:
+                                                        widget.community),
+                                              ]),
                                   )
                                 ],
                               ),

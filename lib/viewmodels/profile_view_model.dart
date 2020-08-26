@@ -35,7 +35,7 @@ class ProfileViewModel extends BaseModel {
   }
 
   Future selectProfileImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectProfileImage();
     if (tempImage != null) {
       selectedProfileImage = tempImage;
       notifyListeners();
@@ -43,7 +43,7 @@ class ProfileViewModel extends BaseModel {
   }
 
   Future selectBkdImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectBackgroundImage();
     if (tempImage != null) {
       selectedBkdImage = tempImage;
       notifyListeners();

@@ -73,7 +73,7 @@ class UserPostsViewModel extends BaseModel {
   }
 
   Future selectFirstImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectPostImage();
     if (tempImage != null) {
       firstImage = tempImage;
       notifyListeners();
@@ -81,7 +81,7 @@ class UserPostsViewModel extends BaseModel {
   }
 
   Future selectSecondImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectPostImage();
     if (tempImage != null) {
       secondImage = tempImage;
       notifyListeners();
@@ -89,7 +89,7 @@ class UserPostsViewModel extends BaseModel {
   }
 
   Future selectThirdImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectPostImage();
     if (tempImage != null) {
       thirdImage = tempImage;
       notifyListeners();

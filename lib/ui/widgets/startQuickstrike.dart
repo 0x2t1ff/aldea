@@ -12,7 +12,7 @@ class StartQuickstrike extends StatelessWidget {
   final Function likeFunction;
   final Function goToCommunity;
   final bool isLiked;
-  final bool goToComments;
+  final Function goToComments;
   const StartQuickstrike(
       {Key key,
       this.postModel,

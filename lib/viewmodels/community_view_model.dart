@@ -82,7 +82,7 @@ class CommunityViewModel extends BaseModel {
   }
 
   Future selectFirstImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectPostImage();
     if (tempImage != null) {
       firstImage = tempImage;
       notifyListeners();
@@ -90,7 +90,7 @@ class CommunityViewModel extends BaseModel {
   }
 
   Future selectSecondImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectPostImage();
     if (tempImage != null) {
       secondImage = tempImage;
       notifyListeners();
@@ -98,7 +98,7 @@ class CommunityViewModel extends BaseModel {
   }
 
   Future selectThirdImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectPostImage();
     if (tempImage != null) {
       thirdImage = tempImage;
       notifyListeners();

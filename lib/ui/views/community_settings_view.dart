@@ -23,15 +23,16 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
   final rulesController = TextEditingController();
   final descriptionController = TextEditingController();
   String rulesPlaceholder;
+  String description;
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CommunitySettingsViewModel>.reactive(
       viewModelBuilder: () => CommunitySettingsViewModel(),
       onModelReady: (model) async {
-        model
-            .getData(widget.community.uid)
-            .then((value) => rulesPlaceholder = model.rules)
-            .then((value) => rulesController.text = rulesPlaceholder);
+        model.getData(widget.community.uid).then((value) {
+          rulesController.text = model.rules;
+          descriptionController.text = model.description;
+        });
       },
       builder: (context, model, child) => Scaffold(
         resizeToAvoidBottomInset: false,

@@ -21,7 +21,7 @@ class CommunityCreationViewModel extends BaseModel {
   File bkdPic;
 
   Future selectBkdImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectBackgroundImage();
     if (tempImage != null) {
       bkdPic = tempImage;
       notifyListeners();
@@ -29,7 +29,7 @@ class CommunityCreationViewModel extends BaseModel {
   }
 
   Future selectProfileImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectProfileImage();
     if (tempImage != null) {
       profilePic = tempImage;
       notifyListeners();

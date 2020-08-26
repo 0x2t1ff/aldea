@@ -30,9 +30,7 @@ class DirectMessageViewModel extends BaseModel {
       chatRooms = event.data["chatRooms"];
       print(chatRooms.toString());
       chatStreams = _rtdbService.getChats(chatRooms);
-      chatStreams[0].listen((event) {
-
-      });
+      chatStreams[0].listen((event) {});
       if (chatStreams is List<Stream<Event>>) {
         _chatStream = chatStreams;
         notifyListeners();
@@ -46,7 +44,9 @@ class DirectMessageViewModel extends BaseModel {
     });
   }
 
-    Future<bool> onWillPop() async {
+
+
+  Future<bool> onWillPop() async {
     var response = await _dialogService.showConfirmationDialog(
         description: "",
         confirmationTitle: "Si",

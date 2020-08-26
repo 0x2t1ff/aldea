@@ -25,6 +25,7 @@ class FeedViewModel extends BaseModel {
   List<Community> get communities => communityList;
   List<Community> communityList;
   bool dialogShowing = false;
+  
   Future fetchPosts() async {
     setBusy(true);
     var quickstrikeResults =
@@ -49,6 +50,7 @@ class FeedViewModel extends BaseModel {
         description: "ha fallado XD asi al menos no crashea ",
       );
     }
+    print("Refresh ended");
   }
 
   Future<bool> likePost(

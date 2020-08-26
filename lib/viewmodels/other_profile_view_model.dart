@@ -73,16 +73,17 @@ class OtherProfileViewModel extends BaseModel {
 
   Future giveVouch() async {
     List vouchList = await _firestoreService.getVouchList(user.uid);
+    print("vouch function starting");
     if (vouchList.contains(currentUser.uid)) {
       vouchList.remove(currentUser.uid);
-      await _firestoreService.giveVouch(vouchList, user.uid);
+       _firestoreService.giveVouch(vouchList, user.uid);
       user.vouches = vouchList;
     } else {
       vouchList.add(currentUser.uid);
-      await _firestoreService.giveVouch(vouchList, user.uid);
+       _firestoreService.giveVouch(vouchList, user.uid);
       user.vouches = vouchList;
     }
+
     notifyListeners();
   }
-  
 }

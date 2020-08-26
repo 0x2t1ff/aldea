@@ -45,6 +45,7 @@ export const chatNotification = functions.database
             const messageData = snap.val();
             const message = messageData.message;
             const otherId = messageData.otherId;
+            const name = messageData.username;
             await db.collection("users").doc(otherId).get().then(querySnapshot => {
                 const docData = querySnapshot.data();
                 if (docData !== undefined) {
@@ -53,7 +54,7 @@ export const chatNotification = functions.database
                     if (messageData["isImage"] == true) {
                         const payload = {
                             notification: {
-                                title: `Tienes un mensaje de ${docData["name"]}`,
+                                title: `Tienes un mensaje de ${name}`,
                                 body: "Image",
                             }
                         }
@@ -72,7 +73,7 @@ export const chatNotification = functions.database
                         const payload = {
 
                             notification: {
-                                title: `Tienes un mensaje de ${docData["name"]}`,
+                                title: `Tienes un mensaje de ${name}`,
                                 body: message,
                             }
                         }

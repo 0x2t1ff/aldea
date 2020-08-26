@@ -19,6 +19,7 @@ class CommunitySettingsViewModel extends BaseModel {
   String rules;
   File profilePic;
   File bkdPic;
+  String description;
 
 
   Future saveChanges(String rules, bool isMarketplace, bool isPublic,
@@ -35,7 +36,7 @@ class CommunitySettingsViewModel extends BaseModel {
   }
 
   Future selectBkdImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectBackgroundImage();
     if (tempImage != null) {
       bkdPic = tempImage;
       notifyListeners();
@@ -43,7 +44,7 @@ class CommunitySettingsViewModel extends BaseModel {
   }
 
   Future selectProfileImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectProfileImage();
     if (tempImage != null) {
       profilePic = tempImage;
       notifyListeners();
@@ -57,6 +58,7 @@ class CommunitySettingsViewModel extends BaseModel {
     isPublic = rulesData["isPublic"] == "true";
     isMarketplace = rulesData["isMarketplace"] == "true";
     rules = rulesData["rules"];
+    description = rulesData["description"];
     setBusy(false);
   }
 }

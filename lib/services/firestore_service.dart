@@ -570,7 +570,8 @@ class FirestoreService {
     var map = ({
       'isPublic': snapshot.data["isPublic"],
       'isMarketplace': snapshot.data["isMarketplace"],
-      'rules': snapshot.data["rules"]
+      'rules': snapshot.data["rules"],
+      'description': snapshot.data["description"]
     });
     return map;
   }

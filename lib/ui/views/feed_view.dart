@@ -2,6 +2,7 @@ import 'package:aldea/ui/widgets/feed_widget.dart';
 import 'package:aldea/viewmodels/feed_view_model.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:stacked/stacked.dart';
 import 'dart:async';
 import "../shared/app_colors.dart" as custcolor;
@@ -18,6 +19,8 @@ class _FeedViewState extends State<FeedView> {
   // You don't need to change any of these variables
   var _fromTop = -_containerHeight;
   var _controller = ScrollController();
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   var _allowReverse = true, _allowForward = true;
   var _prevOffset = 0.0;
   var _prevForwardOffset = -_containerHeight;
@@ -75,42 +78,52 @@ class _FeedViewState extends State<FeedView> {
           body: Stack(
             children: <Widget>[
               model.posts != null
-                  ? ListView.builder(
-                      controller: _controller,
-                      padding: EdgeInsets.all(0),
-                      itemCount: model.posts.length,
-                      itemBuilder: (context, index) => index == 0
-                          ? Padding(
-                              padding: EdgeInsets.only(
-                                  top:
-                                      devicesize.screenHeight(context) * 0.125),
-                              child: FeedWidget(
-                                  navigateToCommunity: () => model
-                                      .communityFromFeed(model.posts[index].communityId),
-                                  navigateToComments: () =>
-                                      model.goToComments(model.posts[index].id),
-                                  postModel: model.posts[index],
-                                  likeFunction: () => model.likePost(
-                                      model.posts[index].id,
-                                      model.isLiked(model.posts[index].likes),
-                                      model.posts[index].likes),
-                                  isLiked: model.isLiked(
-                                    model.posts[index].likes,
-                                  )),
-                            )
-                          : FeedWidget(navigateToCommunity: () => model
-                                      .communityFromFeed(model.posts[index].communityId),
-                              navigateToComments: () =>
-                                  model.goToComments(model.posts[index].id),
-                              postModel: model.posts[index],
-                              likeFunction: () => model.likePost(
-                                  model.posts[index].id,
-                                  model.isLiked(model.posts[index].likes),
-                                  model.posts[index].likes),
-                              isLiked: model.isLiked(
-                                model.posts[index].likes,
+                  ? SmartRefresher(
+                      onRefresh: () async {
+                        await model.fetchPosts();
+                        _refreshController.refreshCompleted();
+                      },
+                      controller: _refreshController,
+                      child: ListView.builder(
+                        controller: _controller,
+                        padding: EdgeInsets.all(0),
+                        itemCount: model.posts.length,
+                        itemBuilder: (context, index) => index == 0
+                            ? Padding(
+                                padding: EdgeInsets.only(
+                                    top: devicesize.screenHeight(context) *
+                                        0.125),
+                                child: FeedWidget(
+                                    navigateToCommunity: () =>
+                                        model.communityFromFeed(
+                                            model.posts[index].communityId),
+                                    navigateToComments: () => model
+                                        .goToComments(model.posts[index].id),
+                                    postModel: model.posts[index],
+                                    likeFunction: () => model.likePost(
+                                        model.posts[index].id,
+                                        model.isLiked(model.posts[index].likes),
+                                        model.posts[index].likes),
+                                    isLiked: model.isLiked(
+                                      model.posts[index].likes,
+                                    )),
+                              )
+                            : FeedWidget(
+                                navigateToCommunity: () =>
+                                    model.communityFromFeed(
+                                        model.posts[index].communityId),
+                                navigateToComments: () =>
+                                    model.goToComments(model.posts[index].id),
+                                postModel: model.posts[index],
+                                likeFunction: () => model.likePost(
+                                    model.posts[index].id,
+                                    model.isLiked(model.posts[index].likes),
+                                    model.posts[index].likes),
+                                isLiked: model.isLiked(
+                                  model.posts[index].likes,
+                                ),
                               ),
-                            ),
+                      ),
                     )
                   : Center(
                       child: CircularProgressIndicator(
@@ -155,8 +168,9 @@ class _FeedViewState extends State<FeedView> {
                                                     ),
                                                   ], shape: BoxShape.circle),
                                                   padding: EdgeInsets.symmetric(
-                                                      horizontal: devicesize.screenHeight(
-                                                              context) *
+                                                      horizontal: devicesize
+                                                              .screenHeight(
+                                                                  context) *
                                                           0.055),
                                                   height:
                                                       devicesize.screenHeight(
