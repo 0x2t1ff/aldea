@@ -11,11 +11,13 @@ class ChatRoomItem extends StatefulWidget {
   final String currentUser;
   final Map<dynamic, dynamic> urls;
   final Map<dynamic, dynamic> username;
+  final Map<dynamic, dynamic> unreadMessages;
 
   const ChatRoomItem({
     this.currentUser,
     this.users,
     this.urls,
+    this.unreadMessages,
     Key key,
     this.index,
     this.model,
@@ -81,7 +83,7 @@ class _ChatRoomItemState extends State<ChatRoomItem> {
                     width: devicesize.screenWidth(context) * 0.5,
                     child: widget.model.isImage
                         ? Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
                                 "Image  ",
@@ -92,11 +94,7 @@ class _ChatRoomItemState extends State<ChatRoomItem> {
                                     color: custcolor.grey,
                                     fontFamily: 'Raleway'),
                               ),
-                              Icon(
-                                Icons.image,
-                                color: Colors.white,
-                                size:20
-                              )
+                              Icon(Icons.image, color: Colors.white, size: 20)
                             ],
                           )
                         : Text(
@@ -114,7 +112,8 @@ class _ChatRoomItemState extends State<ChatRoomItem> {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(top: devicesize.screenHeight(context) * 0.025),
+                padding: EdgeInsets.only(
+                    top: devicesize.screenHeight(context) * 0.025),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -126,17 +125,15 @@ class _ChatRoomItemState extends State<ChatRoomItem> {
                           fontStyle: FontStyle.italic,
                           fontSize: 10),
                     ),
-                 //   Container(
-                 //       width: devicesize.screenWidth(context) * 0.1,
-                 //       height: devicesize.screenWidth(context) * 0.1,
-                 //       decoration: BoxDecoration(
-                 //         color: custcolor.lightBlueColor,
-                 //         borderRadius: BorderRadius.circular(32),
-                 //       ),
-                 //       child: Icon(
-                 //         Icons.send,
-                 //         color: custcolor.blueTheme,
-                 //       ))
+                       Container(
+                         alignment: Alignment.center,
+                           width: devicesize.screenWidth(context) * 0.1,
+                           height: devicesize.screenWidth(context) * 0.1,
+                           decoration: BoxDecoration(
+                             color: custcolor.blueTheme,
+                             borderRadius: BorderRadius.circular(32),
+                           ),
+                           child: Text(widget.unreadMessages[widget.currentUser].toString()  , style: TextStyle( color: custcolor.almostWhite, fontFamily: 'Raleway', fontSize: devicesize.screenWidth(context) * 0.05),),)
                   ],
                 ),
               ),

@@ -140,7 +140,7 @@ class MessageItem extends StatelessWidget {
           )
         : Padding(
             padding:
-                EdgeInsets.only(top: devicesize.screenHeight(context) * 0.02),
+                EdgeInsets.only(top: devicesize.screenHeight(context) * 0.02, left: devicesize.screenWidth(context) * 0.02),
             child: Container(
               child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: <
                   Widget>[

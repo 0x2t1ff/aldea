@@ -17,8 +17,11 @@ class _DirectMessageViewState extends State<DirectMessageView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<DirectMessageViewModel>.reactive(
       viewModelBuilder: () => DirectMessageViewModel(),
-      onModelReady: (model) => model.getStream(),
-      createNewModelOnInsert: true,
+      disposeViewModel: true,
+      onModelReady: (model) {
+        model.getStream();
+        print(model.initialData);
+      },
       builder: (context, model, child) => WillPopScope(
         onWillPop: model.onWillPop,
         child: Scaffold(
@@ -32,6 +35,8 @@ class _DirectMessageViewState extends State<DirectMessageView> {
                       return StreamBuilder<Event>(
                           stream: model.stream[index].asBroadcastStream(),
                           builder: (ctx, snapshot) {
+                            print(snapshot.hasData);
+                            print("the print of the snpashot");
                             if (!snapshot.hasData) {
                               return Text(
                                 'No Data...',
@@ -42,8 +47,10 @@ class _DirectMessageViewState extends State<DirectMessageView> {
                               var chatModel;
                               chatModel = ChatRoomModel.fromMap(
                                   snapshot.data.snapshot.value["lastMessage"]);
-                              print(chatModel);
+
                               return ChatRoomItem(
+                                  unreadMessages: snapshot
+                                      .data.snapshot.value["unreadMessages"],
                                   currentUser: model.currentUser.uid,
                                   urls:
                                       snapshot.data.snapshot.value["avatarUrl"],

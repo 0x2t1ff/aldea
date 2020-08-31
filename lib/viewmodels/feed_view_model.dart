@@ -3,11 +3,7 @@ import 'package:aldea/models/community.dart';
 import 'package:aldea/models/post_model.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:async';
-
-import 'package:flutter/material.dart';
-
 import 'base_model.dart';
 import '../locator.dart';
 import '../services/dialog_service.dart';
@@ -20,12 +16,20 @@ class FeedViewModel extends BaseModel {
 
   List<PostModel> _posts;
   List<PostModel> get posts => _posts;
-
+  bool refreshing = false;
   //make another get to retrieve from the feed-view,
   List<Community> get communities => communityList;
   List<Community> communityList;
   bool dialogShowing = false;
   
+  void refreshingFeed(){
+refreshing = true;
+notifyListeners();
+  }
+    void refreshingFeedEnded(){
+refreshing = false;
+notifyListeners();
+  }
   Future fetchPosts() async {
     setBusy(true);
     var quickstrikeResults =

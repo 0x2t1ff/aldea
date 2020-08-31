@@ -52,8 +52,8 @@ class FirestoreService {
     }
   }
 
-  Future<Map<String,dynamic>> getCommunity ( String id) async{
-    var community  = await _communitiesCollectionReference.document(id).get();
+  Future<Map<String, dynamic>> getCommunity(String id) async {
+    var community = await _communitiesCollectionReference.document(id).get();
     return community.data;
   }
 
@@ -190,7 +190,9 @@ class FirestoreService {
   }
 
   Future registerCommunityActivity(String uid, String imageUrl) async {
-    _activityCollectionReference.document(uid).setData({"activity": 0, "uid":uid,"picUrl":imageUrl});
+    _activityCollectionReference
+        .document(uid)
+        .setData({"activity": 0, "uid": uid, "picUrl": imageUrl});
   }
 
   Future addActivityFromRequest(String uid) async {
@@ -221,7 +223,7 @@ class FirestoreService {
       'rules': rules,
       'isMarketplace': isMarketplace,
       'isPublic': isPublic,
-        'description': description
+      'description': description
     });
   }
 
@@ -502,14 +504,11 @@ class FirestoreService {
       });
 
       List<PostModel> listData = new List<PostModel>();
-      print(lastPosts);
       for (var f in lastPosts) {
         await _postsCollectionReference.document(f).get().then((onValue) {
           if (onValue.data != null) {
-            listData.add(PostModel.fromMap(onValue.data));
-          } else {
-            print("it was null");
-          }
+            listData.add(PostModel.fromMap(onValue.data, id: f));
+          } else {}
         });
       }
       //TODO: HACER RETURN UNA VEZ ACABADA LA CARGA DE POSTS

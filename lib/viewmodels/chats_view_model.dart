@@ -31,6 +31,7 @@ class ChatsViewModel extends BaseModel {
       return tempImage;
     }
   }
+
   Future<File> selectCameraImage() async {
     var tempImage = await _imageSelector.selectCameraImage();
     if (tempImage != null) {
@@ -58,7 +59,8 @@ class ChatsViewModel extends BaseModel {
         chatRoomId: chatRoomId,
         username: username,
         imageUrl: imageUrl,
-        isImage: isImage);
+        isImage: isImage,
+        );
   }
 
   Future getMessages(String chatId) async {
@@ -80,8 +82,10 @@ class ChatsViewModel extends BaseModel {
       );
     }
   }
+
   void openHeroView(List url) {
     _navigationService.navigateTo(HeroScreenRoute, false, arguments: url);
   }
+
 
 }

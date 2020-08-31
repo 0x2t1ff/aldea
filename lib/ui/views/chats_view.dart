@@ -74,12 +74,12 @@ class ChatsView extends StatelessWidget {
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((timeStamp) {
                                       if (flag == false) {
-                                        _controller.animateTo(
+                                        _controller.jumpTo(
                                             _controller
-                                                .position.maxScrollExtent,
-                                            duration: const Duration(
-                                                milliseconds: 300),
-                                            curve: Curves.easeOut);
+                                                .position.maxScrollExtent,);
+                                     //       duration: const Duration(
+                                     //           milliseconds: 0),
+                                     //       curve: Curves.easeOut);
                                         flag = true;
                                       }
                                     });

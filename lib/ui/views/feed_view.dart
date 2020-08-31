@@ -1,5 +1,6 @@
 import 'package:aldea/ui/widgets/feed_widget.dart';
 import 'package:aldea/viewmodels/feed_view_model.dart';
+import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -61,15 +62,15 @@ class _FeedViewState extends State<FeedView> {
       _fromTop = _prevReverseOffset + difference;
       if (_fromTop < -_containerHeight) _fromTop = -_containerHeight;
     }
-    setState(() {
-      print(_fromTop);
-    }); // for simplicity I'm calling setState here, you can put bool values to only call setState when there is a genuine change in _fromTop
+    setState(
+        () {}); // for simplicity I'm calling setState here, you  can put bool values to only call setState when there is a genuine change in _fromTop
   }
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<FeedViewModel>.reactive(
       viewModelBuilder: () => FeedViewModel(),
+      
       onModelReady: (model) => model.fetchPosts(),
       builder: (context, model, child) => WillPopScope(
         onWillPop: model.onWillPop,
@@ -79,11 +80,35 @@ class _FeedViewState extends State<FeedView> {
             children: <Widget>[
               model.posts != null
                   ? SmartRefresher(
+                      controller: _refreshController,
+                      header: CustomHeader(
+                        height: model.refreshing ? 0 : 40,
+                        builder: (context, mode) {
+                          Widget body;
+                          if (mode == RefreshStatus.idle) {
+                            body = Text("pull down refresh");
+                          } else if (mode == RefreshStatus.refreshing) {
+                            body = CupertinoActivityIndicator();
+                          } else if (mode == RefreshStatus.canRefresh) {
+                            body = Text("release to refresh");
+                          } else if (mode == RefreshStatus.completed) {
+                            body = Text("refreshCompleted!");
+                          }
+                          return Container(
+                            height: 0.0,
+                            child: Center(
+                              child: body,
+                            ),
+                          );
+                        },
+                      ),
                       onRefresh: () async {
+                        print("started refreshing");
+                        model.refreshingFeed();
                         await model.fetchPosts();
                         _refreshController.refreshCompleted();
+                        model.refreshingFeedEnded();
                       },
-                      controller: _refreshController,
                       child: ListView.builder(
                         controller: _controller,
                         padding: EdgeInsets.all(0),
@@ -131,6 +156,22 @@ class _FeedViewState extends State<FeedView> {
                             AlwaysStoppedAnimation(custcolor.blueishGreyColor),
                       ),
                     ),
+              model.refreshing
+                  ? Positioned(
+                      left: devicesize.screenWidth(context) * 0.45,
+                      top: devicesize.screenHeight(context) * 0.4,
+                      child: Container(
+                        width: devicesize.screenWidth(context) * 0.15,
+                        height: devicesize.screenWidth(context) * 0.15,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 12,
+                          valueColor: AlwaysStoppedAnimation(
+                            custcolor.blueTheme,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
               model.communityList != null
                   ? Positioned(
                       top: devicesize.screenHeight(context) *

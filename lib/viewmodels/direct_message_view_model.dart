@@ -18,21 +18,22 @@ class DirectMessageViewModel extends BaseModel {
   var chatStreams;
   List<Stream<Event>> _chatStream;
   List<Stream<Event>> get stream => _chatStream;
+  List<Event> initialData;
 
   void openChat(String c) {
     _navigationService.navigateTo(ChatViewRoute, false, arguments: c);
   }
 
   Future getStream() async {
-    var stream = _firestoreService.getChats(currentUser.uid);
+    var stream =  _firestoreService.getChats(currentUser.uid);
 
     stream.listen((event) async {
       chatRooms = event.data["chatRooms"];
       print(chatRooms.toString());
       chatStreams = _rtdbService.getChats(chatRooms);
-      chatStreams[0].listen((event) {});
       if (chatStreams is List<Stream<Event>>) {
         _chatStream = chatStreams;
+
         notifyListeners();
       } else {
         //print(_quickstrikes.length.toString());
@@ -44,8 +45,6 @@ class DirectMessageViewModel extends BaseModel {
     });
   }
 
-
-
   Future<bool> onWillPop() async {
     var response = await _dialogService.showConfirmationDialog(
         description: "",
@@ -54,4 +53,6 @@ class DirectMessageViewModel extends BaseModel {
         title: "¿Estas seguro que quieres salir de la app?");
     return response.confirmed;
   }
+
+
 }
