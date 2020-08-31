@@ -1,6 +1,7 @@
 import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/models/cloud_storage_result.dart';
 import 'package:aldea/services/cloud_storage_service.dart';
+import 'package:aldea/services/dialog_service.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
 import 'base_model.dart';
@@ -14,8 +15,10 @@ class ProfileViewModel extends BaseModel {
       locator<CloudStorageService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  final DialogService _dialogService = locator<DialogService>();
   File selectedProfileImage;
   File selectedBkdImage;
+  bool dialogShowing = false;
 
   Future seeVouches(String c) {
     _navigationService.navigateTo(VouchViewRoute, false, arguments: c);
@@ -32,7 +35,7 @@ class ProfileViewModel extends BaseModel {
   }
 
   Future selectProfileImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectProfileImage();
     if (tempImage != null) {
       selectedProfileImage = tempImage;
       notifyListeners();
@@ -40,7 +43,7 @@ class ProfileViewModel extends BaseModel {
   }
 
   Future selectBkdImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectBackgroundImage();
     if (tempImage != null) {
       selectedBkdImage = tempImage;
       notifyListeners();
@@ -124,5 +127,20 @@ class ProfileViewModel extends BaseModel {
   void toggleInfo() {
     isShowingInfo = !isShowingInfo;
     notifyListeners();
+  }
+
+  Future<bool> onWillPop() async {
+    if (dialogShowing == true) {
+      dialogShowing = false;
+    } else {
+      dialogShowing = true;
+      var response = await _dialogService.showConfirmationDialog(
+          description: "",
+          confirmationTitle: "Si",
+          cancelTitle: "No",
+          title: "¿Estas seguro que quieres salir de la app?");
+
+      return response.confirmed;
+    }
   }
 }

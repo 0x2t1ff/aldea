@@ -3,7 +3,7 @@ import 'package:aldea/models/community.dart';
 import 'package:aldea/models/post_model.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
-
+import 'dart:async';
 import 'base_model.dart';
 import '../locator.dart';
 import '../services/dialog_service.dart';
@@ -16,11 +16,20 @@ class FeedViewModel extends BaseModel {
 
   List<PostModel> _posts;
   List<PostModel> get posts => _posts;
-
+  bool refreshing = false;
   //make another get to retrieve from the feed-view,
   List<Community> get communities => communityList;
   List<Community> communityList;
-
+  bool dialogShowing = false;
+  
+  void refreshingFeed(){
+refreshing = true;
+notifyListeners();
+  }
+    void refreshingFeedEnded(){
+refreshing = false;
+notifyListeners();
+  }
   Future fetchPosts() async {
     setBusy(true);
     var quickstrikeResults =
@@ -36,6 +45,7 @@ class FeedViewModel extends BaseModel {
     }
     print(communityList);
     if (quickstrikeResults is List<PostModel>) {
+      print(quickstrikeResults.length);
       _posts = quickstrikeResults;
       notifyListeners();
     } else {
@@ -44,6 +54,7 @@ class FeedViewModel extends BaseModel {
         description: "ha fallado XD asi al menos no crashea ",
       );
     }
+    print("Refresh ended");
   }
 
   Future<bool> likePost(
@@ -75,5 +86,27 @@ class FeedViewModel extends BaseModel {
   void goToComments(String postId) {
     _navigationService.navigateTo(CommentsViewRoute, false,
         arguments: ({'postId': postId}));
+  }
+
+  void communityFromFeed(String id) async {
+    var communityData = await _firestoreService.getCommunity(id);
+    print(communityData);
+    Community community = Community.fromData(communityData, id);
+    goToCommunity(community);
+  }
+
+  Future<bool> onWillPop() async {
+    if (dialogShowing == true) {
+      dialogShowing = false;
+    } else {
+      dialogShowing = true;
+      var response = await _dialogService.showConfirmationDialog(
+          description: "",
+          confirmationTitle: "Si",
+          cancelTitle: "No",
+          title: "¿Estas seguro que quieres salir de la app?");
+
+      return response.confirmed;
+    }
   }
 }

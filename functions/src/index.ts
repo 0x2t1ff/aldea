@@ -6,7 +6,7 @@ const db = admin.firestore();
 
 export const checkQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(async (context) => {
     const now = admin.firestore.Timestamp.now();
-    const query = db.collection('quickstrikes').where('feºchaQuickstrike', '<=', now).where('finished', '==', false).where('isRandom', '==', true);
+    const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isRandom', '==', true);
     const quickStrikes = await query.get();
     quickStrikes.forEach(async (snapshot) => {
         const winners: any[] = [];
@@ -30,6 +30,14 @@ export const checkQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(as
     return null;
 });
 
+export const resetActivity = functions.pubsub.schedule("0 0 * * 0").onRun(async (context) => {
+
+
+    const query = db.collection("activity").where('activity', ">", 0);
+    const activities = await query.get();
+    activities.forEach(async (snapshot) => { snapshot.ref.update({ 'activity': 0 }) })
+});
+
 export const chatNotification = functions.database
     .ref('/messages/{chatroomId}/{messageId}').onCreate(
         async (snap, context) => {
@@ -37,25 +45,49 @@ export const chatNotification = functions.database
             const messageData = snap.val();
             const message = messageData.message;
             const otherId = messageData.otherId;
+            const name = messageData.username;
             await db.collection("users").doc(otherId).get().then(querySnapshot => {
                 const docData = querySnapshot.data();
                 if (docData !== undefined) {
+
                     const token = docData["pushToken"]
-                    const payload = {
-                        notification: {
-                            title: `Tienes un mensaje de ${docData["name"]}`,
-                            body: message,
+                    if (messageData["isImage"] == true) {
+                        const payload = {
+                            notification: {
+                                title: `Tienes un mensaje de ${name}`,
+                                body: "Image",
+                            }
                         }
+                        admin
+                            .messaging()
+                            .sendToDevice(token, payload)
+                            .then(response => {
+                                console.log('Successfully sent message:', response)
+                            })
+                            .catch(error => {
+                                console.log('Error sending message:', error)
+                            })
+                    } else {
+                        console.log("isImage wasnt true")
+                        console.log(docData["isImage"]);
+                        const payload = {
+
+                            notification: {
+                                title: `Tienes un mensaje de ${name}`,
+                                body: message,
+                            }
+                        }
+                        admin
+                            .messaging()
+                            .sendToDevice(token, payload)
+                            .then(response => {
+                                console.log('Successfully sent message:', response)
+                            })
+                            .catch(error => {
+                                console.log('Error sending message:', error)
+                            })
                     }
-                    admin
-                        .messaging()
-                        .sendToDevice(token, payload)
-                        .then(response => {
-                            console.log('Successfully sent message:', response)
-                        })
-                        .catch(error => {
-                            console.log('Error sending message:', error)
-                        })
+
                 }
 
             })
@@ -123,7 +155,9 @@ export const finishedQuickstrike = functions.firestore.document("quickstrikes/{q
                 "title": quickstrikeData["title"],
                 "winners": quickstrikeData["winners"],
                 "likes": [],
-                "avatarUrl": "placeholder",
+                "avatarUrl": quickstrikeData["communityUrl"],
+                "id": quickstrikeData["id"],
+                //added the id variable to the post it does , needs testing on the comments of the new posts
             }
 
             const path = await db.collection("posts").add(post);

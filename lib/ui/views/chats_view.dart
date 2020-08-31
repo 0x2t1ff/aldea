@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:aldea/models/message_model.dart';
 import 'package:aldea/ui/widgets/message_item.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
@@ -18,6 +17,7 @@ class ChatsView extends StatelessWidget {
   Widget build(BuildContext context) {
     print("rebuilded");
     ScrollController _controller = new ScrollController();
+    bool flag = false;
 
     final messageController = TextEditingController();
     return ViewModelBuilder<ChatsViewModel>.reactive(
@@ -73,13 +73,22 @@ class ChatsView extends StatelessWidget {
                                   itemBuilder: (context, index) {
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((timeStamp) {
-                                      _controller.animateTo(
-                                          _controller.position.maxScrollExtent,
-                                          duration:
-                                              const Duration(milliseconds: 300),
-                                          curve: Curves.easeOut);
+                                      if (flag == false) {
+                                        _controller.jumpTo(
+                                            _controller
+                                                .position.maxScrollExtent,);
+                                     //       duration: const Duration(
+                                     //           milliseconds: 0),
+                                     //       curve: Curves.easeOut);
+                                        flag = true;
+                                      }
                                     });
                                     return MessageItem(
+                                      heroAnimation: () {
+                                        List url = [];
+                                        url.add(messageList[index]["message"]);
+                                        model.openHeroView(url);
+                                      },
                                       model: MessageModel.fromMap(
                                           messageList[index]),
                                       currentUser: model.currentUser.uid,
@@ -111,10 +120,12 @@ class ChatsView extends StatelessWidget {
                         child: Container(
                           width: devicesize.screenWidth(context) * 0.58,
                           padding: EdgeInsets.only(
-                              left: devicesize.screenWidth(context) * 0.02),
+                              left: devicesize.screenWidth(context) * 0.02,
+                              top: devicesize.screenHeight(context) * 0.002,
+                              bottom: devicesize.screenHeight(context) * 0.004),
                           decoration: BoxDecoration(
                             color: custcolor.blueTheme,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(200),
                           ),
                           child: TextFormField(
                             enableSuggestions: true,
@@ -144,13 +155,13 @@ class ChatsView extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            left: devicesize.screenWidth(context) * 0.04,
-                            bottom: devicesize.screenWidth(context) * 0.02),
+                            left: devicesize.screenWidth(context) * 0.02,
+                            bottom: devicesize.screenWidth(context) * 0.01),
                         child: IconButton(
                           icon: Icon(
                             Icons.image,
                             color: custcolor.blueTheme,
-                            size: devicesize.screenWidth(context) * 0.1,
+                            size: devicesize.screenWidth(context) * 0.08,
                           ),
                           onPressed: () async {
                             print(" button pressed");
@@ -171,12 +182,39 @@ class ChatsView extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
+                            left: devicesize.screenWidth(context) * 0.0,
+                            bottom: devicesize.screenWidth(context) * 0.01),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.camera,
+                            color: custcolor.blueTheme,
+                            size: devicesize.screenWidth(context) * 0.08,
+                          ),
+                          onPressed: () async {
+                            print(" button pressed");
+
+                            await model.selectCameraImage().then((value) =>
+                                model
+                                    .uploadImage(
+                                        image: value, chatId: chatroomId)
+                                    .then((value) => model.sendMessage(
+                                        value,
+                                        model.currentUser.uid,
+                                        chatroomId,
+                                        model.currentUser.name,
+                                        model.currentUser.picUrl,
+                                        true)));
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
                             bottom: devicesize.screenWidth(context) * 0.01,
-                            left: devicesize.screenWidth(context) * 0.04),
+                            left: devicesize.screenWidth(context) * 0.0),
                         child: IconButton(
                           icon: Icon(
                             Icons.send,
-                            size: devicesize.screenWidth(context) * 0.09,
+                            size: devicesize.screenWidth(context) * 0.07,
                             color: custcolor.blueTheme,
                           ),
                           onPressed: () {

@@ -67,7 +67,7 @@ class PostModel {
     };
   }
 
-  static PostModel fromMap(Map<String, dynamic> map) {
+  static PostModel fromMap(Map<String, dynamic> map,{ String id}) {
     return PostModel(
         communityName: map['communityName'],
         title: map['title'],
@@ -79,7 +79,7 @@ class PostModel {
         description: map['description'],
         modelo: map['modelo'],
         fechaQuickstrike: map['fechaQuickstrike'],
-        id: map['id'],
+        id: id,
         isAnnouncement: map['isAnnouncement'],
         isResult: map['isResult'],
         communityId: map['communityId'],

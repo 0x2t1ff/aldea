@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/models/cloud_storage_result.dart';
 import 'package:aldea/services/cloud_storage_service.dart';
+import 'package:aldea/services/navigation_service.dart';
 import 'package:aldea/services/rtdb_service.dart';
 import 'package:aldea/utils/image_selector.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -12,6 +14,7 @@ import '../services/dialog_service.dart';
 class CommunityChatViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final RtdbService _firestoreService = locator<RtdbService>();
+  final NavigationService _navigationService = locator<NavigationService>();
   final ImageSelector _imageSelector = locator<ImageSelector>();
   final CloudStorageService _cloudStorageService =
       locator<CloudStorageService>();
@@ -20,7 +23,7 @@ class CommunityChatViewModel extends BaseModel {
   File selectedImage;
 
   Future<File> selectMessageImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectChatImage();
     if (tempImage != null) {
       selectedImage = tempImage;
       notifyListeners();
@@ -28,7 +31,7 @@ class CommunityChatViewModel extends BaseModel {
     }
   }
 
-//TODO later 
+//TODO later
   Future<String> uploadImage({String communityId, File image}) async {
     CloudStorageResult imageResult;
 
@@ -38,6 +41,7 @@ class CommunityChatViewModel extends BaseModel {
       return imageResult.imageUrl;
     }
   }
+
 //
   Future sendCommunityMessage(String text, String senderId, String communityId,
       String username, String imageUrl, bool isImage) {
@@ -48,6 +52,10 @@ class CommunityChatViewModel extends BaseModel {
         username: username,
         imageUrl: imageUrl,
         isImage: isImage);
+  }
+
+  void openHeroView(List url) {
+    _navigationService.navigateTo(HeroScreenRoute, false, arguments: url);
   }
 
   Future getMessages(String communityId) async {
@@ -69,4 +77,5 @@ class CommunityChatViewModel extends BaseModel {
       );
     }
   }
+  
 }

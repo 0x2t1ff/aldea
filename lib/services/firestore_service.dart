@@ -27,6 +27,8 @@ class FirestoreService {
       Firestore.instance.collection('followers');
   final CollectionReference _communitiesCreationRequestsReference =
       Firestore.instance.collection('communityRequests');
+  final CollectionReference _activityCollectionReference =
+      Firestore.instance.collection('activity');
 
   //      **USER METHODS**
   Future<Map<String, dynamic>> getUserData(String uid) async {
@@ -48,6 +50,11 @@ class FirestoreService {
     } catch (e) {
       return e.message;
     }
+  }
+
+  Future<Map<String, dynamic>> getCommunity(String id) async {
+    var community = await _communitiesCollectionReference.document(id).get();
+    return community.data;
   }
 
   Future removeRequest(String communityId, String uid) async {
@@ -114,12 +121,18 @@ class FirestoreService {
       'uid': uid,
       'date': DateTime.now().toString()
     });
-    int number;
-    await _postsCollectionReference
-        .document(postId)
-        .collection("comments")
-        .getDocuments()
-        .then((value) => number = value.documents.length);
+    int number = 0;
+
+    try {
+      await _postsCollectionReference
+          .document(postId)
+          .collection("comments")
+          .getDocuments()
+          .then((value) => number = value.documents.length);
+    } catch (e) {
+      print(e.toString() +
+          "print del error al intentar pillar el document.length para saber la cantidad de comentarios q hay ");
+    }
 
     await _postsCollectionReference
         .document(postId)
@@ -176,6 +189,23 @@ class FirestoreService {
         .updateData({"communities": userRequests});
   }
 
+  Future registerCommunityActivity(String uid, String imageUrl) async {
+    _activityCollectionReference
+        .document(uid)
+        .setData({"activity": 0, "uid": uid, "picUrl": imageUrl});
+  }
+
+  Future addActivityFromRequest(String uid) async {
+    var postRef = _userCollectionReference.document(uid);
+
+    await postRef.updateData({"activity": FieldValue.increment(1)});
+  }
+
+  Future addActivityFromQuickstrike(String uid) async {
+    var postRef = _userCollectionReference.document(uid);
+    await postRef.updateData({"activity": FieldValue.increment(2)});
+  }
+
   Future followCommunity(String uid, String communityId) async {
     var followDoc =
         await _followingPostsCollectionReference.document(communityId).get();
@@ -188,11 +218,12 @@ class FirestoreService {
   }
 
   Future updateCommunitySettings(String rules, bool isMarketplace,
-      bool isPublic, String communityId) async {
+      bool isPublic, String communityId, String description) async {
     await _communitiesCollectionReference.document(communityId).updateData({
       'rules': rules,
       'isMarketplace': isMarketplace,
       'isPublic': isPublic,
+      'description': description
     });
   }
 
@@ -460,11 +491,10 @@ class FirestoreService {
       var postDocumentSnapshot = await _followingPostsCollectionReference
           .where("followers", arrayContains: uid)
           .orderBy("lastPost", descending: true)
-          .limit(10)
+          .limit(5)
           .getDocuments();
       var data = postDocumentSnapshot.documents.map((doc) => doc.data);
       List lastPostsList = [];
-
       data.forEach((f) => lastPostsList.add(f["posts"]));
       var lastPosts = [];
       lastPostsList.forEach((element) {
@@ -474,14 +504,11 @@ class FirestoreService {
       });
 
       List<PostModel> listData = new List<PostModel>();
-      print(lastPosts);
       for (var f in lastPosts) {
         await _postsCollectionReference.document(f).get().then((onValue) {
           if (onValue.data != null) {
-            listData.add(PostModel.fromMap(onValue.data));
-          } else {
-            print("it was null");
-          }
+            listData.add(PostModel.fromMap(onValue.data, id: f));
+          } else {}
         });
       }
       //TODO: HACER RETURN UNA VEZ ACABADA LA CARGA DE POSTS
@@ -542,7 +569,8 @@ class FirestoreService {
     var map = ({
       'isPublic': snapshot.data["isPublic"],
       'isMarketplace': snapshot.data["isMarketplace"],
-      'rules': snapshot.data["rules"]
+      'rules': snapshot.data["rules"],
+      'description': snapshot.data["description"]
     });
     return map;
   }
@@ -551,7 +579,7 @@ class FirestoreService {
     try {
       var communitiesQuery = await _communitiesCollectionReference
           .orderBy("followerCount", descending: true)
-          .limit(6)
+          .limit(12)
           .getDocuments();
       return communitiesQuery.documents;
     } catch (e) {
@@ -573,11 +601,17 @@ class FirestoreService {
     }
   }
 
-  Future<Map<String, dynamic>> getTopCommunities() async {
+  Future<List<Map<String, dynamic>>> getTopCommunities() async {
     try {
-      var communitiesData =
-          await _communitiesCollectionReference.document('top').get();
-      return communitiesData.data;
+      var communitiesData = await _activityCollectionReference
+          .orderBy("activity", descending: true)
+          .limit(3)
+          .getDocuments();
+      List<Map<String, dynamic>> documentsData = [];
+      communitiesData.documents.forEach((element) {
+        documentsData.add(element.data);
+      });
+      return documentsData;
     } catch (e) {
       print(e.message);
     }
@@ -704,7 +738,9 @@ class FirestoreService {
           tx.update(docRef, {"finished": true});
         }
         return true;
-      } else { return false;}
+      } else {
+        return false;
+      }
     }).catchError((error) => print(error.toString()));
   }
 

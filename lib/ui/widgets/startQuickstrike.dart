@@ -10,14 +10,16 @@ import 'like_button.dart';
 class StartQuickstrike extends StatelessWidget {
   final PostModel postModel;
   final Function likeFunction;
+  final Function goToCommunity;
   final bool isLiked;
-  final bool goToComments;
+  final Function goToComments;
   const StartQuickstrike(
       {Key key,
       this.postModel,
       this.likeFunction,
       this.isLiked,
-      this.goToComments})
+      this.goToComments,
+      this.goToCommunity})
       : super(key: key);
 
   String readTimestamp(int timestamp) {
@@ -194,12 +196,15 @@ class StartQuickstrike extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-              width: devicesize.screenWidth(context),
-              height: devicesize.screenHeight(context) * 0.362,
-              child: PostCarousel(
-                imageUrl: this.postModel.imageUrl,
-              )),
+          GestureDetector(
+            onTap:()=>  goToCommunity(),
+                      child: Container(
+                width: devicesize.screenWidth(context),
+                height: devicesize.screenHeight(context) * 0.362,
+                child: PostCarousel(
+                  imageUrl: this.postModel.imageUrl,
+                )),
+          ),
           Container(
             padding: EdgeInsets.symmetric(
                 horizontal: devicesize.screenWidth(context) * 0.045),

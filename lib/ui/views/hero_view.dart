@@ -45,9 +45,11 @@ class HeroScreen extends StatelessWidget {
                 child: Center(
                   child: Hero(
                     tag: tag,
-                    child: HeroCarousel(
-                      imageUrl: url,
-                    ),
+                    child: url.length == 1
+                        ? Image.network(url[0])
+                        : HeroCarousel(
+                            imageUrl: url,
+                          ),
                   ),
                 ),
                 onTap: () => model.popScreen(),

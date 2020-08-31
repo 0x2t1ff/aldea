@@ -189,4 +189,21 @@ class CloudStorageService {
     }
     return null;
   }
+
+  void uploadCommunityImages(
+      {File profileImage, File backgroundImage, String id}) async {
+    //coge la imagen y hace upload al servidor , al reutilzar constantemente el mismo nombre de la imagen no es necesario el url
+    final StorageReference profileImageReference = FirebaseStorage.instance
+        .ref()
+        .child("communities/$id/profile/profileImage");
+    final StorageReference backgroundImageReference = FirebaseStorage.instance
+        .ref()
+        .child("communities/$id/profile/backgroundImage");
+    if (profileImage != null) {
+      profileImageReference.putFile(profileImage);
+    }
+    if (profileImage != null) {
+      backgroundImageReference.putFile(backgroundImage);
+    }
+  }
 }

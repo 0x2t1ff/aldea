@@ -63,7 +63,6 @@ class CommunityChatView extends StatelessWidget {
 
                               return r;
                             });
-
                             // hace que cuando envias mensaje baje
                             //TODO intentar hacer un singlechildscrollview y en vez de usar el listView.builder usar un .forEach() donde devuelva los mensajes , al singlechildscrollview meterle un ScrollController y que con cada resize/mensaje haga scroll hacia abajo
                             return ListView.builder(
@@ -80,6 +79,11 @@ class CommunityChatView extends StatelessWidget {
                                         curve: Curves.easeOut);
                                   });
                                   return CommunityMessageItem(
+                                    heroAnimation: () {
+                                      List url = [];
+                                      url.add(messageList[index]["message"]);
+                                      model.openHeroView(url);
+                                    },
                                     model: MessageModel.fromMap(
                                         messageList[index]),
                                     currentUser: model.currentUser.uid,

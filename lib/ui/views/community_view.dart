@@ -31,7 +31,9 @@ class _CommunityViewState extends State<CommunityView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 5, initialIndex: 0);
+    _tabController = widget.community.isMarketplace
+        ? TabController(vsync: this, length: 5, initialIndex: 0)
+        : TabController(vsync: this, length: 4, initialIndex: 0);
     _tabController.addListener(() => {
           print(_scrollController.position.maxScrollExtent),
           setState(() {
@@ -46,8 +48,7 @@ class _CommunityViewState extends State<CommunityView>
       if (_tabController.indexIsChanging &&
           height != _scrollController.position.maxScrollExtent) {
         setState(() {
-          height = _scrollController
-              .position.maxScrollExtent; //_scrollController.offset.toDouble();
+          height = _scrollController.position.maxScrollExtent;
         });
       }
     });
@@ -98,16 +99,36 @@ class _CommunityViewState extends State<CommunityView>
                             fontSize: 40),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      DropdownButton(
-                        underline: Container(),
-                        items: [],
-                        onChanged: (a) {},
-                        icon: Icon(
-                          Icons.more_vert,
-                          size: 40,
-                          color: Colors.white,
+                      Container(
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  right: screenWidth(context) * 0.03),
+                              child: IconButton(
+                                onPressed: () {
+                                  model.setIsShowingPopup(true);
+                                },
+                                icon: Icon(
+                                  Icons.note_add,
+                                  size: 35,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                model.goToSettings(widget.community);
+                              },
+                              icon: Icon(
+                                Icons.settings,
+                                size: 35,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -272,46 +293,6 @@ class _CommunityViewState extends State<CommunityView>
                                             ),
                                           ),
                                         ),
-                                        isModerator
-                                            ? Positioned(
-                                                top: communityBodyHeight(
-                                                        context) *
-                                                    0.01,
-                                                right: communityBodyHeight(
-                                                        context) *
-                                                    0.01,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    model.setIsShowingPopup(
-                                                        true);
-                                                  },
-                                                  icon: Icon(
-                                                    Icons.note_add,
-                                                    size: 45,
-                                                    color: Colors.white,
-                                                  ),
-                                                ))
-                                            : Container(),
-                                        isModerator
-                                            ? Positioned(
-                                                top: communityBodyHeight(
-                                                        context) *
-                                                    0.2,
-                                                right: communityBodyHeight(
-                                                        context) *
-                                                    0.01,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    model.goToSettings(
-                                                        widget.community);
-                                                  },
-                                                  icon: Icon(
-                                                    Icons.settings,
-                                                    size: 45,
-                                                    color: Colors.white,
-                                                  ),
-                                                ))
-                                            : Container()
                                       ],
                                     ),
                                   ),
@@ -363,6 +344,7 @@ class _CommunityViewState extends State<CommunityView>
                                             ],
                                           )
                                         : TabBar(
+                                            controller: _tabController,
                                             indicatorColor: Colors.white,
                                             tabs: [
                                               SizedBox(
@@ -461,8 +443,14 @@ class _CommunityViewState extends State<CommunityView>
                                                                 'Raleway'))
                                                   ],
                                                 ),
-                                                Icon(Icons.add,
-                                                    color: Color(0xff3CA759)),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      bottom: screenHeight(
+                                                              context) *
+                                                          0.2),
+                                                  child: Icon(Icons.add,
+                                                      color: Color(0xff3CA759)),
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -496,20 +484,28 @@ class _CommunityViewState extends State<CommunityView>
                                                     community:
                                                         widget.community),
                                               ])
-                                        : TabBarView(children: [
-                                            CommunityRules(
-                                              community: widget.community,
-                                              isEditting: false,
-                                            ),
-                                            NewsView(
-                                                community: widget.community),
-                                            CommunityChatView(
-                                                communityId:
-                                                    this.widget.community.uid,
-                                                height: height),
-                                            UserPostsView(
-                                                community: widget.community),
-                                          ]),
+                                        : TabBarView(
+                                            controller: _tabController,
+                                            children: [
+                                                CommunityRules(
+                                                  community: widget.community,
+                                                  isEditting: false,
+                                                ),
+                                                NewsView(
+                                                    community:
+                                                        widget.community),
+                                                CommunityChatView(
+                                                    petitionsShowing:
+                                                        isModerator,
+                                                    communityId: this
+                                                        .widget
+                                                        .community
+                                                        .uid,
+                                                    height: height),
+                                                UserPostsView(
+                                                    community:
+                                                        widget.community),
+                                              ]),
                                   )
                                 ],
                               ),

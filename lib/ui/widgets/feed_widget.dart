@@ -9,21 +9,32 @@ class FeedWidget extends StatelessWidget {
   final Function likeFunction;
   final bool isLiked;
   final Function navigateToComments;
+  final Function navigateToCommunity;
   const FeedWidget(
       {this.postModel,
       this.likeFunction,
       this.isLiked,
-      this.navigateToComments});
+      this.navigateToComments,
+      this.navigateToCommunity});
   @override
   Widget build(BuildContext context) {
     if (postModel.isAnnouncement == true) {
       print("announcement");
       return StartQuickstrike(
-          postModel: postModel, likeFunction: likeFunction, isLiked: isLiked);
+        goToComments: navigateToComments,
+        postModel: postModel,
+        likeFunction: likeFunction,
+        isLiked: isLiked,
+        goToCommunity: navigateToCommunity,
+      );
     } else if (postModel.isResult == true) {
       print("isresult");
       return FinishedQuickstrike(
-          postModel: postModel, likeFunction: likeFunction, isLiked: isLiked);
+        postModel: postModel,
+        likeFunction: likeFunction,
+        isLiked: isLiked,
+        navigateToComments: navigateToComments,
+      );
     } else {
       print("isnormalpostXD");
       return PostItem(
@@ -31,6 +42,7 @@ class FeedWidget extends StatelessWidget {
         postModel: postModel,
         isLiked: isLiked,
         navigateToComments: navigateToComments,
+        goToCommunity: navigateToCommunity,
       );
     }
   }

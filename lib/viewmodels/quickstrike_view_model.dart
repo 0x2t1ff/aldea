@@ -47,7 +47,8 @@ class QuickStrikeViewModel extends BaseModel {
     await _firestoreService.quitQuickstrike(currentUser.uid, quickstrike.id);
     notifyListeners();
   }
-  Future heroAnimation(List url){
+
+  Future heroAnimation(List url) {
     _navigationService.navigateTo(HeroScreenRoute, false, arguments: url);
   }
 
@@ -66,4 +67,15 @@ class QuickStrikeViewModel extends BaseModel {
     await _dialogService.showDialog(
         title: "Wrong Answer", description: "Sorry! Try again next time.");
   }
+
+  Future<bool> onWillPop() async {
+    var response = await _dialogService.showConfirmationDialog(
+        description: "",
+        confirmationTitle: "Si",
+        cancelTitle: "No",
+        title: "¿Estas seguro que quieres salir de la app?");
+    return response.confirmed;
+  }
+
+  
 }

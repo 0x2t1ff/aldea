@@ -26,7 +26,7 @@ class RequestsViewModel extends BaseModel {
   Future acceptRequest(String uid, int index) {
     _firestoreService
         .addCommunityFromRequest(uid, communityId)
-        .then((value) => print("after frist function"));
+        .then((value) => _firestoreService.addActivityFromRequest(communityId));
 
     _firestoreService
         .followCommunity(uid, communityId)

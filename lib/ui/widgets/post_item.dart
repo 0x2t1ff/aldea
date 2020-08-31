@@ -14,12 +14,14 @@ class PostItem extends StatelessWidget {
   final PostModel postModel;
   final Function likeFunction;
   final bool isLiked;
+  final Function goToCommunity;
   const PostItem(
       {Key key,
       this.postModel,
       this.likeFunction,
       this.isLiked,
-      this.navigateToComments})
+      this.navigateToComments,
+      this.goToCommunity})
       : super(key: key);
 
   String readTimestamp(int timestamp) {
@@ -87,9 +89,13 @@ class PostItem extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(
                       left: devicesize.screenWidth(context) * 0.06),
-                  child: CircleAvatar(
-                    radius: devicesize.screenWidth(context) * 0.07,
-                    backgroundImage: NetworkImage(postModel.avatarUrl),
+                  child: GestureDetector(
+                    onTap: () =>
+                    goToCommunity(),
+                                      child: CircleAvatar(
+                      radius: devicesize.screenWidth(context) * 0.07,
+                      backgroundImage: NetworkImage(postModel.avatarUrl),
+                    ),
                   ),
                 ),
                 Container(
@@ -194,7 +200,9 @@ class PostItem extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(
                                 top: devicesize.screenHeight(context) * 0.005),
-                            child: Text(postModel.commentCount.toString(),
+                            child: Text(postModel.commentCount == null
+                                          ? "0"
+                                          : postModel.commentCount.toString(),
                                 style: TextStyle(
                                     color: greyColor,
                                     fontFamily: 'Raleway',

@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/models/cloud_storage_result.dart';
 import 'package:aldea/services/cloud_storage_service.dart';
+import 'package:aldea/services/navigation_service.dart';
 import 'package:aldea/services/rtdb_service.dart';
 import 'package:aldea/utils/image_selector.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -13,6 +15,7 @@ class ChatsViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final RtdbService _firestoreService = locator<RtdbService>();
   final ImageSelector _imageSelector = locator<ImageSelector>();
+  final NavigationService _navigationService = locator<NavigationService>();
   final CloudStorageService _cloudStorageService =
       locator<CloudStorageService>();
   Stream<Event> _chatStream;
@@ -21,7 +24,16 @@ class ChatsViewModel extends BaseModel {
   File selectedImage = null;
 
   Future<File> selectMessageImage() async {
-    var tempImage = await _imageSelector.selectImage();
+    var tempImage = await _imageSelector.selectChatImage();
+    if (tempImage != null) {
+      selectedImage = tempImage;
+      notifyListeners();
+      return tempImage;
+    }
+  }
+
+  Future<File> selectCameraImage() async {
+    var tempImage = await _imageSelector.selectCameraImage();
     if (tempImage != null) {
       selectedImage = tempImage;
       notifyListeners();
@@ -47,7 +59,8 @@ class ChatsViewModel extends BaseModel {
         chatRoomId: chatRoomId,
         username: username,
         imageUrl: imageUrl,
-        isImage: isImage);
+        isImage: isImage,
+        );
   }
 
   Future getMessages(String chatId) async {
@@ -69,4 +82,10 @@ class ChatsViewModel extends BaseModel {
       );
     }
   }
+
+  void openHeroView(List url) {
+    _navigationService.navigateTo(HeroScreenRoute, false, arguments: url);
+  }
+
+
 }

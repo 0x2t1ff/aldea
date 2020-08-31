@@ -40,9 +40,7 @@ class CommentsViewModel extends BaseModel {
   }
 
   Future postComment(String text) async {
-    print(mapId["communityId"]);
-    print("please " + mapId.values.length.toString());
-    print(mapId['postId']);
+    print(mapId.toString() + " communityId");
     if (mapId["communityId"] == null) {
       _firestoreService.postComment(
           mapId['postId'], text, currentUser.name, currentUser.uid);

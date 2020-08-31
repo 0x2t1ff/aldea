@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class RtdbService {
@@ -85,6 +86,7 @@ class RtdbService {
       'imageUrl': imageUrl,
       'isImage': isImage,
       'otherId': otherUser,
+      
     }).then(
       (value) => _database.reference().child('chatRooms/$chatRoomId/').update({
         'lastMessage': {
@@ -95,6 +97,7 @@ class RtdbService {
           'username': username,
           'imageUrl': imageUrl,
           'isImage': isImage,
+          
         }
       }),
     );

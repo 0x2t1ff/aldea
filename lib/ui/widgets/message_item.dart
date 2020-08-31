@@ -6,8 +6,10 @@ import "../shared/app_colors.dart" as custcolor;
 class MessageItem extends StatelessWidget {
   final MessageModel model;
   final String currentUser;
+  final Function heroAnimation;
 
-  const MessageItem({Key key, this.currentUser, this.model}) : super(key: key);
+  const MessageItem({Key key, this.currentUser, this.model, this.heroAnimation})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     int comparation = currentUser.compareTo(model.senderId);
@@ -62,25 +64,48 @@ class MessageItem extends StatelessWidget {
                                               devicesize.screenWidth(context) *
                                                   0.562),
                                       child: model.isImage
-                                          ? ClipRRect(
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10)),
-                                              child: ConstrainedBox(
-                                                constraints: BoxConstraints(
-                                                  maxWidth:
-                                                      devicesize.screenWidth(
-                                                              context) *
-                                                          0.9,
-                                                ),
-                                                child: Image(
-                                                  image: NetworkImage(
-                                                      model.message),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ))
+                                          ? Container(
+                                              child: model.isImage
+                                                  ? GestureDetector(
+                                                      onTap: heroAnimation,
+                                                      child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                          child: Container(
+                                                            width: devicesize
+                                                                    .screenWidth(
+                                                                        context) *
+                                                                0.7,
+                                                            height: devicesize
+                                                                    .screenWidth(
+                                                                        context) *
+                                                                0.7,
+                                                            child: Image(
+                                                              image: NetworkImage(
+                                                                  model
+                                                                      .message),
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          )),
+                                                    )
+                                                  : Text(
+                                                      model.message,
+                                                      style: TextStyle(
+                                                        color: custcolor
+                                                            .almostWhite,
+                                                        fontFamily: 'Raleway',
+                                                      ),
+                                                    ),
+                                            )
                                           : Text(
                                               model.message,
                                               style: TextStyle(
@@ -115,7 +140,7 @@ class MessageItem extends StatelessWidget {
           )
         : Padding(
             padding:
-                EdgeInsets.only(top: devicesize.screenHeight(context) * 0.02),
+                EdgeInsets.only(top: devicesize.screenHeight(context) * 0.02, left: devicesize.screenWidth(context) * 0.02),
             child: Container(
               child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: <
                   Widget>[
@@ -174,27 +199,32 @@ class MessageItem extends StatelessWidget {
                                           : devicesize.screenHeight(context) *
                                               0.015),
                                   child: Container(
-                                    //   width:
-                                    //       devicesize.screenWidth(context) * 0.662,
                                     child: model.isImage
-                                        ? ClipRRect(
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(10),
-                                                topRight: Radius.circular(10),
-                                                bottomRight:
-                                                    Radius.circular(10)),
-                                            child: ConstrainedBox(
-                                              constraints: BoxConstraints(
-                                                  maxWidth:
+                                        ? GestureDetector(
+                                            onTap: heroAnimation,
+                                            child: ClipRRect(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10)),
+                                                child: Container(
+                                                  width: devicesize.screenWidth(
+                                                          context) *
+                                                      0.7,
+                                                  height:
                                                       devicesize.screenWidth(
                                                               context) *
-                                                          0.8),
-                                              child: Image(
-                                                image:
-                                                    NetworkImage(model.message),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ))
+                                                          0.7,
+                                                  child: Image(
+                                                    image: NetworkImage(
+                                                        model.message),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                )),
+                                          )
                                         : Text(
                                             model.message,
                                             style: TextStyle(

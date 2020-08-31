@@ -50,9 +50,12 @@ class _CommunityRulesState extends State<CommunityRules> {
                     color: Color(0xff17191E),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Text(
-                    widget.community.rules,
-                    style: TextStyle(color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      widget.community.rules,
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                   width: double.infinity,
                   constraints:

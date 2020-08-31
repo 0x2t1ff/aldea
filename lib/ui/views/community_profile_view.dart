@@ -92,8 +92,8 @@ class CommunityProfileView extends StatelessWidget {
                                       right: devicesize.screenWidth(context) *
                                           0.015),
                                   child: Image.asset(
-                                    "assets/images/vouch.png",
-                                    color: custcolor.blueTheme,
+                                    "assets/images/hoguera-azul.png",
+                                    
                                     height:
                                         devicesize.screenHeight(context) * 0.07,
                                   ),
@@ -103,7 +103,7 @@ class CommunityProfileView extends StatelessWidget {
                                       top: devicesize.screenHeight(context) *
                                           0.035),
                                   child: Text(
-                                    "Vouch",
+                                    "Aldeas",
                                     style: TextStyle(
                                         color: custcolor.almostWhite,
                                         fontFamily: 'Raleway',
