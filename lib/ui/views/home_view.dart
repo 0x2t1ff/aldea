@@ -69,6 +69,10 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+
+    void goToBuscar(){
+controller.jumpTo(1);}
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xff0F1013),

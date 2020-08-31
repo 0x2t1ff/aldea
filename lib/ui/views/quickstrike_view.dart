@@ -10,7 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
-
+import "../../constants/icondata.dart";
 import "../shared/app_colors.dart" as custcolor;
 
 class QuickSTrikeView extends StatefulWidget {
@@ -47,144 +47,293 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
   @override
   // if there was a necessity of modifying this piece of code I take all responibility since I don't even know what the fuck it is anymore
   Widget build(BuildContext context) {
+    List<QuickStrikePost> quickstrikepostList = [];
     return ViewModelBuilder<QuickStrikeViewModel>.reactive(
         viewModelBuilder: () => QuickStrikeViewModel(),
         onModelReady: (model) => model.fetchPosts(),
         createNewModelOnInsert: true,
         builder: (context, model, child) => WillPopScope(
-          onWillPop: model.onWillPop,
-                  child: Scaffold(
-              body: !model.busy
-                  ? Container(
-                      child: Stack(children: <Widget>[
-                        StreamBuilder(
-                          stream: model.posts,
-                          builder: (context, data) {
-                            if (data.hasData == false) {
-                              return ListView.builder(
-                                  padding: EdgeInsets.all(0),
-                                  itemCount: 8,
-                                  itemBuilder: (context, index) {
-                                    return QuickStrikeItem(
-                                      isParticipating: false,
-                                      index: index,
-                                      quickStrikePost: emptyQuickstrike,
-                                      model: model,
-                                    );
-                                  });
-                            } else if (data.hasError) {
-                              return Text(data.error.toString());
-                            } else if (data.data == null) {
-                              return Center(child: Text("data is null"));
-                            } else {
-                              List dataList = data.data;
-                              List<DocumentSnapshot> documentList = [];
-                              List<QuickStrikePost> quickstrikepostList = [];
-                              //Primer foreach para filtrar el stream , ya que pasa un valor que no es un documentsnapshot dentro de la lista
-                              dataList.forEach((element) {
-                                if (element.runtimeType == DocumentSnapshot) {
-                                  documentList.add(element);
-                                }
-                              });
-                              documentList.forEach((element) {
-                                DocumentSnapshot docSnapshot = element;
-                                Map<dynamic, dynamic> quickstrikeMap =
-                                    docSnapshot.data;
-                                quickstrikepostList
-                                    .add(QuickStrikePost.fromMap(quickstrikeMap));
-                              });
-                              return quickstrikepostList.length >= 8
-                                  ? ListView.builder(
-                                      padding: EdgeInsets.all(0),
-                                      itemCount: quickstrikepostList.length,
-                                      itemBuilder: (context, index) {
-                                        bool participating;
-                                        //si el quickstrike esta activo comprueba que el usuario esta participando.
-                                        if (quickstrikepostList[index].isActive &&
-                                            quickstrikeActive == false) {
-                                          model
-                                              .checkParticipatingQuickstrike(
-                                                  quickstrikepostList[index].id)
-                                              .then((value) {
-                                            participating = value;
-                                            if (value) {
-                                              setState(() {
-                                                quickstrikeActive = true;
-                                                activeQuickstrike =
-                                                    quickstrikepostList[index];
-                                              });
-                                            } else {}
-                                          });
-                                        }
-                                        return QuickStrikeItem(
-                                            heroFunction: () =>
-                                                model.heroAnimation(
-                                                    quickstrikepostList[index]
-                                                        .imageUrl[0]),
-                                            isParticipating: true,
-                                            model: model,
-                                            quickStrikePost:
-                                                quickstrikepostList[index],
-                                            index: index);
-                                      })
-                                  : ListView.builder(
-                                      padding: EdgeInsets.all(0),
-                                      itemCount: 8,
-                                      itemBuilder: (context, index) {
-                                        if (quickstrikepostList.length > index) {
-                                          if (quickstrikepostList[index]
-                                                  .isActive &&
-                                              quickstrikeActive == false) {
-                                            model
-                                                .checkParticipatingQuickstrike(
-                                                    quickstrikepostList[index].id)
-                                                .then((value) {
-                                              if (value == true) {
-                                                setState(() {
-                                                  quickstrikeActive = true;
-                                                  activeQuickstrike =
-                                                      quickstrikepostList[index];
-                                                });
-                                              } else {}
-                                            });
-                                          }
-
-                                          return QuickStrikeItem(
-                                              heroFunction: () =>
-                                                  model.heroAnimation(
-                                                      quickstrikepostList[index]
-                                                          .imageUrl),
-                                              isParticipating: true,
+              onWillPop: model.onWillPop,
+              child: Scaffold(
+                  body: !model.busy
+                      ? Stack(
+                          children: [
+                            Container(
+                              child: Stack(children: <Widget>[
+                                StreamBuilder(
+                                  stream: model.posts,
+                                  builder: (context, data) {
+                                    if (data.hasData == false) {
+                                      return ListView.builder(
+                                          padding: EdgeInsets.all(0),
+                                          itemCount: 8,
+                                          itemBuilder: (context, index) {
+                                            return QuickStrikeItem(
+                                              isParticipating: false,
+                                              index: index,
+                                              quickStrikePost: emptyQuickstrike,
                                               model: model,
-                                              quickStrikePost:
-                                                  quickstrikepostList[index],
-                                              index: index);
-                                        } else {
-                                          if (index == 7 &&
-                                              quickstrikeActive == true) {}
-                                          return QuickStrikeItem(
-                                            isParticipating: false,
-                                            index: index,
-                                            quickStrikePost: emptyQuickstrike,
-                                            model: model,
-                                          );
+                                            );
+                                          });
+                                    } else if (data.hasError) {
+                                      return Text(data.error.toString());
+                                    } else if (data.data == null) {
+                                      return Center(
+                                          child: Text("data is null"));
+                                    } else {
+                                      List dataList = data.data;
+                                      List<DocumentSnapshot> documentList = [];
+
+                                      //Primer foreach para filtrar el stream , ya que pasa un valor que no es un documentsnapshot dentro de la lista
+                                      dataList.forEach((element) {
+                                        if (element.runtimeType ==
+                                            DocumentSnapshot) {
+                                          documentList.add(element);
                                         }
                                       });
-                            }
-                          },
-                        ),
-                        quickstrikeActive
-                            ? getQuickstrike(activeQuickstrike, model)
-                            : Container(),
-                      ]),
-                    )
-                  : Center(
-                      child: CircularProgressIndicator(
-                        valueColor:
-                            AlwaysStoppedAnimation(custcolor.blueishGreyColor),
-                      ),
-                    )),
-        ));
+                                      documentList.forEach((element) {
+                                        DocumentSnapshot docSnapshot = element;
+                                        Map<dynamic, dynamic> quickstrikeMap =
+                                            docSnapshot.data;
+                                        quickstrikepostList.add(
+                                            QuickStrikePost.fromMap(
+                                                quickstrikeMap));
+                                      });
+                                      return quickstrikepostList.length >= 8
+                                          ? ListView.builder(
+                                              padding: EdgeInsets.all(0),
+                                              itemCount:
+                                                  quickstrikepostList.length,
+                                              itemBuilder: (context, index) {
+                                                bool participating;
+                                                //si el quickstrike esta activo comprueba que el usuario esta participando.
+                                                if (quickstrikepostList[index]
+                                                        .isActive &&
+                                                    quickstrikeActive ==
+                                                        false) {
+                                                  model
+                                                      .checkParticipatingQuickstrike(
+                                                          quickstrikepostList[
+                                                                  index]
+                                                              .id)
+                                                      .then((value) {
+                                                    participating = value;
+                                                    if (value) {
+                                                      setState(() {
+                                                        quickstrikeActive =
+                                                            true;
+                                                        activeQuickstrike =
+                                                            quickstrikepostList[
+                                                                index];
+                                                      });
+                                                    } else {}
+                                                  });
+                                                }
+                                                return QuickStrikeItem(
+                                                    heroFunction: () =>
+                                                        model.heroAnimation(
+                                                            quickstrikepostList[
+                                                                    index]
+                                                                .imageUrl[0]),
+                                                    isParticipating: true,
+                                                    model: model,
+                                                    quickStrikePost:
+                                                        quickstrikepostList[
+                                                            index],
+                                                    index: index);
+                                              })
+                                          : ListView.builder(
+                                              padding: EdgeInsets.all(0),
+                                              itemCount: 8,
+                                              itemBuilder: (context, index) {
+                                                if (quickstrikepostList.length >
+                                                    index) {
+                                                  if (quickstrikepostList[index]
+                                                          .isActive &&
+                                                      quickstrikeActive ==
+                                                          false) {
+                                                    model
+                                                        .checkParticipatingQuickstrike(
+                                                            quickstrikepostList[
+                                                                    index]
+                                                                .id)
+                                                        .then((value) {
+                                                      if (value == true) {
+                                                        setState(() {
+                                                          quickstrikeActive =
+                                                              true;
+                                                          activeQuickstrike =
+                                                              quickstrikepostList[
+                                                                  index];
+                                                        });
+                                                      } else {}
+                                                    });
+                                                  }
+
+                                                  return QuickStrikeItem(
+                                                      heroFunction: () =>
+                                                          model.heroAnimation(
+                                                              quickstrikepostList[
+                                                                      index]
+                                                                  .imageUrl),
+                                                      isParticipating: true,
+                                                      model: model,
+                                                      quickStrikePost:
+                                                          quickstrikepostList[
+                                                              index],
+                                                      index: index);
+                                                } else {
+                                                  if (index == 7 &&
+                                                      quickstrikeActive ==
+                                                          true) {}
+                                                  return QuickStrikeItem(
+                                                    isParticipating: false,
+                                                    index: index,
+                                                    quickStrikePost:
+                                                        emptyQuickstrike,
+                                                    model: model,
+                                                  );
+                                                }
+                                              });
+                                    }
+                                  },
+                                ),
+                                quickstrikeActive
+                                    ? getQuickstrike(activeQuickstrike, model)
+                                    : Container(),
+                              ]),
+                            ),
+                            quickstrikepostList.length <= 0
+                                ? Align(
+                                    child: Container(
+                                        width: screenWidth(context) * 0.65,
+                                        height: screenWidth(context) * 0.6,
+                                        decoration: BoxDecoration(boxShadow: [
+                    BoxShadow(
+                      color: custcolor.darkGrey.withOpacity(1),
+                      spreadRadius: 2,
+                      blurRadius: 1,
+                      offset: Offset(3, 3), // changes position of shadow
+                    ),
+                  ],
+                                            color: custcolor.blueTheme,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(30))),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              right:
+                                                  screenWidth(context) * 0.1,
+                                              top:
+                                                  screenHeight(context) * 0.035,
+                                              left:
+                                                  screenWidth(context) * 0.1),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "UPS...",
+                                                style: TextStyle(
+                                                    color:
+                                                        custcolor.almostWhite,
+                                                    fontFamily: "Raleway",
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 30),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                  top: screenHeight(context) *
+                                                      0.02,
+                                                ),
+                                                child: Container(
+                                                  color: custcolor.almostWhite,
+                                                  width: double.infinity,
+                                                  height: 3,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: screenHeight(context) *
+                                                        0.02,
+                                                    bottom:
+                                                        screenHeight(context) *
+                                                            0.02),
+                                                child: Text(
+                                                    "Parece que aún no sigues a ninguna aldea. Echa un vistazo",
+                                                    style: TextStyle(
+                                                      color:
+                                                          custcolor.almostBlack,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
+                                                    )),
+                                              ),
+                                              Container(
+                                                  height:
+                                                      screenHeight(context) *
+                                                          0.05,
+                                                  decoration: BoxDecoration(
+                                                      color:
+                                                          custcolor.almostBlack,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  200))),
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        height: screenHeight(
+                                                                context) *
+                                                            0.05,
+                                                        decoration: BoxDecoration(
+                                                            color: custcolor
+                                                                .almostWhite,
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        200))),
+                                                        child: Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      screenWidth(
+                                                                              context) *
+                                                                          0.05),
+                                                          child: Align(
+                                                            child: Text(
+                                                                "¡Explorar!",
+                                                                style: TextStyle(
+                                                                    color: custcolor
+                                                                        .almostBlack,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        "Raleway",
+                                                                    fontSize:
+                                                                        20)),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:  EdgeInsets.only(left: screenWidth(context) * 0.0),
+                                                        child: IconButton( icon: Icon(Buscar.buscar, color: custcolor.blueTheme), onPressed: () =>""),
+                                                      )
+                                                    ],
+                                                  )),
+                                            ],
+                                          ),
+                                        )),
+                                  )
+                                : Container()
+                          ],
+                        )
+                      : Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(
+                                custcolor.blueishGreyColor),
+                          ),
+                        )),
+            ));
   }
 
   Widget getQuickstrike(
