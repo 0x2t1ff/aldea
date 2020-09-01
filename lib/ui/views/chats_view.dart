@@ -32,7 +32,7 @@ class ChatsView extends StatelessWidget {
             children: <Widget>[
               NotchFiller(),
               Container(
-                height: devicesize.screenHeight(context) * 0.8487 -
+                height: devicesize.screenHeight(context) * 0.9 -
                     MediaQuery.of(context).viewInsets.bottom,
                 color: custcolor.darkBlue,
                 width: devicesize.screenWidth(context),
@@ -77,12 +77,12 @@ class ChatsView extends StatelessWidget {
                                         _controller.jumpTo(
                                             _controller
                                                 .position.maxScrollExtent,);
-                                     //       duration: const Duration(
-                                     //           milliseconds: 0),
-                                     //       curve: Curves.easeOut);
+                                     
                                         flag = true;
                                       }
                                     });
+                                    model.readMessage(chatroomId);
+                                    print("yes");
                                     return MessageItem(
                                       heroAnimation: () {
                                         List url = [];
@@ -109,7 +109,7 @@ class ChatsView extends StatelessWidget {
                   constraints: BoxConstraints(
                     maxWidth: devicesize.screenWidth(context),
                   ),
-                  height: devicesize.screenHeight(context) * 0.09,
+                  height: devicesize.screenHeight(context) * 0.1,
                   color: custcolor.almostBlack,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

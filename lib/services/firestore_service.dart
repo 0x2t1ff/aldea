@@ -183,7 +183,7 @@ class FirestoreService {
   Future addCommunityFromRequest(String uid, String communityId) async {
     var userInfo = await _userCollectionReference.document(uid).get();
     List userRequests = userInfo.data["communities"];
-    userRequests.add(uid);
+    userRequests.add(communityId);
     _userCollectionReference
         .document(uid)
         .updateData({"communities": userRequests});

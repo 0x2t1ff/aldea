@@ -35,6 +35,7 @@ class _DirectMessageViewState extends State<DirectMessageView> {
                       return StreamBuilder<Event>(
                           stream: model.stream[index].asBroadcastStream(),
                           builder: (ctx, snapshot) {
+                            
                             print(snapshot.hasData);
                             print("the print of the snpashot");
                             if (!snapshot.hasData) {

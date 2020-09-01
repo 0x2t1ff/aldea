@@ -86,9 +86,16 @@ class RtdbService {
       'imageUrl': imageUrl,
       'isImage': isImage,
       'otherId': otherUser,
-      
-    }).then(
-      (value) => _database.reference().child('chatRooms/$chatRoomId/').update({
+    }).then((value) async {
+      var query =
+          await _database.reference().child('chatRooms/$chatRoomId/').once();
+      Map unreadMessages = query.value["unreadMessages"];
+      print(unreadMessages);
+      unreadMessages.update(otherUser, (value) {
+        return value + 1;
+      });
+
+      _database.reference().child('chatRooms/$chatRoomId/').update({
         'lastMessage': {
           'message': message,
           'senderId': senderId,
@@ -97,10 +104,10 @@ class RtdbService {
           'username': username,
           'imageUrl': imageUrl,
           'isImage': isImage,
-          
-        }
-      }),
-    );
+        },
+        "unreadMessages": unreadMessages
+      });
+    });
   }
 
   List<Stream<Event>> getChats(List<dynamic> chatRoomIds) {
@@ -112,13 +119,30 @@ class RtdbService {
     return streams;
   }
 
-  void readMessage(String chatRoomId, String messageId) {
+  void readMessage(String chatRoomId, currentUser) async {
+    var chatroom = await _database
+        .reference()
+        .child("chatRooms")
+        .child("$chatRoomId")
+        .once();
+    var userIds = chatroom.value["users"];
+    String otherUser;
+    if (userIds[0] == currentUser) {
+      otherUser = userIds[1];
+    } else {
+      otherUser = userIds[0];
+    }
+
+    var query =
+        await _database.reference().child('chatRooms/$chatRoomId/').once();
+    Map unreadMessages = query.value["unreadMessages"];
+    print(unreadMessages);
+    unreadMessages.update(currentUser, (value) {
+      return 0;
+    });
     _database
         .reference()
-        .child('messages/$chatRoomId/$messageId')
-        .update({'isRead': true}).then((value) => _database
-            .reference()
-            .child('chatRooms/$chatRoomId/lastMessage')
-            .update({'isRead': true}));
+        .child('chatRooms/$chatRoomId/')
+        .update({"unreadMessages": unreadMessages});
   }
 }

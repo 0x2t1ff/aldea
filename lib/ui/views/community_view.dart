@@ -133,7 +133,7 @@ class _CommunityViewState extends State<CommunityView>
                   ),
                 ),
                 model.busy
-                    ? Center(child: const CircularProgressIndicator())
+                    ? Container(height: screenHeight(context) * 0.8, width: screenWidth(context) ,  child:Center( child: const CircularProgressIndicator()))
                     : Stack(
                         children: <Widget>[
                           Container(

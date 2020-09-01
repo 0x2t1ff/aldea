@@ -208,27 +208,29 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                     child: Container(
                                         width: screenWidth(context) * 0.65,
                                         height: screenWidth(context) * 0.6,
-                                        decoration: BoxDecoration(boxShadow: [
-                    BoxShadow(
-                      color: custcolor.darkGrey.withOpacity(1),
-                      spreadRadius: 2,
-                      blurRadius: 1,
-                      offset: Offset(3, 3), // changes position of shadow
-                    ),
-                  ],
+                                        decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: custcolor.darkGrey
+                                                    .withOpacity(1),
+                                                spreadRadius: 2,
+                                                blurRadius: 1,
+                                                offset: Offset(3,
+                                                    3), // changes position of shadow
+                                              ),
+                                            ],
                                             color: custcolor.blueTheme,
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(30))),
                                         child: Padding(
                                           padding: EdgeInsets.only(
-                                              right:
-                                                  screenWidth(context) * 0.1,
+                                              right: screenWidth(context) * 0.1,
                                               top:
                                                   screenHeight(context) * 0.035,
-                                              left:
-                                                  screenWidth(context) * 0.1),
+                                              left: screenWidth(context) * 0.1),
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 "UPS...",
@@ -258,7 +260,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                                         screenHeight(context) *
                                                             0.02),
                                                 child: Text(
-                                                    "Parece que aún no sigues a ninguna aldea. Echa un vistazo",
+                                                    "Parece que en estos momentos no hay ningún quickstrike activo",
                                                     style: TextStyle(
                                                       color:
                                                           custcolor.almostBlack,
@@ -267,59 +269,59 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                                       fontSize: 18,
                                                     )),
                                               ),
-                                              Container(
-                                                  height:
-                                                      screenHeight(context) *
-                                                          0.05,
-                                                  decoration: BoxDecoration(
-                                                      color:
-                                                          custcolor.almostBlack,
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  200))),
-                                                  child: Row(
-                                                    children: [
-                                                      Container(
-                                                        height: screenHeight(
-                                                                context) *
-                                                            0.05,
-                                                        decoration: BoxDecoration(
-                                                            color: custcolor
-                                                                .almostWhite,
-                                                            borderRadius:
-                                                                BorderRadius.all(
-                                                                    Radius.circular(
-                                                                        200))),
-                                                        child: Padding(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      screenWidth(
-                                                                              context) *
-                                                                          0.05),
-                                                          child: Align(
-                                                            child: Text(
-                                                                "¡Explorar!",
-                                                                style: TextStyle(
-                                                                    color: custcolor
-                                                                        .almostBlack,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontFamily:
-                                                                        "Raleway",
-                                                                    fontSize:
-                                                                        20)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:  EdgeInsets.only(left: screenWidth(context) * 0.0),
-                                                        child: IconButton( icon: Icon(Buscar.buscar, color: custcolor.blueTheme), onPressed: () =>""),
-                                                      )
-                                                    ],
-                                                  )),
+                                              //        Container(
+                                              //            height:
+                                              //                screenHeight(context) *
+                                              //                    0.05,
+                                              //            decoration: BoxDecoration(
+                                              //                color:
+                                              //                    custcolor.almostBlack,
+                                              //                borderRadius:
+                                              //                    BorderRadius.all(
+                                              //                        Radius.circular(
+                                              //                            200))),
+                                              //            child: Row(
+                                              //              children: [
+                                              //                Container(
+                                              //                  height: screenHeight(
+                                              //                          context) *
+                                              //                      0.05,
+                                              //                  decoration: BoxDecoration(
+                                              //                      color: custcolor
+                                              //                          .almostWhite,
+                                              //                      borderRadius:
+                                              //                          BorderRadius.all(
+                                              //                              Radius.circular(
+                                              //                                  200))),
+                                              //                  child: Padding(
+                                              //                    padding: EdgeInsets
+                                              //                        .symmetric(
+                                              //                            horizontal:
+                                              //                                screenWidth(
+                                              //                                        context) *
+                                              //                                    0.05),
+                                              //                    child: Align(
+                                              //                      child: Text(
+                                              //                          "¡Explorar!",
+                                              //                          style: TextStyle(
+                                              //                              color: custcolor
+                                              //                                  .almostBlack,
+                                              //                              fontWeight:
+                                              //                                  FontWeight
+                                              //                                      .bold,
+                                              //                              fontFamily:
+                                              //                                  "Raleway",
+                                              //                              fontSize:
+                                              //                                  20)),
+                                              //                    ),
+                                              //                  ),
+                                              //                ),
+                                              //                Padding(
+                                              //                  padding:  EdgeInsets.only(left: screenWidth(context) * 0.0),
+                                              //                  child: IconButton( icon: Icon(Buscar.buscar, color: custcolor.blueTheme), onPressed: () =>""),
+                                              //                )
+                                              //              ],
+                                              //            )),
                                             ],
                                           ),
                                         )),

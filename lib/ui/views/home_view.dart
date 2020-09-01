@@ -70,14 +70,13 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
 
-    void goToBuscar(){
-controller.jumpTo(1);}
+
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xff0F1013),
       body: Container(
-        height: device.screenHeight(context),
+        height: MediaQuery.of(context).size.height,
         width: double.infinity,
         child: Column(children: <Widget>[
           NotchFiller(),
@@ -105,7 +104,7 @@ controller.jumpTo(1);}
                   ),
                 ),
                 SizedBox(
-                    height: device.screenHeight(context) * 0.06,
+                    height: device.screenHeight(context) * 0.08,
                     child: Image.asset('assets/images/hoguera.png'))
               ],
             ),
@@ -131,6 +130,7 @@ controller.jumpTo(1);}
               Container(
                 width: device.screenWidth(context),
                 height: device.usableScreenHeight(context) * 0.1,
+                //TODO:  evita que no funcione la navbar
                 decoration: BoxDecoration(
                   color: theme.blueishGreyColor,
                   boxShadow: [
@@ -145,7 +145,7 @@ controller.jumpTo(1);}
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: MediaQuery.of(context).size.width * 0.05,
-                    vertical: MediaQuery.of(context).size.height * 0.01,
+                    vertical: device.screenHeight(context) * 0.01,
                   ),
                   child: Container(
                     child: GNav(

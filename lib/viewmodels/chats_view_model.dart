@@ -87,5 +87,9 @@ class ChatsViewModel extends BaseModel {
     _navigationService.navigateTo(HeroScreenRoute, false, arguments: url);
   }
 
+  void readMessage(chatRoomId){
+  _firestoreService.readMessage(chatRoomId, currentUser.uid);
+  }
+
 
 }

@@ -26,6 +26,7 @@ class CommunityChatView extends StatelessWidget {
       onModelReady: (model) => model.getMessages(communityId),
       createNewModelOnInsert: true,
       builder: (context, model, child) => Scaffold(
+        backgroundColor: custcolor.darkBlue,
         resizeToAvoidBottomPadding: false,
         body: Container(
           color: custcolor.almostBlack,
@@ -33,7 +34,7 @@ class CommunityChatView extends StatelessWidget {
             children: <Widget>[
               Container(
                 height: petitionsShowing
-                    ? devicesize.screenHeight(context) * 0.34314 +
+                    ? devicesize.screenHeight(context) * 0.3445 +
                         height * 0.988 -
                         MediaQuery.of(context).viewInsets.bottom
                     : devicesize.screenHeight(context) * 0.395 +
@@ -103,7 +104,7 @@ class CommunityChatView extends StatelessWidget {
                 constraints: BoxConstraints(
                   maxWidth: devicesize.screenWidth(context),
                 ),
-                height: devicesize.screenHeight(context) * 0.09,
+                height: devicesize.screenHeight(context) * 0.12,
                 color: custcolor.almostBlack,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
