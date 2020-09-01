@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 const InputDecoration profileDropDownInputDecoration = InputDecoration(
     enabledBorder:
         UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-    focusedBorder:
-        UnderlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 2)));
+    focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.white, width: 2)));
 
 // Box Decorations
 

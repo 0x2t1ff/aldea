@@ -16,7 +16,7 @@ class AuthenticationService {
     return await _firebaseAuth.currentUser();
   }
 
-  Future logOut(){
+  Future logOut() {
     _firebaseAuth.signOut();
   }
 
@@ -48,18 +48,19 @@ class AuthenticationService {
         'picUrl': null,
         'picName': null,
         'bkdPicUrl': null,
-        'bkdPicName' : null,
+        'bkdPicName': null,
         'postsCount': 0,
         'communitiesCount': 0,
         'vouchCount': 0,
         'winCount': 0,
-        'gender': null,
-        'phoneNumber': null,
-        'address': null,
-        'vouches':[],
+        'gender': '',
+        'phoneNumber': '',
+        'address': '',
+        'vouches': [],
         'communities': [],
         'chatRooms': [],
-        
+        'requests': [],
+        'isGodAdmin': false,
       };
       registerCurrentUser(userData);
 

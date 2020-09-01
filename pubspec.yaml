@@ -140,7 +140,7 @@ flutter:
     - assets/images/plata.png
     - assets/images/platino.png
     - assets/images/boton_quickstrike.png
-
+    - assets/images/default-profile.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
