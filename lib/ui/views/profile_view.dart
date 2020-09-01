@@ -80,11 +80,11 @@ class ProfileView extends StatelessWidget {
                                   )
                                 : Container()),
                         Positioned(
-                            left: screenWidth(context) * 0.055,
-                            top: usableScreenWithoughtBars(context) * 0.025,
-                            child: Container(
-                              decoration: profilePicDecoration,
-                              child: CircleAvatar(
+                          left: screenWidth(context) * 0.055,
+                          top: usableScreenWithoughtBars(context) * 0.025,
+                          child: Container(
+                            decoration: profilePicDecoration,
+                            child: CircleAvatar(
                                 child: (model.isEditting &&
                                         model.selectedProfileImage == null)
                                     ? Container(
@@ -106,12 +106,12 @@ class ProfileView extends StatelessWidget {
                                 backgroundImage: model.selectedProfileImage !=
                                         null
                                     ? FileImage(model.selectedProfileImage)
-                                    : (model.currentUser.picUrl != null
+                                    : (model.currentUser.picUrl != null)
                                         ? NetworkImage(model.currentUser.picUrl)
                                         : AssetImage(
                                             "assets/images/default-profile.png")),
-                              ),
-                            )),
+                          ),
+                        ),
                         Positioned(
                           left: screenWidth(context) * 0.038,
                           top: usableScreenWithoughtBars(context) * 0.029,

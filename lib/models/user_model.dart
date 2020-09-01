@@ -55,7 +55,6 @@ class User {
         requests = data['requests'],
         chatRooms = data["chatRooms"],
         communities = data['communities'],
-      //  onGoingQuickstrikes = data["onGoingQuickstrikes"],
         isGodAdmin = data["isGodAdmin"];
   Map<String, dynamic> toJson() {
     return {
