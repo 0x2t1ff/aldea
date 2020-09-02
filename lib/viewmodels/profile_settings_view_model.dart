@@ -1,4 +1,5 @@
 import 'package:aldea/constants/route_names.dart';
+import 'package:aldea/models/user_model.dart';
 import 'package:aldea/services/authentication_service.dart';
 import 'package:aldea/ui/views/login_view.dart';
 
@@ -18,9 +19,9 @@ class ProfileSettingsViewModel extends BaseModel {
     _navigationService.navigateTo(AdminScreenViewRoute, true);
   }
 
-  Future logOut() {
-    _navigationService.navigateTo(LoginViewRoute, true);
-    _authenticationService.logOut();
+  Future logOut() async {
+    await _authenticationService.logOut();
+    locator.unregister(instance: locator<User>());
+    await _navigationService.navigateTo(LoginViewRoute, true, isRemoval: true);
   }
-  
 }

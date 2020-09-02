@@ -10,9 +10,14 @@ class NavigationService {
   }
 
   Future<dynamic> navigateTo(String routeName, bool isReplaced,
-      {dynamic arguments}) {
+      {dynamic arguments, bool isRemoval = false}) {
+    if (isRemoval) {
+      return _navigationKey.currentState
+          .pushNamedAndRemoveUntil(routeName, (route) => false);
+    }
     return isReplaced
-        ? _navigationKey.currentState.pushReplacementNamed(routeName, arguments: arguments)
+        ? _navigationKey.currentState
+            .pushReplacementNamed(routeName, arguments: arguments)
         : _navigationKey.currentState
             .pushNamed(routeName, arguments: arguments);
   }
