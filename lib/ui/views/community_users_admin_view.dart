@@ -34,29 +34,26 @@ class CommunityUsersAdminView extends StatelessWidget {
                               height: screenHeight(context) * 0.103,
                               color: darkGrey,
                               child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Padding(
                                     padding: EdgeInsets.only(
                                         right: screenWidth(context) * 0.015),
-                                    child: Image.asset(
-                                      "assets/images/vouch.png",
-                                      color: blueTheme,
-                                      height: screenHeight(context) * 0.07,
+                                    child: CircleAvatar(
+                                      radius: screenWidth(context) * 0.06,
+                                      backgroundImage:
+                                          NetworkImage(community.iconPicUrl),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top: screenHeight(context) * 0.035),
-                                    child: Text(
-                                      "Vouch",
-                                      style: TextStyle(
-                                          color: almostWhite,
-                                          fontFamily: 'Raleway',
-                                          fontWeight: FontWeight.w600,
-                                          fontSize:
-                                              screenHeight(context) * 0.026),
-                                    ),
-                                  )
+                                  Text(
+                                    community.name,
+                                    style: TextStyle(
+                                        color: almostWhite,
+                                        fontFamily: 'Raleway',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize:
+                                            screenHeight(context) * 0.026),
+                                  ),
                                 ],
                                 mainAxisAlignment: MainAxisAlignment.center,
                               ),
