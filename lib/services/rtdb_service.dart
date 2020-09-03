@@ -4,15 +4,33 @@ import 'package:firebase_database/firebase_database.dart';
 class RtdbService {
   FirebaseDatabase _database = FirebaseDatabase.instance;
 
-  Stream<Event> fetchChatMessages(String chatRoomId) {
-    return _database.reference().child('messages/$chatRoomId').onValue;
-  }
 
-  Stream<Event> fetchCommunityChatMessages(String communityId) {
+
+
+
+  Stream<Event> getChatMessages(String chatRoomId, int limit) {
+  List messages = new List();
+  var stream = _database
+      .reference()
+      .child('messages/$chatRoomId')
+      .orderByChild("time")
+      .limitToLast(limit)
+      .onChildAdded;
+
+
+  //    .forEach((element) {
+  //  messages.add(element.snapshot.value);
+  //});
+
+  print(messages.toString());
+  return stream;
+}
+
+  Stream<Event> fetchCommunityChatMessages(String communityId, int limit) {
     return _database
         .reference()
         .child("communitiesChatRooms/$communityId")
-        .onValue;
+        .orderByChild("time").limitToLast(limit).onChildAdded;
   }
 
   String createChatRoom(
@@ -40,7 +58,7 @@ class RtdbService {
       String username,
       String imageUrl,
       bool isImage}) {
-    var time = DateTime.now().toString();
+    var time = DateTime.now(); //.toString();
     var path =
         _database.reference().child("communitiesChatRooms/$communityId").push();
 

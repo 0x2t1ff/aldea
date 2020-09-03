@@ -231,7 +231,7 @@ class ProfileView extends StatelessWidget {
                             sigmaY: 6.0,
                           ),
                           child: Container(
-                            color: Color(0xff3C8FA7).withOpacity(0.6),
+                            //color: Color(0xff3C8FA7).withOpacity(0.6),
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             child: AnimatedContainer(
                               duration: Duration(milliseconds: 250),

@@ -26,33 +26,9 @@ class _CommunityViewState extends State<CommunityView>
     with SingleTickerProviderStateMixin {
   ScrollController _scrollController;
   TabController _tabController;
-  double height;
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = widget.community.isMarketplace
-        ? TabController(vsync: this, length: 5, initialIndex: 0)
-        : TabController(vsync: this, length: 4, initialIndex: 0);
-    _tabController.addListener(() => {
-          print(_scrollController.position.maxScrollExtent),
-          setState(() {
-            _scrollController.animateTo(240,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.ease);
-          })
-        });
-    _scrollController = ScrollController();
-    height = 0;
-    _scrollController.addListener(() {
-      if (_tabController.indexIsChanging &&
-          height != _scrollController.position.maxScrollExtent) {
-        setState(() {
-          height = _scrollController.position.maxScrollExtent;
-        });
-      }
-    });
-  }
+
+
 
   @override
   void dispose() {
@@ -72,6 +48,20 @@ class _CommunityViewState extends State<CommunityView>
             model.getRequests(widget.community.uid);
           await model.getFollowersDoc();
           await model.fetchProducts(widget.community.uid);
+          _tabController = widget.community.isMarketplace
+        ? TabController(vsync: this, length: 5, initialIndex: 0)
+        : TabController(vsync: this, length: 4, initialIndex: 0);
+    _tabController.addListener(() => {
+          
+          
+            _scrollController.animateTo(240,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.ease)
+          
+        });
+    _scrollController = ScrollController();
+
+
         },
         builder: (context, model, child) {
           isModerator =
@@ -479,7 +469,7 @@ class _CommunityViewState extends State<CommunityView>
                                                         .widget
                                                         .community
                                                         .uid,
-                                                    height: height),
+                                                    ),
                                                 UserPostsView(
                                                     community:
                                                         widget.community),
@@ -501,7 +491,7 @@ class _CommunityViewState extends State<CommunityView>
                                                         .widget
                                                         .community
                                                         .uid,
-                                                    height: height),
+                                                    ),
                                                 UserPostsView(
                                                     community:
                                                         widget.community),

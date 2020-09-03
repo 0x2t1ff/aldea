@@ -125,7 +125,7 @@ class MessageItem extends StatelessWidget {
                             top: devicesize.screenHeight(context) * 0.005,
                           ),
                           child: Text(
-                            model.time.substring(10, 16),
+                            model.time,//.substring(10, 16),
                             style: TextStyle(
                               color: Colors.grey,
                               fontFamily: 'Raleway',

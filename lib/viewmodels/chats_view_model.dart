@@ -18,10 +18,36 @@ class ChatsViewModel extends BaseModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final CloudStorageService _cloudStorageService =
       locator<CloudStorageService>();
+
   Stream<Event> _chatStream;
-  Stream<Event> get messages => _chatStream;
-  // ignore: avoid_init_to_null
-  File selectedImage = null;
+  File selectedImage;
+  int limit = 15;
+  bool isLoadingMore = false;
+  List messageList = [];
+  List get messages => messageList;
+
+  Future getMessages(String chatId) async {
+    setBusy(true);
+    var chatStream = _firestoreService.getChatMessages(chatId, limit);
+
+    setBusy(true);
+
+    if (chatStream is Stream<Event>) {
+      _chatStream = chatStream;
+      _chatStream.listen((event) {
+        messageList.add(event.snapshot.value);
+        notifyListeners();
+      });
+      
+      notifyListeners();
+    } else {
+      
+      await _dialogService.showDialog(
+        title: 'La actualizacion de mensajes ha fallado',
+        description: "ha fallado XD asi al menos no crashea ",
+      );
+    }
+  }
 
   Future<File> selectMessageImage() async {
     var tempImage = await _imageSelector.selectChatImage();
@@ -54,42 +80,28 @@ class ChatsViewModel extends BaseModel {
   Future sendMessage(String text, String senderId, String chatRoomId,
       String username, String imageUrl, bool isImage) {
     _firestoreService.sendMessage(
-        message: text,
-        senderId: senderId,
-        chatRoomId: chatRoomId,
-        username: username,
-        imageUrl: imageUrl,
-        isImage: isImage,
-        );
-  }
-
-  Future getMessages(String chatId) async {
-    setBusy(true);
-    var chatStream = _firestoreService.fetchChatMessages(chatId);
-    chatStream.listen((event) {
-      print(event.toString());
-    });
-    setBusy(true);
-
-    if (chatStream is Stream<Event>) {
-      _chatStream = chatStream;
-      notifyListeners();
-    } else {
-      //print(_quickstrikes.length.toString());
-      await _dialogService.showDialog(
-        title: 'La actualizacion de mensajes ha fallado',
-        description: "ha fallado XD asi al menos no crashea ",
-      );
-    }
+      message: text,
+      senderId: senderId,
+      chatRoomId: chatRoomId,
+      username: username,
+      imageUrl: imageUrl,
+      isImage: isImage,
+    );
   }
 
   void openHeroView(List url) {
     _navigationService.navigateTo(HeroScreenRoute, false, arguments: url);
   }
 
-  void readMessage(chatRoomId){
-  _firestoreService.readMessage(chatRoomId, currentUser.uid);
+  void readMessage(chatRoomId) {
+    _firestoreService.readMessage(chatRoomId, currentUser.uid);
   }
 
-
+  void loadMoreMessages(String chatId) {
+    isLoadingMore = true;
+    
+    limit += 15;
+    getMessages(chatId);
+    isLoadingMore = false;
+  }
 }

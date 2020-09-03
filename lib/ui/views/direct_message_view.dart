@@ -35,13 +35,14 @@ class _DirectMessageViewState extends State<DirectMessageView> {
                       return StreamBuilder<Event>(
                           stream: model.stream[index].asBroadcastStream(),
                           builder: (ctx, snapshot) {
-                            
                             print(snapshot.hasData);
                             print("the print of the snpashot");
                             if (!snapshot.hasData) {
-                              return Text(
-                                'No Data...',
-                              );
+                              return Container(
+                                  height: screenHeight(context) * 0.103,
+                                  width: double.infinity,
+                                  child:
+                                      Center(child: Text("Loading data...")));
                             } else if (snapshot.hasError) {
                               return Text("error");
                             } else {

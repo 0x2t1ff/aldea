@@ -16,13 +16,23 @@ class ChatsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("rebuilded");
-    ScrollController _controller = new ScrollController();
+    ScrollController controller = new ScrollController();
     bool flag = false;
 
     final messageController = TextEditingController();
     return ViewModelBuilder<ChatsViewModel>.reactive(
       viewModelBuilder: () => ChatsViewModel(),
-      onModelReady: (model) => model.getMessages(chatroomId),
+      onModelReady: (model) async {
+        await model.getMessages(chatroomId);
+        controller.addListener(() {
+          if (controller.position.pixels /
+                      controller.position.maxScrollExtent >=
+                  0.8 &&
+              model.isLoadingMore == false) {
+            model.loadMoreMessages(chatroomId);
+          }
+        });
+      },
       createNewModelOnInsert: true,
       builder: (context, model, child) => Scaffold(
         backgroundColor: custcolor.darkBlue,
@@ -37,65 +47,21 @@ class ChatsView extends StatelessWidget {
                 color: custcolor.darkBlue,
                 width: devicesize.screenWidth(context),
                 child: model.messages != null
-                    ? StreamBuilder<Event>(
-                        stream: model.messages,
-                        builder: (ctx, snapshot) {
-                          if (!snapshot.hasData) {
-                            return Text(
-                              'No Data...',
-                            );
-                          } else if (snapshot.hasError) {
-                            return Text("error");
-                          } else if (snapshot.data.snapshot.value == null) {
-                            return Center(
-                                child: Text(" send your first message!"));
-                          } else {
-                            Map<dynamic, dynamic> messageMaps =
-                                snapshot.data.snapshot.value;
-
-                            List messageList = messageMaps.values.toList();
-
-                            messageList.sort((a, b) {
-                              var r = a["time"]
-                                  .toString()
-                                  .compareTo(b["time"].toString());
-
-                              return r;
-                            });
-
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  bottom:
-                                      devicesize.screenHeight(context) * 0.01),
-                              child: ListView.builder(
-                                  controller: _controller,
-                                  itemCount: messageList.length,
-                                  itemBuilder: (context, index) {
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((timeStamp) {
-                                      if (flag == false) {
-                                        _controller.jumpTo(
-                                            _controller
-                                                .position.maxScrollExtent,);
-                                     
-                                        flag = true;
-                                      }
-                                    });
-                                    model.readMessage(chatroomId);
-                                    print("yes");
-                                    return MessageItem(
-                                      heroAnimation: () {
-                                        List url = [];
-                                        url.add(messageList[index]["message"]);
-                                        model.openHeroView(url);
-                                      },
-                                      model: MessageModel.fromMap(
-                                          messageList[index]),
-                                      currentUser: model.currentUser.uid,
-                                    );
-                                  }),
-                            );
-                          }
+                    ? ListView.builder(
+                        reverse: true,
+                        controller: controller,
+                        itemCount: model.messages.length,
+                        itemBuilder: (ctx, index) {
+                          return MessageItem(
+                            heroAnimation: () {
+                              List url = [];
+                              url.add(model.messages[index]["message"]);
+                              model.openHeroView(url);
+                            },
+                            model: MessageModel.fromMap(
+                                model.messages.reversed.elementAt(index)),
+                            currentUser: model.currentUser.uid,
+                          );
                         },
                       )
                     : Center(
