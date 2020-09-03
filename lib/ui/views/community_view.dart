@@ -27,9 +27,6 @@ class _CommunityViewState extends State<CommunityView>
   ScrollController _scrollController;
   TabController _tabController;
 
-
-
-
   @override
   void dispose() {
     _tabController.dispose();
@@ -49,19 +46,14 @@ class _CommunityViewState extends State<CommunityView>
           await model.getFollowersDoc();
           await model.fetchProducts(widget.community.uid);
           _tabController = widget.community.isMarketplace
-        ? TabController(vsync: this, length: 5, initialIndex: 0)
-        : TabController(vsync: this, length: 4, initialIndex: 0);
-    _tabController.addListener(() => {
-          
-          
-            _scrollController.animateTo(240,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.ease)
-          
-        });
-    _scrollController = ScrollController();
-
-
+              ? TabController(vsync: this, length: 5, initialIndex: 0)
+              : TabController(vsync: this, length: 4, initialIndex: 0);
+          _tabController.addListener(() => {
+                _scrollController.animateTo(240,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease)
+              });
+          _scrollController = ScrollController();
         },
         builder: (context, model, child) {
           isModerator =
@@ -116,6 +108,17 @@ class _CommunityViewState extends State<CommunityView>
                                 color: Colors.white,
                               ),
                             ),
+                            IconButton(
+                              onPressed: () {
+                                model
+                                    .goToAdminUsersScreen(widget.community);
+                              },
+                              icon: Icon(
+                                Icons.supervised_user_circle,
+                                size: 35,
+                                color: Colors.white,
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -123,7 +126,10 @@ class _CommunityViewState extends State<CommunityView>
                   ),
                 ),
                 model.busy
-                    ? Container(height: screenHeight(context) * 0.8, width: screenWidth(context) ,  child:Center( child: const CircularProgressIndicator()))
+                    ? Container(
+                        height: screenHeight(context) * 0.8,
+                        width: screenWidth(context),
+                        child: Center(child: const CircularProgressIndicator()))
                     : Stack(
                         children: <Widget>[
                           Container(
@@ -463,13 +469,10 @@ class _CommunityViewState extends State<CommunityView>
                                                 MarketView(widget.community,
                                                     model.products),
                                                 CommunityChatView(
-                                                    petitionsShowing:
-                                                        isModerator,
-                                                    communityId: this
-                                                        .widget
-                                                        .community
-                                                        .uid,
-                                                    ),
+                                                  petitionsShowing: isModerator,
+                                                  communityId:
+                                                      this.widget.community.uid,
+                                                ),
                                                 UserPostsView(
                                                     community:
                                                         widget.community),
@@ -485,13 +488,10 @@ class _CommunityViewState extends State<CommunityView>
                                                     community:
                                                         widget.community),
                                                 CommunityChatView(
-                                                    petitionsShowing:
-                                                        isModerator,
-                                                    communityId: this
-                                                        .widget
-                                                        .community
-                                                        .uid,
-                                                    ),
+                                                  petitionsShowing: isModerator,
+                                                  communityId:
+                                                      this.widget.community.uid,
+                                                ),
                                                 UserPostsView(
                                                     community:
                                                         widget.community),

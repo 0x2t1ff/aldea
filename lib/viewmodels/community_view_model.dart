@@ -61,6 +61,10 @@ class CommunityViewModel extends BaseModel {
         arguments: community);
   }
 
+  void goToAdminUsersScreen(Community community) {
+    _navigationService.navigateTo(CommunityUsersAdminRoute, false, arguments: community);
+  }
+
   void setIsQuickstrike(bool value) {
     isQuickstrike = value;
     notifyListeners();

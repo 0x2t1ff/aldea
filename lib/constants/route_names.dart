@@ -16,3 +16,4 @@ const String CommunitySettingsViewRoute = 'CommunitySettingsView';
 const String CommentsViewRoute = 'CommentsView';
 const String CommunitiesProfileViewRoute = 'CommunitiesProfileView';
 const String HeroScreenRoute = 'HeroScreen';
+const String CommunityUsersAdminRoute= 'CommunityUsersAdminView';

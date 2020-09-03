@@ -766,4 +766,54 @@ class FirestoreService {
       return (e.message);
     }
   }
+
+  Future<QuerySnapshot> getCommunityUsers(String uid) async {
+    return _userCollectionReference
+        .where("communities", arrayContains: uid)
+        .limit(2)
+        .getDocuments();
+  }
+
+  Future<QuerySnapshot> getCommunityUsersSearch(String uid, String name) {
+    return _userCollectionReference
+        .where("communities", arrayContains: uid)
+        .where("username", arrayContains: name)
+        .getDocuments();
+  }
+
+  Future giveCommunityMod(String communityId, String uid) async {
+    var communityData =
+        await _communitiesCollectionReference.document(communityId).get();
+    List moderatorList = communityData.data["moderators"];
+    moderatorList.add(uid);
+    _communitiesCollectionReference
+        .document(communityId)
+        .updateData({"moderators": moderatorList});
+  }
+
+  Future kickCommunityUser(String communityId, String uid) async {
+    var followerDocument =
+        await _followingPostsCollectionReference.document(communityId).get();
+    List followersData = followerDocument.data["followers"];
+    followersData.remove(uid);
+    _followingPostsCollectionReference
+        .document(communityId)
+        .updateData({"followers": followersData});
+    var userDocument = await _userCollectionReference.document(uid).get();
+    List userCommunities = userDocument.data["communities"];
+    userCommunities.remove(communityId);
+    _userCollectionReference
+        .document(uid)
+        .updateData({"communities": userCommunities});
+
+    var communityData =
+        await _communitiesCollectionReference.document(communityId).get();
+    List moderatorList = communityData.data["moderators"];
+    if (moderatorList.contains(uid)) {
+      moderatorList.remove(uid);
+      _communitiesCollectionReference
+          .document(communityId)
+          .updateData({"moderators": moderatorList});
+    }
+  }
 }
