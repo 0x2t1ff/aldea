@@ -1,5 +1,4 @@
 import 'package:aldea/models/user_model.dart';
-import 'package:aldea/models/vouch_model.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

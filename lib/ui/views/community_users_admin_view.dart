@@ -4,7 +4,6 @@ import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/widgets/bottom_filler.dart';
 import 'package:aldea/ui/widgets/community_users_moderation_item.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
-import 'package:aldea/ui/widgets/vouch_item.dart';
 import 'package:aldea/viewmodels/community_users_admin_view_model.dart';
 import "package:flutter/material.dart";
 import 'package:stacked/stacked.dart';
