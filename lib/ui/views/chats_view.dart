@@ -3,7 +3,6 @@ import 'package:aldea/ui/widgets/message_item.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:aldea/viewmodels/chats_view_model.dart';
 import '../shared/ui_helpers.dart' as devicesize;
-import 'package:firebase_database/firebase_database.dart';
 import "package:flutter/material.dart";
 import 'package:stacked/stacked.dart';
 import "../shared/app_colors.dart" as custcolor;
@@ -52,6 +51,7 @@ class ChatsView extends StatelessWidget {
                         controller: controller,
                         itemCount: model.messages.length,
                         itemBuilder: (ctx, index) {
+                          model.readMessage(chatroomId);
                           return MessageItem(
                             heroAnimation: () {
                               List url = [];

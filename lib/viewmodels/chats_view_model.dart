@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:aldea/constants/route_names.dart';
@@ -25,23 +26,32 @@ class ChatsViewModel extends BaseModel {
   bool isLoadingMore = false;
   List messageList = [];
   List get messages => messageList;
+  StreamSubscription sth;
 
   Future getMessages(String chatId) async {
     setBusy(true);
+
     var chatStream = _firestoreService.getChatMessages(chatId, limit);
 
     setBusy(true);
 
     if (chatStream is Stream<Event>) {
       _chatStream = chatStream;
-      _chatStream.listen((event) {
-        messageList.add(event.snapshot.value);
+
+      print("ITS NULL");
+      sth = _chatStream.listen((event) {
+        print(event.snapshot.value);
+        if (messageList.contains(event.snapshot.value)) {
+          print("repeated");
+        } else {
+          messageList.add(event.snapshot.value);
+        }
+
         notifyListeners();
       });
-      
+
       notifyListeners();
     } else {
-      
       await _dialogService.showDialog(
         title: 'La actualizacion de mensajes ha fallado',
         description: "ha fallado XD asi al menos no crashea ",
@@ -97,11 +107,48 @@ class ChatsViewModel extends BaseModel {
     _firestoreService.readMessage(chatRoomId, currentUser.uid);
   }
 
-  void loadMoreMessages(String chatId) {
+  void loadMoreMessages(String chatId) async {
     isLoadingMore = true;
-    
-    limit += 15;
-    getMessages(chatId);
+    var timestamp = messageList.first["time"];
+    print(timestamp);
+    print("next line to the timestamp");
+    var chatStream =
+        _firestoreService.getMoreChatMessages(chatId, limit, timestamp);
+    print(limit);
+    if (chatStream is Stream<Event>) {
+      _chatStream = chatStream;
+      if (sth != null) {
+        sth.cancel();
+        sth = _chatStream.listen((event) {
+          if (messageList.contains(event.snapshot.value)) {
+            print("repeated");
+          } else {
+            messageList.add(event.snapshot.value);
+          }
+
+          notifyListeners();
+        });
+      } else {
+        print("ITS NULL");
+        sth = _chatStream.listen((event) {
+          if (messageList.contains(event.snapshot.value)) {
+            print("repeated");
+          } else {
+            messageList.add(event.snapshot.value);
+          }
+
+          notifyListeners();
+        });
+      }
+
+      notifyListeners();
+    } else {
+      await _dialogService.showDialog(
+        title: 'La actualizacion de mensajes ha fallado',
+        description: "ha fallado XD asi al menos no crashea ",
+      );
+    }
+
     isLoadingMore = false;
   }
 }
