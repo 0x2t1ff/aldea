@@ -21,15 +21,17 @@ class FeedViewModel extends BaseModel {
   List<Community> get communities => communityList;
   List<Community> communityList;
   bool dialogShowing = false;
-  
-  void refreshingFeed(){
-refreshing = true;
-notifyListeners();
+
+  void refreshingFeed() {
+    refreshing = true;
+    notifyListeners();
   }
-    void refreshingFeedEnded(){
-refreshing = false;
-notifyListeners();
+
+  void refreshingFeedEnded() {
+    refreshing = false;
+    notifyListeners();
   }
+
   Future fetchPosts() async {
     setBusy(true);
     var quickstrikeResults =
@@ -37,7 +39,7 @@ notifyListeners();
     var communities =
         await _firestoreService.getFollowingCommunities(currentUser.uid);
 
-    print(quickstrikeResults);
+    
     if (communities != null) {
       communityList = await _firestoreService.getCommunitiesData(
           communities, currentUser.uid);
@@ -45,7 +47,7 @@ notifyListeners();
     }
     print(communityList);
     if (quickstrikeResults is List<PostModel>) {
-      print(quickstrikeResults.length);
+   
       _posts = quickstrikeResults;
       notifyListeners();
     } else {
@@ -54,7 +56,7 @@ notifyListeners();
         description: "ha fallado XD asi al menos no crashea ",
       );
     }
-    print("Refresh ended");
+    
   }
 
   Future<bool> likePost(

@@ -1,3 +1,4 @@
+import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
 class GNav extends StatefulWidget {
   GNav({Key key, this.tabs, this.selectedIndex = 0, this.onTabChange});
@@ -96,7 +97,7 @@ class _GButtonState extends State<GButton> {
       icon: Icon(widget.icon,
           color: widget.active ? widget.iconActiveColor : widget.iconColor,
           //tamaño del icono 
-          size: MediaQuery.of(context).size.height* 0.03333),
+          size: screenHeight(context)* 0.03333),
       text: Text(
         widget.text,
         style: widget.textStyle ??

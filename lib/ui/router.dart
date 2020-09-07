@@ -3,6 +3,7 @@ import 'package:aldea/ui/views/chats_view.dart';
 import 'package:aldea/ui/views/comments_view.dart';
 import 'package:aldea/ui/views/community_creation_view.dart';
 import 'package:aldea/ui/views/community_profile_view.dart';
+import 'package:aldea/ui/views/community_users_admin_view.dart';
 import 'package:aldea/ui/views/detailed_community_creation_request_view.dart';
 import 'package:aldea/ui/views/hero_view.dart';
 import 'package:aldea/ui/views/other_profile_view.dart';
@@ -51,11 +52,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           arguments: settings.arguments,
         ),
       );
-      case HeroScreenRoute:
+    case HeroScreenRoute:
       return _getPageRoute(
-        routeName: settings.name, 
-        viewToShow: HeroScreen(settings.arguments)
-      );
+          routeName: settings.name, viewToShow: HeroScreen(settings.arguments));
 
     case VouchViewRoute:
       return _getPageRoute(
@@ -104,6 +103,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: CommentsView(settings.arguments),
       );
+    case CommunityUsersAdminRoute:
+      return _getPageRoute(
+          routeName: settings.name,
+          viewToShow: CommunityUsersAdminView(settings.arguments));
+
     case CommunitySettingsViewRoute:
       return _getPageRoute(
           routeName: settings.name,

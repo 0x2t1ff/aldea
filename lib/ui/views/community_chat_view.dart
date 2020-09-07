@@ -10,86 +10,65 @@ import "../shared/app_colors.dart" as custcolor;
 
 class CommunityChatView extends StatelessWidget {
   final String communityId;
-  final double height;
+
   final bool petitionsShowing;
 
-  const CommunityChatView(
-      {Key key, this.communityId, this.height, this.petitionsShowing})
+  const CommunityChatView({Key key, this.communityId, this.petitionsShowing})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print("builded");
     final messageController = TextEditingController();
-    ScrollController _controller = new ScrollController();
+    ScrollController controller = new ScrollController();
     return ViewModelBuilder<CommunityChatViewModel>.reactive(
       viewModelBuilder: () => CommunityChatViewModel(),
-      onModelReady: (model) => model.getMessages(communityId),
-      createNewModelOnInsert: true,
+      onModelReady: (model) async {
+        await model.getMessages(communityId);
+        controller.addListener(() {
+          if (controller.position.pixels /
+                      controller.position.maxScrollExtent >=
+                  0.8 &&
+              model.isLoadingMore == false) {
+            
+            model.loadMoreMessages(communityId);
+          }
+        });
+        
+      },
+      createNewModelOnInsert: false,
       builder: (context, model, child) => Scaffold(
-        resizeToAvoidBottomPadding: false,
+        backgroundColor: custcolor.darkBlue,
         body: Container(
           color: custcolor.almostBlack,
           child: Column(
             children: <Widget>[
               Container(
                 height: petitionsShowing
-                    ? devicesize.screenHeight(context) * 0.34314 +
-                        height * 0.988 -
+                    ? devicesize.screenHeight(context) * 0.65 -
                         MediaQuery.of(context).viewInsets.bottom
-                    : devicesize.screenHeight(context) * 0.395 +
-                        height * 0.988 -
+                    :
+                    //TODO: testear que esta altura funciona , calculo pocho dice q es esto _but_ who knows
+                    devicesize.screenHeight(context) * 0.71 -
                         MediaQuery.of(context).viewInsets.bottom,
                 color: custcolor.darkBlue,
                 width: devicesize.screenWidth(context),
                 child: model.messages != null
-                    ? StreamBuilder<Event>(
-                        stream: model.messages,
-                        builder: (ctx, snapshot) {
-                          if (!snapshot.hasData) {
-                            return Text(
-                              'No Data...',
-                            );
-                          } else if (snapshot.hasError) {
-                            return Text("error");
-                          } else {
-                            Map<dynamic, dynamic> messageMaps =
-                                snapshot.data.snapshot.value;
-                            List messageList = messageMaps.values.toList();
-
-                            messageList.sort((a, b) {
-                              var r = a["time"]
-                                  .toString()
-                                  .compareTo(b["time"].toString());
-
-                              return r;
-                            });
-                            // hace que cuando envias mensaje baje
-                            //TODO intentar hacer un singlechildscrollview y en vez de usar el listView.builder usar un .forEach() donde devuelva los mensajes , al singlechildscrollview meterle un ScrollController y que con cada resize/mensaje haga scroll hacia abajo
-                            return ListView.builder(
-                                reverse: false,
-                                controller: _controller,
-                                itemCount: messageList.length,
-                                itemBuilder: (context, index) {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((timeStamp) {
-                                    _controller.animateTo(
-                                        _controller.position.maxScrollExtent,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        curve: Curves.easeOut);
-                                  });
-                                  return CommunityMessageItem(
-                                    heroAnimation: () {
-                                      List url = [];
-                                      url.add(messageList[index]["message"]);
-                                      model.openHeroView(url);
-                                    },
-                                    model: MessageModel.fromMap(
-                                        messageList[index]),
-                                    currentUser: model.currentUser.uid,
-                                  );
-                                });
-                          }
+                    ? ListView.builder(
+                        reverse: true,
+                        controller: controller,
+                        itemCount: model.messages.length,
+                        itemBuilder: (ctx, index) {
+                          return MessageItem(
+                            heroAnimation: () {
+                              List url = [];
+                              url.add(model.messages[index]["message"]);
+                              model.openHeroView(url);
+                            },
+                            model: MessageModel.fromMap(
+                                model.messages.reversed.elementAt(index)),
+                            currentUser: model.currentUser.uid,
+                          );
                         },
                       )
                     : Center(
@@ -103,7 +82,7 @@ class CommunityChatView extends StatelessWidget {
                 constraints: BoxConstraints(
                   maxWidth: devicesize.screenWidth(context),
                 ),
-                height: devicesize.screenHeight(context) * 0.09,
+                height: devicesize.screenHeight(context) * 0.12,
                 color: custcolor.almostBlack,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

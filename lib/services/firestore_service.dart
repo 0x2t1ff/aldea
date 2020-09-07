@@ -7,7 +7,6 @@ import 'package:aldea/models/post_model.dart';
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/models/user_post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 import '../models/user_model.dart';
@@ -183,7 +182,7 @@ class FirestoreService {
   Future addCommunityFromRequest(String uid, String communityId) async {
     var userInfo = await _userCollectionReference.document(uid).get();
     List userRequests = userInfo.data["communities"];
-    userRequests.add(uid);
+    userRequests.add(communityId);
     _userCollectionReference
         .document(uid)
         .updateData({"communities": userRequests});
@@ -764,6 +763,56 @@ class FirestoreService {
       return stream;
     } catch (e) {
       return (e.message);
+    }
+  }
+
+  Future<QuerySnapshot> getCommunityUsers(String uid) async {
+    return _userCollectionReference
+        .where("communities", arrayContains: uid)
+        .limit(2)
+        .getDocuments();
+  }
+
+  Future<QuerySnapshot> getCommunityUsersSearch(String uid, String name) {
+    return _userCollectionReference
+        .where("communities", arrayContains: uid)
+        .where("username", arrayContains: name)
+        .getDocuments();
+  }
+
+  Future giveCommunityMod(String communityId, String uid) async {
+    var communityData =
+        await _communitiesCollectionReference.document(communityId).get();
+    List moderatorList = communityData.data["moderators"];
+    moderatorList.add(uid);
+    _communitiesCollectionReference
+        .document(communityId)
+        .updateData({"moderators": moderatorList});
+  }
+
+  Future kickCommunityUser(String communityId, String uid) async {
+    var followerDocument =
+        await _followingPostsCollectionReference.document(communityId).get();
+    List followersData = followerDocument.data["followers"];
+    followersData.remove(uid);
+    _followingPostsCollectionReference
+        .document(communityId)
+        .updateData({"followers": followersData});
+    var userDocument = await _userCollectionReference.document(uid).get();
+    List userCommunities = userDocument.data["communities"];
+    userCommunities.remove(communityId);
+    _userCollectionReference
+        .document(uid)
+        .updateData({"communities": userCommunities});
+
+    var communityData =
+        await _communitiesCollectionReference.document(communityId).get();
+    List moderatorList = communityData.data["moderators"];
+    if (moderatorList.contains(uid)) {
+      moderatorList.remove(uid);
+      _communitiesCollectionReference
+          .document(communityId)
+          .updateData({"moderators": moderatorList});
     }
   }
 }

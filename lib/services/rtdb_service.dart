@@ -4,15 +4,37 @@ import 'package:firebase_database/firebase_database.dart';
 class RtdbService {
   FirebaseDatabase _database = FirebaseDatabase.instance;
 
-  Stream<Event> fetchChatMessages(String chatRoomId) {
-    return _database.reference().child('messages/$chatRoomId').onValue;
+  Stream<Event> getChatMessages(String chatRoomId, int limit) {
+    var stream = _database
+        .reference()
+        .child('messages/$chatRoomId')
+        .orderByChild("time")
+        .limitToLast(limit)
+        .onChildAdded;
+
+    return stream;
   }
 
-  Stream<Event> fetchCommunityChatMessages(String communityId) {
+  Stream<Event> getMoreChatMessages(
+      String chatRoomId, int limit, String timestamp) {
+    var stream = _database
+        .reference()
+        .child('messages/$chatRoomId')
+        .orderByChild("time")
+        .startAt(timestamp)
+        .limitToFirst(limit)
+        .onChildAdded;
+
+    return stream;
+  }
+
+  Stream<Event> fetchCommunityChatMessages(String communityId, int limit) {
     return _database
         .reference()
         .child("communitiesChatRooms/$communityId")
-        .onValue;
+        .orderByChild("time")
+        .limitToLast(limit)
+        .onChildAdded;
   }
 
   String createChatRoom(
@@ -40,7 +62,7 @@ class RtdbService {
       String username,
       String imageUrl,
       bool isImage}) {
-    var time = DateTime.now().toString();
+    var time = DateTime.now(); //.toString();
     var path =
         _database.reference().child("communitiesChatRooms/$communityId").push();
 
@@ -86,9 +108,16 @@ class RtdbService {
       'imageUrl': imageUrl,
       'isImage': isImage,
       'otherId': otherUser,
-      
-    }).then(
-      (value) => _database.reference().child('chatRooms/$chatRoomId/').update({
+    }).then((value) async {
+      var query =
+          await _database.reference().child('chatRooms/$chatRoomId/').once();
+      Map unreadMessages = query.value["unreadMessages"];
+      print(unreadMessages);
+      unreadMessages.update(otherUser, (value) {
+        return value + 1;
+      });
+
+      _database.reference().child('chatRooms/$chatRoomId/').update({
         'lastMessage': {
           'message': message,
           'senderId': senderId,
@@ -97,10 +126,10 @@ class RtdbService {
           'username': username,
           'imageUrl': imageUrl,
           'isImage': isImage,
-          
-        }
-      }),
-    );
+        },
+        "unreadMessages": unreadMessages
+      });
+    });
   }
 
   List<Stream<Event>> getChats(List<dynamic> chatRoomIds) {
@@ -112,13 +141,30 @@ class RtdbService {
     return streams;
   }
 
-  void readMessage(String chatRoomId, String messageId) {
+  void readMessage(String chatRoomId, currentUser) async {
+    var chatroom = await _database
+        .reference()
+        .child("chatRooms")
+        .child("$chatRoomId")
+        .once();
+    var userIds = chatroom.value["users"];
+    String otherUser;
+    if (userIds[0] == currentUser) {
+      otherUser = userIds[1];
+    } else {
+      otherUser = userIds[0];
+    }
+
+    var query =
+        await _database.reference().child('chatRooms/$chatRoomId/').once();
+    Map unreadMessages = query.value["unreadMessages"];
+    print(unreadMessages);
+    unreadMessages.update(currentUser, (value) {
+      return 0;
+    });
     _database
         .reference()
-        .child('messages/$chatRoomId/$messageId')
-        .update({'isRead': true}).then((value) => _database
-            .reference()
-            .child('chatRooms/$chatRoomId/lastMessage')
-            .update({'isRead': true}));
+        .child('chatRooms/$chatRoomId/')
+        .update({"unreadMessages": unreadMessages});
   }
 }

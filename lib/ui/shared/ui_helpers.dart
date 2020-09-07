@@ -24,13 +24,18 @@ double notchHeight(BuildContext context) => MediaQuery.of(context).padding.top;
 double bottomHeight(BuildContext context) =>
     MediaQuery.of(context).padding.bottom;
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
-double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
+
+double screenHeight(BuildContext context) =>
+    MediaQuery.of(context).size.height -
+    notchHeight(context) - bottomHeight(context);
+
 double usableScreenHeight(BuildContext context) =>
     MediaQuery.of(context).size.height -
     notchHeight(context) -
     bottomHeight(context);
 double usableScreenWithoughtBars(BuildContext context) =>
     usableScreenHeight(context) * 0.8;
+
 double communityBodyHeight(BuildContext context) =>
     usableScreenHeight(context) * 0.9 + bottomHeight(context);
 

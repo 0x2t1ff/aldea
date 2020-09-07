@@ -18,8 +18,12 @@ class CommunityChatViewModel extends BaseModel {
   final ImageSelector _imageSelector = locator<ImageSelector>();
   final CloudStorageService _cloudStorageService =
       locator<CloudStorageService>();
+
   Stream<Event> _chatStream;
-  Stream<Event> get messages => _chatStream;
+  int limit = 15;
+  bool isLoadingMore = false;
+  List messageList = [];
+  List get messages => messageList;
   File selectedImage;
 
   Future<File> selectMessageImage() async {
@@ -60,22 +64,32 @@ class CommunityChatViewModel extends BaseModel {
 
   Future getMessages(String communityId) async {
     setBusy(true);
-    var chatStream = _firestoreService.fetchCommunityChatMessages(communityId);
-    chatStream.listen((event) {
-      print(event.toString());
-    });
+    var chatStream =
+        _firestoreService.fetchCommunityChatMessages(communityId, limit);
+
     setBusy(true);
 
     if (chatStream is Stream<Event>) {
       _chatStream = chatStream;
+      _chatStream.listen((event) {
+        messageList.add(event.snapshot.value);
+        notifyListeners();
+      });
+
       notifyListeners();
     } else {
-      //print(_quickstrikes.length.toString());
       await _dialogService.showDialog(
         title: 'La actualizacion de mensajes ha fallado',
-        description: "Error",
+        description: "ha fallado XD asi al menos no crashea ",
       );
     }
   }
-  
+
+  void loadMoreMessages(String communityId) {
+    isLoadingMore = true;
+    print("loading more messages ? owo");
+    limit += 15;
+    getMessages(communityId);
+    isLoadingMore = false;
+  }
 }

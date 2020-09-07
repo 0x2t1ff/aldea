@@ -113,9 +113,9 @@ class _ChatRoomItemState extends State<ChatRoomItem> {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(
-                    top: devicesize.screenHeight(context) * 0.025),
+                    top: devicesize.screenHeight(context) * 0.015),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Text(
                       widget.model.time.substring(0, 10),
@@ -127,8 +127,8 @@ class _ChatRoomItemState extends State<ChatRoomItem> {
                     ),
                        Container(
                          alignment: Alignment.center,
-                           width: devicesize.screenWidth(context) * 0.1,
-                           height: devicesize.screenWidth(context) * 0.1,
+                           width: devicesize.screenWidth(context) * 0.07,
+                           height: devicesize.screenWidth(context) * 0.07,
                            decoration: BoxDecoration(
                              color: custcolor.blueTheme,
                              borderRadius: BorderRadius.circular(32),
