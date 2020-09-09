@@ -104,6 +104,16 @@ class CommunitiesViewModel extends BaseModel {
     }
 
   }
+ void subscribeToCommunity(String communityId){
+_firestoreService.addCommunityFromRequest(currentUser.uid, communityId);
+currentUser.communities.add(communityId);
+notifyListeners();
 
+ }
 
+void unsubscribeToCommunity(String communityId){
+  _firestoreService.kickCommunityUser(communityId, currentUser.uid);
+  currentUser.communities.remove(communityId);
+  notifyListeners();
+}
 }

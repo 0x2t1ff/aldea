@@ -106,10 +106,10 @@ class CommunityPreview extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Padding(
-                            padding:  EdgeInsets.only(left:screenWidth(context) * 0.023),
+                            padding: EdgeInsets.only(
+                                left: screenWidth(context) * 0.023),
                             child: Container(
                               height: screenHeight(context) * 0.074,
-                              
                               child: Text(
                                 community.description,
                                 style: TextStyle(
@@ -172,24 +172,63 @@ class CommunityPreview extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                IconButton(
-                                    icon: model.isSendingRequest
-                                        ? CircularProgressIndicator()
-                                        : Icon(
-                                            model.currentUser.communities
+                                community.isPublic
+                                    ? Row(
+                                        children: [
+                                          IconButton(
+                                              icon: Icon(
+                                                Icons.input,
+                                                color: Color(0xff3C8FA7),
+                                                size: 35,
+                                              ),
+                                              onPressed: () {
+                                                model.goToCommunity(community);
+                                              }),
+                                          IconButton(
+                                            icon: model.currentUser.communities
                                                     .contains(community.uid)
-                                                ? Icons.input
-                                                : Icons.person_add,
-                                            color: Color(0xff3C8FA7),
-                                            size: 35,
-                                          ),
-                                    onPressed: () {
-                                      if (model.currentUser.communities
-                                          .contains(community.uid))
-                                        model.goToCommunity(community);
-                                      else
-                                        model.requestCommunityAcces(community);
-                                    })
+                                                ? Icon(
+                                                    Icons.person_remove,
+                                                    size: 35,
+                                                    color: Color(0xff3C8FA7),
+                                                  )
+                                                : Icon(
+                                                    Icons.person_add,
+                                                    color: Color(0xff3C8FA7),
+                                                    size: 35,
+                                                  ),
+                                            onPressed: () {
+                                              if (model.currentUser.communities
+                                                  .contains(community.uid)) {
+                                                model.unsubscribeToCommunity(
+                                                    community.uid);
+                                              } else {
+                                                model.subscribeToCommunity(
+                                                    community.uid);
+                                              }
+                                            },
+                                          )
+                                        ],
+                                      )
+                                    : IconButton(
+                                        icon: model.isSendingRequest
+                                            ? CircularProgressIndicator()
+                                            : Icon(
+                                                model.currentUser.communities
+                                                        .contains(community.uid)
+                                                    ? Icons.input
+                                                    : Icons.person_add,
+                                                color: Color(0xff3C8FA7),
+                                                size: 35,
+                                              ),
+                                        onPressed: () {
+                                          if (model.currentUser.communities
+                                              .contains(community.uid))
+                                            model.goToCommunity(community);
+                                          else
+                                            model.requestCommunityAcces(
+                                                community);
+                                        })
                               ],
                             ),
                           )
