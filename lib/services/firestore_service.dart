@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:aldea/models/comment_model.dart';
 import 'package:aldea/models/community.dart';
 import 'package:aldea/models/community_creation_request.dart';

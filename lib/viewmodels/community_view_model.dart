@@ -62,7 +62,8 @@ class CommunityViewModel extends BaseModel {
   }
 
   void goToAdminUsersScreen(Community community) {
-    _navigationService.navigateTo(CommunityUsersAdminRoute, false, arguments: community);
+    _navigationService.navigateTo(CommunityUsersAdminRoute, false,
+        arguments: community);
   }
 
   void setIsQuickstrike(bool value) {
@@ -158,6 +159,10 @@ class CommunityViewModel extends BaseModel {
     });
 
     return namez;
+  }
+
+  Future unfollowCommunity() async {
+    await _firestoreService.kickCommunityUser(community.uid, currentUser.uid);
   }
 
   Future<Null> selectDate(BuildContext context) async {

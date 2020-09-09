@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/views/user_posts_view.dart';
 import 'package:aldea/ui/views/news_view.dart';
 import 'package:aldea/models/community.dart';
@@ -83,9 +84,42 @@ class _CommunityViewState extends State<CommunityView>
                       Container(
                         child: Row(
                           children: [
+                            DropdownButton(
+                              dropdownColor: Colors.transparent,
+                              underline: Container(),
+                              items: <String>[
+                                "Dejar de seguir",
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  child: Container(
+                                      width: screenWidth(context) * 0.4,
+                                      padding: EdgeInsets.only(
+                                          top: screenHeight(context) * 0.1),
+                                      child: Container(
+                                          color: almostWhite,
+                                          height: screenHeight(context) * 0.05,
+                                          child: Center(
+                                            child: Text(value,
+                                                style: TextStyle(
+                                                    color: almostBlack,
+                                                    fontFamily: 'Raleway',
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ))),
+                                );
+                              }).toList(),
+                              onChanged: (a) {
+                                print(a);
+                              },
+                              icon: Icon(
+                                Icons.more_vert,
+                                size: 40,
+                                color: Colors.white,
+                              ),
+                            ),
                             Padding(
                               padding: EdgeInsets.only(
-                                  right: screenWidth(context) * 0.03),
+                                  right: screenWidth(context) * 0.0),
                               child: IconButton(
                                 onPressed: () {
                                   model.setIsShowingPopup(true);
@@ -109,8 +143,7 @@ class _CommunityViewState extends State<CommunityView>
                             ),
                             IconButton(
                               onPressed: () {
-                                model
-                                    .goToAdminUsersScreen(widget.community);
+                                model.goToAdminUsersScreen(widget.community);
                               },
                               icon: Icon(
                                 Icons.supervised_user_circle,
