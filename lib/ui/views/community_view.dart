@@ -6,6 +6,7 @@ import 'package:aldea/models/community.dart';
 import 'package:aldea/ui/shared/shared_styles.dart';
 import 'package:aldea/ui/views/market_view.dart';
 import 'package:aldea/ui/widgets/community_rules.dart';
+import 'package:aldea/ui/widgets/confirm_popup_unfollow.dart';
 import 'package:aldea/ui/widgets/creation_popup.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:flutter/material.dart';
@@ -109,7 +110,7 @@ class _CommunityViewState extends State<CommunityView>
                                 );
                               }).toList(),
                               onChanged: (a) {
-                                print(a);
+                                model.setIsUnfollowPopup();
                               },
                               icon: Icon(
                                 Icons.more_vert,
@@ -533,7 +534,10 @@ class _CommunityViewState extends State<CommunityView>
                               ),
                             ),
                           ),
-                          if (model.isShowingPopup) CreationPopup(model)
+                          if (model.isShowingPopup) CreationPopup(model),
+                          if(model.unfollowPopup) Positioned(top: screenHeight(context) * 0.25, left: screenWidth(context) * 0.15,
+                                                      child: UnfollowPopUp(context, model),
+                          ),
                         ],
                       )
               ],

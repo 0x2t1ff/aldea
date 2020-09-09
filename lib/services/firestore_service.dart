@@ -185,6 +185,14 @@ class FirestoreService {
     _userCollectionReference
         .document(uid)
         .updateData({"communities": userRequests});
+
+    var followerDocument =
+        await _followingPostsCollectionReference.document(communityId).get();
+    List followersData = followerDocument.data["followers"];
+    followersData.add(uid);
+    _followingPostsCollectionReference
+        .document(communityId)
+        .updateData({"followers": followersData});
   }
 
   Future registerCommunityActivity(String uid, String imageUrl) async {
