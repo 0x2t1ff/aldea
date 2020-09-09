@@ -21,16 +21,12 @@ class _CommunitiesViewState extends State<CommunitiesView>
 
   @override
   bool get wantKeepAlive => true;
-  var isShowingMore = false;
-
-
-
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CommunitiesViewModel>.reactive(
       viewModelBuilder: () => CommunitiesViewModel(),
       onModelReady: (model) {
-        if (model.topCommunities.isEmpty) {
+        
           model.fetchCommunities();
           controller.addListener(() {
             if (controller.position.pixels/controller.position.maxScrollExtent >=
@@ -38,7 +34,7 @@ class _CommunitiesViewState extends State<CommunitiesView>
               model.loadMoreCommunities();
             }
           });
-        }
+        
       },
       builder: (context, model, child) => WillPopScope(
         onWillPop: model.onWillPop,

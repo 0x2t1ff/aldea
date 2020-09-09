@@ -22,6 +22,7 @@ class CommunityViewModel extends BaseModel {
   var isShowingPopup = false;
   var isUploading = false;
   var isQuickstrike = true;
+  bool unfollowPopup = false;
   final Community community;
   Map<dynamic, dynamic> followersDoc;
   File firstImage;
@@ -73,6 +74,11 @@ class CommunityViewModel extends BaseModel {
 
   void setIsShowingPopup(bool value) {
     isShowingPopup = value;
+    notifyListeners();
+  }
+
+  void setIsUnfollowPopup(){
+    unfollowPopup = !unfollowPopup;
     notifyListeners();
   }
 
