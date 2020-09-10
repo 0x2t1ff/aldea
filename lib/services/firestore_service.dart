@@ -422,7 +422,7 @@ class FirestoreService {
       await _userCollectionReference
           .where("uid", isEqualTo: f)
           .getDocuments()
-          .then((onValue) => onValue.documents.first.data != null
+          .then((onValue) => onValue.documents.first.exists != null
               ? userList.add(User.fromData(onValue.documents.first.data))
               : print("it was null"));
 

@@ -101,7 +101,7 @@ class ProfileBody extends StatelessWidget {
                             onTap: () {
                               model == null
                                   ? otherModel
-                                      .seeVouches(otherModel.targetUserId)
+                                      .seeVouches(otherModel.user.uid)
                                   : model.seeVouches(model.currentUser.uid);
                             }),
                         GestureDetector(
@@ -110,7 +110,7 @@ class ProfileBody extends StatelessWidget {
                                 ? otherModel.giveVouch()
                                 : print("pressed");
                           },
-                          child: Container(
+                          child: model == null ? Container(
 
                               height: usableScreenWithoughtBars(context) * 0.12,
                               width: screenWidth(context) * 0.2 , 
@@ -119,7 +119,10 @@ class ProfileBody extends StatelessWidget {
                                     'assets/animations/vouchAnimation.flr',
                                     fit: BoxFit.cover,
                                     animation: otherModel.animationController,
-                                  )),
+                                  )) : SizedBox(
+                                    height: screenHeight(context) * 0.1,
+                                    width: screenWidth(context) * 0.15,
+                                    child: Image.asset("assets/images/vouch.png", fit: BoxFit.cover,),),
                         )
                       ],
                     ),

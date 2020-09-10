@@ -1,6 +1,4 @@
-import 'dart:math';
 import 'package:aldea/ui/widgets/notch_filler.dart';
-
 import "../shared/app_colors.dart" as custcolor;
 import "../shared/ui_helpers.dart" as device;
 import 'package:aldea/ui/shared/ui_helpers.dart';

@@ -23,57 +23,6 @@ class VouchView extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     NotchFiller(),
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            width: devicesize.screenWidth(context),
-                            height: screenHeight,
-                            color: custcolor.darkGrey,
-                          ),
-                          Container(
-                            width: devicesize.screenWidth(context),
-                            height: screenHeight,
-                            color: custcolor.backgroundColor,
-                          ),
-                          Container(
-                            width: devicesize.screenWidth(context),
-                            height: screenHeight,
-                            color: custcolor.darkGrey,
-                          ),
-                          Container(
-                            width: devicesize.screenWidth(context),
-                            height: screenHeight,
-                            color: custcolor.backgroundColor,
-                          ),
-                          Container(
-                            width: devicesize.screenWidth(context),
-                            height: screenHeight,
-                            color: custcolor.darkGrey,
-                          ),
-                          Container(
-                            width: devicesize.screenWidth(context),
-                            height: screenHeight,
-                            color: custcolor.backgroundColor,
-                          ),
-                          Container(
-                            width: devicesize.screenWidth(context),
-                            height: screenHeight,
-                            color: custcolor.darkGrey,
-                          ),
-                          Container(
-                            width: devicesize.screenWidth(context),
-                            height: screenHeight,
-                            color: custcolor.backgroundColor,
-                          ),
-                          Container(
-                            width: devicesize.screenWidth(context),
-                            height: screenHeight,
-                            color: custcolor.darkGrey,
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
                 model.posts != null
@@ -118,13 +67,29 @@ class VouchView extends StatelessWidget {
                           ),
                           Expanded(
                             child: ListView.builder(
-                              padding: EdgeInsets.all(0),
-                              itemCount: model.posts.length,
-                              itemBuilder: (context, index) => VouchItem(
-                                vouch: model.posts[index],
-                                index: index,
-                              ),
-                            ),
+                                padding: EdgeInsets.all(0),
+                                itemCount: model.posts.length > 9
+                                    ? model.posts.length
+                                    : 9,
+                                itemBuilder: (context, index) {
+                                  return index < model.posts.length
+                                      ? VouchItem(
+                                          goToProfile: () => model.goToProfile(
+                                              model.posts[index].uid),
+                                          vouch: model.posts[index],
+                                          index: index,
+                                        )
+                                      : Container(
+                                          color: index % 2 == 0
+                                              ? custcolor.backgroundColor
+                                              : custcolor.darkGrey,
+                                          width:
+                                              devicesize.screenWidth(context),
+                                          height:
+                                              devicesize.screenHeight(context) *
+                                                  0.103,
+                                        );
+                                }),
                           ),
                           BottomFiller(),
                         ],
