@@ -15,8 +15,8 @@ class OtherProfileViewModel extends BaseModel {
 
   User user;
   User get userData => user;
-
   String targetUserId;
+  String animationController = "Fijo Azul";
 
   Future fetchUser(String uid) async {
     targetUserId = uid;
@@ -25,7 +25,7 @@ class OtherProfileViewModel extends BaseModel {
 
     if (_user is User) {
       user = _user;
-      print(_user.toString() + "should be instance of user but w.e XD");
+      checkVouch();
       setBusy(false);
       notifyListeners();
     } else {
@@ -36,7 +36,7 @@ class OtherProfileViewModel extends BaseModel {
     }
   }
 
-  Future seeVouches(String c) {
+  void seeVouches(String c) {
     _navigationService.navigateTo(VouchViewRoute, false, arguments: c);
   }
 
@@ -44,7 +44,7 @@ class OtherProfileViewModel extends BaseModel {
     _navigationService.navigateTo(ChatViewRoute, false, arguments: c);
   }
 
-  Future seeCommunities(String c) {
+  void seeCommunities(String c) {
     _navigationService.navigateTo(CommunitiesProfileViewRoute, false,
         arguments: c);
   }
@@ -72,18 +72,36 @@ class OtherProfileViewModel extends BaseModel {
   }
 
   Future giveVouch() async {
+    if (user.vouches.contains(currentUser.uid)) {
+      animationController = "Fijo azul";
+    } else {
+      animationController = "Animacion";
+      notifyListeners();
+      Future.delayed(Duration(milliseconds: 300)).then((value) {
+        animationController = "Fijo amarillo";
+      });
+    }
+
     List vouchList = await _firestoreService.getVouchList(user.uid);
     print("vouch function starting");
     if (vouchList.contains(currentUser.uid)) {
       vouchList.remove(currentUser.uid);
-       _firestoreService.giveVouch(vouchList, user.uid);
+      _firestoreService.giveVouch(vouchList, user.uid);
       user.vouches = vouchList;
     } else {
       vouchList.add(currentUser.uid);
-       _firestoreService.giveVouch(vouchList, user.uid);
+      _firestoreService.giveVouch(vouchList, user.uid);
       user.vouches = vouchList;
     }
 
     notifyListeners();
+  }
+
+  void checkVouch() {
+    if (user.vouches.contains(currentUser.uid)) {
+      animationController = "Fijo amarillo";
+    } else {
+      animationController = "Fijo azul";
+    }
   }
 }

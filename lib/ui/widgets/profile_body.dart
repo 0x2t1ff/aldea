@@ -1,6 +1,7 @@
 import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/viewmodels/other_profile_view_model.dart';
 import 'package:aldea/viewmodels/profile_view_model.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import '../shared/shared_styles.dart';
 
@@ -109,9 +110,16 @@ class ProfileBody extends StatelessWidget {
                                 ? otherModel.giveVouch()
                                 : print("pressed");
                           },
-                          child: SizedBox(
+                          child: Container(
+
                               height: usableScreenWithoughtBars(context) * 0.12,
-                              child: Image.asset("assets/images/vouch.png")),
+                              width: screenWidth(context) * 0.2 , 
+                              
+                              child:FlareActor(
+                                    'assets/animations/vouchAnimation.flr',
+                                    fit: BoxFit.cover,
+                                    animation: otherModel.animationController,
+                                  )),
                         )
                       ],
                     ),

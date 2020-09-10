@@ -20,6 +20,7 @@ class ProfileView extends StatelessWidget {
     return ViewModelBuilder<ProfileViewModel>.reactive(
       viewModelBuilder: () => ProfileViewModel(),
       onModelReady: (model) {
+        
         if (phoneController.text.isEmpty)
           phoneController.text = model.currentUser.phoneNumber;
         if (mailController.text.isEmpty)
