@@ -22,6 +22,7 @@ class CommunityViewModel extends BaseModel {
   var isShowingPopup = false;
   var isUploading = false;
   var isQuickstrike = true;
+  bool unfollowDropdown = false;
   bool unfollowPopup = false;
   final Community community;
   Map<dynamic, dynamic> followersDoc;
@@ -82,15 +83,9 @@ class CommunityViewModel extends BaseModel {
     notifyListeners();
   }
 
-  void setDropdownValue(String value) {
-    dropDownValue = value;
-    notifyListeners();
-  }
 
-  void setModelDropdown(String value) {
-    modelDropdown = value;
-    notifyListeners();
-  }
+
+ 
 
   Future selectFirstImage() async {
     var tempImage = await _imageSelector.selectPostImage();
@@ -340,4 +335,19 @@ class CommunityViewModel extends BaseModel {
     selectedDate = null;
     notifyListeners();
   }
+  void setDropdownContainer( ){
+    unfollowDropdown = !unfollowDropdown;
+    notifyListeners();
+  }
+
+
+   void setDropdownValue(String value) {
+    dropDownValue = value;
+    notifyListeners();
+  }
+  void setModelDropdown(String value) {
+    modelDropdown = value;
+    notifyListeners();
+  }
+
 }
