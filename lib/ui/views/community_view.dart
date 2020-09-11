@@ -85,73 +85,18 @@ class _CommunityViewState extends State<CommunityView>
                       Container(
                         child: Row(
                           children: [
-                            DropdownButton(
-                              dropdownColor: Colors.transparent,
-                              underline: Container(),
-                              items: <String>[
-                                "Dejar de seguir",
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  child: Container(
-                                      width: screenWidth(context) * 0.4,
-                                      padding: EdgeInsets.only(
-                                          top: screenHeight(context) * 0.1),
-                                      child: Container(
-                                          color: almostWhite,
-                                          height: screenHeight(context) * 0.05,
-                                          child: Center(
-                                            child: Text(value,
-                                                style: TextStyle(
-                                                    color: almostBlack,
-                                                    fontFamily: 'Raleway',
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          ))),
-                                );
-                              }).toList(),
-                              onChanged: (a) {
-                                model.setIsUnfollowPopup();
-                              },
-                              icon: Icon(
-                                Icons.more_vert,
-                                size: 40,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  right: screenWidth(context) * 0.0),
-                              child: IconButton(
-                                onPressed: () {
-                                  model.setIsShowingPopup(true);
-                                },
-                                icon: Icon(
-                                  Icons.note_add,
-                                  size: 35,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                model.goToSettings(widget.community);
-                              },
-                              icon: Icon(
-                                Icons.settings,
-                                size: 35,
-                                color: Colors.white,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                model.goToAdminUsersScreen(widget.community);
-                              },
-                              icon: Icon(
-                                Icons.supervised_user_circle,
-                                size: 35,
-                                color: Colors.white,
-                              ),
-                            )
+                            if (model.community.moderators
+                                    .contains(model.currentUser.uid) !=
+                                true)
+                              IconButton(
+                                  icon: Icon(Icons.more_vert, color: almostWhite, size: 35),
+                                  onPressed: () {
+                                    model.setDropdownContainer();
+                                  }),
+                            model.community.moderators
+                                    .contains(model.currentUser.uid)
+                                ? getModButtons(model)
+                                : Container()
                           ],
                         ),
                       ),
@@ -535,14 +480,69 @@ class _CommunityViewState extends State<CommunityView>
                             ),
                           ),
                           if (model.isShowingPopup) CreationPopup(model),
-                          if(model.unfollowPopup) Positioned(top: screenHeight(context) * 0.25, left: screenWidth(context) * 0.15,
-                                                      child: UnfollowPopUp(context, model),
-                          ),
+                          if (model.unfollowPopup)
+                            Positioned(
+                              top: screenHeight(context) * 0.25,
+                              left: screenWidth(context) * 0.15,
+                              child: UnfollowPopUp(context, model),
+                            ),
+                       model.unfollowDropdown?   Positioned(
+                            top:screenHeight(context) *0.03,
+                              right: screenWidth(context) * 0.07,
+                              child: GestureDetector(
+                                onTap: (){ 
+                                  model.setDropdownContainer();
+                                  model.setIsUnfollowPopup();},
+                                  child: Container(
+                                    decoration: BoxDecoration(color: almostWhite, borderRadius: BorderRadius.all(Radius.circular(10,),),),
+                                      width: screenWidth(context) * 0.3,
+                                      height: screenHeight(context) * 0.05, 
+                                      child: Center(child: Text( "Dejar de seguir", style: TextStyle(color: almostBlack, fontFamily: 'Raleway', ),))))) : Container()
                         ],
                       )
               ],
             ),
           );
         });
+  }
+
+  Widget getModButtons(CommunityViewModel model) {
+    return Row(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(right: screenWidth(context) * 0.0),
+          child: IconButton(
+            onPressed: () {
+              model.setIsShowingPopup(true);
+            },
+            icon: Icon(
+              Icons.note_add,
+              size: 35,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            model.goToSettings(widget.community);
+          },
+          icon: Icon(
+            Icons.settings,
+            size: 35,
+            color: Colors.white,
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            model.goToAdminUsersScreen(widget.community);
+          },
+          icon: Icon(
+            Icons.supervised_user_circle,
+            size: 35,
+            color: Colors.white,
+          ),
+        )
+      ],
+    );
   }
 }
