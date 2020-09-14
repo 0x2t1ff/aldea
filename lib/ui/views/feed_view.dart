@@ -201,18 +201,18 @@ class _FeedViewState extends State<FeedView> {
                                                       BoxDecoration(boxShadow: [
                                                     BoxShadow(
                                                       color: Colors.black
-                                                          .withOpacity(1),
+                                                         , 
                                                       spreadRadius: 3,
                                                       blurRadius: 7,
-                                                      offset: Offset(2,
+                                                          offset: Offset(2,
                                                           3), // changes position of shadow
                                                     ),
                                                   ], shape: BoxShape.circle),
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: devicesize
-                                                              .screenHeight(
+                                                              .screenWidth(
                                                                   context) *
-                                                          0.055),
+                                                          0.02),
                                                   height:
                                                       devicesize.screenHeight(
                                                               context) *
