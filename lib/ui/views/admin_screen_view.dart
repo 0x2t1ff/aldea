@@ -7,6 +7,7 @@ import 'package:aldea/viewmodels/admin_screen_view_model.dart';
 class AdminScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    
     return ViewModelBuilder<AdminScreenViewModel>.reactive(
       viewModelBuilder: () => AdminScreenViewModel(),
       onModelReady: (model) => model.getAdminRequests(),

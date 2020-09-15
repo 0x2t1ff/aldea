@@ -256,11 +256,15 @@ class FirestoreService {
     await _communitiesCreationRequestsReference.document(id).delete();
   }
 
-  Future createCommunity(Community community, String id) async {
+  Future createCommunity(Community community, String id, String userId) async {
     try {
       await _communitiesCollectionReference
           .document(community.uid)
           .setData(community.toJson());
+          var userData = await _userCollectionReference.document(userId).get();
+          List communities = userData["communities"];
+          communities.add(id);
+          _userCollectionReference.document(userId).updateData({"communities":communities});
     } catch (e) {
       //TODO: Find or create a way to repeat error handling without so much repeated code
       if (e is PlatformException) {

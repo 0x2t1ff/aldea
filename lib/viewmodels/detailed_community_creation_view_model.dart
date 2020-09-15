@@ -14,9 +14,9 @@ class DetailedCommunityCreationViewModel extends BaseModel {
     _firestoreService.denyCommunityCreation(id);
   }
 
-  Future acceptRequest(CommunityCreationRequest request) async {
+  Future acceptRequest(CommunityCreationRequest request, String userId) async {
     var community = Community.fromData(request.toJson(), request.id);
-    _firestoreService.createCommunity(community, request.id).then(
+    _firestoreService.createCommunity(community, request.id, userId).then(
           (_) => _firestoreService.denyCommunityCreation(request.id).then(
                 (value) => _firestoreService.registerCommunityActivity(
                     request.id, request.bkdPicUrl),

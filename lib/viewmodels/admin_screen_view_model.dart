@@ -4,8 +4,6 @@ import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/models/community_creation_request.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
-import 'package:aldea/services/rtdb_service.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'base_model.dart';
 import '../locator.dart';
 import '../services/dialog_service.dart';
