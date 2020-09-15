@@ -135,7 +135,7 @@ class FinishedQuickstrike extends StatelessWidget {
                       padding: EdgeInsets.only(
                           left: devicesize.screenWidth(context) * 0.074),
                       child: Container(
-                        width: devicesize.screenWidth(context) * 0.54,
+                        width: devicesize.screenWidth(context) * 0.52,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,7 +407,7 @@ class FinishedQuickstrike extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          left: devicesize.screenWidth(context) * 0.455,
+                          left: devicesize.screenWidth(context) * 0.43,
                         ),
                         child: IconButton(
                           icon: Icon(

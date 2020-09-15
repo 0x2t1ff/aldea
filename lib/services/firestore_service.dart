@@ -325,7 +325,12 @@ class FirestoreService {
     for (var f in communitiesList) {
       var communityInfo =
           await _communitiesCollectionReference.document(f).get();
-
+if(communityInfo.data["isDeleted"]){
+ var userData =  await _userCollectionReference.document(uid).get();
+ List communitiesList = userData.data["communities"];
+ communitiesList.remove(f);
+await _userCollectionReference.document(uid).updateData({"communities":communitiesList});
+}else{
       var community =
           Community.fromData(communityInfo.data, communityInfo.data["uid"]);
       infoList.add(community);
@@ -333,6 +338,7 @@ class FirestoreService {
 
     return infoList;
   }
+      }
 
   Future createUser(User user) async {
     try {
@@ -821,5 +827,10 @@ class FirestoreService {
           .document(communityId)
           .updateData({"moderators": moderatorList});
     }
+  }
+  void deleteCommunity(String communityId, String communityName){
+    _communitiesCollectionReference.document(communityId).setData({"isDeleted":true, "name":communityName});
+    _followingPostsCollectionReference.document(communityId).delete();
+    
   }
 }
