@@ -167,4 +167,7 @@ class RtdbService {
         .child('chatRooms/$chatRoomId/')
         .update({"unreadMessages": unreadMessages});
   }
+   void deleteCommunityChat ( String communityId){
+     _database.reference().child("communitiesChatRooms/$communityId").remove();
+   }
 }

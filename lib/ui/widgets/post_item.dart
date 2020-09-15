@@ -213,7 +213,7 @@ class PostItem extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          left: devicesize.screenWidth(context) * 0.545,
+                          left: devicesize.screenWidth(context) * 0.52,
                         ),
                         child: IconButton(
                           icon: Icon(

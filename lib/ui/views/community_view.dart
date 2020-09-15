@@ -93,6 +93,10 @@ class _CommunityViewState extends State<CommunityView>
                                   onPressed: () {
                                     model.setDropdownContainer();
                                   }),
+                                  model.currentUser.isGodAdmin ? IconButton(
+                                    icon: Icon(Icons.dangerous, color: Colors.red, size: 35),
+                                    onPressed: () => "",
+                                  ) : Container(),
                             model.community.moderators
                                     .contains(model.currentUser.uid)
                                 ? getModButtons(model)

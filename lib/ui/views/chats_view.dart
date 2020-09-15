@@ -78,7 +78,7 @@ class ChatsView extends StatelessWidget {
                   height: devicesize.screenHeight(context) * 0.1,
                   color: custcolor.almostBlack,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -101,7 +101,7 @@ class ChatsView extends StatelessWidget {
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal:
-                                      devicesize.screenWidth(context) * 0.025),
+                                      devicesize.screenWidth(context) * 0.035),
                               hintText: "   Envia un mensaje...",
                               hintStyle: TextStyle(
                                   color: Color(0xff3a464d),
@@ -121,7 +121,7 @@ class ChatsView extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            left: devicesize.screenWidth(context) * 0.02,
+                            left: devicesize.screenWidth(context) * 0.01,
                             bottom: devicesize.screenWidth(context) * 0.01),
                         child: IconButton(
                           icon: Icon(
@@ -148,7 +148,7 @@ class ChatsView extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            left: devicesize.screenWidth(context) * 0.0,
+                            
                             bottom: devicesize.screenWidth(context) * 0.01),
                         child: IconButton(
                           icon: Icon(
@@ -176,7 +176,7 @@ class ChatsView extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(
                             bottom: devicesize.screenWidth(context) * 0.01,
-                            left: devicesize.screenWidth(context) * 0.0),
+                           ),
                         child: IconButton(
                           icon: Icon(
                             Icons.send,

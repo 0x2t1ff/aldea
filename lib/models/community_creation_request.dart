@@ -33,7 +33,12 @@ class CommunityCreationRequest {
       'bkdPicUrl': bkdPicUrl,
       'postsCount': 0,
       'followerCount': 0,
-      'moderators': [user.uid]
+      'moderators': [user.uid],
+      'isMarketplace': false,
+      'isPublic': false,
+      'postCount': 0,
+
+
     };
   }
 }

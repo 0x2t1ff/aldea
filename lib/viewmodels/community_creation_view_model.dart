@@ -14,8 +14,7 @@ class CommunityCreationViewModel extends BaseModel {
   FirestoreService _firestoreService = locator<FirestoreService>();
   CloudStorageService _cloudStorageService = locator<CloudStorageService>();
   DialogService _dialogService = locator<DialogService>();
-    final NavigationService _navigationService = locator<NavigationService>();
-
+  final NavigationService _navigationService = locator<NavigationService>();
 
   File profilePic;
   File bkdPic;
@@ -38,26 +37,32 @@ class CommunityCreationViewModel extends BaseModel {
 
   Future createRequest(User user, String messageRequest, String name,
       String communityRules, String description) async {
-        print("we got here");
+    print("we got here");
     var reference = await _firestoreService.createRequestId();
     print(reference.documentID + " this is the reference");
     var profilePicUrl = await _cloudStorageService.uploadCommunityRequestImage(
         imageToUpload: profilePic, communityId: reference.documentID);
     var bkdPicUrl = await _cloudStorageService.uploadCommunityRequestImage(
         imageToUpload: bkdPic, communityId: reference.documentID);
-    var sth = await _firestoreService.createCommunityCreationRequest(user, messageRequest,
+    await _firestoreService.createCommunityCreationRequest(user, messageRequest,
         bkdPicUrl, name, communityRules, description, profilePicUrl, reference);
   }
 
-  Future termsDialog(){
-    _dialogService.showDialog(title:"" , buttonTitle: "Okay", description: "Please accept the terms and conditions");
+  Future termsDialog() {
+    _dialogService.showDialog(
+        title: "",
+        buttonTitle: "Okay",
+        description: "Please accept the terms and conditions");
   }
 
-  Future fieldsDialog(){
-    _dialogService.showDialog(title:"", buttonTitle: "okay" , description: " por favor rellena todos los campos");
+  Future fieldsDialog() {
+    _dialogService.showDialog(
+        title: "",
+        buttonTitle: "okay",
+        description: " por favor rellena todos los campos");
   }
 
-  Future backToSettings(){
+  Future backToSettings() {
     _navigationService.pop();
   }
 }

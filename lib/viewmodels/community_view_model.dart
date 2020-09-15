@@ -8,6 +8,7 @@ import 'package:aldea/services/cloud_storage_service.dart';
 import 'package:aldea/services/dialog_service.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
+import 'package:aldea/services/rtdb_service.dart';
 import 'package:aldea/viewmodels/base_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,7 @@ class CommunityViewModel extends BaseModel {
   final ImageSelector _imageSelector = locator<ImageSelector>();
   final NavigationService _navigationService = locator<NavigationService>();
   final DialogService _dialogService = locator<DialogService>();
+  final RtdbService _rtdbService = locator<RtdbService>();
 
   void goToRequests() {
     _navigationService.navigateTo(RequestsViewRoute, false,
@@ -348,6 +350,13 @@ class CommunityViewModel extends BaseModel {
   void setModelDropdown(String value) {
     modelDropdown = value;
     notifyListeners();
+  }
+
+  void deleteCommunity (){
+    _firestoreService.deleteCommunity(community.uid, community.name);
+    _rtdbService.deleteCommunityChat(community.uid);
+
+
   }
 
 }

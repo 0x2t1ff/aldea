@@ -1,4 +1,5 @@
 import 'package:aldea/models/community_creation_request.dart';
+import 'package:aldea/models/user_model.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
@@ -10,7 +11,7 @@ import 'package:stacked/stacked.dart';
 class DetailedCommunityCreationView extends StatelessWidget {
   final CommunityCreationRequest request;
 
-  DetailedCommunityCreationView(this.request);
+  DetailedCommunityCreationView(this.request, );
   @override
   Widget build(BuildContext context) {
     final TextStyle optionsStyle =
@@ -241,7 +242,7 @@ class DetailedCommunityCreationView extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {
                                   print("accepted");
-                                  model.acceptRequest(request);
+                                  model.acceptRequest(request, request.user.uid);
                                   
                                   model.goBack();
                                 },

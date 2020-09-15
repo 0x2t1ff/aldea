@@ -46,7 +46,7 @@ class ProfileSettingsView extends StatelessWidget {
               ),
             ),
             Container(
-                height: devicesize.screenHeight(context) * 0.84486,
+                height: devicesize.screenHeight(context) * 0.9,
                 width: devicesize.screenWidth(context),
                 color: darkGrey,
                 child: Container(

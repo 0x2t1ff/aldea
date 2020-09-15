@@ -148,6 +148,7 @@ class MessageItem extends StatelessWidget {
                   padding: EdgeInsets.only(
                     bottom: devicesize.screenHeight(context) * 0.025,
                     right: devicesize.screenWidth(context) * 0.02,
+                    left: devicesize.screenWidth(context) * 0.02
                   ),
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(model.imageUrl),
