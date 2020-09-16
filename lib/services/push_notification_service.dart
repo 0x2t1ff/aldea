@@ -22,7 +22,6 @@ class PushNotificationService {
     );
 
     _fcm.getToken().then((token) {
-      print('token: $token');
       Firestore.instance
           .collection('users')
           .document(id)
