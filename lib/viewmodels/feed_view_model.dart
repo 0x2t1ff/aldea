@@ -17,6 +17,7 @@ class FeedViewModel extends BaseModel {
   List<PostModel> _posts;
   List<PostModel> get posts => _posts;
   bool refreshing = false;
+  bool isLoadingMore = false;
   //make another get to retrieve from the feed-view,
   List<Community> get communities => communityList;
   List<Community> communityList;
@@ -32,31 +33,51 @@ class FeedViewModel extends BaseModel {
     notifyListeners();
   }
 
+  Future getPosts() async {
+    setBusy(true);
+    var posts = await _firestoreService.getPosts(currentUser.communities);
+    _posts = posts;
+    notifyListeners();
+    print("acaba");
+  }
+
+  Future loadMorePosts() async {
+    isLoadingMore = true;
+    notifyListeners();
+    var postsToAdd = await _firestoreService.getMorePosts(
+        currentUser.communities, _posts[_posts.length - 1].fechaQuickstrike);
+
+    _posts.addAll(postsToAdd);
+    notifyListeners();
+  }
+
+  setIsLoading(bool val) {
+    isLoadingMore = val;
+    notifyListeners();
+  }
+
   Future fetchPosts() async {
     setBusy(true);
-    var quickstrikeResults =
-        await _firestoreService.getFollowingPostsOnceOff(currentUser.uid);
-    var communities =
-        await _firestoreService.getFollowingCommunities(currentUser.uid);
+    var communities = currentUser.communities;
+    var quickstrikeResults = await _firestoreService.getPosts(communities);
 
-    
     if (communities != null) {
       communityList = await _firestoreService.getCommunitiesData(
           communities, currentUser.uid);
       notifyListeners();
     }
-    print(communityList);
     if (quickstrikeResults is List<PostModel>) {
-   
       _posts = quickstrikeResults;
       notifyListeners();
     } else {
       await _dialogService.showDialog(
-        title: 'La actualizacion de posts ha fallado',
-        description: "ha fallado XD asi al menos no crashea ",
+        title: 'Error.',
+        description:
+            "Ha ocurrido un error al cargar las publicaciones. Por favor, inténtelo más tarde.",
       );
     }
-    
+
+    setBusy(false);
   }
 
   Future<bool> likePost(

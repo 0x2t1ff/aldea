@@ -4,7 +4,6 @@ import 'package:aldea/ui/views/direct_message_view.dart';
 import 'package:aldea/ui/views/feed_view.dart';
 import 'package:aldea/ui/views/profile_view.dart';
 import 'package:aldea/ui/views/quickstrike_view.dart';
-import 'package:aldea/ui/views/startup_view.dart';
 import 'package:aldea/ui/widgets/bottom_filler.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:flutter/material.dart';
@@ -69,9 +68,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xff0F1013),
