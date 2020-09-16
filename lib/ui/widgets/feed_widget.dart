@@ -19,6 +19,7 @@ class FeedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (postModel.isAnnouncement == true) {
+      print("announcement");
       return StartQuickstrike(
         goToComments: navigateToComments,
         postModel: postModel,
@@ -27,6 +28,7 @@ class FeedWidget extends StatelessWidget {
         goToCommunity: navigateToCommunity,
       );
     } else if (postModel.isResult == true) {
+      print("isresult");
       return FinishedQuickstrike(
         postModel: postModel,
         likeFunction: likeFunction,
@@ -34,6 +36,7 @@ class FeedWidget extends StatelessWidget {
         navigateToComments: navigateToComments,
       );
     } else {
+      print("isnormalpostXD");
       return PostItem(
         likeFunction: likeFunction,
         postModel: postModel,

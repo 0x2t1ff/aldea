@@ -14,8 +14,7 @@ class FeedView extends StatefulWidget {
   _FeedViewState createState() => _FeedViewState();
 }
 
-class _FeedViewState extends State<FeedView>
-    with AutomaticKeepAliveClientMixin {
+class _FeedViewState extends State<FeedView> {
   static final _containerHeight = 100.0 / 800;
 
   // You don't need to change any of these variables
@@ -68,25 +67,11 @@ class _FeedViewState extends State<FeedView>
   }
 
   @override
-  bool get wantKeepAlive => true;
-  @override
-  // ignore: must_call_super
-  @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<FeedViewModel>.reactive(
       viewModelBuilder: () => FeedViewModel(),
-      onModelReady: (model) {
-        model.fetchPosts();
-        _controller.addListener(() async {
-          if (_controller.position.pixels /
-                      _controller.position.maxScrollExtent >=
-                  0.6 &&
-              model.isLoadingMore == false) {
-            await model.loadMorePosts();
-            model.setIsLoading(false);
-          }
-        });
-      },
+      
+      onModelReady: (model) => model.fetchPosts(),
       builder: (context, model, child) => WillPopScope(
         onWillPop: model.onWillPop,
         child: Scaffold(
@@ -215,10 +200,11 @@ class _FeedViewState extends State<FeedView>
                                                   decoration:
                                                       BoxDecoration(boxShadow: [
                                                     BoxShadow(
-                                                      color: Colors.black,
+                                                      color: Colors.black
+                                                         , 
                                                       spreadRadius: 3,
                                                       blurRadius: 7,
-                                                      offset: Offset(2,
+                                                          offset: Offset(2,
                                                           3), // changes position of shadow
                                                     ),
                                                   ], shape: BoxShape.circle),
