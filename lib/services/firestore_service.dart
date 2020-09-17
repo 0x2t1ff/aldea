@@ -507,6 +507,37 @@ class FirestoreService {
     }
   }
 
+  Future<List<PostModel>> getPosts(List<dynamic> communityIds) async {
+    List<PostModel> posts = [];
+    List<List<String>> lists = [];
+    List<String> list = [];
+
+    for (var i = 0; i < communityIds.length; i++) {
+      list.add(communityIds[i]);
+      if (list.length == 10 || (i + 1) == communityIds.length) {
+        lists.add(list);
+        list = [];
+      }
+    }
+    try {
+      await Future.forEach(lists, (list) async {
+        var postsResult = await _postsCollectionReference
+            .where("communityId", whereIn: list)
+            .orderBy("fechaQuickstrike", descending: true)
+            .limit(10)
+            .getDocuments();
+        postsResult.documents.forEach((doc) {
+          var post = PostModel.fromMap(doc.data, id: doc.documentID);
+          posts.add(post);
+        });
+        return null;
+      });
+    } catch (e) {
+      print(e);
+    }
+    return posts;
+  }
+
   Future getFollowingPostsOnceOff(String uid) async {
     try {
       var postDocumentSnapshot = await _followingPostsCollectionReference
@@ -620,6 +651,39 @@ class FirestoreService {
     } catch (e) {
       return e.message;
     }
+  }
+
+  Future<List<PostModel>> getMorePosts(List<dynamic> communityIds, Timestamp d,
+      {int limit = 9}) async {
+    List<PostModel> posts = [];
+    List<List<String>> lists = [];
+    List<String> list = [];
+
+    for (var i = 0; i < communityIds.length; i++) {
+      list.add(communityIds[i]);
+      if (list.length == 10 || (i + 1) == communityIds.length) {
+        lists.add(list);
+        list = [];
+      }
+    }
+    try {
+      await Future.forEach(lists, (list) async {
+        var postsResult = await _postsCollectionReference
+            .where("communityId", whereIn: list)
+            .where("fechaQuickstrike", isLessThan: d)
+            .orderBy("fechaQuickstrike", descending: true)
+            .limit(10)
+            .getDocuments();
+        postsResult.documents.forEach((doc) {
+          var post = PostModel.fromMap(doc.data, id: doc.documentID);
+          posts.add(post);
+        });
+        return null;
+      });
+    } catch (e) {
+      print(e);
+    }
+    return posts;
   }
 
   Future<List<Map<String, dynamic>>> getTopCommunities() async {
