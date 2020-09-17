@@ -38,6 +38,7 @@ class FeedViewModel extends BaseModel {
         await _firestoreService.getFollowingPostsOnceOff(currentUser.uid);
     var communities =
         await _firestoreService.getFollowingCommunities(currentUser.uid);
+        
 
     
     if (communities != null) {

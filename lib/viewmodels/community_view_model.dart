@@ -25,6 +25,7 @@ class CommunityViewModel extends BaseModel {
   var isQuickstrike = true;
   bool unfollowDropdown = false;
   bool unfollowPopup = false;
+  bool deletingCommunity = false;
   final Community community;
   Map<dynamic, dynamic> followersDoc;
   File firstImage;
@@ -352,11 +353,23 @@ class CommunityViewModel extends BaseModel {
     notifyListeners();
   }
 
-  void deleteCommunity (){
+  void deleteCommunityDatabase (){
     _firestoreService.deleteCommunity(community.uid, community.name);
     _rtdbService.deleteCommunityChat(community.uid);
 
 
   }
+  void setDeleteCommunity(){
+    deletingCommunity = true;
+  notifyListeners();
+  }
+ void setNotDeleteCommunity(){
+    deletingCommunity = false;
+  notifyListeners();
+  }
 
+  void deleteCommunity(){
+    setNotDeleteCommunity();
+    deleteCommunityDatabase();
+  }
 }

@@ -261,10 +261,12 @@ class FirestoreService {
       await _communitiesCollectionReference
           .document(community.uid)
           .setData(community.toJson());
-          var userData = await _userCollectionReference.document(userId).get();
-          List communities = userData["communities"];
-          communities.add(id);
-          _userCollectionReference.document(userId).updateData({"communities":communities});
+      var userData = await _userCollectionReference.document(userId).get();
+      List communities = userData["communities"];
+      communities.add(id);
+      _userCollectionReference
+          .document(userId)
+          .updateData({"communities": communities});
     } catch (e) {
       //TODO: Find or create a way to repeat error handling without so much repeated code
       if (e is PlatformException) {
@@ -325,24 +327,27 @@ class FirestoreService {
   Future<List<Community>> getCommunitiesData(
       List<dynamic> communitiesList, String uid) async {
     List<Community> infoList = List();
-
+ 
     for (var f in communitiesList) {
       var communityInfo =
           await _communitiesCollectionReference.document(f).get();
-if(communityInfo.data["isDeleted"]){
- var userData =  await _userCollectionReference.document(uid).get();
- List communitiesList = userData.data["communities"];
- communitiesList.remove(f);
-await _userCollectionReference.document(uid).updateData({"communities":communitiesList});
-}else{
-      var community =
-          Community.fromData(communityInfo.data, communityInfo.data["uid"]);
-      infoList.add(community);
-    }
-
-    return infoList;
-  }
+      if (communityInfo.data["isDeleted"]) {
+        var userData = await _userCollectionReference.document(uid).get();
+        List communitiesList = userData.data["communities"];
+        communitiesList.remove(f);
+        await _userCollectionReference
+            .document(uid)
+            .updateData({"communities": communitiesList});
+      } else {
+        
+        var community =
+            Community.fromData(communityInfo.data, communityInfo.data["uid"]);
+        infoList.add(community);
       }
+
+    }
+      return infoList;
+  }
 
   Future createUser(User user) async {
     try {
@@ -832,9 +837,11 @@ await _userCollectionReference.document(uid).updateData({"communities":communiti
           .updateData({"moderators": moderatorList});
     }
   }
-  void deleteCommunity(String communityId, String communityName){
-    _communitiesCollectionReference.document(communityId).setData({"isDeleted":true, "name":communityName});
+
+  void deleteCommunity(String communityId, String communityName) {
+    _communitiesCollectionReference
+        .document(communityId)
+        .setData({"isDeleted": true, "name": communityName});
     _followingPostsCollectionReference.document(communityId).delete();
-    
   }
 }

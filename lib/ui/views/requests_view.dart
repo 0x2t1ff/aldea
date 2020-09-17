@@ -2,7 +2,8 @@ import 'package:aldea/models/community_request.dart';
 import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/ui/widgets/bottom_filler.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
-import 'package:aldea/ui/widgets/swipe_item.dart';
+import 'package:aldea/ui/widgets/request_card.dart';
+
 import 'package:aldea/viewmodels/requests_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -12,7 +13,7 @@ class RequestsView extends StatelessWidget {
   final Object arguments;
 
   const RequestsView({this.arguments});
-  @override 
+  @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<RequestsViewModel>.reactive(
       viewModelBuilder: () => RequestsViewModel(arguments),
@@ -39,14 +40,11 @@ class RequestsView extends StatelessWidget {
                     padding: EdgeInsets.all(0),
                     itemCount: model.requests.length,
                     itemBuilder: (context, i) {
-                      return SwipeItem(
-                          data: model.requests[i],
-                          isEven: i.isEven,
-                          deny: () => model.removeRequest(
-                              model.requests[i].uid, i),
-                              accept: () => model.acceptRequest(
-                                model.requests[i].uid,i
-                              ),);
+                      return RequestCard(
+                        request: model.requests[i],
+                        denyFunction: ()=> model.removeRequest(model.requests[i].uid, i),
+                        acceptFunction: ()=> model.acceptRequest(model.requests[i].uid,i)
+                      );
                     })),
             Container(
               height: usableScreenHeight(context) * 0.46,
