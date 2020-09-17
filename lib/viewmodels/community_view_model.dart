@@ -31,6 +31,12 @@ class CommunityViewModel extends BaseModel {
   final postDescController = TextEditingController();
   final Map<String, List<Product>> products = {};
   final qsDescController = TextEditingController();
+  final qsCorrectAnswerController = TextEditingController();
+  final qsFirstWrongAnserController = TextEditingController();
+  final qsSecondWrongAnserController = TextEditingController();
+  final qsThirdWrongAnserController = TextEditingController();
+  final qsForthWrongAnserController = TextEditingController();
+  final qsModelController = TextEditingController();
   final qsQuantityController = TextEditingController();
   QuickStrikePost quickStrikePost = QuickStrikePost(
     isGame: false,
@@ -80,14 +86,10 @@ class CommunityViewModel extends BaseModel {
     notifyListeners();
   }
 
-  void setIsUnfollowPopup(){
+  void setIsUnfollowPopup() {
     unfollowPopup = !unfollowPopup;
     notifyListeners();
   }
-
-
-
- 
 
   Future selectFirstImage() async {
     var tempImage = await _imageSelector.selectPostImage();
@@ -118,8 +120,14 @@ class CommunityViewModel extends BaseModel {
     dropDownValue = null;
     modelDropdown = null;
     qsDescController.text = '';
+    qsModelController.text = '';
     postDescController.text = '';
     qsQuantityController.text = '';
+    qsCorrectAnswerController.text = '';
+    qsFirstWrongAnserController.text = '';
+    qsSecondWrongAnserController.text = '';
+    qsThirdWrongAnserController.text = '';
+    qsForthWrongAnserController.text = '';
     firstImage = null;
     secondImage = null;
     thirdImage = null;
@@ -261,6 +269,13 @@ class CommunityViewModel extends BaseModel {
           buttonTitle: "Entendido");
       return null;
     }
+    if (qsModelController.text.isEmpty) {
+      _dialogService.showDialog(
+          title: "Error",
+          description: "Debes añadir al menos un mod",
+          buttonTitle: "Entendido");
+      return null;
+    }
     if (firstImage == null && secondImage == null && thirdImage == null) {
       _dialogService.showDialog(
           title: "Error",
@@ -292,7 +307,15 @@ class CommunityViewModel extends BaseModel {
 
     isUploading = true;
     notifyListeners();
+    if (quickStrikePost.isQuestion) {
+      quickStrikePost.correctAnswer = qsCorrectAnswerController.text;
+      quickStrikePost.firstWrongAnswer = qsFirstWrongAnserController.text;
+      quickStrikePost.secondWrongAnswer = qsSecondWrongAnserController.text;
+      quickStrikePost.thirdWrongAnswer = qsThirdWrongAnserController.text;
+      quickStrikePost.fourthWrongAnswer = qsForthWrongAnserController.text;
+    }
     quickStrikePost.description = qsDescController.text;
+    quickStrikePost.modelo = qsModelController.text;
     quickStrikePost.communityName = community.name;
     quickStrikePost.modelo = modelDropdown;
     quickStrikePost.amount = int.parse(qsQuantityController.text);
@@ -337,26 +360,24 @@ class CommunityViewModel extends BaseModel {
     selectedDate = null;
     notifyListeners();
   }
-  void setDropdownContainer( ){
+
+  void setDropdownContainer() {
     unfollowDropdown = !unfollowDropdown;
     notifyListeners();
   }
 
-
-   void setDropdownValue(String value) {
+  void setDropdownValue(String value) {
     dropDownValue = value;
     notifyListeners();
   }
+
   void setModelDropdown(String value) {
     modelDropdown = value;
     notifyListeners();
   }
 
-  void deleteCommunity (){
+  void deleteCommunity() {
     _firestoreService.deleteCommunity(community.uid, community.name);
     _rtdbService.deleteCommunityChat(community.uid);
-
-
   }
-
 }

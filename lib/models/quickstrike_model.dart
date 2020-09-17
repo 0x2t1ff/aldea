@@ -15,6 +15,11 @@ class QuickStrikePost {
   String id;
   String communityName;
   String cid;
+  String correctAnswer;
+  String firstWrongAnswer;
+  String secondWrongAnswer;
+  String thirdWrongAnswer;
+  String fourthWrongAnswer;
   bool isActive = false;
   final bool isEmpty;
   final bool finished;
@@ -55,7 +60,12 @@ class QuickStrikePost {
       'isEmpty': isEmpty,
       'finished': finished,
       'cid': cid,
-      'amount': amount
+      'amount': amount,
+      'correctAnswer': correctAnswer,
+      'firstWrongAnswer': firstWrongAnswer,
+      'secondWrongAnswer': secondWrongAnswer,
+      'thirdWrongAnswer': thirdWrongAnswer,
+      'fourthWrongAnswer': fourthWrongAnswer,
     };
   }
 
