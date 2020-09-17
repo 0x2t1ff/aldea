@@ -13,17 +13,19 @@ class CommentsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textController = TextEditingController();
-    double shitHeigth = screenHeight(context) * 0.055;
+
     return ViewModelBuilder<CommentsViewModel>.reactive(
       viewModelBuilder: () => CommentsViewModel(),
-      onModelReady: (model) => model.fetchComments(ids),
+      onModelReady: (model) {
+        model.fetchComments(ids);
+      },
       builder: (context, model, child) => !model.busy
           ? Scaffold(
               resizeToAvoidBottomInset: false,
               backgroundColor: backgroundColor,
               body: Column(
                 children: <Widget>[
-                  NotchFiller(),
+                 
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     width: double.infinity,
@@ -49,7 +51,7 @@ class CommentsView extends StatelessWidget {
                   Container(
                     color: darkGrey,
                     width: screenWidth(context),
-                    height: shitHeigth,
+                   
                     margin: EdgeInsets.symmetric(
                         vertical: screenHeight(context) * 0.005),
                     child: GestureDetector(
@@ -77,17 +79,19 @@ class CommentsView extends StatelessWidget {
                   Container(
                     color: backgroundColor,
                     width: screenWidth(context),
-                    height: screenHeight(context) * 0.7346 -
-                        shitHeigth -
-                        MediaQuery.of(context).viewInsets.bottom,
+                    height: screenHeight(context) * 0.786 ,
+                        
+                        
                     child: ListView.builder(
-                      padding: EdgeInsets.all(0),
-                      itemCount: model.comments.length,
-                      itemBuilder: (context, index) => Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: screenHeight(context) * 0.005),
-                          child: CommentWidget(model.comments[index])),
-                    ),
+                        reverse: true,
+                        padding: EdgeInsets.all(0),
+                        itemCount: model.comments.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: screenHeight(context) * 0.005),
+                              child: CommentWidget(model.comments[index]));
+                        }),
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -139,7 +143,7 @@ class CommentsView extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            model.postComment(textController.text); 
+                            model.postComment(textController.text);
                             textController.text = "";
                           },
                           child: Container(

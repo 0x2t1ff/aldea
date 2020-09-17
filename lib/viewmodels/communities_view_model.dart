@@ -4,6 +4,7 @@ import 'package:aldea/models/community.dart';
 import 'package:aldea/services/dialog_service.dart';
 import 'package:aldea/services/navigation_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import 'base_model.dart';
 import '../services/firestore_service.dart';
@@ -48,14 +49,18 @@ class CommunitiesViewModel extends BaseModel {
     _navigationService.navigateTo(CommunityViewRoute, false, arguments: c);
   }
 
-  Future requestCommunityAcces(Community c) async {
+  Future requestCommunityAcces(Community c, BuildContext context) async {
     var response = await _dialogService.showAccessRequestDialog(
         title: "Solicitud de acceso", description: "");
     if (response.confirmed) {
+          currentUser.requests.add(selectedCommunity.uid);
       isSendingRequest = true;
       notifyListeners();
       await _firestoreService.requestCommunityAccess(
           c.uid, currentUser, response.textField, false);
+          
+    }else{
+      
     }
     isSendingRequest = false;
     notifyListeners();

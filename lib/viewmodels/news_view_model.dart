@@ -60,4 +60,12 @@ class NewsViewModel extends BaseModel {
   void goToCommunity(Community c) {
     _navigationService.navigateTo(CommunityViewRoute, false, arguments: c);
   }
+
+ void communityFromFeed(String id) async {
+//no it dont do shit XD
+  }
+ void goToComments(String postId) {
+    _navigationService.navigateTo(CommentsViewRoute, false,
+        arguments: ({'postId': postId}));
+  }
 }

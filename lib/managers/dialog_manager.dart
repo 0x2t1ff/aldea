@@ -1,3 +1,4 @@
+import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../locator.dart';
 import '../models/dialog_models.dart';
@@ -27,18 +28,21 @@ class _DialogManagerState extends State<DialogManager> {
   }
 
   void _showDialog(DialogRequest request) {
+    controller.clear();
     var isConfirmationDialog = request.cancelTitle != null;
     showDialog(
         context: context,
-        builder: (context) => AlertDialog(
+        builder: (context) { return AlertDialog(
               title: Text(request.title, style: TextStyle(color: Colors.white)),
               content: !request.hasTextArea
                   ? Text(request.description, style: TextStyle(color: Colors.white),)
                   : TextField(
                       controller: controller,
                       style: TextStyle(color: Colors.white),
-                      maxLines: 10,
+                      maxLines: 3,
+                      maxLength: 90,
                       decoration: InputDecoration(
+                        counterStyle: TextStyle(color: almostWhite),
                           hintText: "Escribe el cuerpo de tu solicitud...",
                           hintStyle: TextStyle(
                               fontStyle: FontStyle.italic,
@@ -58,6 +62,7 @@ class _DialogManagerState extends State<DialogManager> {
                   FlatButton(
                     child: Text(request.cancelTitle),
                     onPressed: () {
+                      
                       _dialogService
                           .dialogComplete(DialogResponse(confirmed: false));
                     },
@@ -70,6 +75,6 @@ class _DialogManagerState extends State<DialogManager> {
                   },
                 ),
               ],
-            ));
+        );});
   }
 }

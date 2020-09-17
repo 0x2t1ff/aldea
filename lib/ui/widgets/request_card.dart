@@ -15,8 +15,8 @@ class RequestCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: screenWidth(context),
-        height: screenHeight(context) * 0.12,
-        padding: EdgeInsets.symmetric( vertical: 12.0),
+        height: screenHeight(context) * 0.14,
+        padding: EdgeInsets.symmetric(vertical: 12.0),
         decoration: BoxDecoration(
           color: backgroundColor,
           boxShadow: [
@@ -27,13 +27,15 @@ class RequestCard extends StatelessWidget {
           ],
         ),
         child: Padding(
-          padding:  EdgeInsets.only(left:screenWidth(context) * 0.02),
+          padding: EdgeInsets.only(left: screenWidth(context) * 0.02),
           child: Row(
             children: <Widget>[
               Container(
                 decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
                   BoxShadow(
-                      offset: Offset(5, 5), blurRadius: 10, color: Colors.black45)
+                      offset: Offset(5, 5),
+                      blurRadius: 10,
+                      color: Colors.black45)
                 ]),
                 child: CircleAvatar(
                   radius: 30,
@@ -42,27 +44,41 @@ class RequestCard extends StatelessWidget {
               ),
               Container(
                 width: screenWidth(context) * 0.52,
-                child: Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(request.user.name,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                              request.message,
-                              style:
-                                  TextStyle(color: Colors.white70, fontSize: 12),
-                            ),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(request.user.name,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold)),
+                       Padding(
+                         padding:  EdgeInsets.only(top: screenHeight(context) * 0.008),
+                         child: Text(
+                            request.message,
+                            style: TextStyle(color: Colors.white70, fontSize: 12),
                           ),
-                        ),
-                      ],
+                       ),
+                      
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: screenWidth(context) * 0.04),
+                child: Container(
+                  width: screenWidth(context) * 0.1,
+                  height: screenWidth(context) * 0.1,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(200),
+                      color: Colors.red),
+                  child: IconButton(
+                    onPressed: denyFunction,
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -70,22 +86,17 @@ class RequestCard extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: screenWidth(context) * 0.04),
                 child: Container(
-                  width:screenWidth(context) * 0.1,
+                  width: screenWidth(context) * 0.1,
                   height: screenWidth(context) * 0.1,
-                  decoration:BoxDecoration(borderRadius: BorderRadius.circular(200), color: Colors.red) ,
-                  child: IconButton(onPressed: denyFunction,
-                    icon: Icon(Icons.close, color: Colors.white,),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left:screenWidth(context) * 0.04),
-                child: Container(
-                  width:screenWidth(context) * 0.1,
-                  height: screenWidth(context) * 0.1,
-                  decoration:BoxDecoration(borderRadius: BorderRadius.circular(200), color: Colors.green) ,
-                  child: IconButton(onPressed: acceptFunction,
-                    icon: Icon(Icons.check, color: Colors.white,),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(200),
+                      color: Colors.green),
+                  child: IconButton(
+                    onPressed: acceptFunction,
+                    icon: Icon(
+                      Icons.check,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               )
