@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/models/cloud_storage_result.dart';
 import 'package:aldea/services/cloud_storage_service.dart';
+import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
 import 'package:aldea/services/rtdb_service.dart';
 import 'package:aldea/utils/image_selector.dart';
@@ -14,7 +15,8 @@ import '../services/dialog_service.dart';
 
 class ChatsViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
-  final RtdbService _firestoreService = locator<RtdbService>();
+  final RtdbService _rtdbService = locator<RtdbService>();
+  final FirestoreService _firestoreService = locator<FirestoreService>();
   final ImageSelector _imageSelector = locator<ImageSelector>();
   final NavigationService _navigationService = locator<NavigationService>();
   final CloudStorageService _cloudStorageService =
@@ -31,7 +33,7 @@ class ChatsViewModel extends BaseModel {
   Future getMessages(String chatId) async {
     setBusy(true);
 
-    var chatStream = _firestoreService.getChatMessages(chatId, limit);
+    var chatStream = _rtdbService.getChatMessages(chatId, limit);
 
     setBusy(true);
 
@@ -89,7 +91,7 @@ class ChatsViewModel extends BaseModel {
 
   Future sendMessage(String text, String senderId, String chatRoomId,
       String username, String imageUrl, bool isImage) {
-    _firestoreService.sendMessage(
+    _rtdbService.sendMessage(
       message: text,
       senderId: senderId,
       chatRoomId: chatRoomId,
@@ -104,7 +106,12 @@ class ChatsViewModel extends BaseModel {
   }
 
   void readMessage(chatRoomId) {
-    _firestoreService.readMessage(chatRoomId, currentUser.uid);
+    _rtdbService.readMessage(chatRoomId, currentUser.uid);
+  }
+
+  void navigateToUser(String id) async{
+    
+    _navigationService.navigateTo(OtherProfileViewRoute, false, arguments: id);
   }
 
   void loadMoreMessages(String chatId) async {
@@ -113,7 +120,7 @@ class ChatsViewModel extends BaseModel {
     print(timestamp);
     print("next line to the timestamp");
     var chatStream =
-        _firestoreService.getMoreChatMessages(chatId, limit, timestamp);
+       _rtdbService.getMoreChatMessages(chatId, limit, timestamp);
     print(limit);
     if (chatStream is Stream<Event>) {
       _chatStream = chatStream;

@@ -6,9 +6,15 @@ import "../shared/app_colors.dart" as custcolor;
 class MessageItem extends StatelessWidget {
   final MessageModel model;
   final String currentUser;
+  final Function navigateToUser;
   final Function heroAnimation;
 
-  const MessageItem({Key key, this.currentUser, this.model, this.heroAnimation})
+  const MessageItem(
+      {Key key,
+      this.currentUser,
+      this.model,
+      this.heroAnimation,
+      this.navigateToUser})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -125,7 +131,7 @@ class MessageItem extends StatelessWidget {
                             top: devicesize.screenHeight(context) * 0.005,
                           ),
                           child: Text(
-                            model.time,//.substring(10, 16),
+                            model.time, //.substring(10, 16),
                             style: TextStyle(
                               color: Colors.grey,
                               fontFamily: 'Raleway',
@@ -139,19 +145,22 @@ class MessageItem extends StatelessWidget {
             ),
           )
         : Padding(
-            padding:
-                EdgeInsets.only(top: devicesize.screenHeight(context) * 0.02, left: devicesize.screenWidth(context) * 0.02),
+            padding: EdgeInsets.only(
+                top: devicesize.screenHeight(context) * 0.02,
+                left: devicesize.screenWidth(context) * 0.02),
             child: Container(
               child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: <
                   Widget>[
                 Padding(
                   padding: EdgeInsets.only(
-                    bottom: devicesize.screenHeight(context) * 0.025,
-                    right: devicesize.screenWidth(context) * 0.02,
-                    left: devicesize.screenWidth(context) * 0.02
-                  ),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(model.imageUrl),
+                      bottom: devicesize.screenHeight(context) * 0.025,
+                      right: devicesize.screenWidth(context) * 0.02,
+                      left: devicesize.screenWidth(context) * 0.02),
+                  child: GestureDetector(
+                    onTap: navigateToUser,
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(model.imageUrl),
+                    ),
                   ),
                 ),
                 Container(
