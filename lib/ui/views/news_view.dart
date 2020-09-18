@@ -23,6 +23,12 @@ class NewsView extends StatelessWidget {
                       padding: EdgeInsets.all(0),
                       itemCount: model.posts.length,
                       itemBuilder: (context, index) => FeedWidget(
+                        
+                        navigateToComments: () => model
+                                        .goToComments(model.posts[index].id),
+                        navigateToCommunity: () =>
+                                        model.communityFromFeed(
+                                            model.posts[index].communityId),
                           postModel: model.posts[index],
                           likeFunction: () => model.likePost(
                               model.posts[index].id,

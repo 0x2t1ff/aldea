@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:aldea/models/community.dart';
+
 import 'package:aldea/ui/widgets/all_communities.dart';
 import 'package:aldea/ui/widgets/communities_carousel.dart';
 import 'package:aldea/ui/widgets/community_preview.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import '../../viewmodels/communities_view_model.dart';

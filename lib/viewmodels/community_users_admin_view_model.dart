@@ -36,7 +36,7 @@ class CommunityUsersAdminViewModel extends BaseModel {
   }
 
   void unselectDialog() {
-    print("unselect Dialogue");
+    print("unselect Dialog");
     showingDialog = false;
     notifyListeners();
   }
@@ -50,10 +50,12 @@ class CommunityUsersAdminViewModel extends BaseModel {
 
   void kickUser(String uid, String communityId) async {
     _firestoreService.kickCommunityUser(communityId, uid);
+    unselectDialog();
   }
 
   void modUser(String uid, String communityId) {
     _firestoreService.giveCommunityMod(communityId, uid);
+    unselectDialog();
   }
 
   Future<bool> onWillPop() async {

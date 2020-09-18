@@ -5,7 +5,6 @@ import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:stacked/stacked.dart';
-import 'dart:async';
 import "../shared/app_colors.dart" as custcolor;
 import "../shared/ui_helpers.dart" as devicesize;
 

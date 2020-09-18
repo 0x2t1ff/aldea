@@ -446,7 +446,7 @@ class _CommunityViewState extends State<CommunityView>
                                         )
                                       : Container(),
                                   Container(
-                                    height: communityBodyHeight(context) * 0.86,
+                                    height: communityBodyHeight(context) * 0.92,
                                     width: double.infinity,
                                     child: widget.community.isMarketplace
                                         ? TabBarView(

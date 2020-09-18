@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:aldea/models/community.dart';
 import 'package:aldea/models/user_model.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
@@ -96,7 +98,7 @@ class CommunityUsersAdminView extends StatelessWidget {
                         ),
                   Positioned(
                     left: screenWidth(context) * 0.1,
-                    top: screenHeight(context) * 0.3,
+                    top: screenHeight(context) * 0.35,
                     child: model.showingDialog
                         ? getDialog(
                             context,
@@ -125,89 +127,85 @@ class CommunityUsersAdminView extends StatelessWidget {
       Function kickUser,
       Function modUser) {
     String name = user.name;
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(50),
-          ),
-          color: blueTheme,
+    return ClipRRect(borderRadius: BorderRadius.circular(30),
+          child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: 6.0,
+          sigmaY:6.0,
         ),
-        width: screenWidth(context) * 0.8,
-        height: screenHeight(context) * 0.4,
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: screenHeight(context) * 0.02),
-              child: CircleAvatar(
-                radius: screenWidth(context) * 0.1,
-                backgroundImage: NetworkImage(user.picUrl),
+            child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(30),
               ),
+              color: almostWhite.withOpacity(0.2),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: screenWidth(context) * 0.04,
-                  right: screenWidth(context) * 0.04,
-                  top: screenHeight(context) * 0.01),
-              child: Text(
-                kicking == true
-                    ? "Estas seguro que quieres expulsar a $name de  $community?"
-                    : "¿Estas seguro que quieres otorgar a $name el puesto de moderador en $communityName? ",
-                style: TextStyle(
-                  color: almostWhite,
-                  fontFamily: "Raleway",
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: screenHeight(context) * 0.02),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  GestureDetector(
-                    //TODO: testing if this works
-                    onTap: kicking ? kickUser : modUser,
-                    child: Container(
-                        width: screenWidth(context) * 0.28,
-                        height: screenHeight(context) * 0.07,
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(200))),
-                        child: Center(
-                            child: Text(
-                          "Sí",
-                          style: TextStyle(
-                              fontFamily: "Raleway",
-                              color: almostWhite,
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold),
-                        ))),
+            width: screenWidth(context) * 0.8,
+            height: screenHeight(context) * 0.4,
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: screenHeight(context) * 0.04),
+                  child: CircleAvatar(
+                    radius: screenWidth(context) * 0.09,
+                    backgroundImage: NetworkImage(user.picUrl),
                   ),
-                  GestureDetector(
-                    onTap: unselectDialog,
-                    child: Container(
-                        width: screenWidth(context) * 0.28,
-                        height: screenHeight(context) * 0.07,
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(200))),
-                        child: Center(
-                            child: Text(
-                          "No",
-                          style: TextStyle(
-                              fontFamily: "Raleway",
-                              color: almostWhite,
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold),
-                        ))),
-                  )
-                ],
-              ),
-            )
-          ],
-        ));
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: screenWidth(context) * 0.04,
+                      right: screenWidth(context) * 0.04,
+                      top: screenHeight(context) * 0.01),
+                  child: Text(
+                    kicking == true
+                        ? "Estas seguro que quieres expulsar a $name de  $communityName?"
+                        : "¿Estas seguro que quieres otorgar a $name el puesto de moderador en $communityName? ",
+                        textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: almostWhite,
+                      fontFamily: "Raleway",
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: screenHeight(context) * 0.02),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        //TODO: testing if this works
+                        onTap: kicking ? kickUser : modUser,
+                        child: Container(
+                            width: screenHeight(context) * 0.08,
+                            height: screenHeight(context) * 0.08,
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(200)),
+                            child: Center(
+                                child: Icon(Icons.check,
+                                    color: almostWhite, size: 35))),
+                      ),
+                      GestureDetector(
+                        onTap: unselectDialog,
+                        child: Container(
+                            width: screenHeight(context) * 0.08,
+                            height: screenHeight(context) * 0.08,
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(200))),
+                            child: Center(
+                                child: Icon(Icons.close,
+                                    color: almostWhite, size: 40))),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            )),
+      ),
+    );
   }
 }

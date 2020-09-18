@@ -327,7 +327,7 @@ class FirestoreService {
   Future<List<Community>> getCommunitiesData(
       List<dynamic> communitiesList, String uid) async {
     List<Community> infoList = List();
- 
+
     for (var f in communitiesList) {
       var communityInfo =
           await _communitiesCollectionReference.document(f).get();
@@ -339,14 +339,12 @@ class FirestoreService {
             .document(uid)
             .updateData({"communities": communitiesList});
       } else {
-        
         var community =
             Community.fromData(communityInfo.data, communityInfo.data["uid"]);
         infoList.add(community);
       }
-
     }
-      return infoList;
+    return infoList;
   }
 
   Future createUser(User user) async {
@@ -391,10 +389,21 @@ class FirestoreService {
           .orderBy("fechaQuickstrike", descending: true)
           .limit(10)
           .getDocuments();
+      List ids = [];
+
+      postDocumentSnapshot.documents.forEach((element) {
+        ids.add(element.documentID);
+      });
 
       var data = postDocumentSnapshot.documents.map((doc) => doc.data);
+      int counter = 0;
       List<PostModel> listData = new List<PostModel>();
-      data.forEach((f) => listData.add(PostModel.fromMap(f)));
+      data.forEach((
+        f,
+      ) {
+        listData.add(PostModel.fromMap(f, id: ids[counter]));
+        counter++;
+      });
       return listData;
     } catch (e) {
       print(e.toString());
@@ -855,7 +864,6 @@ class FirestoreService {
   Future<QuerySnapshot> getCommunityUsers(String uid) async {
     return _userCollectionReference
         .where("communities", arrayContains: uid)
-        .limit(2)
         .getDocuments();
   }
 

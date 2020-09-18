@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:aldea/models/community.dart';
+import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/shared/shared_styles.dart';
 import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/viewmodels/communities_view_model.dart';
@@ -213,21 +214,31 @@ class CommunityPreview extends StatelessWidget {
                                     : IconButton(
                                         icon: model.isSendingRequest
                                             ? CircularProgressIndicator()
-                                            : Icon(
-                                                model.currentUser.communities
-                                                        .contains(community.uid)
-                                                    ? Icons.input
-                                                    : Icons.person_add,
-                                                color: Color(0xff3C8FA7),
-                                                size: 35,
-                                              ),
+                                            : model.currentUser.requests
+                                                    .contains(community.uid)
+                                                ? Icon(Icons.access_time,
+                                                    color: blueTheme, size: 35)
+                                                : Icon(
+                                                    model.currentUser
+                                                            .communities
+                                                            .contains(
+                                                                community.uid)
+                                                        ? Icons.input
+                                                        : Icons.person_add,
+                                                    color: Color(0xff3C8FA7),
+                                                    size: 35,
+                                                  ),
                                         onPressed: () {
-                                          if (model.currentUser.communities
-                                              .contains(community.uid))
-                                            model.goToCommunity(community);
-                                          else
-                                            model.requestCommunityAcces(
-                                                community);
+                                          if (model.currentUser.requests
+                                              .contains(community.uid)) {
+                                          } else {
+                                            if (model.currentUser.communities
+                                                .contains(community.uid))
+                                              model.goToCommunity(community);
+                                            else
+                                              model.requestCommunityAcces(
+                                                  community, context);
+                                          }
                                         })
                               ],
                             ),
