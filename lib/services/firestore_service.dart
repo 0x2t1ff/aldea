@@ -423,7 +423,8 @@ class FirestoreService {
     var ref = _communitiesCollectionReference
         .document(communityId)
         .collection("userPosts");
-    ref.document().setData({
+       var id = ref.document().documentID;
+    ref.document(id).setData({
       "avatarUrl": avatarUrl,
       "description": description,
       "comments": ({}),
@@ -433,7 +434,8 @@ class FirestoreService {
       "name": name,
       "userId": userId,
       "date": date,
-      "commentCount": 0
+      "commentCount": 0,
+      "id":id,
     });
   }
 
@@ -865,6 +867,19 @@ class FirestoreService {
     return _userCollectionReference
         .where("communities", arrayContains: uid)
         .getDocuments();
+  }
+
+  Future<bool> deleteUserCommunityPosts(
+    String id,
+    String communityId,
+  ) async {
+    print(id + " sdgao     " + communityId);
+    await _communitiesCollectionReference
+        .document(communityId)
+        .collection("userPosts")
+        .document(id)
+        .delete();
+    return true;
   }
 
   Future<QuerySnapshot> getCommunityUsersSearch(String uid, String name) {
