@@ -62,10 +62,12 @@ class _CommunitiesViewState extends State<CommunitiesView>
                                 color: Color(0xffb5b5b5), fontSize: 29),
                           ),
                           Padding(
-                            padding:  EdgeInsets.only(left:screenWidth(context) * 0.14),
-                            child: IconButton(
-                              icon: Icon(Icons.refresh, color: blueTheme,size: 35),
-                              onPressed: () => model.fetchCommunities(),
+                            padding:  EdgeInsets.only(left:screenWidth(context) *0.05),
+                            child: InkWell(
+                              onTap: () => model.fetchCommunities(),
+                              child: Container(
+                                  child: Icon(Icons.refresh,
+                                      color: blueTheme, size: 35)),
                             ),
                           )
                         ],

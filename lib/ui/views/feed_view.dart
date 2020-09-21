@@ -62,6 +62,7 @@ class _FeedViewState extends State<FeedView>
       _fromTop = _prevReverseOffset + difference;
       if (_fromTop < -_containerHeight) _fromTop = -_containerHeight;
     }
+
     setState(
         () {}); // for simplicity I'm calling setState here, you  can put bool values to only call setState when there is a genuine change in _fromTop
   }
@@ -122,6 +123,7 @@ class _FeedViewState extends State<FeedView>
                         await model.fetchPosts();
                         _refreshController.refreshCompleted();
                         model.refreshingFeedEnded();
+                        _fromTop = -0.125;
                       },
                       child: ListView.builder(
                         controller: _controller,
