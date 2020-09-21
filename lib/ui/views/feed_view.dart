@@ -89,7 +89,7 @@ class _FeedViewState extends State<FeedView>
       builder: (context, model, child) => WillPopScope(
         onWillPop: model.onWillPop,
         child: Scaffold(
-          backgroundColor: custcolor.darkGrey,
+          backgroundColor: custcolor.backgroundColor,
           body: Stack(
             children: <Widget>[
               model.posts != null
@@ -202,9 +202,9 @@ class _FeedViewState extends State<FeedView>
                                 ? ListView.builder(
                                     padding: EdgeInsets.only(
                                         left: devicesize.screenWidth(context) *
-                                            0.02),
+                                            0.022),
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: 5,
+                                    itemCount: 6,
                                     itemBuilder: (context, index) {
                                       return index < model.communityList.length
                                           ? GestureDetector(
