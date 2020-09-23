@@ -34,7 +34,9 @@ class NewsView extends StatelessWidget {
                               model.posts[index].id,
                               model.isLiked(model.posts[index].likes),
                               model.posts[index].likes),
-                          isLiked: model.isLiked(model.posts[index].likes)),
+                          isLiked: model.isLiked(model.posts[index].likes, 
+                          ),
+                          deleteAllowed: community.moderators.contains(model.currentUser.uid),),
                     )
                   
                 : Center(

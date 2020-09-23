@@ -18,7 +18,7 @@ class UserPostsView extends StatefulWidget {
 
 class _UserPostsViewState extends State<UserPostsView> {
   bool isCreatingPost;
-
+  var mod;
   void creatingPost() {
     setState(() {
       isCreatingPost = !isCreatingPost;
@@ -36,7 +36,10 @@ class _UserPostsViewState extends State<UserPostsView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<UserPostsViewModel>.reactive(
       viewModelBuilder: () => UserPostsViewModel(),
-      onModelReady: (model) => model.fetchPosts(widget.community.uid),
+      onModelReady: (model) {
+        model.fetchPosts(widget.community.uid);
+        mod = widget.community.moderators.contains(model.currentUser.uid);
+      },
       builder: (context, model, child) => Scaffold(
           backgroundColor: custcolor.darkGrey,
           body: Stack(
@@ -58,6 +61,9 @@ class _UserPostsViewState extends State<UserPostsView> {
                             model.isLiked(model.posts[index].likes),
                             model.posts[index].likes),
                         isLiked: model.isLiked(model.posts[index].likes),
+                        isMod: mod,
+                        deletePost: () =>
+                            model.deletePost(model.posts[index].id, widget.community.uid),
                       ),
                     )
                   : Center(

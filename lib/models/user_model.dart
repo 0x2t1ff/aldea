@@ -17,6 +17,7 @@ class User {
   List<String> onGoingQuickstrikes = [];
   List<dynamic> chatRooms;
   bool isGodAdmin;
+  List<dynamic> mod;
 
   User(
       {this.name,
@@ -36,7 +37,7 @@ class User {
       this.onGoingQuickstrikes,
       this.requests,
       this.chatRooms,
-      this.isGodAdmin});
+      this.isGodAdmin, this.mod});
 
   User.fromData(Map<String, dynamic> data)
       : name = data['name'],
@@ -55,7 +56,8 @@ class User {
         requests = data['requests'],
         chatRooms = data["chatRooms"],
         communities = data['communities'],
-        isGodAdmin = data["isGodAdmin"];
+        isGodAdmin = data["isGodAdmin"],
+        mod = data["mod"];
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,
@@ -74,7 +76,8 @@ class User {
       'communities': communities,
       'vouches': vouches,
       'chatRooms': chatRooms,
-      'isGodAdmin': isGodAdmin
+      'isGodAdmin': isGodAdmin,
+      'moderator':mod
     };
   }
 }

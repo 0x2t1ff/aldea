@@ -147,7 +147,13 @@ class _FeedViewState extends State<FeedView>
                                         model.posts[index].likes),
                                     isLiked: model.isLiked(
                                       model.posts[index].likes,
-                                    )),
+                                    ),
+                                    deleteAllowed: model.currentUser.mod
+                                        .contains(
+                                            model.posts[index].communityId),
+                                    deletePost: () => model.deletePost(
+                                        model.posts[index].id,
+                                        model.posts[index].communityId)),
                               )
                             : FeedWidget(
                                 navigateToCommunity: () =>
@@ -163,7 +169,11 @@ class _FeedViewState extends State<FeedView>
                                 isLiked: model.isLiked(
                                   model.posts[index].likes,
                                 ),
-                              ),
+                                deleteAllowed: model.currentUser.mod
+                                    .contains(model.posts[index].communityId),
+                                deletePost: () => model.deletePost(
+                                    model.posts[index].id,
+                                    model.posts[index].communityId)),
                       ),
                     )
                   : Center(
