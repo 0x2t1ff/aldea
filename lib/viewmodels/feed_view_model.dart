@@ -102,6 +102,10 @@ class FeedViewModel extends BaseModel {
     return false;
   }
 
+  void deletePost(String id, String cid) {
+    _firestoreService.deletePost(id, cid);
+  }
+
   void goToCommunity(Community c) {
     _navigationService.navigateTo(CommunityViewRoute, false, arguments: c);
   }

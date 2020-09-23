@@ -31,7 +31,7 @@ class ProfileViewModel extends BaseModel {
 
   Future seeSettings() {
     _navigationService.navigateTo(ProfileSettingsViewRoute, false,
-        arguments: currentUser.isGodAdmin);
+        arguments: currentUser);
   }
 
   Future selectProfileImage() async {

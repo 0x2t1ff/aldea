@@ -1,3 +1,4 @@
+import 'package:aldea/models/user_model.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:aldea/viewmodels/profile_settings_view_model.dart';
@@ -6,9 +7,9 @@ import 'package:stacked/stacked.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 
 class ProfileSettingsView extends StatelessWidget {
-  final bool isGodAdmin;
+  final User user;
 
-  ProfileSettingsView(this.isGodAdmin);
+  ProfileSettingsView(this.user);
 
   final TextStyle optionsStyle =
       TextStyle(fontFamily: 'Raleway', fontSize: 22, color: almostWhite);
@@ -85,13 +86,23 @@ class ProfileSettingsView extends StatelessWidget {
                                 size: 29,
                               ),
                               Padding(
-                                  padding: EdgeInsets.only(
-                                      left: devicesize.screenWidth(context) *
-                                          0.04),
-                                  child: Text(
-                                    "Notificaciones",
-                                    style: optionsStyle,
-                                  ))
+                                padding: EdgeInsets.only(
+                                    left:
+                                        devicesize.screenWidth(context) * 0.04),
+                                child: Text(
+                                  "Notificaciones",
+                                  style: optionsStyle,
+                                ),
+                              ),
+                              Container(
+                                  width: devicesize.screenWidth(context) * 0.16,
+                                  child: Switch(
+                                      value: model
+                                          .currentUser.notificationsEnabled,
+                                      onChanged: (bool notifications) =>
+                                          model.changeNotifications(
+                                              notifications,
+                                              model.currentUser.uid)))
                             ],
                           ),
                         ),
@@ -144,30 +155,30 @@ class ProfileSettingsView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: devicesize.screenHeight(context) * 0.024),
-                        child: GestureDetector(
-                          onTap: () => print("pressed"),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.credit_card,
-                                color: blueTheme,
-                                size: 29,
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      left: devicesize.screenWidth(context) *
-                                          0.04),
-                                  child: Text(
-                                    "Pagos",
-                                    style: optionsStyle,
-                                  ))
-                            ],
-                          ),
-                        ),
-                      ),
+                    //  Padding(
+                    //    padding: EdgeInsets.symmetric(
+                    //        vertical: devicesize.screenHeight(context) * 0.024),
+                    //    child: GestureDetector(
+                    //      onTap: () => print("pressed"),
+                    //      child: Row(
+                    //        children: <Widget>[
+                    //          Icon(
+                    //            Icons.credit_card,
+                    //            color: blueTheme,
+                    //            size: 29,
+                    //          ),
+                    //          Padding(
+                    //              padding: EdgeInsets.only(
+                    //                  left: devicesize.screenWidth(context) *
+                    //                      0.04),
+                    //              child: Text(
+                    //                "Pagos",
+                    //                style: optionsStyle,
+                    //              ))
+                    //        ],
+                    //      ),
+                    //    ),
+                    //  ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: devicesize.screenHeight(context) * 0.024),
@@ -185,7 +196,7 @@ class ProfileSettingsView extends StatelessWidget {
                                       left: devicesize.screenWidth(context) *
                                           0.04),
                                   child: Text(
-                                    "Ayuda",
+                                    "Idiomas",
                                     style: optionsStyle,
                                   ))
                             ],
@@ -227,7 +238,7 @@ class ProfileSettingsView extends StatelessWidget {
                             width: devicesize.screenWidth(context) * 0.682,
                             color: almostWhite),
                       ),
-                      isGodAdmin
+                      user.isGodAdmin
                           ? Row(
                               children: <Widget>[
                                 SizedBox(
@@ -272,9 +283,9 @@ class ProfileSettingsView extends StatelessWidget {
                                 ),
                               ],
                             ),
-                      isGodAdmin
+                      user.isGodAdmin
                           ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                                 Padding(
                                   padding: EdgeInsets.only(top: 15),
@@ -330,7 +341,7 @@ class ProfileSettingsView extends StatelessWidget {
                               ],
                             )
                           : Container(),
-                      isGodAdmin
+                      user.isGodAdmin
                           ? Container()
                           : Padding(
                               padding: EdgeInsets.only(top: 11.8),

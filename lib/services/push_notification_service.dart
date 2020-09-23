@@ -8,7 +8,7 @@ class PushNotificationService {
   final FirebaseMessaging _fcm = FirebaseMessaging();
   final NavigationService _navigationService = locator<NavigationService>();
 
-  Future initialise(String id) async {
+  Future initialise(String id, bool notificationsEnabled) async {
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
@@ -20,15 +20,21 @@ class PushNotificationService {
         print("onMessage: $message");
       },
     );
-
-    _fcm.getToken().then((token) {
+    if (notificationsEnabled) {
+      _fcm.getToken().then((token) {
+        Firestore.instance
+            .collection('users')
+            .document(id)
+            .updateData({'pushToken': token});
+      }).catchError((err) {
+        print(err.message.toString());
+      });
+    } else {
       Firestore.instance
           .collection('users')
           .document(id)
-          .updateData({'pushToken': token});
-    }).catchError((err) {
-      print(err.message.toString());
-    });
+          .updateData({'pushToken': ""});
+    }
   }
 
 //TODO: make it navigate
