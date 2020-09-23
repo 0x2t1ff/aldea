@@ -10,12 +10,16 @@ class FeedWidget extends StatelessWidget {
   final bool isLiked;
   final Function navigateToComments;
   final Function navigateToCommunity;
+  final bool deleteAllowed;
+  final Function deletePost;
   const FeedWidget(
       {this.postModel,
       this.likeFunction,
       this.isLiked,
       this.navigateToComments,
-      this.navigateToCommunity});
+      this.navigateToCommunity, 
+      this.deleteAllowed,
+      this.deletePost});
   @override
   Widget build(BuildContext context) {
     if (postModel.isAnnouncement == true) {
@@ -25,6 +29,9 @@ class FeedWidget extends StatelessWidget {
         likeFunction: likeFunction,
         isLiked: isLiked,
         goToCommunity: navigateToCommunity,
+        deleteAllowed: deleteAllowed,
+        deletePost: deletePost
+        ,
       );
     } else if (postModel.isResult == true) {
       return FinishedQuickstrike(
@@ -32,6 +39,10 @@ class FeedWidget extends StatelessWidget {
         likeFunction: likeFunction,
         isLiked: isLiked,
         navigateToComments: navigateToComments,
+        goToCommunity: navigateToCommunity,
+        allowedDelete: deleteAllowed,
+        deletePost: deletePost,
+
       );
     } else {
       return PostItem(
@@ -40,6 +51,8 @@ class FeedWidget extends StatelessWidget {
         isLiked: isLiked,
         navigateToComments: navigateToComments,
         goToCommunity: navigateToCommunity,
+        allowedDelete: deleteAllowed,
+        deletePost: deletePost,
       );
     }
   }

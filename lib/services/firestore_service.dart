@@ -55,6 +55,10 @@ class FirestoreService {
     return community.data;
   }
 
+  Future changeNotificationsSetting(String id , bool notifications) async{
+    _userCollectionReference.document(id).updateData({"notificationsEnabled":notifications});
+  }
+
   Future removeRequest(String communityId, String uid) async {
     var reference = await _communitiesCollectionReference
         .document(communityId)
@@ -63,6 +67,10 @@ class FirestoreService {
         .getDocuments();
 
     await reference.documents.first.reference.delete();
+  }
+
+  Future deletePost(String uid, String cid) {
+    _postsCollectionReference.document(uid).delete();
   }
 
   Future<List<CommentModel>> getUserComments(
@@ -382,12 +390,12 @@ class FirestoreService {
     });
   }
 
-  Future getNewsPosts(String uid) async {
+  Future getNewsPosts(String uid, int limit) async {
     try {
       var postDocumentSnapshot = await _postsCollectionReference
           .where("communityId", isEqualTo: uid)
           .orderBy("fechaQuickstrike", descending: true)
-          .limit(10)
+          .limit(limit)
           .getDocuments();
       List ids = [];
 
@@ -423,7 +431,8 @@ class FirestoreService {
     var ref = _communitiesCollectionReference
         .document(communityId)
         .collection("userPosts");
-    ref.document().setData({
+    var id = ref.document().documentID;
+    ref.document(id).setData({
       "avatarUrl": avatarUrl,
       "description": description,
       "comments": ({}),
@@ -433,7 +442,8 @@ class FirestoreService {
       "name": name,
       "userId": userId,
       "date": date,
-      "commentCount": 0
+      "commentCount": 0,
+      "id": id,
     });
   }
 
@@ -867,6 +877,19 @@ class FirestoreService {
         .getDocuments();
   }
 
+  Future<bool> deleteUserCommunityPosts(
+    String id,
+    String communityId,
+  ) async {
+    print(id + " sdgao     " + communityId);
+    await _communitiesCollectionReference
+        .document(communityId)
+        .collection("userPosts")
+        .document(id)
+        .delete();
+    return true;
+  }
+
   Future<QuerySnapshot> getCommunityUsersSearch(String uid, String name) {
     return _userCollectionReference
         .where("communities", arrayContains: uid)
@@ -882,13 +905,20 @@ class FirestoreService {
     _communitiesCollectionReference
         .document(communityId)
         .updateData({"moderators": moderatorList});
+    var userData = await _userCollectionReference.document(uid).get();
+    List modList = userData.data["mod"];
+    modList.add(communityId);
+    _userCollectionReference.document(uid).updateData({"mod": modList});
   }
 
   Future kickCommunityUser(String communityId, String uid) async {
     var followerDocument =
         await _followingPostsCollectionReference.document(communityId).get();
     List followersData = followerDocument.data["followers"];
+    List modData = followerDocument.data["mod"];
     followersData.remove(uid);
+    modData.remove(communityId);
+    _userCollectionReference.document(uid).updateData({"mod":modData});
     _followingPostsCollectionReference
         .document(communityId)
         .updateData({"followers": followersData});

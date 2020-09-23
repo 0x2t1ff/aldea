@@ -26,7 +26,7 @@ class StartUpViewModel extends BaseModel {
       registerCurrentUser(userData);
       _navigationService.navigateTo(HomeViewRoute, true);
 
-      await _pushNotificationService.initialise(currentUser.uid);
+      await _pushNotificationService.initialise(currentUser.uid, currentUser.notificationsEnabled);
     } else {
       _navigationService.navigateTo(LoginViewRoute, true);
     }
