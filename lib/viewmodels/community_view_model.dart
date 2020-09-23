@@ -81,10 +81,14 @@ class CommunityViewModel extends BaseModel {
     notifyListeners();
   }
 
-  void setIsUnfollowPopup() {
+  void setIsUnfollowPopup(){
     unfollowPopup = !unfollowPopup;
     notifyListeners();
   }
+
+
+
+ 
 
   Future selectFirstImage() async {
     var tempImage = await _imageSelector.selectPostImage();
@@ -132,8 +136,7 @@ class CommunityViewModel extends BaseModel {
   Future getRequests(String communityId) async {
     setBusy(true);
     var data = await _firestoreService.getCommunityRequests(communityId);
-    requests =
-        data.map((doc) => CommunityRequest.fromData(doc.data())).toList();
+    requests = data.map((doc) => CommunityRequest.fromData(doc.data)).toList();
     setBusy(false);
   }
 
@@ -142,10 +145,9 @@ class CommunityViewModel extends BaseModel {
     var documents =
         await _firestoreService.getProductsFromCommunity(communityId);
     documents.forEach((document) {
-      products.putIfAbsent(document.data()['name'], () {
+      products.putIfAbsent(document.data['name'], () {
         List<Product> list = [];
-        document
-            .data()['products']
+        document.data['products']
             .forEach((item) => list.add(Product.fromData(item)));
         return list;
       });
@@ -336,38 +338,37 @@ class CommunityViewModel extends BaseModel {
     selectedDate = null;
     notifyListeners();
   }
-
-  void setDropdownContainer() {
+  void setDropdownContainer( ){
     unfollowDropdown = !unfollowDropdown;
     notifyListeners();
   }
 
-  void setDropdownValue(String value) {
+
+   void setDropdownValue(String value) {
     dropDownValue = value;
     notifyListeners();
   }
-
   void setModelDropdown(String value) {
     modelDropdown = value;
     notifyListeners();
   }
 
-  void deleteCommunityDatabase() {
+  void deleteCommunityDatabase (){
     _firestoreService.deleteCommunity(community.uid, community.name);
     _rtdbService.deleteCommunityChat(community.uid);
-  }
 
-  void setDeleteCommunity() {
+
+  }
+  void setDeleteCommunity(){
     deletingCommunity = true;
-    notifyListeners();
+  notifyListeners();
   }
-
-  void setNotDeleteCommunity() {
+ void setNotDeleteCommunity(){
     deletingCommunity = false;
-    notifyListeners();
+  notifyListeners();
   }
 
-  void deleteCommunity() {
+  void deleteCommunity(){
     setNotDeleteCommunity();
     deleteCommunityDatabase();
   }

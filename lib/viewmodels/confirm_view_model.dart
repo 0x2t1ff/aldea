@@ -1,6 +1,4 @@
-import 'package:aldea/ui/shared/google_navbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 import '../locator.dart';
 import '../constants/route_names.dart';
@@ -16,51 +14,37 @@ class ConfirmNumberViewModel extends BaseModel {
       locator<AuthenticationService>();
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
-  final _codeController = TextEditingController();
   var isCodeSent = false;
-  var phoneError;
-  String phoneNumber;
-  String phoneIsoCode;
 
-  Future createPhoneAuth(BuildContext ctx) async {
-    await _authenticationService.phoneAuth(
-        phoneNumber, (verificationId) => codeSent(verificationId));
-    return;
+  Future enviarVerificacion({@required String phoneNumber}) async {
+    setBusy(true);
+    await _authenticationService.verifyPhone(
+      phoneNumber: phoneNumber,
+      codeSent: codeSent,
+      verifactionCompleted: verificationCompleted
+      
+    );
+    setBusy(false);
   }
 
-  void onPhoneNumberChange(
-      String number, String internationalizedPhoneNumber, String isoCode) {
-    print(internationalizedPhoneNumber);
-    print(isoCode);
-
-    phoneNumber = internationalizedPhoneNumber;
-    phoneIsoCode = isoCode;
+  void codeSent(String verificationId) {
+    isCodeSent = true;
   }
 
-  void codeSent(String verificationId, [int forceResendingToken]) {
-    print("yey");
-    _dialogService
-        .showPhoneCodeDialog(title: "Codigo de verificacion")
-        .then((value) {
-      print("verificatinId: " + verificationId);
-      var _credential = PhoneAuthProvider.credential(
-          verificationId: verificationId, smsCode: _codeController.text.trim());
-      print(_credential);
-      _authenticationService.linkCredentials(_credential).then((response) {
-        print("we check");
-        if (response is User) {
-          _navigationService.pop();
-          _navigationService.navigateTo(HomeViewRoute, true);
-        } else {
-          print("gave error:");
-          print(response.toString());
-        }
-      }).catchError((e) {
-        phoneError = e;
-        print(e.toString());
-        _navigationService.pop();
-        notifyListeners();
-      });
-    });
+  void verificationCompleted(AuthCredential credential) async {
+    setBusy(true);
+    var result = await _authenticationService.verificationCompleted(credential);
+    setBusy(false);
+    if (result is bool) {
+      if (result) {
+        //do something
+        _navigationService.navigateTo(HomeViewRoute, true);
+      } else {
+        _dialogService.showDialog(
+            title: "Error",
+            description:
+                "Un error ha ocurrido al intentar asociar el numero a la cuenta. Por favor intentelo de nuevo mas tarde.");
+      }
+    }
   }
 }

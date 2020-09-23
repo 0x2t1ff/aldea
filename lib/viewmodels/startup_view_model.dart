@@ -1,7 +1,9 @@
 import 'package:aldea/services/push_notification_service.dart';
+import 'package:aldea/ui/views/community_view.dart';
 
 import '../locator.dart';
 import './base_model.dart';
+import '../locator.dart';
 import '../constants/route_names.dart';
 import '../services/authentication_service.dart';
 import '../services/firestore_service.dart';
@@ -16,19 +18,15 @@ class StartUpViewModel extends BaseModel {
       locator<PushNotificationService>();
 
   Future handleStartUpLogic() async {
-    var user = _authenticationService.getCurrentUser();
+    var hasLoggedInUser = await _authenticationService.isUserLoggedIn();
 
-    if (user != null) {
-      print(user.phoneNumber);
-      if (user.phoneNumber != null && user.phoneNumber.length > 0) {
-        var userData = await _firestoreService.getUserData(user.uid);
-        registerCurrentUser(userData);
-        _navigationService.navigateTo(HomeViewRoute, true);
+    if (hasLoggedInUser) {
+      var userUid = await _authenticationService.getUserUID();
+      var userData = await _firestoreService.getUserData(userUid);
+      registerCurrentUser(userData);
+      _navigationService.navigateTo(HomeViewRoute, true);
 
-        await _pushNotificationService.initialise(currentUser.uid);
-      } else {
-        _navigationService.navigateTo(ConfirmPhoneNumberRoute, true);
-      }
+      await _pushNotificationService.initialise(currentUser.uid);
     } else {
       _navigationService.navigateTo(LoginViewRoute, true);
     }

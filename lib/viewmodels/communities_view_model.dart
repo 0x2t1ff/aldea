@@ -29,7 +29,7 @@ class CommunitiesViewModel extends BaseModel {
     var communities = await _firestoreService.getFirstCommunities();
     communities.forEach((c) {
       lastDoc = c;
-      communitiesList.add(Community.fromData(c.data(), c.id));
+      communitiesList.add(Community.fromData(c.data, c.documentID));
     });
     var topList = topDocument;
     topCommunities.add(topList[0]);
@@ -68,7 +68,7 @@ class CommunitiesViewModel extends BaseModel {
     var docs = await _firestoreService.getMoreCommunities(lastDoc, limit: 15);
     docs.forEach((d) {
       lastDoc = d;
-      communitiesList.add(Community.fromData(d.data(), d.id));
+      communitiesList.add(Community.fromData(d.data, d.documentID));
     });
     isLoadingMore = false;
     notifyListeners();
@@ -88,28 +88,32 @@ class CommunitiesViewModel extends BaseModel {
   }
 
   Future<bool> onWillPop() async {
+    
     if (selectedCommunity == null) {
-      var response = await _dialogService.showConfirmationDialog(
-          description: "",
-          confirmationTitle: "Si",
-          cancelTitle: "No",
-          title: "¿Estas seguro que quieres salir de la app?");
-      return response.confirmed;
+      var response = await _dialogService
+          .showConfirmationDialog(
+              description: "",
+              confirmationTitle: "Si",
+              cancelTitle: "No",
+              title: "¿Estas seguro que quieres salir de la app?"
+          );
+          return response.confirmed;
     } else {
-      unselectCommunity();
-      return false;
+       unselectCommunity();
+       return false;
     }
-  }
 
-  void subscribeToCommunity(String communityId) {
-    _firestoreService.addCommunityFromRequest(currentUser.uid, communityId);
-    currentUser.communities.add(communityId);
-    notifyListeners();
   }
+ void subscribeToCommunity(String communityId){
+_firestoreService.addCommunityFromRequest(currentUser.uid, communityId);
+currentUser.communities.add(communityId);
+notifyListeners();
 
-  void unsubscribeToCommunity(String communityId) {
-    _firestoreService.kickCommunityUser(communityId, currentUser.uid);
-    currentUser.communities.remove(communityId);
-    notifyListeners();
-  }
+ }
+
+void unsubscribeToCommunity(String communityId){
+  _firestoreService.kickCommunityUser(communityId, currentUser.uid);
+  currentUser.communities.remove(communityId);
+  notifyListeners();
+}
 }

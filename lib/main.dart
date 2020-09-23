@@ -1,5 +1,4 @@
 import 'package:aldea/ui/views/startup_view.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import './services/navigation_service.dart';
 import './services/dialog_service.dart';
@@ -9,18 +8,15 @@ import 'managers/dialog_manager.dart';
 import './ui/router.dart';
 import 'locator.dart';
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+    SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,]);
   // Register all the models and services before the app starts
-
   setupLocator();
-  await Firebase.initializeApp();
-  SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
   runApp(MyApp());
+  SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
 }
 
 class MyApp extends StatelessWidget {
