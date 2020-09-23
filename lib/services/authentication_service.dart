@@ -1,19 +1,20 @@
 import 'package:aldea/locator.dart';
 import 'package:aldea/services/firestore_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import '../models/user_model.dart';
 
 class AuthenticationService {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
-  Future<String> getUserUID() async {
-    return (await _firebaseAuth.currentUser()).uid;
+  String getUserUID() {
+    return _firebaseAuth.currentUser.uid;
   }
 
-  Future<FirebaseUser> getCurrentUser() async {
-    return await _firebaseAuth.currentUser();
+  auth.User getCurrentUser() {
+    return _firebaseAuth.currentUser;
   }
 
   Future logOut() {
@@ -79,31 +80,31 @@ class AuthenticationService {
       @required Function verificationFailed}) async {
     try {
       _firebaseAuth.verifyPhoneNumber(
-          phoneNumber: null,
+          phoneNumber: phoneNumber,
           timeout: Duration(seconds: 10),
           verificationCompleted: verifactionCompleted,
           verificationFailed: verificationFailed,
           codeSent: codeSent,
           codeAutoRetrievalTimeout: null);
-    } catch (e) {}
-  }
-
-  Future verificationCompleted(AuthCredential credential) async {
-    try {
-      var user = await _firebaseAuth.currentUser();
-      return (await user.linkWithCredential(credential)) != null;
     } catch (e) {
-      return e.message;
+      print(e.error);
     }
   }
 
-  Future<bool> isUserLoggedIn() async {
-    var user = await _firebaseAuth.currentUser();
-    return user != null;
+  Future phoneAuth(String phone, Function codeSent) async {
+    await _firebaseAuth.verifyPhoneNumber(
+        phoneNumber: phone,
+        timeout: Duration(seconds: 60),
+        verificationCompleted: (credential) => print("verificationCompleted"),
+        verificationFailed: (auth.FirebaseAuthException exception) =>
+            print(exception.message),
+        codeSent: (validationId, [token]) => codeSent(validationId),
+        codeAutoRetrievalTimeout: (value) => print("codeAutroRetrivalTimeout"));
   }
 
-  Future<FirebaseUser> getUserID() async {
-    var userId = _firebaseAuth.currentUser();
-    return userId;
+  Future linkCredentials(auth.AuthCredential credential) async {
+    var response = await _firebaseAuth.signInWithCredential(credential);
+    print("it gets here");
+    return response.user;
   }
 }

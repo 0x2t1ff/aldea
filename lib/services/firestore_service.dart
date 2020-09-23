@@ -13,35 +13,35 @@ import '../models/user_model.dart';
 class FirestoreService {
   //COLLECTION REFERENCES
   final CollectionReference _userCollectionReference =
-      Firestore.instance.collection('users');
+      FirebaseFirestore.instance.collection('users');
 
   final CollectionReference _postsCollectionReference =
-      Firestore.instance.collection('posts');
+      FirebaseFirestore.instance.collection('posts');
   final CollectionReference _quickstrikeCollectionReference =
-      Firestore.instance.collection('quickstrikes');
+      FirebaseFirestore.instance.collection('quickstrikes');
   final CollectionReference _communitiesCollectionReference =
-      Firestore.instance.collection('communities');
+      FirebaseFirestore.instance.collection('communities');
   final CollectionReference _followingPostsCollectionReference =
-      Firestore.instance.collection('followers');
+      FirebaseFirestore.instance.collection('followers');
   final CollectionReference _communitiesCreationRequestsReference =
-      Firestore.instance.collection('communityRequests');
+      FirebaseFirestore.instance.collection('communityRequests');
   final CollectionReference _activityCollectionReference =
-      Firestore.instance.collection('activity');
+      FirebaseFirestore.instance.collection('activity');
 
   //      **USER METHODS**
   Future<Map<String, dynamic>> getUserData(String uid) async {
     try {
-      var userData = await _userCollectionReference.document(uid).get();
+      var userData = await _userCollectionReference.doc(uid).get();
       var docs = await _userCollectionReference
-          .document(uid)
+          .doc(uid)
           .collection("pQuickstrikes")
           .where("fechaQuickstrike", isGreaterThanOrEqualTo: Timestamp.now())
-          .getDocuments();
+          .get();
       List<String> onGoingQuickstrikes = [];
-      for (var doc in docs.documents) {
-        onGoingQuickstrikes.add(doc.documentID);
+      for (var doc in docs.docs) {
+        onGoingQuickstrikes.add(doc.id);
       }
-      Map<dynamic, dynamic> data = userData.data;
+      Map<dynamic, dynamic> data = userData.data();
       data.putIfAbsent("onGoingQuickstrikes", () => onGoingQuickstrikes);
 
       return data;
@@ -51,31 +51,31 @@ class FirestoreService {
   }
 
   Future<Map<String, dynamic>> getCommunity(String id) async {
-    var community = await _communitiesCollectionReference.document(id).get();
-    return community.data;
+    var community = await _communitiesCollectionReference.doc(id).get();
+    return community.data();
   }
 
   Future removeRequest(String communityId, String uid) async {
     var reference = await _communitiesCollectionReference
-        .document(communityId)
+        .doc(communityId)
         .collection("requests")
         .where("uid", isEqualTo: uid)
-        .getDocuments();
+        .get();
 
-    await reference.documents.first.reference.delete();
+    await reference.docs.first.reference.delete();
   }
 
   Future<List<CommentModel>> getUserComments(
       String postId, String communityId) async {
     try {
       var result = await _communitiesCollectionReference
-          .document(communityId)
+          .doc(communityId)
           .collection("userPosts")
-          .document(postId)
+          .doc(postId)
           .collection("comments")
-          .getDocuments();
+          .get();
 
-      var data = result.documents.map((doc) => doc.data);
+      var data = result.docs.map((doc) => doc.data());
       List<CommentModel> listData = new List<CommentModel>();
       data.forEach((f) => listData.add(CommentModel.fromData(f)));
 
@@ -91,11 +91,11 @@ class FirestoreService {
   Future<List<CommentModel>> getComments(String postId) async {
     try {
       var result = await _postsCollectionReference
-          .document(postId)
+          .doc(postId)
           .collection("comments")
-          .getDocuments();
+          .get();
 
-      var data = result.documents.map((doc) => doc.data);
+      var data = result.docs.map((doc) => doc.data());
       List<CommentModel> listData = new List<CommentModel>();
       data.forEach((f) => listData.add(CommentModel.fromData(f)));
       listData.sort((a, b) {
@@ -109,11 +109,7 @@ class FirestoreService {
 
   Future postComment(
       String postId, String text, String name, String uid) async {
-    _postsCollectionReference
-        .document(postId)
-        .collection("comments")
-        .document()
-        .setData({
+    _postsCollectionReference.doc(postId).collection("comments").doc().set({
       'text': text,
       'name': name,
       'uid': uid,
@@ -123,29 +119,29 @@ class FirestoreService {
 
     try {
       await _postsCollectionReference
-          .document(postId)
+          .doc(postId)
           .collection("comments")
-          .getDocuments()
-          .then((value) => number = value.documents.length);
+          .get()
+          .then((value) => number = value.docs.length);
     } catch (e) {
       print(e.toString() +
           "print del error al intentar pillar el document.length para saber la cantidad de comentarios q hay ");
     }
 
     await _postsCollectionReference
-        .document(postId)
-        .updateData({"commentCount": number});
+        .doc(postId)
+        .update({"commentCount": number});
   }
 
   Future postUserComment(String communityId, String postId, String text,
       String name, String uid) async {
     _communitiesCollectionReference
-        .document(communityId)
+        .doc(communityId)
         .collection("userPosts")
-        .document(postId)
+        .doc(postId)
         .collection("comments")
-        .document()
-        .setData({
+        .doc()
+        .set({
       'text': text,
       'name': name,
       'uid': uid,
@@ -153,79 +149,75 @@ class FirestoreService {
     });
     int number;
     await _communitiesCollectionReference
-        .document(communityId)
+        .doc(communityId)
         .collection("userPosts")
-        .document(postId)
+        .doc(postId)
         .collection("comments")
-        .getDocuments()
-        .then((value) => number = value.documents.length);
+        .get()
+        .then((value) => number = value.docs.length);
 
     await _communitiesCollectionReference
-        .document(communityId)
+        .doc(communityId)
         .collection("userPosts")
-        .document(postId)
-        .updateData({"commentCount": number});
+        .doc(postId)
+        .update({"commentCount": number});
   }
 
   Future removeRequestUser(String communityId, String uid) async {
-    var userInfo = await _userCollectionReference.document(uid).get();
-    List userRequests = userInfo.data["requests"];
+    var userInfo = await _userCollectionReference.doc(uid).get();
+    List userRequests = userInfo.data()["requests"];
 
     userRequests.remove(communityId);
 
-    _userCollectionReference
-        .document(uid)
-        .updateData({"requests": userRequests});
+    _userCollectionReference.doc(uid).update({"requests": userRequests});
   }
 
   Future addCommunityFromRequest(String uid, String communityId) async {
-    var userInfo = await _userCollectionReference.document(uid).get();
-    List userRequests = userInfo.data["communities"];
+    var userInfo = await _userCollectionReference.doc(uid).get();
+    List userRequests = userInfo.data()["communities"];
     userRequests.add(communityId);
-    _userCollectionReference
-        .document(uid)
-        .updateData({"communities": userRequests});
+    _userCollectionReference.doc(uid).update({"communities": userRequests});
 
     var followerDocument =
-        await _followingPostsCollectionReference.document(communityId).get();
-    List followersData = followerDocument.data["followers"];
+        await _followingPostsCollectionReference.doc(communityId).get();
+    List followersData = followerDocument.data()["followers"];
     followersData.add(uid);
     _followingPostsCollectionReference
-        .document(communityId)
-        .updateData({"followers": followersData});
+        .doc(communityId)
+        .update({"followers": followersData});
   }
 
   Future registerCommunityActivity(String uid, String imageUrl) async {
     _activityCollectionReference
-        .document(uid)
-        .setData({"activity": 0, "uid": uid, "picUrl": imageUrl});
+        .doc(uid)
+        .set({"activity": 0, "uid": uid, "picUrl": imageUrl});
   }
 
   Future addActivityFromRequest(String uid) async {
-    var postRef = _userCollectionReference.document(uid);
+    var postRef = _userCollectionReference.doc(uid);
 
-    await postRef.updateData({"activity": FieldValue.increment(1)});
+    await postRef.update({"activity": FieldValue.increment(1)});
   }
 
   Future addActivityFromQuickstrike(String uid) async {
-    var postRef = _userCollectionReference.document(uid);
-    await postRef.updateData({"activity": FieldValue.increment(2)});
+    var postRef = _userCollectionReference.doc(uid);
+    await postRef.update({"activity": FieldValue.increment(2)});
   }
 
   Future followCommunity(String uid, String communityId) async {
     var followDoc =
-        await _followingPostsCollectionReference.document(communityId).get();
-    List followers = followDoc.data["followers"];
+        await _followingPostsCollectionReference.doc(communityId).get();
+    List followers = followDoc.data()["followers"];
 
     followers.add(communityId);
     await _followingPostsCollectionReference
-        .document(communityId)
-        .updateData({"followers": followers});
+        .doc(communityId)
+        .update({"followers": followers});
   }
 
   Future updateCommunitySettings(String rules, bool isMarketplace,
       bool isPublic, String communityId, String description) async {
-    await _communitiesCollectionReference.document(communityId).updateData({
+    await _communitiesCollectionReference.doc(communityId).update({
       'rules': rules,
       'isMarketplace': isMarketplace,
       'isPublic': isPublic,
@@ -236,13 +228,13 @@ class FirestoreService {
   Future<List<UserPostModel>> getUserPosts(String uid) async {
     try {
       var result = await _communitiesCollectionReference
-          .document(uid)
+          .doc(uid)
           .collection('userPosts')
           .orderBy("date", descending: true)
           .limit(10)
-          .getDocuments();
+          .get();
 
-      var data = result.documents.map((doc) => doc.data);
+      var data = result.docs.map((doc) => doc.data());
       List<UserPostModel> listData = new List<UserPostModel>();
       data.forEach((f) => listData.add(UserPostModel.fromMap(f)));
       return listData;
@@ -253,20 +245,18 @@ class FirestoreService {
   }
 
   Future denyCommunityCreation(String id) async {
-    await _communitiesCreationRequestsReference.document(id).delete();
+    await _communitiesCreationRequestsReference.doc(id).delete();
   }
 
   Future createCommunity(Community community, String id, String userId) async {
     try {
       await _communitiesCollectionReference
-          .document(community.uid)
-          .setData(community.toJson());
-      var userData = await _userCollectionReference.document(userId).get();
-      List communities = userData["communities"];
+          .doc(community.uid)
+          .set(community.toJson());
+      var userData = await _userCollectionReference.doc(userId).get();
+      List communities = userData.data()["communities"];
       communities.add(id);
-      _userCollectionReference
-          .document(userId)
-          .updateData({"communities": communities});
+      _userCollectionReference.doc(userId).update({"communities": communities});
     } catch (e) {
       //TODO: Find or create a way to repeat error handling without so much repeated code
       if (e is PlatformException) {
@@ -278,7 +268,7 @@ class FirestoreService {
   }
 
   Future<DocumentReference> createRequestId() async {
-    var documentPath = await _communitiesCreationRequestsReference.document();
+    var documentPath = await _communitiesCreationRequestsReference.doc();
     return documentPath;
   }
 
@@ -291,7 +281,7 @@ class FirestoreService {
       String description,
       String iconPicUrl,
       DocumentReference documentPath) async {
-    documentPath.setData({
+    documentPath.set({
       'user': user.toJson(),
       'messageRequest': messageRequest,
       'bkdPicUrl': bkdPicUrl,
@@ -299,59 +289,55 @@ class FirestoreService {
       'communityRules': communityRules,
       'description': description,
       'iconPicUrl': iconPicUrl,
-      'id': documentPath.documentID
+      'id': documentPath..id
     });
   }
 
   Future<List<CommunityCreationRequest>> getAdminRequests() async {
     List<CommunityCreationRequest> requestsList = [];
-    var requests = await _communitiesCreationRequestsReference.getDocuments();
-    requests.documents.forEach((element) {
-      requestsList.add(CommunityCreationRequest.fromData(element.data));
+    var requests = await _communitiesCreationRequestsReference.get();
+    requests.docs.forEach((element) {
+      requestsList.add(CommunityCreationRequest.fromData(element.data()));
     });
     return requestsList;
   }
 
   Future<List<dynamic>> getFollowingCommunities(String uid) async {
-    var followingCommunities =
-        await _userCollectionReference.document(uid).get();
+    var followingCommunities = await _userCollectionReference.doc(uid).get();
 
-    return followingCommunities.data["communities"];
+    return followingCommunities.data()["communities"];
   }
 
   Future getUser(String uid) async {
-    var userData = await _userCollectionReference.document(uid).get();
-    return User.fromData(userData.data);
+    var userData = await _userCollectionReference.doc(uid).get();
+    return User.fromData(userData.data());
   }
 
   Future<List<Community>> getCommunitiesData(
       List<dynamic> communitiesList, String uid) async {
     List<Community> infoList = List();
- 
+
     for (var f in communitiesList) {
-      var communityInfo =
-          await _communitiesCollectionReference.document(f).get();
-      if (communityInfo.data["isDeleted"]) {
-        var userData = await _userCollectionReference.document(uid).get();
-        List communitiesList = userData.data["communities"];
+      var communityInfo = await _communitiesCollectionReference.doc(f).get();
+      if (communityInfo.data()["isDeleted"]) {
+        var userData = await _userCollectionReference.doc(uid).get();
+        List communitiesList = userData.data()["communities"];
         communitiesList.remove(f);
         await _userCollectionReference
-            .document(uid)
-            .updateData({"communities": communitiesList});
+            .doc(uid)
+            .update({"communities": communitiesList});
       } else {
-        
-        var community =
-            Community.fromData(communityInfo.data, communityInfo.data["uid"]);
+        var community = Community.fromData(
+            communityInfo.data(), communityInfo.data()["uid"]);
         infoList.add(community);
       }
-
     }
-      return infoList;
+    return infoList;
   }
 
   Future createUser(User user) async {
     try {
-      await _userCollectionReference.document(user.uid).setData(user.toJson());
+      await _userCollectionReference.doc(user.uid).set(user.toJson());
     } catch (e) {
       //TODO: Find or create a way to repeat error handling without so much repeated code
       if (e is PlatformException) {
@@ -363,22 +349,20 @@ class FirestoreService {
   }
 
   Future<List> getVouchList(String uid) async {
-    var user = await _userCollectionReference.document(uid).get();
-    List vouchList = user.data["vouches"];
+    var user = await _userCollectionReference.doc(uid).get();
+    List vouchList = user.data()["vouches"];
     return vouchList;
   }
 
   Future giveVouch(List vouchList, String uid) async {
-    await _userCollectionReference
-        .document(uid)
-        .updateData({"vouches": vouchList});
+    await _userCollectionReference.doc(uid).update({"vouches": vouchList});
   }
 
   Future writeNewChatRoom(String id, String otherId, String chatRoomId) async {
-    var postRef = _userCollectionReference.document(id);
+    var postRef = _userCollectionReference.doc(id);
     Firestore.instance.runTransaction((Transaction tx) async {
       DocumentSnapshot postSnapshot = await tx.get(postRef);
-      List list = postSnapshot.data["chatRooms"];
+      List list = postSnapshot.data()["chatRooms"];
       list.add(chatRoomId);
       await tx.update(postRef, <String, dynamic>{"chatRooms": list});
     });
@@ -390,9 +374,9 @@ class FirestoreService {
           .where("communityId", isEqualTo: uid)
           .orderBy("fechaQuickstrike", descending: true)
           .limit(10)
-          .getDocuments();
+          .get();
 
-      var data = postDocumentSnapshot.documents.map((doc) => doc.data);
+      var data = postDocumentSnapshot.docs.map((doc) => doc.data());
       List<PostModel> listData = new List<PostModel>();
       data.forEach((f) => listData.add(PostModel.fromMap(f)));
       return listData;
@@ -403,18 +387,16 @@ class FirestoreService {
 
   Future<bool> likePost(
       List<dynamic> likeList, String postId, bool liked) async {
-    await _postsCollectionReference
-        .document(postId)
-        .updateData({"likes": likeList});
+    await _postsCollectionReference.doc(postId).update({"likes": likeList});
     return !liked;
   }
 
   Future createUserPost(String communityId, List imageUrl, String description,
       String avatarUrl, String name, String userId, DateTime date) {
     var ref = _communitiesCollectionReference
-        .document(communityId)
+        .doc(communityId)
         .collection("userPosts");
-    ref.document().setData({
+    ref.doc().set({
       "avatarUrl": avatarUrl,
       "description": description,
       "comments": ({}),
@@ -429,16 +411,14 @@ class FirestoreService {
   }
 
   Future getVouch(String userId) async {
-    var userDocument = await _userCollectionReference.document(userId).get();
-    var userIdList = userDocument.data["vouches"];
+    var userDocument = await _userCollectionReference.doc(userId).get();
+    var userIdList = userDocument.data()["vouches"];
     List<User> userList = new List<User>();
 
     for (var f in userIdList) {
-      await _userCollectionReference
-          .where("uid", isEqualTo: f)
-          .getDocuments()
-          .then((onValue) => onValue.documents.first.exists != null
-              ? userList.add(User.fromData(onValue.documents.first.data))
+      await _userCollectionReference.where("uid", isEqualTo: f).get().then(
+          (onValue) => onValue.docs.first.exists != null
+              ? userList.add(User.fromData(onValue.docs.first.data()))
               : print("it was null"));
 
       return userList;
@@ -446,12 +426,12 @@ class FirestoreService {
   }
 
   Future<List> getCommunitiesList(String uid) async {
-    var user = await _userCollectionReference.document(uid).get();
-    List communityList = user.data["communities"];
+    var user = await _userCollectionReference.doc(uid).get();
+    List communityList = user.data()["communities"];
     List<Community> communities = [];
     for (var f in communityList) {
-      var community = await _communitiesCollectionReference.document(f).get();
-      communities.add(Community.fromData(community.data, f));
+      var community = await _communitiesCollectionReference.doc(f).get();
+      communities.add(Community.fromData(community.data(), f));
     }
     return communities;
   }
@@ -466,7 +446,7 @@ class FirestoreService {
       String phoneNumber,
       String gender,
       String address}) async {
-    await _userCollectionReference.document(uid).updateData({
+    await _userCollectionReference.doc(uid).update({
       'picUrl': picUrl,
       'picName': picName,
       'bkdPicUrl': bkdPicUrl,
@@ -483,7 +463,7 @@ class FirestoreService {
   Future<String> addPost(Map<dynamic, dynamic> post) async {
     try {
       var doc = await _postsCollectionReference.add(post);
-      return doc.documentID;
+      return doc.id;
     } catch (e) {
       return e.toString();
     }
@@ -494,12 +474,11 @@ class FirestoreService {
       var postDocumentSnapshot = await _postsCollectionReference
           .where("id", isEqualTo: eventId)
           .limit(10)
-          .getDocuments();
+          .get();
 
       {
-        if (postDocumentSnapshot.documents.isNotEmpty) {
-          return QuickStrikePost.fromMap(
-              postDocumentSnapshot.documents.last.data);
+        if (postDocumentSnapshot.docs.isNotEmpty) {
+          return QuickStrikePost.fromMap(postDocumentSnapshot.docs.last.data());
         }
       }
     } catch (e) {
@@ -525,9 +504,9 @@ class FirestoreService {
             .where("communityId", whereIn: list)
             .orderBy("fechaQuickstrike", descending: true)
             .limit(10)
-            .getDocuments();
-        postsResult.documents.forEach((doc) {
-          var post = PostModel.fromMap(doc.data, id: doc.documentID);
+            .get();
+        postsResult.docs.forEach((doc) {
+          var post = PostModel.fromMap(doc.data(), id: doc.id);
           posts.add(post);
         });
         return null;
@@ -544,8 +523,8 @@ class FirestoreService {
           .where("followers", arrayContains: uid)
           .orderBy("lastPost", descending: true)
           .limit(5)
-          .getDocuments();
-      var data = postDocumentSnapshot.documents.map((doc) => doc.data);
+          .get();
+      var data = postDocumentSnapshot.docs.map((doc) => doc.data());
       List lastPostsList = [];
       data.forEach((f) => lastPostsList.add(f["posts"]));
       var lastPosts = [];
@@ -557,9 +536,9 @@ class FirestoreService {
 
       List<PostModel> listData = new List<PostModel>();
       for (var f in lastPosts) {
-        await _postsCollectionReference.document(f).get().then((onValue) {
+        await _postsCollectionReference.doc(f).get().then((onValue) {
           if (onValue.data != null) {
-            listData.add(PostModel.fromMap(onValue.data, id: f));
+            listData.add(PostModel.fromMap(onValue.data(), id: f));
           } else {}
         });
       }
@@ -578,8 +557,8 @@ class FirestoreService {
       String communityId, List<dynamic> posts, Timestamp lastPost) async {
     try {
       await _followingPostsCollectionReference
-          .document(communityId)
-          .setData({'posts': posts, 'lastPost': lastPost}, merge: true);
+          .doc(communityId)
+          .set({'posts': posts, 'lastPost': lastPost}, SetOptions(merge: true));
     } catch (e) {
       return (e.messages);
     }
@@ -588,41 +567,40 @@ class FirestoreService {
   //      **COMMUNITY METHODS**
   Future<List<DocumentSnapshot>> getCommunityRequests(String id) async {
     var documents = await _communitiesCollectionReference
-        .document(id)
+        .doc(id)
         .collection("requests")
-        .getDocuments();
-    return documents.documents;
+        .get();
+    return documents.docs;
   }
 
   Future requestCommunityAccess(
       String communityUid, User user, String text, bool isFromFB) async {
     try {
       await _communitiesCollectionReference
-          .document(communityUid)
+          .doc(communityUid)
           .collection('requests')
-          .document(user.uid)
-          .setData({
+          .doc(user.uid)
+          .set({
         'isFromFB': isFromFB,
         "uid": user.uid,
         'text': text,
         'user': user.toJson()
       });
       await _userCollectionReference
-          .document(user.uid)
-          .updateData({'requests': user.requests..add(communityUid)});
+          .doc(user.uid)
+          .update({'requests': user.requests..add(communityUid)});
     } catch (e) {
       print(e);
     }
   }
 
   Future<Map<String, dynamic>> getSettings(String communityId) async {
-    var snapshot =
-        await _communitiesCollectionReference.document(communityId).get();
+    var snapshot = await _communitiesCollectionReference.doc(communityId).get();
     var map = ({
-      'isPublic': snapshot.data["isPublic"],
-      'isMarketplace': snapshot.data["isMarketplace"],
-      'rules': snapshot.data["rules"],
-      'description': snapshot.data["description"]
+      'isPublic': snapshot.data()["isPublic"],
+      'isMarketplace': snapshot.data()["isMarketplace"],
+      'rules': snapshot.data()["rules"],
+      'description': snapshot.data()["description"]
     });
     return map;
   }
@@ -632,8 +610,8 @@ class FirestoreService {
       var communitiesQuery = await _communitiesCollectionReference
           .orderBy("followerCount", descending: true)
           .limit(12)
-          .getDocuments();
-      return communitiesQuery.documents;
+          .get();
+      return communitiesQuery.docs;
     } catch (e) {
       return e.message;
     }
@@ -646,8 +624,8 @@ class FirestoreService {
           .orderBy("followerCount", descending: true)
           .startAfterDocument(d)
           .limit(limit)
-          .getDocuments();
-      return communitiesQuery.documents;
+          .get();
+      return communitiesQuery.docs;
     } catch (e) {
       return e.message;
     }
@@ -673,9 +651,9 @@ class FirestoreService {
             .where("fechaQuickstrike", isLessThan: d)
             .orderBy("fechaQuickstrike", descending: true)
             .limit(10)
-            .getDocuments();
-        postsResult.documents.forEach((doc) {
-          var post = PostModel.fromMap(doc.data, id: doc.documentID);
+            .get();
+        postsResult.docs.forEach((doc) {
+          var post = PostModel.fromMap(doc.data(), id: doc.id);
           posts.add(post);
         });
         return null;
@@ -691,10 +669,10 @@ class FirestoreService {
       var communitiesData = await _activityCollectionReference
           .orderBy("activity", descending: true)
           .limit(3)
-          .getDocuments();
+          .get();
       List<Map<String, dynamic>> documentsData = [];
-      communitiesData.documents.forEach((element) {
-        documentsData.add(element.data);
+      communitiesData.docs.forEach((element) {
+        documentsData.add(element.data());
       });
       return documentsData;
     } catch (e) {
@@ -705,10 +683,10 @@ class FirestoreService {
   Future<List<DocumentSnapshot>> getProductsFromCommunity(String uid) async {
     try {
       var result = await _communitiesCollectionReference
-          .document(uid)
+          .doc(uid)
           .collection('market')
-          .getDocuments();
-      return result.documents;
+          .get();
+      return result.docs;
     } catch (e) {
       return (e.message);
     }
@@ -716,7 +694,7 @@ class FirestoreService {
 
   Future createFollowersDoc(String communityId) async {
     try {
-      await _followingPostsCollectionReference.document(communityId).setData({
+      await _followingPostsCollectionReference.doc(communityId).set({
         'followers': [],
         'posts': [],
         'quickstrikes': [],
@@ -730,7 +708,7 @@ class FirestoreService {
   Future getCommunityFollowersDoc(String communityId) async {
     try {
       var result =
-          await _followingPostsCollectionReference.document(communityId).get();
+          await _followingPostsCollectionReference.doc(communityId).get();
       return result.data;
     } catch (e) {}
   }
@@ -738,9 +716,9 @@ class FirestoreService {
   Future addQsToFollowing(
       String communityId, List<dynamic> qs, Timestamp lastQs) async {
     try {
-      await _followingPostsCollectionReference.document(communityId).setData(
+      await _followingPostsCollectionReference.doc(communityId).set(
           {'quickstrikes': qs, 'lastQuickstrike': lastQs},
-          merge: true);
+          SetOptions(merge: true));
     } catch (e) {
       return (e.messages);
     }
@@ -751,8 +729,8 @@ class FirestoreService {
   Future<String> addQuickstrike(QuickStrikePost post) async {
     try {
       var doc = await _quickstrikeCollectionReference.add(post.toMap());
-      doc.updateData({'id': doc.documentID});
-      return doc.documentID;
+      doc.update({'id': doc..id});
+      return doc.id;
     } catch (e) {
       return e.toString();
     }
@@ -764,8 +742,8 @@ class FirestoreService {
           .where("followers", arrayContains: uid)
           .orderBy("lastQuickstrike", descending: true)
           .limit(20)
-          .getDocuments();
-      var data = postDocumentSnapshot.documents.map((doc) => doc.data).toList();
+          .get();
+      var data = postDocumentSnapshot.docs.map((doc) => doc.data()).toList();
       var lastPosts = [];
       data.forEach((value) {
         for (var quickstrike in value['quickstrikes']) {
@@ -778,8 +756,7 @@ class FirestoreService {
 
       List<Stream> listData = [];
       for (var lastPost in lastPosts) {
-        listData.add(
-            _quickstrikeCollectionReference.document(lastPost).snapshots());
+        listData.add(_quickstrikeCollectionReference.doc(lastPost).snapshots());
       }
 
       var mergedStream = Rx.combineLatestList(listData);
@@ -792,31 +769,31 @@ class FirestoreService {
 
   Future joinQuickstrike(String userId, Map<String, dynamic> data) async {
     await _userCollectionReference
-        .document(userId)
+        .doc(userId)
         .collection("pQuickstrikes")
-        .document(data["id"])
-        .setData(data);
+        .doc(data["id"])
+        .set(data);
   }
 
   Future quitQuickstrike(String userId, String quickstrikeId) async {
     await _userCollectionReference
-        .document(userId)
+        .doc(userId)
         .collection("pQuickstrikes")
-        .document(quickstrikeId)
+        .doc(quickstrikeId)
         .delete();
   }
 
   Future submitQuickstrikeResult(String id, String userId) async {
-    var docRef = _quickstrikeCollectionReference.document(id);
+    var docRef = _quickstrikeCollectionReference.doc(id);
     Firestore.instance.runTransaction((Transaction tx) async {
       DocumentSnapshot postSnapshot = await tx.get(docRef);
       print(postSnapshot.data);
       List winners = [];
-      int amount = postSnapshot.data["amount"];
-      postSnapshot.data["winners"] == null
+      int amount = postSnapshot.data()["amount"];
+      postSnapshot.data()["winners"] == null
           ? null
-          : winners = postSnapshot.data["winners"];
-      if (postSnapshot.data["finished"] == false && winners.length < amount) {
+          : winners = postSnapshot.data()["winners"];
+      if (postSnapshot.data()["finished"] == false && winners.length < amount) {
         winners.add(userId);
         tx.update(docRef, {"winners": winners});
         if (winners.length >= amount) {
@@ -831,9 +808,9 @@ class FirestoreService {
 
   Future getParticipatingQuickstrikes(String uid, String qid) async {
     var docRef = await _userCollectionReference
-        .document(uid)
+        .doc(uid)
         .collection("pQuickstrikes")
-        .document(qid)
+        .doc(qid)
         .get();
 
     if (docRef.data == null) {
@@ -845,7 +822,7 @@ class FirestoreService {
 
   Stream<DocumentSnapshot> getChats(String uid) {
     try {
-      var stream = _userCollectionReference.document(uid).snapshots();
+      var stream = _userCollectionReference.doc(uid).snapshots();
       return stream;
     } catch (e) {
       return (e.message);
@@ -856,56 +833,54 @@ class FirestoreService {
     return _userCollectionReference
         .where("communities", arrayContains: uid)
         .limit(2)
-        .getDocuments();
+        .get();
   }
 
   Future<QuerySnapshot> getCommunityUsersSearch(String uid, String name) {
     return _userCollectionReference
         .where("communities", arrayContains: uid)
         .where("username", arrayContains: name)
-        .getDocuments();
+        .get();
   }
 
   Future giveCommunityMod(String communityId, String uid) async {
     var communityData =
-        await _communitiesCollectionReference.document(communityId).get();
-    List moderatorList = communityData.data["moderators"];
+        await _communitiesCollectionReference.doc(communityId).get();
+    List moderatorList = communityData.data()["moderators"];
     moderatorList.add(uid);
     _communitiesCollectionReference
-        .document(communityId)
-        .updateData({"moderators": moderatorList});
+        .doc(communityId)
+        .update({"moderators": moderatorList});
   }
 
   Future kickCommunityUser(String communityId, String uid) async {
     var followerDocument =
-        await _followingPostsCollectionReference.document(communityId).get();
-    List followersData = followerDocument.data["followers"];
+        await _followingPostsCollectionReference.doc(communityId).get();
+    List followersData = followerDocument.data()["followers"];
     followersData.remove(uid);
     _followingPostsCollectionReference
-        .document(communityId)
-        .updateData({"followers": followersData});
-    var userDocument = await _userCollectionReference.document(uid).get();
-    List userCommunities = userDocument.data["communities"];
+        .doc(communityId)
+        .update({"followers": followersData});
+    var userDocument = await _userCollectionReference.doc(uid).get();
+    List userCommunities = userDocument.data()["communities"];
     userCommunities.remove(communityId);
-    _userCollectionReference
-        .document(uid)
-        .updateData({"communities": userCommunities});
+    _userCollectionReference.doc(uid).update({"communities": userCommunities});
 
     var communityData =
-        await _communitiesCollectionReference.document(communityId).get();
-    List moderatorList = communityData.data["moderators"];
+        await _communitiesCollectionReference.doc(communityId).get();
+    List moderatorList = communityData.data()["moderators"];
     if (moderatorList.contains(uid)) {
       moderatorList.remove(uid);
       _communitiesCollectionReference
-          .document(communityId)
-          .updateData({"moderators": moderatorList});
+          .doc(communityId)
+          .update({"moderators": moderatorList});
     }
   }
 
   void deleteCommunity(String communityId, String communityName) {
     _communitiesCollectionReference
-        .document(communityId)
-        .setData({"isDeleted": true, "name": communityName});
-    _followingPostsCollectionReference.document(communityId).delete();
+        .doc(communityId)
+        .set({"isDeleted": true, "name": communityName});
+    _followingPostsCollectionReference.doc(communityId).delete();
   }
 }

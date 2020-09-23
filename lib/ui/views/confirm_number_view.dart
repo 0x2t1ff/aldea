@@ -6,6 +6,7 @@ import '../widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import '../../viewmodels/confirm_view_model.dart';
+import 'package:international_phone_input/international_phone_input.dart';
 
 class ConfirmNumberView extends StatelessWidget {
   final numberController = TextEditingController();
@@ -30,11 +31,14 @@ class ConfirmNumberView extends StatelessWidget {
                 ),
               ),
               verticalSpaceLarge,
-              InputField(
-                placeholder: 'P.E. +34 66666666',
-                controller: numberController,
-                textInputType: TextInputType.phone,
-
+              InternationalPhoneInput(
+                onPhoneNumberChange:
+                    (number, internationalizedPhoneNumber, isoCode) =>
+                        model.onPhoneNumberChange(
+                            number, internationalizedPhoneNumber, isoCode),
+                enabledCountries: ["ES"],
+                showCountryCodes: true,
+                showCountryFlags: true,
               ),
               verticalSpaceSmall,
               AnimatedContainer(
@@ -52,10 +56,8 @@ class ConfirmNumberView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   BusyButton(
-                    title: 'Enviar codigo',
-                    onPressed: model.isCodeSent ? () => model.enviarVerificacion(phoneNumber: numberController.text) : null
-                    
-                  )
+                      title: 'Enviar codigo',
+                      onPressed: () => model.createPhoneAuth(context))
                 ],
               ),
             ],

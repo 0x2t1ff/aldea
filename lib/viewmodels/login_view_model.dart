@@ -16,7 +16,8 @@ class LoginViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
   void navigateRegister() {
-    _navigationService.navigateTo(SignUpViewRoute, false);
+    print("tries to navigate");
+    _navigationService.navigateTo(ConfirmPhoneNumberRoute, false);
   }
 
   Future login({

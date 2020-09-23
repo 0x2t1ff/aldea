@@ -25,10 +25,10 @@ class DirectMessageViewModel extends BaseModel {
   }
 
   Future getStream() async {
-    var stream =  _firestoreService.getChats(currentUser.uid);
+    var stream = _firestoreService.getChats(currentUser.uid);
 
     stream.listen((event) async {
-      chatRooms = event.data["chatRooms"];
+      chatRooms = event.data()["chatRooms"];
       print(chatRooms.toString());
       chatStreams = _rtdbService.getChats(chatRooms);
       if (chatStreams is List<Stream<Event>>) {
@@ -53,6 +53,4 @@ class DirectMessageViewModel extends BaseModel {
         title: "¿Estas seguro que quieres salir de la app?");
     return response.confirmed;
   }
-
-
 }

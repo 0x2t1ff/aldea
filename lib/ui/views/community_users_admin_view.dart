@@ -66,7 +66,7 @@ class CommunityUsersAdminView extends StatelessWidget {
                                   itemBuilder: (context, index) {
                                     if (model.users.length > index) {
                                       User user = User.fromData(
-                                          model.users[index].data);
+                                          model.users[index].data());
                                       return CommunityUsersModerationItem(
                                           community: community,
                                           kickMember: () =>

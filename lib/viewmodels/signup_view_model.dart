@@ -24,14 +24,11 @@ class SignUpViewModel extends BaseModel {
   }) async {
     setBusy(true);
     var result = await _authenticationService.signupWithEmail(
-      email: email,
-      password: password,
-      name: name
-    );
+        email: email, password: password, name: name);
     if (result is bool) {
       if (result) {
         setBusy(false);
-        _navigationService.navigateTo(HomeViewRoute, true);
+        _navigationService.navigateTo(ConfirmPhoneNumberRoute, false);
       } else {
         setBusy(false);
         await _dialogService.showDialog(
