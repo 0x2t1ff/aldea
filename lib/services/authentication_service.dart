@@ -44,7 +44,21 @@ class AuthenticationService {
     _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phone,
         timeout: Duration(seconds: 10),
-        verificationCompleted: (credential) => print(credential),
+        verificationCompleted: (credential) async {
+          var result = await _firebaseAuth.signInWithCredential(credential);
+          if (result.user != null) {
+            var userData =
+                generateInitialUserData(result.user.uid, email, name, phone);
+            registerCurrentUser(userData);
+            await _firestoreService.createUser(User.fromData(userData));
+            _navigatorService.navigateTo(HomeViewRoute, true);
+          } else {
+            _dialogService.showDialog(
+                title: "Error",
+                description:
+                    "No se ha podido crear la cuenta. Por favor, intentalo de nuevo.");
+          }
+        },
         verificationFailed: (error) => print("error: " + error.message),
         codeSent: (verificationId, [token]) async {
           var dialogResponse = await _dialogService.showPhoneCodeDialog(
