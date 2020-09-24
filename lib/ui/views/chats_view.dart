@@ -53,6 +53,7 @@ class ChatsView extends StatelessWidget {
                         itemBuilder: (ctx, index) {
                           model.readMessage(chatroomId);
                           return MessageItem(
+                            navigateToUser: () => model.navigateToUser(model.messages.reversed.elementAt(index)["senderId"]),
                             heroAnimation: () {
                               List url = [];
                               url.add(model.messages[index]["message"]);

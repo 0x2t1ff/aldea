@@ -15,19 +15,18 @@ class NewsViewModel extends BaseModel {
 
   List<PostModel> _posts;
   List<PostModel> get posts => _posts;
-
-
+  int limit = 10;
+  bool isLoadingMore = false;
   Future fetchPosts(String uid) async {
     setBusy(true);
-    var quickstrikeResults =
-        await _firestoreService.getNewsPosts(uid);
+    var quickstrikeResults = await _firestoreService.getNewsPosts(uid, limit);
+    limit += 10;
 
     setBusy(true);
     if (quickstrikeResults is List<PostModel>) {
       _posts = quickstrikeResults;
       notifyListeners();
     } else {
-      
       await _dialogService.showDialog(
         title: 'La actualizacion de posts ha fallado',
         description: "ha fallado XD asi al menos no crashea ",
@@ -59,5 +58,24 @@ class NewsViewModel extends BaseModel {
 
   void goToCommunity(Community c) {
     _navigationService.navigateTo(CommunityViewRoute, false, arguments: c);
+  }
+
+  void communityFromFeed(String id) async {
+//no it dont do shit XD
+  }
+  void goToComments(String postId) {
+    _navigationService.navigateTo(CommentsViewRoute, false,
+        arguments: ({'postId': postId}));
+  }
+
+  void loadMorePosts(String uid) async {
+    setIsLoading(true);
+    await fetchPosts(uid);
+    setIsLoading(false);
+  }
+
+  void setIsLoading(bool value) {
+    isLoadingMore = value;
+    notifyListeners();
   }
 }

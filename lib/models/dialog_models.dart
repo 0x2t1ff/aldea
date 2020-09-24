@@ -6,12 +6,14 @@ class DialogRequest {
   final String buttonTitle;
   final String cancelTitle;
   final bool hasTextArea;
+  final bool hasPhoneCode;
 
   DialogRequest(
       {@required this.title,
       @required this.description,
       @required this.buttonTitle,
       this.hasTextArea = false,
+      this.hasPhoneCode = false,
       this.cancelTitle});
 }
 
@@ -25,6 +27,6 @@ class DialogResponse {
     this.fieldOne,
     this.fieldTwo,
     this.confirmed,
-    this.textField, 
+    this.textField,
   });
 }

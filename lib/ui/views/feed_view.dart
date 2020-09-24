@@ -5,7 +5,6 @@ import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:stacked/stacked.dart';
-import 'dart:async';
 import "../shared/app_colors.dart" as custcolor;
 import "../shared/ui_helpers.dart" as devicesize;
 
@@ -14,7 +13,8 @@ class FeedView extends StatefulWidget {
   _FeedViewState createState() => _FeedViewState();
 }
 
-class _FeedViewState extends State<FeedView> {
+class _FeedViewState extends State<FeedView>
+    with AutomaticKeepAliveClientMixin {
   static final _containerHeight = 100.0 / 800;
 
   // You don't need to change any of these variables
@@ -62,20 +62,35 @@ class _FeedViewState extends State<FeedView> {
       _fromTop = _prevReverseOffset + difference;
       if (_fromTop < -_containerHeight) _fromTop = -_containerHeight;
     }
+
     setState(
         () {}); // for simplicity I'm calling setState here, you  can put bool values to only call setState when there is a genuine change in _fromTop
   }
 
   @override
+  bool get wantKeepAlive => true;
+  @override
+  // ignore: must_call_super
+  @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<FeedViewModel>.reactive(
       viewModelBuilder: () => FeedViewModel(),
-      
-      onModelReady: (model) => model.fetchPosts(),
+      onModelReady: (model) {
+        model.fetchPosts();
+        _controller.addListener(() async {
+          if (_controller.position.pixels /
+                      _controller.position.maxScrollExtent >=
+                  0.6 &&
+              model.isLoadingMore == false) {
+            await model.loadMorePosts();
+            model.setIsLoading(false);
+          }
+        });
+      },
       builder: (context, model, child) => WillPopScope(
         onWillPop: model.onWillPop,
         child: Scaffold(
-          backgroundColor: custcolor.darkGrey,
+          backgroundColor: custcolor.backgroundColor,
           body: Stack(
             children: <Widget>[
               model.posts != null
@@ -108,6 +123,7 @@ class _FeedViewState extends State<FeedView> {
                         await model.fetchPosts();
                         _refreshController.refreshCompleted();
                         model.refreshingFeedEnded();
+                        _fromTop = -0.125;
                       },
                       child: ListView.builder(
                         controller: _controller,
@@ -131,7 +147,13 @@ class _FeedViewState extends State<FeedView> {
                                         model.posts[index].likes),
                                     isLiked: model.isLiked(
                                       model.posts[index].likes,
-                                    )),
+                                    ),
+                                    deleteAllowed: model.currentUser.mod
+                                        .contains(
+                                            model.posts[index].communityId),
+                                    deletePost: () => model.deletePost(
+                                        model.posts[index].id,
+                                        model.posts[index].communityId)),
                               )
                             : FeedWidget(
                                 navigateToCommunity: () =>
@@ -147,7 +169,11 @@ class _FeedViewState extends State<FeedView> {
                                 isLiked: model.isLiked(
                                   model.posts[index].likes,
                                 ),
-                              ),
+                                deleteAllowed: model.currentUser.mod
+                                    .contains(model.posts[index].communityId),
+                                deletePost: () => model.deletePost(
+                                    model.posts[index].id,
+                                    model.posts[index].communityId)),
                       ),
                     )
                   : Center(
@@ -188,9 +214,9 @@ class _FeedViewState extends State<FeedView> {
                                 ? ListView.builder(
                                     padding: EdgeInsets.only(
                                         left: devicesize.screenWidth(context) *
-                                            0.02),
+                                            0.022),
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: 5,
+                                    itemCount: 6,
                                     itemBuilder: (context, index) {
                                       return index < model.communityList.length
                                           ? GestureDetector(
@@ -200,11 +226,10 @@ class _FeedViewState extends State<FeedView> {
                                                   decoration:
                                                       BoxDecoration(boxShadow: [
                                                     BoxShadow(
-                                                      color: Colors.black
-                                                         , 
+                                                      color: Colors.black,
                                                       spreadRadius: 3,
                                                       blurRadius: 7,
-                                                          offset: Offset(2,
+                                                      offset: Offset(2,
                                                           3), // changes position of shadow
                                                     ),
                                                   ], shape: BoxShape.circle),

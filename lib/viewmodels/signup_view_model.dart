@@ -12,9 +12,14 @@ class SignUpViewModel extends BaseModel {
       locator<AuthenticationService>();
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  String phoneNumber;
 
   void navigateLogin() {
     _navigationService.navigateTo(LoginViewRoute, true);
+  }
+
+  Future onPhoneNumberChange(String phone) {
+    phoneNumber = phone;
   }
 
   Future signUp({
@@ -23,28 +28,28 @@ class SignUpViewModel extends BaseModel {
     @required String name,
   }) async {
     setBusy(true);
-    var result = await _authenticationService.signupWithEmail(
-      email: email,
-      password: password,
-      name: name
-    );
-    if (result is bool) {
-      if (result) {
-        setBusy(false);
-        _navigationService.navigateTo(HomeViewRoute, true);
-      } else {
-        setBusy(false);
-        await _dialogService.showDialog(
-            title: 'Error',
-            description:
-                'Ha habido un error al intentar crear la cuenta. Por favor, intentelo de nuevo mas tarde.');
-      }
-    } else {
-      setBusy(false);
-      await _dialogService.showDialog(
-        title: "Error",
-        description: result,
-      );
-    }
+    _authenticationService.signUpPhoneNumber(
+        phoneNumber, email, name, password);
+
+    // var result = await _authenticationService.signupWithEmail(
+    //     email: email, password: password, name: name);
+    // if (result is bool) {
+    //   if (result) {
+    //     setBusy(false);
+    //     _navigationService.navigateTo(HomeViewRoute, true);
+    //   } else {
+    //     setBusy(false);
+    //     await _dialogService.showDialog(
+    //         title: 'Error',
+    //         description:
+    //             'Ha habido un error al intentar crear la cuenta. Por favor, intentelo de nuevo mas tarde.');
+    //   }
+    // } else {
+    //   setBusy(false);
+    //   await _dialogService.showDialog(
+    //     title: "Error",
+    //     description: result,
+    //   );
+    // }
   }
 }

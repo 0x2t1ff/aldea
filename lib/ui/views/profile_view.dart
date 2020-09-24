@@ -20,7 +20,6 @@ class ProfileView extends StatelessWidget {
     return ViewModelBuilder<ProfileViewModel>.reactive(
       viewModelBuilder: () => ProfileViewModel(),
       onModelReady: (model) {
-        
         if (phoneController.text.isEmpty)
           phoneController.text = model.currentUser.phoneNumber;
         if (mailController.text.isEmpty)
@@ -232,7 +231,7 @@ class ProfileView extends StatelessWidget {
                             sigmaY: 6.0,
                           ),
                           child: Container(
-                            //color: Color(0xff3C8FA7).withOpacity(0.6),
+                            color: Color(0xff3C8FA7).withOpacity(0.6),
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             child: AnimatedContainer(
                               duration: Duration(milliseconds: 250),
@@ -308,6 +307,7 @@ class ProfileView extends StatelessWidget {
                                                     )),
                                                     Expanded(
                                                         child: TextField(
+                                                            readOnly: true,
                                                             keyboardType:
                                                                 TextInputType
                                                                     .phone,

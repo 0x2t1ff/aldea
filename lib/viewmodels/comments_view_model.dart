@@ -10,7 +10,7 @@ class CommentsViewModel extends BaseModel {
   NavigationService _navigationService = locator<NavigationService>();
   List<CommentModel> _comments;
   List<CommentModel> get comments => _comments;
-
+ 
   Map mapId;
   Future fetchComments(Map ids) async {
     mapId = ids;

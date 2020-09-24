@@ -28,7 +28,7 @@ class UserPostsViewModel extends BaseModel {
   Future fetchPosts(String uid) async {
     setBusy(true);
     var userPosts = await _firestoreService.getUserPosts(uid);
-    print(userPosts.toString());
+   
 
     setBusy(true);
     if (userPosts is List<UserPostModel>) {
@@ -42,12 +42,16 @@ class UserPostsViewModel extends BaseModel {
     }
   }
 
-  Future navigate(String uid) {
+  void navigate(String uid) {
     if (uid == currentUser.uid) {
     } else {
       _navigationService.navigateTo(OtherProfileViewRoute, false,
           arguments: uid);
     }
+  }
+
+  void deletePost(String postId, String communityId) {
+    _firestoreService.deleteUserCommunityPosts(postId, communityId);
   }
 
   Future<bool> likePost(

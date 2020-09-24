@@ -29,7 +29,7 @@ class DialogService {
     ));
     return _dialogCompleter.future;
   }
-
+ 
   /// Shows a confirmation dialog
   Future<DialogResponse> showConfirmationDialog(
       {String title,
@@ -56,14 +56,30 @@ class DialogService {
         description: description,
         buttonTitle: confirmationTitle,
         hasTextArea: true,
+
+        cancelTitle: cancelTitle));
+    return _dialogCompleter.future;
+  }
+
+  Future<DialogResponse> showPhoneCodeDialog(
+      {String title,
+      String description,
+      String confirmationTitle = 'Enviar',
+      String cancelTitle = 'Cancelar'}) {
+    _dialogCompleter = Completer<DialogResponse>();
+    _showDialogListener(DialogRequest(
+        title: title,
+        description: description,
+        buttonTitle: confirmationTitle,
+        hasPhoneCode: true,
         cancelTitle: cancelTitle));
     return _dialogCompleter.future;
   }
 
   /// Completes the _dialogCompleter to resume the Future's execution call
-  void dialogComplete(DialogResponse response) {
-    _dialogNavigationKey.currentState.pop();
-    _dialogCompleter.complete(response);
+  void dialogComplete(DialogResponse response,) {
+     _dialogNavigationKey.currentState.pop();
+        _dialogCompleter.complete(response);
     _dialogCompleter = null;
   }
 }

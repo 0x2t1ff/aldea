@@ -1,5 +1,6 @@
 import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/models/cloud_storage_result.dart';
+import 'package:aldea/services/authentication_service.dart';
 import 'package:aldea/services/cloud_storage_service.dart';
 import 'package:aldea/services/dialog_service.dart';
 import 'package:aldea/services/firestore_service.dart';
@@ -14,6 +15,8 @@ class ProfileViewModel extends BaseModel {
   final CloudStorageService _cloudStorageService =
       locator<CloudStorageService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
+  final AuthenticationService _authenticationService =
+      locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
   final DialogService _dialogService = locator<DialogService>();
   File selectedProfileImage;
@@ -29,9 +32,13 @@ class ProfileViewModel extends BaseModel {
         arguments: c);
   }
 
+  Future getAuthUser() async {
+    return await _authenticationService.getCurrentUser();
+  }
+
   Future seeSettings() {
     _navigationService.navigateTo(ProfileSettingsViewRoute, false,
-        arguments: currentUser.isGodAdmin);
+        arguments: currentUser);
   }
 
   Future selectProfileImage() async {
@@ -101,7 +108,6 @@ class ProfileViewModel extends BaseModel {
             ? bkdResult.imageFileName
             : currentUser.bkdPicName,
         email: email,
-        phoneNumber: phoneNumber,
         gender: gender,
         address: address);
 
@@ -115,7 +121,6 @@ class ProfileViewModel extends BaseModel {
       currentUser.bkdPicUrl = bkdResult.imageUrl;
     }
     currentUser.email = email;
-    currentUser.phoneNumber = phoneNumber;
     currentUser.address = address;
     currentUser.gender = gender;
     _isEditting = false;

@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:aldea/models/community.dart';
+import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/widgets/all_communities.dart';
 import 'package:aldea/ui/widgets/communities_carousel.dart';
 import 'package:aldea/ui/widgets/community_preview.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import '../../viewmodels/communities_view_model.dart';
@@ -22,23 +22,24 @@ class _CommunitiesViewState extends State<CommunitiesView>
   @override
   bool get wantKeepAlive => true;
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     return ViewModelBuilder<CommunitiesViewModel>.reactive(
       viewModelBuilder: () => CommunitiesViewModel(),
       onModelReady: (model) {
-        
-          model.fetchCommunities();
-          controller.addListener(() {
-            if (controller.position.pixels/controller.position.maxScrollExtent >=
-                0.6 && model.isLoadingMore == false) {
-              model.loadMoreCommunities();
-            }
-          });
-        
+        model.fetchCommunities();
+        controller.addListener(() {
+          if (controller.position.pixels /
+                      controller.position.maxScrollExtent >=
+                  0.6 &&
+              model.isLoadingMore == false) {
+            model.loadMoreCommunities();
+          }
+        });
       },
       builder: (context, model, child) => WillPopScope(
         onWillPop: model.onWillPop,
-              child: Stack(children: <Widget>[
+        child: Stack(children: <Widget>[
           SingleChildScrollView(
             controller: controller,
             child: Column(
@@ -57,20 +58,26 @@ class _CommunitiesViewState extends State<CommunitiesView>
                           horizontalSpaceSmall,
                           Text(
                             "Top de la semana",
-                            style:
-                                TextStyle(color: Color(0xffb5b5b5), fontSize: 29),
+                            style: TextStyle(
+                                color: Color(0xffb5b5b5), fontSize: 29),
                           ),
+                          Padding(
+                            padding:  EdgeInsets.only(left:screenWidth(context) *0.05),
+                            child: InkWell(
+                              onTap: () => model.fetchCommunities(),
+                              child: Container(
+                                  child: Icon(Icons.refresh,
+                                      color: blueTheme, size: 35)),
+                            ),
+                          )
                         ],
                       ),
                       CommunitiesCarousel(
                         busy: model.busy,
-                        url1:
-                            model.busy ? null : model.topCommunities[0],
-                        url2:
-                            model.busy ? null : model.topCommunities[1],
-                        url3:
-                            model.busy ? null : model.topCommunities[2],
-                            model: model,
+                        url1: model.busy ? null : model.topCommunities[0],
+                        url2: model.busy ? null : model.topCommunities[1],
+                        url3: model.busy ? null : model.topCommunities[2],
+                        model: model,
                       ),
                       AllCommunities(
                         model: model,
@@ -101,7 +108,9 @@ class _CommunitiesViewState extends State<CommunitiesView>
               ),
               Center(
                 child: CommunityPreview(
-                  community: model.selectedCommunity != null ? model.selectedCommunity : null,
+                  community: model.selectedCommunity != null
+                      ? model.selectedCommunity
+                      : null,
                   cancel: model.unselectCommunity,
                   model: model,
                 ),

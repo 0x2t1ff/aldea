@@ -89,14 +89,18 @@ class _CommunityViewState extends State<CommunityView>
                                     .contains(model.currentUser.uid) !=
                                 true)
                               IconButton(
-                                  icon: Icon(Icons.more_vert, color: almostWhite, size: 35),
+                                  icon: Icon(Icons.more_vert,
+                                      color: almostWhite, size: 35),
                                   onPressed: () {
                                     model.setDropdownContainer();
                                   }),
-                                  model.currentUser.isGodAdmin ? IconButton(
-                                    icon: Icon(Icons.dangerous, color: Colors.red, size: 35),
-                                    onPressed: () => "",
-                                  ) : Container(),
+                            model.currentUser.isGodAdmin
+                                ? IconButton(
+                                    icon: Icon(Icons.dangerous,
+                                        color: Colors.red, size: 35),
+                                    onPressed: () => model.setDeleteCommunity(),
+                                  )
+                                : Container(),
                             model.community.moderators
                                     .contains(model.currentUser.uid)
                                 ? getModButtons(model)
@@ -238,33 +242,38 @@ class _CommunityViewState extends State<CommunityView>
                                                               fontSize: 16))
                                                     ],
                                                   ),
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: <Widget>[
-                                                      Text(
-                                                          model
-                                                              .followersDoc[
-                                                                  "followers"]
-                                                              .length
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 18)),
-                                                      Text("Seguidores",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
-                                                              fontSize: 16))
-                                                    ],
+                                                  GestureDetector(
+                                                    onTap: () => model
+                                                        .goToAdminUsersScreen(
+                                                            model.community),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        Text(
+                                                            model
+                                                                .followersDoc[
+                                                                    "followers"]
+                                                                .length
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 18)),
+                                                        Text("Seguidores",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                fontSize: 16))
+                                                      ],
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -313,12 +322,14 @@ class _CommunityViewState extends State<CommunityView>
                                                       0.04,
                                                   child: Image.asset(
                                                       "assets/images/community-chat.png")),
-                                              SizedBox(
-                                                  height: communityBodyHeight(
-                                                          context) *
-                                                      0.04,
-                                                  child: Image.asset(
-                                                      "assets/images/user-posts.png")),
+                                              GestureDetector(
+                                                child: SizedBox(
+                                                    height: communityBodyHeight(
+                                                            context) *
+                                                        0.04,
+                                                    child: Image.asset(
+                                                        "assets/images/user-posts.png")),
+                                              ),
                                             ],
                                           )
                                         : TabBar(
@@ -376,7 +387,7 @@ class _CommunityViewState extends State<CommunityView>
                                                 ),
                                               ],
                                             ),
-                                            padding: EdgeInsets.all(12),
+                                            padding: EdgeInsets.all(8),
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -435,7 +446,7 @@ class _CommunityViewState extends State<CommunityView>
                                         )
                                       : Container(),
                                   Container(
-                                    height: communityBodyHeight(context) * 0.86,
+                                    height: communityBodyHeight(context) * 0.92,
                                     width: double.infinity,
                                     child: widget.community.isMarketplace
                                         ? TabBarView(
@@ -490,18 +501,169 @@ class _CommunityViewState extends State<CommunityView>
                               left: screenWidth(context) * 0.15,
                               child: UnfollowPopUp(context, model),
                             ),
-                       model.unfollowDropdown?   Positioned(
-                            top:screenHeight(context) *0.03,
-                              right: screenWidth(context) * 0.07,
-                              child: GestureDetector(
-                                onTap: (){ 
-                                  model.setDropdownContainer();
-                                  model.setIsUnfollowPopup();},
-                                  child: Container(
-                                    decoration: BoxDecoration(color: almostWhite, borderRadius: BorderRadius.all(Radius.circular(10,),),),
-                                      width: screenWidth(context) * 0.3,
-                                      height: screenHeight(context) * 0.05, 
-                                      child: Center(child: Text( "Dejar de seguir", style: TextStyle(color: almostBlack, fontFamily: 'Raleway', ),))))) : Container()
+                          model.unfollowDropdown
+                              ? Positioned(
+                                  top: screenHeight(context) * 0.03,
+                                  right: screenWidth(context) * 0.07,
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        model.setDropdownContainer();
+                                        model.setIsUnfollowPopup();
+                                      },
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                            color: almostWhite,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(
+                                                10,
+                                              ),
+                                            ),
+                                          ),
+                                          width: screenWidth(context) * 0.3,
+                                          height: screenHeight(context) * 0.05,
+                                          child: Center(
+                                              child: Text(
+                                            "Dejar de seguir",
+                                            style: TextStyle(
+                                              color: almostBlack,
+                                              fontFamily: 'Raleway',
+                                            ),
+                                          )))))
+                              : Container(),
+                          model.deletingCommunity
+                              ? Positioned(
+                                  top: screenHeight(context) * 0.25,
+                                  left: screenWidth(context) * 0.15,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(50),
+                                    ),
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                          sigmaX: 6.0, sigmaY: 6.0),
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(50),
+                                              ),
+                                              color: Colors.white
+                                                  .withOpacity(0.2)),
+                                          width: screenWidth(context) * 0.7,
+                                          height: screenHeight(context) * 0.3,
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    screenWidth(context) *
+                                                        0.05),
+                                            child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left:
+                                                          screenWidth(context) *
+                                                              0.04,
+                                                      right:
+                                                          screenWidth(context) *
+                                                              0.04,
+                                                      top: screenHeight(
+                                                              context) *
+                                                          0.04),
+                                                  child: Text(
+                                                    "¿Estás seguro que quieres eliminar ${model.community.name}?",
+                                                    style: TextStyle(
+                                                      color: almostWhite,
+                                                      fontFamily: "Raleway",
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 22,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: screenHeight(
+                                                              context) *
+                                                          0.02),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          model
+                                                              .deleteCommunity();
+                                                        },
+                                                        child: Container(
+                                                            width: screenWidth(
+                                                                    context) *
+                                                                0.24,
+                                                            height: screenHeight(
+                                                                    context) *
+                                                                0.06,
+                                                            decoration: BoxDecoration(
+                                                                color:
+                                                                    almostWhite,
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            200))),
+                                                            child: Center(
+                                                                child: Text(
+                                                              "Sí",
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      "Raleway",
+                                                                  color:
+                                                                      almostBlack,
+                                                                  fontSize: 25,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ))),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          model
+                                                              .setNotDeleteCommunity();
+                                                        },
+                                                        child: Container(
+                                                            width: screenWidth(
+                                                                    context) *
+                                                                0.24,
+                                                            height: screenHeight(
+                                                                    context) *
+                                                                0.06,
+                                                            decoration: BoxDecoration(
+                                                                color:
+                                                                    blueTheme,
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            200))),
+                                                            child: Center(
+                                                                child: Text(
+                                                              "No",
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      "Raleway",
+                                                                  color:
+                                                                      almostWhite,
+                                                                  fontSize: 25,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ))),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )),
+                                    ),
+                                  ))
+                              : Container()
                         ],
                       )
               ],
@@ -536,16 +698,6 @@ class _CommunityViewState extends State<CommunityView>
             color: Colors.white,
           ),
         ),
-        IconButton(
-          onPressed: () {
-            model.goToAdminUsersScreen(widget.community);
-          },
-          icon: Icon(
-            Icons.supervised_user_circle,
-            size: 35,
-            color: Colors.white,
-          ),
-        )
       ],
     );
   }

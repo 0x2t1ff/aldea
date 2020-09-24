@@ -55,6 +55,10 @@ class FirestoreService {
     return community.data;
   }
 
+  Future changeNotificationsSetting(String id , bool notifications) async{
+    _userCollectionReference.document(id).updateData({"notificationsEnabled":notifications});
+  }
+
   Future removeRequest(String communityId, String uid) async {
     var reference = await _communitiesCollectionReference
         .document(communityId)
@@ -63,6 +67,10 @@ class FirestoreService {
         .getDocuments();
 
     await reference.documents.first.reference.delete();
+  }
+
+  Future deletePost(String uid, String cid) {
+    _postsCollectionReference.document(uid).delete();
   }
 
   Future<List<CommentModel>> getUserComments(
@@ -261,10 +269,12 @@ class FirestoreService {
       await _communitiesCollectionReference
           .document(community.uid)
           .setData(community.toJson());
-          var userData = await _userCollectionReference.document(userId).get();
-          List communities = userData["communities"];
-          communities.add(id);
-          _userCollectionReference.document(userId).updateData({"communities":communities});
+      var userData = await _userCollectionReference.document(userId).get();
+      List communities = userData["communities"];
+      communities.add(id);
+      _userCollectionReference
+          .document(userId)
+          .updateData({"communities": communities});
     } catch (e) {
       //TODO: Find or create a way to repeat error handling without so much repeated code
       if (e is PlatformException) {
@@ -329,20 +339,21 @@ class FirestoreService {
     for (var f in communitiesList) {
       var communityInfo =
           await _communitiesCollectionReference.document(f).get();
-if(communityInfo.data["isDeleted"]){
- var userData =  await _userCollectionReference.document(uid).get();
- List communitiesList = userData.data["communities"];
- communitiesList.remove(f);
-await _userCollectionReference.document(uid).updateData({"communities":communitiesList});
-}else{
-      var community =
-          Community.fromData(communityInfo.data, communityInfo.data["uid"]);
-      infoList.add(community);
+      if (communityInfo.data["isDeleted"]) {
+        var userData = await _userCollectionReference.document(uid).get();
+        List communitiesList = userData.data["communities"];
+        communitiesList.remove(f);
+        await _userCollectionReference
+            .document(uid)
+            .updateData({"communities": communitiesList});
+      } else {
+        var community =
+            Community.fromData(communityInfo.data, communityInfo.data["uid"]);
+        infoList.add(community);
+      }
     }
-
     return infoList;
   }
-      }
 
   Future createUser(User user) async {
     try {
@@ -379,17 +390,28 @@ await _userCollectionReference.document(uid).updateData({"communities":communiti
     });
   }
 
-  Future getNewsPosts(String uid) async {
+  Future getNewsPosts(String uid, int limit) async {
     try {
       var postDocumentSnapshot = await _postsCollectionReference
           .where("communityId", isEqualTo: uid)
           .orderBy("fechaQuickstrike", descending: true)
-          .limit(10)
+          .limit(limit)
           .getDocuments();
+      List ids = [];
+
+      postDocumentSnapshot.documents.forEach((element) {
+        ids.add(element.documentID);
+      });
 
       var data = postDocumentSnapshot.documents.map((doc) => doc.data);
+      int counter = 0;
       List<PostModel> listData = new List<PostModel>();
-      data.forEach((f) => listData.add(PostModel.fromMap(f)));
+      data.forEach((
+        f,
+      ) {
+        listData.add(PostModel.fromMap(f, id: ids[counter]));
+        counter++;
+      });
       return listData;
     } catch (e) {
       print(e.toString());
@@ -409,7 +431,8 @@ await _userCollectionReference.document(uid).updateData({"communities":communiti
     var ref = _communitiesCollectionReference
         .document(communityId)
         .collection("userPosts");
-    ref.document().setData({
+    var id = ref.document().documentID;
+    ref.document(id).setData({
       "avatarUrl": avatarUrl,
       "description": description,
       "comments": ({}),
@@ -419,7 +442,8 @@ await _userCollectionReference.document(uid).updateData({"communities":communiti
       "name": name,
       "userId": userId,
       "date": date,
-      "commentCount": 0
+      "commentCount": 0,
+      "id": id,
     });
   }
 
@@ -500,6 +524,37 @@ await _userCollectionReference.document(uid).updateData({"communities":communiti
     } catch (e) {
       return e.toString();
     }
+  }
+
+  Future<List<PostModel>> getPosts(List<dynamic> communityIds) async {
+    List<PostModel> posts = [];
+    List<List<String>> lists = [];
+    List<String> list = [];
+
+    for (var i = 0; i < communityIds.length; i++) {
+      list.add(communityIds[i]);
+      if (list.length == 10 || (i + 1) == communityIds.length) {
+        lists.add(list);
+        list = [];
+      }
+    }
+    try {
+      await Future.forEach(lists, (list) async {
+        var postsResult = await _postsCollectionReference
+            .where("communityId", whereIn: list)
+            .orderBy("fechaQuickstrike", descending: true)
+            .limit(10)
+            .getDocuments();
+        postsResult.documents.forEach((doc) {
+          var post = PostModel.fromMap(doc.data, id: doc.documentID);
+          posts.add(post);
+        });
+        return null;
+      });
+    } catch (e) {
+      print(e);
+    }
+    return posts;
   }
 
   Future getFollowingPostsOnceOff(String uid) async {
@@ -615,6 +670,39 @@ await _userCollectionReference.document(uid).updateData({"communities":communiti
     } catch (e) {
       return e.message;
     }
+  }
+
+  Future<List<PostModel>> getMorePosts(List<dynamic> communityIds, Timestamp d,
+      {int limit = 9}) async {
+    List<PostModel> posts = [];
+    List<List<String>> lists = [];
+    List<String> list = [];
+
+    for (var i = 0; i < communityIds.length; i++) {
+      list.add(communityIds[i]);
+      if (list.length == 10 || (i + 1) == communityIds.length) {
+        lists.add(list);
+        list = [];
+      }
+    }
+    try {
+      await Future.forEach(lists, (list) async {
+        var postsResult = await _postsCollectionReference
+            .where("communityId", whereIn: list)
+            .where("fechaQuickstrike", isLessThan: d)
+            .orderBy("fechaQuickstrike", descending: true)
+            .limit(10)
+            .getDocuments();
+        postsResult.documents.forEach((doc) {
+          var post = PostModel.fromMap(doc.data, id: doc.documentID);
+          posts.add(post);
+        });
+        return null;
+      });
+    } catch (e) {
+      print(e);
+    }
+    return posts;
   }
 
   Future<List<Map<String, dynamic>>> getTopCommunities() async {
@@ -786,8 +874,20 @@ await _userCollectionReference.document(uid).updateData({"communities":communiti
   Future<QuerySnapshot> getCommunityUsers(String uid) async {
     return _userCollectionReference
         .where("communities", arrayContains: uid)
-        .limit(2)
         .getDocuments();
+  }
+
+  Future<bool> deleteUserCommunityPosts(
+    String id,
+    String communityId,
+  ) async {
+    print(id + " sdgao     " + communityId);
+    await _communitiesCollectionReference
+        .document(communityId)
+        .collection("userPosts")
+        .document(id)
+        .delete();
+    return true;
   }
 
   Future<QuerySnapshot> getCommunityUsersSearch(String uid, String name) {
@@ -805,13 +905,20 @@ await _userCollectionReference.document(uid).updateData({"communities":communiti
     _communitiesCollectionReference
         .document(communityId)
         .updateData({"moderators": moderatorList});
+    var userData = await _userCollectionReference.document(uid).get();
+    List modList = userData.data["mod"];
+    modList.add(communityId);
+    _userCollectionReference.document(uid).updateData({"mod": modList});
   }
 
   Future kickCommunityUser(String communityId, String uid) async {
     var followerDocument =
         await _followingPostsCollectionReference.document(communityId).get();
     List followersData = followerDocument.data["followers"];
+    List modData = followerDocument.data["mod"];
     followersData.remove(uid);
+    modData.remove(communityId);
+    _userCollectionReference.document(uid).updateData({"mod":modData});
     _followingPostsCollectionReference
         .document(communityId)
         .updateData({"followers": followersData});
@@ -832,9 +939,11 @@ await _userCollectionReference.document(uid).updateData({"communities":communiti
           .updateData({"moderators": moderatorList});
     }
   }
-  void deleteCommunity(String communityId, String communityName){
-    _communitiesCollectionReference.document(communityId).setData({"isDeleted":true, "name":communityName});
+
+  void deleteCommunity(String communityId, String communityName) {
+    _communitiesCollectionReference
+        .document(communityId)
+        .setData({"isDeleted": true, "name": communityName});
     _followingPostsCollectionReference.document(communityId).delete();
-    
   }
 }
