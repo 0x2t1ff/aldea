@@ -1,12 +1,18 @@
+import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/locator.dart';
+import 'package:aldea/services/dialog_service.dart';
 import 'package:aldea/services/firestore_service.dart';
+import 'package:aldea/utils/userDataCreator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import '../models/user_model.dart';
+import 'navigation_service.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = locator<FirestoreService>();
+  final NavigationService _navigatorService = locator<NavigationService>();
+  final DialogService _dialogService = locator<DialogService>();
 
   Future<String> getUserUID() async {
     return (await _firebaseAuth.currentUser()).uid;
@@ -16,8 +22,8 @@ class AuthenticationService {
     return await _firebaseAuth.currentUser();
   }
 
-  Future logOut() {
-    _firebaseAuth.signOut();
+  Future logOut() async {
+    return await _firebaseAuth.signOut();
   }
 
   Future loginWithEmail({
@@ -33,68 +39,88 @@ class AuthenticationService {
     }
   }
 
-  Future signupWithEmail({
-    @required String email,
-    @required String password,
-    @required String name,
-  }) async {
-    try {
-      var authResult = await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      var userData = {
-        'uid': authResult.user.uid,
-        'name': name,
-        'email': email,
-        'picUrl': "https://firebasestorage.googleapis.com/v0/b/aldea-dev-40685.appspot.com/o/default-profile.png?alt=media&token=062950e5-c830-43e9-9869-7704e0accd66",
-        'picName': null,
-        'bkdPicUrl': null,
-        'bkdPicName': null,
-        'postsCount': 0,
-        'communitiesCount': 0,
-        'vouchCount': 0,
-        'winCount': 0,
-        'gender': '',
-        'phoneNumber': '',
-        'address': '',
-        'vouches': [],
-        'communities': [],
-        'chatRooms': [],
-        'requests': [],
-        'isGodAdmin': false,
-      };
-      registerCurrentUser(userData);
-
-      await _firestoreService.createUser(User.fromData(userData));
-
-      return authResult.user != null;
-    } catch (e) {
-      return e.message;
-    }
+  void signUpPhoneNumber(
+      String phone, String email, String name, String password) {
+    _firebaseAuth.verifyPhoneNumber(
+        phoneNumber: phone,
+        timeout: Duration(seconds: 10),
+        verificationCompleted: (credential) async {
+          var result = await _firebaseAuth.signInWithCredential(credential);
+          if (result.user != null) {
+            var userData =
+                generateInitialUserData(result.user.uid, email, name, phone);
+            registerCurrentUser(userData);
+            await _firestoreService.createUser(User.fromData(userData));
+            _navigatorService.navigateTo(HomeViewRoute, true);
+          } else {
+            _dialogService.showDialog(
+                title: "Error",
+                description:
+                    "No se ha podido crear la cuenta. Por favor, intentalo de nuevo.");
+          }
+        },
+        verificationFailed: (error) => print("error: " + error.message),
+        codeSent: (verificationId, [token]) async {
+          var dialogResponse = await _dialogService.showPhoneCodeDialog(
+              title: "Código de verificación");
+          var credential = PhoneAuthProvider.getCredential(
+              verificationId: verificationId,
+              smsCode: dialogResponse.textField);
+          var result = await _firebaseAuth.signInWithCredential(credential);
+          if (result.user != null) {
+            var userData =
+                generateInitialUserData(result.user.uid, email, name, phone);
+            registerCurrentUser(userData);
+            await _firestoreService.createUser(User.fromData(userData));
+            _navigatorService.navigateTo(HomeViewRoute, true);
+          } else {
+            _dialogService.showDialog(
+                title: "Error",
+                description:
+                    "No se ha podido crear la cuenta. Por favor, intentalo de nuevo.");
+          }
+        },
+        codeAutoRetrievalTimeout: null);
   }
 
-  Future verifyPhone(
-      {@required String phoneNumber,
-      @required Function codeSent,
-      @required Function verifactionCompleted,
-      @required Function verificationFailed}) async {
-    try {
-      _firebaseAuth.verifyPhoneNumber(
-          phoneNumber: null,
-          timeout: Duration(seconds: 10),
-          verificationCompleted: verifactionCompleted,
-          verificationFailed: verificationFailed,
-          codeSent: codeSent,
-          codeAutoRetrievalTimeout: null);
-    } catch (e) {}
-  }
-
-  Future verificationCompleted(AuthCredential credential) async {
-    try {
-      var user = await _firebaseAuth.currentUser();
-      return (await user.linkWithCredential(credential)) != null;
-    } catch (e) {
-      return e.message;
-    }
+  void loginPhoneNumber(String phone) {
+    _firebaseAuth.verifyPhoneNumber(
+        phoneNumber: phone,
+        timeout: Duration(seconds: 10),
+        verificationCompleted: (credential) async {
+          var result = await _firebaseAuth.signInWithCredential(credential);
+          if (result.user != null) {
+            var userData = await _firestoreService.getUserData(result.user.uid);
+            registerCurrentUser(userData);
+            _navigatorService.navigateTo(HomeViewRoute, true);
+          } else {
+            _dialogService.showDialog(
+                title: "Error",
+                description:
+                    "Ha ocurrido un error con la autentificacion. Por favor, intentalo de nuevo.");
+          }
+        },
+        verificationFailed: (error) async => await _dialogService.showDialog(
+            title: "Error", description: error.message),
+        codeSent: (verificationId, [token]) async {
+          var dialogResponse = await _dialogService.showPhoneCodeDialog(
+              title: "Código de verificación");
+          var credential = PhoneAuthProvider.getCredential(
+              verificationId: verificationId,
+              smsCode: dialogResponse.textField);
+          var result = await _firebaseAuth.signInWithCredential(credential);
+          if (result.user != null) {
+            var userData = await _firestoreService.getUserData(result.user.uid);
+            registerCurrentUser(userData);
+            _navigatorService.navigateTo(HomeViewRoute, true);
+          } else {
+            _dialogService.showDialog(
+                title: "Error",
+                description:
+                    "Ha ocurrido un error con la autentificacion. Por favor, intentalo de nuevo.");
+          }
+        },
+        codeAutoRetrievalTimeout: null);
   }
 
   Future<bool> isUserLoggedIn() async {

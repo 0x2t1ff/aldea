@@ -35,7 +35,26 @@ class _DialogManagerState extends State<DialogManager> {
         builder: (context) { return AlertDialog(
               title: Text(request.title, style: TextStyle(color: Colors.white)),
               content: !request.hasTextArea
-                  ? Text(request.description, style: TextStyle(color: Colors.white),)
+                  ? (!request.hasPhoneCode
+                      ? Text(
+                          request.description,
+                          style: TextStyle(color: Colors.white),
+                        )
+                      : TextField(
+                          controller: controller,
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                              hintText: "Escribe el código de verificación",
+                              hintStyle: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: Colors.white24),
+                              filled: true,
+                              fillColor: Color(0xff15232B),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(15),
+                              )),
+                        ))
                   : TextField(
                       controller: controller,
                       style: TextStyle(color: Colors.white),
@@ -70,8 +89,8 @@ class _DialogManagerState extends State<DialogManager> {
                 FlatButton(
                   child: Text(request.buttonTitle),
                   onPressed: () {
-                    _dialogService
-                        .dialogComplete(DialogResponse(confirmed: true, textField: controller.text));
+                    _dialogService.dialogComplete(DialogResponse(
+                        confirmed: true, textField: controller.text));
                   },
                 ),
               ],
