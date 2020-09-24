@@ -298,6 +298,206 @@ class CreationPopup extends StatelessWidget {
           ],
         ),
       ),
+      model.quickStrikePost.isQuestion
+          ? Container(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              width: double.infinity,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Cuestionario",
+                style: TextStyle(
+                    fontFamily: "Raleway",
+                    fontSize: 22,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600),
+              ),
+            )
+          : Container(),
+      model.quickStrikePost.isQuestion
+          ? Container(
+              padding: EdgeInsets.all(20),
+              height: usableScreenHeight(context) * 0.5,
+              width: screenWidth(context) * 0.8,
+              decoration: BoxDecoration(
+                color: Color(0xff17191E),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Container(
+                        height: 30,
+                        width: screenWidth(context) * 0.3,
+                        alignment: Alignment.center,
+                        child: TextField(
+                          controller: model.qsQuestionController,
+                          maxLength: 30,
+                          maxLengthEnforced: true,
+                          style: selectorStyle,
+                          keyboardType: TextInputType.text,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            counterText: "Pregunta",
+                            counterStyle: selectorStyle,
+                            isDense: true,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 0, style: BorderStyle.none),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: screenWidth(context) * 0.3,
+                        height: 20,
+                        alignment: Alignment.center,
+                        child: TextField(
+                          controller: model.qsAnswerNumberController,
+                          maxLength: 1,
+                          maxLengthEnforced: true,
+                          style: selectorStyle,
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            isDense: true,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 0, style: BorderStyle.none),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          alignment: Alignment.center,
+                          child: TextField(
+                            controller: model.qsCorrectAnswerController,
+                            maxLength: 30,
+                            maxLengthEnforced: true,
+                            style: selectorStyle,
+                            keyboardType: TextInputType.text,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              counterText: "Respuesta correcta",
+                              counterStyle: selectorStyle,
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 10),
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: TextField(
+                            controller: model.qsFirstWrongAnserController,
+                            maxLength: 30,
+                            style: selectorStyle,
+                            keyboardType: TextInputType.text,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              counterText: "Respuesta incorrecta",
+                              counterStyle: selectorStyle,
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 10),
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  model.qsAnswerNumberController.text == '3'
+                      ? Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: TextField(
+                                  controller:
+                                      model.qsSecondWrongAnserController,
+                                  maxLength: 30,
+                                  maxLengthEnforced: true,
+                                  style: selectorStyle,
+                                  keyboardType: TextInputType.text,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    counterText: "Respuesta incorrecta 2",
+                                    counterStyle: selectorStyle,
+                                    isDense: true,
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 0, style: BorderStyle.none),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  model.qsAnswerNumberController.text == '4'
+                      ? Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: TextField(
+                                  controller: model.qsThirdWrongAnserController,
+                                  maxLength: 30,
+                                  maxLengthEnforced: true,
+                                  style: selectorStyle,
+                                  keyboardType: TextInputType.text,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    counterText: "Respuesta incorrecta 3",
+                                    counterStyle: selectorStyle,
+                                    isDense: true,
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 0, style: BorderStyle.none),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Container(),
+                ],
+              ),
+            )
+          : Container(),
       Container(
         padding: EdgeInsets.symmetric(vertical: 10),
         width: double.infinity,
@@ -312,6 +512,7 @@ class CreationPopup extends StatelessWidget {
         ),
       ),
       Expanded(
+        flex: 3,
         child: Container(
           width: double.infinity,
           child: Column(
@@ -327,7 +528,7 @@ class CreationPopup extends StatelessWidget {
                           color: Color(0xff17191E),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        height: double.infinity,
+                        height: 300,
                         width: double.infinity,
                         child: TextField(
                           controller: model.qsDescController,
@@ -352,6 +553,7 @@ class CreationPopup extends StatelessWidget {
                     ),
                     horizontalSpaceSmall,
                     Expanded(
+                      flex: 2,
                       child: Column(
                         children: <Widget>[
                           Expanded(
@@ -441,27 +643,6 @@ class CreationPopup extends StatelessWidget {
           ),
         ),
       ),
-      Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        width: double.infinity,
-        alignment: Alignment.centerLeft,
-        child: Text(
-          "Cuestionario",
-          style: TextStyle(
-              fontFamily: "Raleway",
-              fontSize: 22,
-              color: Colors.white,
-              fontWeight: FontWeight.w600),
-        ),
-      ),
-      Container(
-        padding: EdgeInsets.all(20),
-        height: usableScreenHeight(context) * 0.25,
-        width: double.infinity,
-        child: Column(
-          children: [],
-        ),
-      )
     ];
   }
 
@@ -481,7 +662,7 @@ class CreationPopup extends StatelessWidget {
         ),
       ),
       Expanded(
-        flex: 5,
+        flex: 3,
         child: Container(
           child: Container(
               decoration: BoxDecoration(
@@ -515,27 +696,28 @@ class CreationPopup extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Expanded(
-                  child: GestureDetector(
-                onTap: () => model.selectFirstImage(),
-                child: Container(
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Color(0xff17191E),
-                      borderRadius: BorderRadius.circular(15),
-                      image: model.firstImage != null
-                          ? DecorationImage(
-                              fit: BoxFit.cover,
-                              image: FileImage(model.firstImage))
-                          : null),
-                  child: model.firstImage == null
-                      ? Icon(
-                          Icons.add,
-                          size: 40,
-                          color: Colors.white,
-                        )
-                      : Container(),
+                child: GestureDetector(
+                  onTap: () => model.selectFirstImage(),
+                  child: Container(
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Color(0xff17191E),
+                        borderRadius: BorderRadius.circular(15),
+                        image: model.firstImage != null
+                            ? DecorationImage(
+                                fit: BoxFit.cover,
+                                image: FileImage(model.firstImage))
+                            : null),
+                    child: model.firstImage == null
+                        ? Icon(
+                            Icons.add,
+                            size: 40,
+                            color: Colors.white,
+                          )
+                        : Container(),
+                  ),
                 ),
-              )),
+              ),
               horizontalSpaceMedium,
               Expanded(
                   child: GestureDetector(
@@ -681,7 +863,7 @@ class CreationPopup extends StatelessWidget {
                   height: screenHeight(context) * 0.5,
                   child: SingleChildScrollView(
                     child: Container(
-                      height: 600,
+                      height: 1000,
                       width: 500,
                       child: Column(
                         children: model.isQuickstrike

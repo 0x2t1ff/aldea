@@ -31,6 +31,7 @@ class CommunityViewModel extends BaseModel {
   final postDescController = TextEditingController();
   final Map<String, List<Product>> products = {};
   final qsDescController = TextEditingController();
+  final qsQuestionController = TextEditingController();
   final qsCorrectAnswerController = TextEditingController();
   final qsFirstWrongAnserController = TextEditingController();
   final qsSecondWrongAnserController = TextEditingController();
@@ -38,6 +39,7 @@ class CommunityViewModel extends BaseModel {
   final qsForthWrongAnserController = TextEditingController();
   final qsModelController = TextEditingController();
   final qsQuantityController = TextEditingController();
+  final qsAnswerNumberController = TextEditingController();
   QuickStrikePost quickStrikePost = QuickStrikePost(
     isGame: false,
     isRandom: true,
@@ -123,6 +125,8 @@ class CommunityViewModel extends BaseModel {
     qsModelController.text = '';
     postDescController.text = '';
     qsQuantityController.text = '';
+    qsAnswerNumberController.text = '';
+    qsQuestionController.text = '';
     qsCorrectAnswerController.text = '';
     qsFirstWrongAnserController.text = '';
     qsSecondWrongAnserController.text = '';
@@ -308,16 +312,20 @@ class CommunityViewModel extends BaseModel {
     isUploading = true;
     notifyListeners();
     if (quickStrikePost.isQuestion) {
+      quickStrikePost.question = qsQuestionController.text;
       quickStrikePost.correctAnswer = qsCorrectAnswerController.text;
-      quickStrikePost.firstWrongAnswer = qsFirstWrongAnserController.text;
-      quickStrikePost.secondWrongAnswer = qsSecondWrongAnserController.text;
-      quickStrikePost.thirdWrongAnswer = qsThirdWrongAnserController.text;
-      quickStrikePost.fourthWrongAnswer = qsForthWrongAnserController.text;
     }
     quickStrikePost.description = qsDescController.text;
     quickStrikePost.modelo = qsModelController.text;
     quickStrikePost.communityName = community.name;
     quickStrikePost.modelo = modelDropdown;
+    quickStrikePost.wrongAnswers.addAll([
+      qsFirstWrongAnserController.text,
+      qsSecondWrongAnserController.text,
+      qsThirdWrongAnserController.text,
+      qsForthWrongAnserController.text
+    ]);
+
     quickStrikePost.amount = int.parse(qsQuantityController.text);
     quickStrikePost.cid = community.uid;
     quickStrikePost.fechaQuickstrike = Timestamp.fromMillisecondsSinceEpoch(

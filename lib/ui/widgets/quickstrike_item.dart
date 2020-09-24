@@ -70,13 +70,14 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                   : custcolor.backgroundColor,
               boxShadow: [
                 BoxShadow(
-                    color: isExpanded ? Colors.red : Colors.black,
-                    blurRadius: 4.0,
-                    spreadRadius: 0,
-                    offset: Offset(
-                      0,
-                      0,
-                    )),
+                  color: isExpanded ? Colors.red : Colors.black,
+                  blurRadius: 4.0,
+                  spreadRadius: 0,
+                  offset: Offset(
+                    0,
+                    0,
+                  ),
+                ),
               ],
             ),
             width: devicesize.screenWidth(context),
