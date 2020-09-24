@@ -13,6 +13,7 @@ Map<String, Object> generateInitialUserData(
       'vouchCount': 0,
       'winCount': 0,
       'gender': '',
+      'mod': [],
       'phoneNumber': phoneNumber,
       'address': '',
       'vouches': [],
