@@ -34,15 +34,13 @@ class ConfirmNumberView extends StatelessWidget {
                 placeholder: 'P.E. +34 66666666',
                 controller: numberController,
                 textInputType: TextInputType.phone,
-
               ),
               verticalSpaceSmall,
               AnimatedContainer(
                 duration: Duration(milliseconds: 500),
                 curve: Curves.easeIn,
-                height: model.isCodeSent ? null : 0,
                 child: InputField(
-                  placeholder: 'Codigo de verificacion',
+                  placeholder: 'Código de verificación',
                   controller: passwordController,
                 ),
               ),
@@ -52,9 +50,7 @@ class ConfirmNumberView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   BusyButton(
-                    title: 'Enviar codigo',
-                    onPressed: model.isCodeSent ? () => model.enviarVerificacion(phoneNumber: numberController.text) : null
-                    
+                    title: 'Enviar código',
                   )
                 ],
               ),

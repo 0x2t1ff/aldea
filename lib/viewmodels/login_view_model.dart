@@ -14,38 +14,17 @@ class LoginViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
-
+  String _phoneNumber;
   void navigateRegister() {
     _navigationService.navigateTo(SignUpViewRoute, false);
   }
 
-  Future login({
-    @required String email,
-    @required String password,
-  }) async {
+  Future login() async {
     setBusy(true);
-    var result = await _authenticationService.loginWithEmail(
-      email: email,
-      password: password,
-    );
-    setBusy(false);
-    if (result is bool) {
-      if (result) {
-        var userUid = await _authenticationService.getUserUID();
-        var userData = await _firestoreService.getUserData(userUid);
-        registerCurrentUser(userData);
-        _navigationService.navigateTo(HomeViewRoute, true);
-      } else {
-        await _dialogService.showDialog(
-            title: 'Error',
-            description:
-                'Ha habido un error al intentar acceder la cuenta. Por favor, intentelo de nuevo mas tarde.');
-      }
-    } else {
-      await _dialogService.showDialog(
-        title: "Error",
-        description: result,
-      );
-    }
+    _authenticationService.loginPhoneNumber(_phoneNumber);
+  }
+
+  onPhoneNumberChange(String internationalPhone) {
+    _phoneNumber = internationalPhone;
   }
 }
