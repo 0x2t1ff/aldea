@@ -1,12 +1,12 @@
 class User {
-  final String name;
-  final String uid;
+  String name;
+  String uid;
   String picUrl;
   String picName;
   String bkdPicUrl;
   String bkdPicName;
-  final int postsCount;
-  final int winCount;
+  int postsCount;
+  int winCount;
   List<dynamic> communities;
   List<dynamic> requests;
   String gender;
@@ -84,5 +84,27 @@ class User {
       'moderator': mod,
       'notificationsEnabled': notificationsEnabled,
     };
+  }
+
+  void updateFromData(Map<String, dynamic> data) {
+    name = data['name'];
+    uid = data['uid'];
+    picUrl = data['picUrl'];
+    picName = data['picName'];
+    bkdPicUrl = data['bkdPicUrl'];
+    bkdPicName = data['bkdPicName'];
+    postsCount = data['postsCount'];
+    winCount = data['winCount'];
+    gender = data['gender'];
+    vouches = data['vouches'];
+    phoneNumber = data['phoneNumber'];
+    email = data['email'];
+    address = data['address'];
+    requests = data['requests'];
+    chatRooms = data["chatRooms"];
+    communities = data['communities'];
+    isGodAdmin = data["isGodAdmin"];
+    mod = data["mod"];
+    notificationsEnabled = data["notificationsEnabled"];
   }
 }
