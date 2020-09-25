@@ -4,7 +4,8 @@ Map<String, Object> generateInitialUserData(
       'uid': id,
       'name': name,
       'email': email,
-      'picUrl': null,
+      'picUrl':
+          "https://firebasestorage.googleapis.com/v0/b/aldea-dev-40685.appspot.com/o/default-profile.png?alt=media&token=062950e5-c830-43e9-9869-7704e0accd66",
       'picName': null,
       'bkdPicUrl': null,
       'bkdPicName': null,
@@ -21,4 +22,6 @@ Map<String, Object> generateInitialUserData(
       'chatRooms': [],
       'requests': [],
       'isGodAdmin': false,
+      'notificationsEnabled': true,
+      'language': null
     };

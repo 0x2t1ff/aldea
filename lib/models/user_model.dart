@@ -19,6 +19,7 @@ class User {
   bool isGodAdmin;
   List<dynamic> mod;
   bool notificationsEnabled;
+  String language;
 
   User(
       {this.name,
@@ -40,7 +41,8 @@ class User {
       this.chatRooms,
       this.isGodAdmin,
       this.mod,
-      this.notificationsEnabled});
+      this.notificationsEnabled,
+    this.language });
 
   User.fromData(Map<String, dynamic> data)
       : name = data['name'],
@@ -61,6 +63,7 @@ class User {
         communities = data['communities'],
         isGodAdmin = data["isGodAdmin"],
         mod = data["mod"],
+        language = data["language"],
         notificationsEnabled = data["notificationsEnabled"];
   Map<String, dynamic> toJson() {
     return {
@@ -83,6 +86,7 @@ class User {
       'isGodAdmin': isGodAdmin,
       'moderator': mod,
       'notificationsEnabled': notificationsEnabled,
+      'language':language
     };
   }
 }
