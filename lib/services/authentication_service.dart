@@ -132,4 +132,5 @@ class AuthenticationService {
     var userId = _firebaseAuth.currentUser();
     return userId;
   }
+
 }

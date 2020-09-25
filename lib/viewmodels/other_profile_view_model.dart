@@ -97,6 +97,10 @@ class OtherProfileViewModel extends BaseModel {
     notifyListeners();
   }
 
+  void banUser() {
+    print(" haha get yeeted son ");
+  }
+
   void checkVouch() {
     if (user.vouches.contains(currentUser.uid)) {
       animationController = "Fijo amarillo";
