@@ -18,6 +18,7 @@ import './views/login_view.dart';
 import './views/signup_view.dart';
 import './views/confirm_number_view.dart';
 import 'views/community_view.dart';
+import 'views/language_view.dart';
 import './views/community_settings_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -109,7 +110,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           routeName: settings.name,
           viewToShow: CommunityUsersAdminView(settings.arguments));
     case PrivacidadViewRoute:
-    return _getPageRoute(routeName: settings.name, viewToShow: PrivacidadView());
+      return _getPageRoute(
+          routeName: settings.name, viewToShow: PrivacidadView());
+
+    case LanguageViewRoute:
+      return _getPageRoute(
+          routeName: settings.name, viewToShow: LanguageView());
+
     case CommunitySettingsViewRoute:
       return _getPageRoute(
           routeName: settings.name,

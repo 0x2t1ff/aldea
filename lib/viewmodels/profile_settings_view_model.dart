@@ -36,4 +36,8 @@ class ProfileSettingsViewModel extends BaseModel {
   void goToPrivacity() {
     _navigationService.navigateTo(PrivacidadViewRoute, false);
   }
+
+  void goToLanguage() {
+    _navigationService.navigateTo(LanguageViewRoute, false);
+  }
 }

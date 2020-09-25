@@ -73,6 +73,9 @@ class FirestoreService {
     _postsCollectionReference.document(uid).delete();
   }
 
+Future changeUserLanguage(String language , String uid){
+  _userCollectionReference.document(uid).updateData({"language":language});
+}
   Future<List<CommentModel>> getUserComments(
       String postId, String communityId) async {
     try {

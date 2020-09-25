@@ -19,6 +19,7 @@ class User {
   bool isGodAdmin;
   List<dynamic> mod;
   bool notificationsEnabled;
+  String language;
 
   User(
       {this.name,
@@ -40,7 +41,7 @@ class User {
       this.chatRooms,
       this.isGodAdmin,
       this.mod,
-      this.notificationsEnabled});
+      this.notificationsEnabled, });
 
   User.fromData(Map<String, dynamic> data)
       : name = data['name'],
