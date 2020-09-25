@@ -7,6 +7,7 @@ import 'package:aldea/ui/views/community_users_admin_view.dart';
 import 'package:aldea/ui/views/detailed_community_creation_request_view.dart';
 import 'package:aldea/ui/views/hero_view.dart';
 import 'package:aldea/ui/views/other_profile_view.dart';
+import 'package:aldea/ui/views/privacidad_view.dart';
 import 'package:aldea/ui/views/requests_view.dart';
 import 'package:aldea/ui/views/vouch_view.dart';
 import './views/profile_settings_view.dart';
@@ -107,7 +108,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
           routeName: settings.name,
           viewToShow: CommunityUsersAdminView(settings.arguments));
-
+    case PrivacidadViewRoute:
+    return _getPageRoute(routeName: settings.name, viewToShow: PrivacidadView());
     case CommunitySettingsViewRoute:
       return _getPageRoute(
           routeName: settings.name,
