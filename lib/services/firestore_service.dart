@@ -55,8 +55,10 @@ class FirestoreService {
     return community.data;
   }
 
-  Future changeNotificationsSetting(String id , bool notifications) async{
-    _userCollectionReference.document(id).updateData({"notificationsEnabled":notifications});
+  Future changeNotificationsSetting(String id, bool notifications) async {
+    _userCollectionReference
+        .document(id)
+        .updateData({"notificationsEnabled": notifications});
   }
 
   Future removeRequest(String communityId, String uid) async {
@@ -485,7 +487,6 @@ Future changeUserLanguage(String language , String uid){
       String picName,
       String bkdPicName,
       String email,
-      String phoneNumber,
       String gender,
       String address}) async {
     await _userCollectionReference.document(uid).updateData({
@@ -494,7 +495,6 @@ Future changeUserLanguage(String language , String uid){
       'bkdPicUrl': bkdPicUrl,
       'bkdPicName': bkdPicName,
       'email': email,
-      'phoneNumber': phoneNumber,
       'gender': gender,
       'address': address
     });
@@ -900,6 +900,10 @@ Future changeUserLanguage(String language , String uid){
         .getDocuments();
   }
 
+  Stream<DocumentSnapshot> listenToUserChanges(String uid) {
+    return _userCollectionReference.document(uid).snapshots();
+  }
+
   Future giveCommunityMod(String communityId, String uid) async {
     var communityData =
         await _communitiesCollectionReference.document(communityId).get();
@@ -921,7 +925,7 @@ Future changeUserLanguage(String language , String uid){
     List modData = followerDocument.data["mod"];
     followersData.remove(uid);
     modData.remove(communityId);
-    _userCollectionReference.document(uid).updateData({"mod":modData});
+    _userCollectionReference.document(uid).updateData({"mod": modData});
     _followingPostsCollectionReference
         .document(communityId)
         .updateData({"followers": followersData});

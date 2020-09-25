@@ -29,7 +29,6 @@ class ProfileSettingsViewModel extends BaseModel {
 
   void changeNotifications(bool notifications, String id) {
     _firestoreService.changeNotificationsSetting(id, notifications);
-    currentUser.notificationsEnabled = notifications;
     notifyListeners();
   }
 
