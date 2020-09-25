@@ -94,15 +94,21 @@ class ProfileSettingsView extends StatelessWidget {
                                   style: optionsStyle,
                                 ),
                               ),
-                              Container(
-                                  width: devicesize.screenWidth(context) * 0.16,
-                                  child: Switch(
-                                      value: model
-                                          .currentUser.notificationsEnabled,
-                                      onChanged: (bool notifications) =>
-                                          model.changeNotifications(
-                                              notifications,
-                                              model.currentUser.uid)))
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left:
+                                        devicesize.screenWidth(context) * 0.1),
+                                child: Container(
+                                    width:
+                                        devicesize.screenWidth(context) * 0.16,
+                                    child: Switch(
+                                        value: model
+                                            .currentUser.notificationsEnabled,
+                                        onChanged: (bool notifications) =>
+                                            model.changeNotifications(
+                                                notifications,
+                                                model.currentUser.uid))),
+                              )
                             ],
                           ),
                         ),
@@ -135,7 +141,7 @@ class ProfileSettingsView extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             vertical: devicesize.screenHeight(context) * 0.024),
                         child: GestureDetector(
-                          onTap: () => print("pressed"),
+                          onTap: () => model.goToPrivacity(),
                           child: Row(
                             children: <Widget>[
                               Icon(
@@ -155,30 +161,30 @@ class ProfileSettingsView extends StatelessWidget {
                           ),
                         ),
                       ),
-                    //  Padding(
-                    //    padding: EdgeInsets.symmetric(
-                    //        vertical: devicesize.screenHeight(context) * 0.024),
-                    //    child: GestureDetector(
-                    //      onTap: () => print("pressed"),
-                    //      child: Row(
-                    //        children: <Widget>[
-                    //          Icon(
-                    //            Icons.credit_card,
-                    //            color: blueTheme,
-                    //            size: 29,
-                    //          ),
-                    //          Padding(
-                    //              padding: EdgeInsets.only(
-                    //                  left: devicesize.screenWidth(context) *
-                    //                      0.04),
-                    //              child: Text(
-                    //                "Pagos",
-                    //                style: optionsStyle,
-                    //              ))
-                    //        ],
-                    //      ),
-                    //    ),
-                    //  ),
+                      //  Padding(
+                      //    padding: EdgeInsets.symmetric(
+                      //        vertical: devicesize.screenHeight(context) * 0.024),
+                      //    child: GestureDetector(
+                      //      onTap: () => print("pressed"),
+                      //      child: Row(
+                      //        children: <Widget>[
+                      //          Icon(
+                      //            Icons.credit_card,
+                      //            color: blueTheme,
+                      //            size: 29,
+                      //          ),
+                      //          Padding(
+                      //              padding: EdgeInsets.only(
+                      //                  left: devicesize.screenWidth(context) *
+                      //                      0.04),
+                      //              child: Text(
+                      //                "Pagos",
+                      //                style: optionsStyle,
+                      //              ))
+                      //        ],
+                      //      ),
+                      //    ),
+                      //  ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: devicesize.screenHeight(context) * 0.024),

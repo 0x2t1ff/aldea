@@ -12,7 +12,7 @@ class ProfileSettingsViewModel extends BaseModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
-      final FirestoreService _firestoreService = locator<FirestoreService>();
+  final FirestoreService _firestoreService = locator<FirestoreService>();
   Future goCreateCommunityScreen() {
     _navigationService.navigateTo(CommunityCreationViewRoute, false);
   }
@@ -27,10 +27,13 @@ class ProfileSettingsViewModel extends BaseModel {
     await _navigationService.navigateTo(LoginViewRoute, true, isRemoval: true);
   }
 
-  void changeNotifications(bool notifications, String id){
-_firestoreService.changeNotificationsSetting(id, notifications);
-currentUser.notificationsEnabled = notifications;
-notifyListeners();
+  void changeNotifications(bool notifications, String id) {
+    _firestoreService.changeNotificationsSetting(id, notifications);
+    currentUser.notificationsEnabled = notifications;
+    notifyListeners();
+  }
 
+  void goToPrivacity() {
+    _navigationService.navigateTo(PrivacidadViewRoute, false);
   }
 }
