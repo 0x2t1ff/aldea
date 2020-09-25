@@ -15,7 +15,7 @@ class QuickStrikeViewModel extends BaseModel {
 
   Stream _quickstrikes;
   Stream get posts => _quickstrikes;
-
+  bool showEmptyDialog;
   Future fetchPosts() async {
     setBusy(true);
     var quickstrikeResults =
@@ -23,6 +23,11 @@ class QuickStrikeViewModel extends BaseModel {
 
     if (quickstrikeResults is Stream<dynamic>) {
       _quickstrikes = quickstrikeResults;
+      if (_quickstrikes == null) {
+        showEmptyDialog = true;
+      } else {
+        showEmptyDialog = false;
+      }
       setBusy(false);
       notifyListeners();
     } else {
@@ -77,5 +82,8 @@ class QuickStrikeViewModel extends BaseModel {
     return response.confirmed;
   }
 
-  
+  void hideDialog() {
+    showEmptyDialog = false;
+    notifyListeners();
+  }
 }

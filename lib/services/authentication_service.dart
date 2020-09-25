@@ -120,7 +120,7 @@ class AuthenticationService {
                     "Ha ocurrido un error con la autentificacion. Por favor, intentalo de nuevo.");
           }
         },
-        codeAutoRetrievalTimeout: null);
+        codeAutoRetrievalTimeout: (a) => print("a"));
   }
 
   Future<bool> isUserLoggedIn() async {
