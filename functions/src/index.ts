@@ -120,7 +120,7 @@ export const finishedQuickstrike = functions.firestore.document("quickstrikes/{q
     const quickstrikeId = snap.after.id;
     const query = db.collection("quickstrikes").doc(quickstrikeId);
     const quickstrike = await query.get();
-    const now = admin.firestore.Timestamp.now();
+   
     const quickstrikeData = quickstrike.data();
     if (quickstrikeData !== undefined) {
         if (quickstrikeData['winners'].length >= quickstrikeData['amount']) {
@@ -130,14 +130,31 @@ export const finishedQuickstrike = functions.firestore.document("quickstrikes/{q
                 const userPath = db.collection("users").doc(element);
                 const userQuery = await userPath.get();
                 const userData = userQuery.data();
+
                 if (userData !== undefined) {
                     winnersList.push(userData["name"])
                     var wins = userData["winCount"];
                     wins++;
                     await userPath.update({ "winCount": wins });
+                    const token = userData["pushToken"]
 
+                    const payload = {
+
+                        notification: {
+                            title: `Has ganado un quickstrike`,
+                            body: quickstrikeData["title"],
+                        }
+                    }
+                    admin
+                        .messaging()
+                        .sendToDevice(token, payload)
+                        .then(response => {
+                            console.log('Successfully sent message:', response)
+                        })
+                        .catch(error => {
+                            console.log('Error sending message:', error)
+                        })
                 }
-
             });
             //TODO: update del avatarUrl una vez la creación de quickstrike pase ese dato
             const post = {
@@ -160,24 +177,8 @@ export const finishedQuickstrike = functions.firestore.document("quickstrikes/{q
                 //added the id variable to the post it does , needs testing on the comments of the new posts
             }
 
-            const path = await db.collection("posts").add(post);
-            const id = path.id;
-            const followerRef = db.collection("followers").doc(quickstrikeData["cid"]);
-            const follower = await followerRef.get();
-            const followerData = follower.data();
-            if (followerData !== undefined) {
-                const posts = followerData["posts"];
-                posts.push({ "date": now, "id": id });
-                followerRef.update({ "posts": posts });
-                const quickstrikes = followerData["quickstrikes"] as Array<[]>;
-                quickstrikes.forEach((element: any) => {
-                    if (quickstrikeId == element["id"]) {
-                        quickstrikes.filter(x => x !== element);
-                        followerRef.update({ "quickstrikes": quickstrikes });
-                    }
+            db.collection("posts").add(post);
 
-                })
-            }
         }
 
 
