@@ -20,17 +20,8 @@ import '../locator.dart';
 class CommunityViewModel extends BaseModel {
   CommunityViewModel(this.community);
 
-  var isShowingPopup = false;
-  var isUploading = false;
-  var isQuickstrike = true;
-  bool unfollowDropdown = false;
-  bool unfollowPopup = false;
-  bool deletingCommunity = false;
-  final Community community;
-  Map<dynamic, dynamic> followersDoc;
-  File firstImage;
-  final postDescController = TextEditingController();
-  final Map<String, List<Product>> products = {};
+// the pop up data
+
   final qsDescController = TextEditingController();
   final qsQuestionController = TextEditingController();
   final qsCorrectAnswerController = TextEditingController();
@@ -41,6 +32,45 @@ class CommunityViewModel extends BaseModel {
   final qsModelController = TextEditingController();
   final qsQuantityController = TextEditingController();
   final qsAnswerNumberController = TextEditingController();
+
+  var isShowingPopup = false;
+  var isQuickstrike = true;
+
+  void cancelChanges() {
+    isShowingPopup = false;
+    dropDownValue = null;
+    modelDropdown = null;
+    qsDescController.text = '';
+    qsModelController.text = '';
+    postDescController.text = '';
+    qsQuantityController.text = '';
+    qsAnswerNumberController.text = '';
+    qsQuestionController.text = '';
+    qsCorrectAnswerController.text = '';
+    qsFirstWrongAnserController.text = '';
+    qsSecondWrongAnserController.text = '';
+    qsThirdWrongAnserController.text = '';
+    qsForthWrongAnserController.text = '';
+    firstImage = null;
+    secondImage = null;
+    thirdImage = null;
+    selectedDate = null;
+    notifyListeners();
+  }
+
+  //the pop up
+
+  var isUploading = false;
+
+  bool unfollowDropdown = false;
+  bool unfollowPopup = false;
+  bool deletingCommunity = false;
+  final Community community;
+  Map<dynamic, dynamic> followersDoc;
+  File firstImage;
+  final postDescController = TextEditingController();
+  final Map<String, List<Product>> products = {};
+
   QuickStrikePost quickStrikePost = QuickStrikePost(
     isGame: false,
     isRandom: true,
@@ -116,28 +146,6 @@ class CommunityViewModel extends BaseModel {
       thirdImage = tempImage;
       notifyListeners();
     }
-  }
-
-  void cancelChanges() {
-    isShowingPopup = false;
-    dropDownValue = null;
-    modelDropdown = null;
-    qsDescController.text = '';
-    qsModelController.text = '';
-    postDescController.text = '';
-    qsQuantityController.text = '';
-    qsAnswerNumberController.text = '';
-    qsQuestionController.text = '';
-    qsCorrectAnswerController.text = '';
-    qsFirstWrongAnserController.text = '';
-    qsSecondWrongAnserController.text = '';
-    qsThirdWrongAnserController.text = '';
-    qsForthWrongAnserController.text = '';
-    firstImage = null;
-    secondImage = null;
-    thirdImage = null;
-    selectedDate = null;
-    notifyListeners();
   }
 
   Future getFollowersDoc() async {

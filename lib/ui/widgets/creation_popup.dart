@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/viewmodels/community_view_model.dart';
 import 'package:flutter/material.dart';
@@ -21,655 +21,138 @@ class CreationPopup extends StatelessWidget {
     fontWeight: FontWeight.w600,
     fontFamily: "Raleway",
   );
+
   final selectorStyle = TextStyle(
     fontSize: 16,
     color: Colors.white,
     fontWeight: FontWeight.w600,
     fontFamily: "Raleway",
   );
-
-  List<Widget> quickstrikeCreation(BuildContext context) {
-    return [
-      Container(
-        padding: EdgeInsets.only(bottom: 10),
-        width: double.infinity,
-        alignment: Alignment.centerLeft,
-        child: Text(
-          "Opciones",
-          style: TextStyle(
-              fontFamily: "Raleway",
-              fontSize: 22,
-              color: Colors.white,
-              fontWeight: FontWeight.w600),
-        ),
-      ),
-      Container(
-        padding: EdgeInsets.all(20),
-        height: usableScreenHeight(context) * 0.25,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Color(0xff17191E),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: usableScreenHeight(context) * 0.035,
-              decoration: BoxDecoration(
-                color: Color(0xff3C3D42),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Text(
-                        "Cantidad",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xff3C3D42),
-                            fontFamily: "Raleway",
-                            fontWeight: FontWeight.w600),
-                      ),
-                      alignment: Alignment.center,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(50)),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      height: double.infinity,
-                      alignment: Alignment.center,
-                      child: TextField(
-                        controller: model.qsQuantityController,
-                        maxLength: 1,
-                        maxLengthEnforced: true,
-                        style: selectorStyle,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          counterText: "",
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                          border: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 0, style: BorderStyle.none),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              height: usableScreenHeight(context) * 0.035,
-              decoration: BoxDecoration(
-                color: Color(0xff3C3D42),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Text(
-                        "Tipo",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xff3C3D42),
-                            fontFamily: "Raleway",
-                            fontWeight: FontWeight.w600),
-                      ),
-                      alignment: Alignment.center,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      height: double.infinity,
-                      alignment: Alignment.center,
-                      child: DropdownButton(
-                        value: model.dropDownValue,
-                        dropdownColor: Color(0xff3C3D42),
-                        isDense: true,
-                        underline: Container(),
-                        elevation: 8,
-                        items: [
-                          DropdownMenuItem(
-                            onTap: () {
-                              model.quickStrikePost.isQuestion = false;
-                              model.quickStrikePost.isGame = false;
-                              model.quickStrikePost.isRandom = true;
-                            },
-                            value: "Random",
-                            child: Text("Random", style: selectorStyle),
-                          ),
-                          DropdownMenuItem(
-                            onTap: () {
-                              model.quickStrikePost.isQuestion = false;
-                              model.quickStrikePost.isGame = true;
-                              model.quickStrikePost.isRandom = false;
-                            },
-                            value: "Boton",
-                            child: Text(
-                              "Boton",
-                              style: selectorStyle,
-                            ),
-                          ),
-                          DropdownMenuItem(
-                            onTap: () {
-                              model.quickStrikePost.isQuestion = true;
-                              model.quickStrikePost.isGame = false;
-                              model.quickStrikePost.isRandom = false;
-                            },
-                            value: "Pregunta",
-                            child: Text(
-                              "Pregunta",
-                              style: selectorStyle,
-                            ),
-                          )
-                        ],
-                        onChanged: (val) {
-                          model.setDropdownValue(val);
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              height: usableScreenHeight(context) * 0.035,
-              decoration: BoxDecoration(
-                color: Color(0xff3C3D42),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Text(
-                        "Modelo",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xff3C3D42),
-                            fontFamily: "Raleway",
-                            fontWeight: FontWeight.w600),
-                      ),
-                      alignment: Alignment.center,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      height: double.infinity,
-                      alignment: Alignment.center,
-                      child: DropdownButton(
-                        style: selectorStyle,
-                        value: model.modelDropdown,
-                        dropdownColor: Color(0xff3C3D42),
-                        isDense: true,
-                        underline: Container(),
-                        elevation: 8,
-                        items: model
-                            .getProductNames()
-                            .map((e) => DropdownMenuItem(
-                                  child: Text(e),
-                                  value: e,
-                                ))
-                            .toList(),
-                        onChanged: (val) {
-                          model.setModelDropdown(val);
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              height: usableScreenHeight(context) * 0.035,
-              decoration: BoxDecoration(
-                color: Color(0xff3C3D42),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Text(
-                        "Hora",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xff3C3D42),
-                            fontFamily: "Raleway",
-                            fontWeight: FontWeight.w600),
-                      ),
-                      alignment: Alignment.center,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: GestureDetector(
-                      onTap: () => model.selectDate(context),
-                      child: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Color(0xff3C3D42),
-                        ),
-                        alignment: Alignment.center,
-                        child: model.selectedDate != null
-                            ? Text(
-                                "${model.selectedDate.day}-${model.selectedDate.month}-${model.selectedDate.year} ${model.selectedDate.hour}:${model.selectedDate.minute}",
-                                style: selectorStyle,
-                              )
-                            : Container(),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-      model.quickStrikePost.isQuestion
-          ? Container(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              width: double.infinity,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Cuestionario",
-                style: TextStyle(
-                    fontFamily: "Raleway",
-                    fontSize: 22,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600),
-              ),
-            )
-          : Container(),
-      model.quickStrikePost.isQuestion
-          ? Container(
-              padding: EdgeInsets.all(20),
-              height: usableScreenHeight(context) * 0.5,
-              width: screenWidth(context) * 0.8,
-              decoration: BoxDecoration(
-                color: Color(0xff17191E),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: [
-                      Container(
-                        height: 30,
-                        width: screenWidth(context) * 0.3,
-                        alignment: Alignment.center,
-                        child: TextField(
-                          controller: model.qsQuestionController,
-                          maxLength: 30,
-                          maxLengthEnforced: true,
-                          style: selectorStyle,
-                          keyboardType: TextInputType.text,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            counterText: "Pregunta",
-                            counterStyle: selectorStyle,
-                            isDense: true,
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 10),
-                            border: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 0, style: BorderStyle.none),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: screenWidth(context) * 0.3,
-                        height: 20,
-                        alignment: Alignment.center,
-                        child: TextField(
-                          controller: model.qsAnswerNumberController,
-                          maxLength: 1,
-                          maxLengthEnforced: true,
-                          style: selectorStyle,
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            counterText: "",
-                            isDense: true,
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 10),
-                            border: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 0, style: BorderStyle.none),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          alignment: Alignment.center,
-                          child: TextField(
-                            controller: model.qsCorrectAnswerController,
-                            maxLength: 30,
-                            maxLengthEnforced: true,
-                            style: selectorStyle,
-                            keyboardType: TextInputType.text,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              counterText: "Respuesta correcta",
-                              counterStyle: selectorStyle,
-                              isDense: true,
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 10),
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 0, style: BorderStyle.none),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: TextField(
-                            controller: model.qsFirstWrongAnserController,
-                            maxLength: 30,
-                            style: selectorStyle,
-                            keyboardType: TextInputType.text,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              counterText: "Respuesta incorrecta",
-                              counterStyle: selectorStyle,
-                              isDense: true,
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 10),
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 0, style: BorderStyle.none),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  model.qsAnswerNumberController.text == '3'
-                      ? Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: TextField(
-                                  controller:
-                                      model.qsSecondWrongAnserController,
-                                  maxLength: 30,
-                                  maxLengthEnforced: true,
-                                  style: selectorStyle,
-                                  keyboardType: TextInputType.text,
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                    counterText: "Respuesta incorrecta 2",
-                                    counterStyle: selectorStyle,
-                                    isDense: true,
-                                    contentPadding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 0, style: BorderStyle.none),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Container(),
-                  model.qsAnswerNumberController.text == '4'
-                      ? Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: TextField(
-                                  controller: model.qsThirdWrongAnserController,
-                                  maxLength: 30,
-                                  maxLengthEnforced: true,
-                                  style: selectorStyle,
-                                  keyboardType: TextInputType.text,
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                    counterText: "Respuesta incorrecta 3",
-                                    counterStyle: selectorStyle,
-                                    isDense: true,
-                                    contentPadding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 0, style: BorderStyle.none),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Container(),
-                ],
-              ),
-            )
-          : Container(),
-      Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        width: double.infinity,
-        alignment: Alignment.centerLeft,
-        child: Text(
-          "Descripcion",
-          style: TextStyle(
-              fontFamily: "Raleway",
-              fontSize: 22,
-              color: Colors.white,
-              fontWeight: FontWeight.w600),
-        ),
-      ),
-      Expanded(
-        flex: 3,
-        child: Container(
-          width: double.infinity,
+  final containerStyle =
+      TextStyle(fontFamily: "Raleway", color: almostBlack, fontSize: 17);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: screenHeight(context) * 0.7,
+      width: screenWidth(context) * 0.8,
+      color: Colors.red,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: screenWidth(context) * 0.05),
+        child: SingleChildScrollView(
           child: Column(
-            children: <Widget>[
-              Expanded(
-                flex: 3,
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 3,
-                      child: Container(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  top: screenHeight(context) * 0.02,
+                ),
+                child: Container(
+                  alignment: Alignment.center,
+                  height: screenHeight(context) * 0.09,
+                  width: screenWidth(context),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        width: screenWidth(context) * 0.6,
+                        height: screenHeight(context) * 0.06,
                         decoration: BoxDecoration(
-                          color: Color(0xff17191E),
-                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(50),
                         ),
-                        height: 300,
-                        width: double.infinity,
-                        child: TextField(
-                          controller: model.qsDescController,
-                          expands: true,
-                          textAlignVertical: TextAlignVertical.top,
-                          style: TextStyle(color: Colors.white),
-                          maxLines: null,
-                          decoration: InputDecoration(
-                            hintText: "Escribe una descripcion...",
-                            hintStyle: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                color: Colors.white24),
-                            filled: true,
-                            fillColor: Color(0xff17191E),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
+                        child: Container(
+                          width: screenWidth(context) * 0.6,
+                          height: screenHeight(context) * 0.1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  model.setIsQuickstrike(true);
+                                },
+                                child: Container(
+                                    height: screenHeight(context) * 0.06,
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 9),
+                                    child: Text(
+                                      "Quickstrike",
+                                      style: model.isQuickstrike
+                                          ? selectedTypeStyle
+                                          : unselectedTypeStyle,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: model.isQuickstrike
+                                          ? Colors.white
+                                          : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(50),
+                                    )),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  model.setIsQuickstrike(false);
+                                },
+                                child: Container(
+                                  height: screenHeight(context) * 0.06,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: !model.isQuickstrike
+                                        ? Colors.white
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Text(
+                                    "Publicar",
+                                    style: model.isQuickstrike
+                                        ? unselectedTypeStyle
+                                        : selectedTypeStyle,
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 8,
+                                      horizontal: screenWidth(context) * 0.05),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                    horizontalSpaceSmall,
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () => model.selectFirstImage(),
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: Color(0xff17191E),
-                                    borderRadius: BorderRadius.circular(15),
-                                    image: model.firstImage != null
-                                        ? DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: FileImage(model.firstImage),
-                                          )
-                                        : null),
-                                child: model.firstImage == null
-                                    ? Icon(
-                                        Icons.add,
-                                        size: 40,
-                                        color: Colors.white,
-                                      )
-                                    : Container(),
-                                width: double.infinity,
-                              ),
-                            ),
-                          ),
-                          verticalSpaceSmall,
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () => model.selectSecondImage(),
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: Color(0xff17191E),
-                                    borderRadius: BorderRadius.circular(15),
-                                    image: model.secondImage != null
-                                        ? DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: FileImage(model.secondImage),
-                                          )
-                                        : null),
-                                child: model.secondImage == null
-                                    ? Icon(
-                                        Icons.add,
-                                        size: 40,
-                                        color: Colors.white,
-                                      )
-                                    : Container(),
-                                width: double.infinity,
-                              ),
-                            ),
-                          ),
-                          verticalSpaceSmall,
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () => model.selectThirdImage(),
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: Color(0xff17191E),
-                                    borderRadius: BorderRadius.circular(15),
-                                    image: model.thirdImage != null
-                                        ? DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: FileImage(model.thirdImage),
-                                          )
-                                        : null),
-                                child: model.thirdImage == null
-                                    ? Icon(
-                                        Icons.add,
-                                        size: 40,
-                                        color: Colors.white,
-                                      )
-                                    : Container(),
-                                width: double.infinity,
-                              ),
-                            ),
-                          ),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            width: double.infinity,
+                            height: 3,
+                            color: almostWhite),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
+              model.isQuickstrike
+                  ? quickstrikeWidget(context)
+                  : postWidget(context)
             ],
           ),
         ),
       ),
-    ];
+    );
   }
 
-  List<Widget> postCreation() {
-    return [
-      Container(
-        padding: EdgeInsets.only(bottom: 10),
-        width: double.infinity,
-        alignment: Alignment.centerLeft,
-        child: Text(
-          "Descripcion",
-          style: TextStyle(
-              fontFamily: "Raleway",
-              fontSize: 22,
-              color: Colors.white,
-              fontWeight: FontWeight.w600),
+  Widget postWidget(BuildContext context) {
+    return Container(
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          " Descripción",
+          style: unselectedTypeStyle,
         ),
-      ),
-      Expanded(
-        flex: 3,
-        child: Container(
+        Padding(
+          padding: EdgeInsets.only(top: screenHeight(context) * 0.02),
           child: Container(
+              width: screenWidth(context) * 0.7,
+              height: screenHeight(context) * 0.3,
               decoration: BoxDecoration(
                   color: Color(0xff17191E),
                   borderRadius: BorderRadius.circular(20)),
-              height: double.infinity,
-              width: double.infinity,
               child: TextField(
                 controller: model.postDescController,
                 textAlignVertical: TextAlignVertical.top,
@@ -688,42 +171,38 @@ class CreationPopup extends StatelessWidget {
                     )),
               )),
         ),
-      ),
-      Expanded(
-        flex: 2,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15),
+        Padding(
+          padding: EdgeInsets.only(top: screenHeight(context) * 0.02),
           child: Row(
-            children: <Widget>[
-              Expanded(
-                child: GestureDetector(
-                  onTap: () => model.selectFirstImage(),
-                  child: Container(
-                    height: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Color(0xff17191E),
-                        borderRadius: BorderRadius.circular(15),
-                        image: model.firstImage != null
-                            ? DecorationImage(
-                                fit: BoxFit.cover,
-                                image: FileImage(model.firstImage))
-                            : null),
-                    child: model.firstImage == null
-                        ? Icon(
-                            Icons.add,
-                            size: 40,
-                            color: Colors.white,
-                          )
-                        : Container(),
-                  ),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () => model.selectFirstImage(),
+                child: Container(
+                  width: screenWidth(context) * 0.21,
+                  height: screenHeight(context) * 0.11,
+                  decoration: BoxDecoration(
+                      color: Color(0xff17191E),
+                      borderRadius: BorderRadius.circular(15),
+                      image: model.firstImage != null
+                          ? DecorationImage(
+                              fit: BoxFit.cover,
+                              image: FileImage(model.firstImage))
+                          : null),
+                  child: model.firstImage == null
+                      ? Icon(
+                          Icons.add,
+                          size: 40,
+                          color: Colors.white,
+                        )
+                      : Container(),
                 ),
               ),
-              horizontalSpaceMedium,
-              Expanded(
-                  child: GestureDetector(
+              GestureDetector(
                 onTap: () => model.selectSecondImage(),
                 child: Container(
-                  height: double.infinity,
+                  width: screenWidth(context) * 0.21,
+                  height: screenHeight(context) * 0.11,
                   decoration: BoxDecoration(
                       color: Color(0xff17191E),
                       borderRadius: BorderRadius.circular(15),
@@ -740,13 +219,12 @@ class CreationPopup extends StatelessWidget {
                         )
                       : Container(),
                 ),
-              )),
-              horizontalSpaceMedium,
-              Expanded(
-                  child: GestureDetector(
+              ),
+              GestureDetector(
                 onTap: () => model.selectThirdImage(),
                 child: Container(
-                  height: double.infinity,
+                  width: screenWidth(context) * 0.21,
+                  height: screenHeight(context) * 0.11,
                   decoration: BoxDecoration(
                       color: Color(0xff17191E),
                       borderRadius: BorderRadius.circular(15),
@@ -763,186 +241,755 @@ class CreationPopup extends StatelessWidget {
                         )
                       : Container(),
                 ),
-              ))
+              )
             ],
           ),
         ),
-      ),
-    ];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-      height: usableScreenHeight(context) * 0.9,
-      width: double.infinity,
-      child: Stack(
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: BackdropFilter(
+        Padding(
+          padding: EdgeInsets.only(top: screenHeight(context) * 0.02),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () => model.cancelChanges(),
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Color(0xFF223C47).withOpacity(0.23),
-                      borderRadius: BorderRadius.circular(20)),
-                  height: usableScreenHeight(context) * 0.9,
-                  width: double.infinity,
-                ),
-                filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0)),
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            height: double.infinity,
-            width: double.infinity,
-            padding: EdgeInsets.all(25),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Color(0xff17191E),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black45,
+                            offset: Offset(5, 5),
+                            blurRadius: 4)
+                      ]),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   child: Row(
                     children: <Widget>[
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            model.setIsQuickstrike(true);
-                          },
-                          child: Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(8),
-                              child: Text(
-                                "Quickstrike",
-                                style: model.isQuickstrike
-                                    ? selectedTypeStyle
-                                    : unselectedTypeStyle,
-                              ),
-                              decoration: BoxDecoration(
-                                color: model.isQuickstrike
-                                    ? Colors.white
-                                    : Color(0xff17191E),
-                                borderRadius: BorderRadius.circular(50),
-                              )),
-                        ),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            model.setIsQuickstrike(false);
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: !model.isQuickstrike
-                                  ? Colors.white
-                                  : Color(0xff17191E),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: Text(
-                              "Publicar",
-                              style: model.isQuickstrike
-                                  ? unselectedTypeStyle
-                                  : selectedTypeStyle,
-                            ),
-                            padding: EdgeInsets.all(8),
-                          ),
-                        ),
-                      ),
+                      Text("Cancelar",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Color(0xff17191E),
+                              fontFamily: "Raleway",
+                              fontWeight: FontWeight.w700)),
+                      horizontalSpaceSmall,
+                      Icon(Icons.clear)
                     ],
                   ),
                 ),
-                verticalSpaceSmall,
-                Divider(
-                  color: Colors.white,
-                  thickness: 2,
-                ),
-                Container(
-                  height: screenHeight(context) * 0.5,
-                  child: SingleChildScrollView(
-                    child: Container(
-                      height: 1000,
-                      width: 500,
-                      child: Column(
-                        children: model.isQuickstrike
-                            ? quickstrikeCreation(context)
-                            : postCreation(),
-                      ),
-                    ),
-                  ),
-                ),
-                verticalSpaceMedium,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () => model.cancelChanges(),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(50),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black45,
-                                  offset: Offset(5, 5),
-                                  blurRadius: 4)
-                            ]),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 15),
-                        child: Row(
+              ),
+              GestureDetector(
+                onTap: () => model.uploadPost(),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black45,
+                            offset: Offset(5, 5),
+                            blurRadius: 4)
+                      ]),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  child: model.isUploading
+                      ? CircularProgressIndicator()
+                      : Row(
                           children: <Widget>[
-                            Text("Cancelar",
+                            Text("Listo",
                                 style: TextStyle(
                                     fontSize: 20,
                                     color: Color(0xff17191E),
                                     fontFamily: "Raleway",
                                     fontWeight: FontWeight.w700)),
                             horizontalSpaceSmall,
-                            Icon(Icons.clear)
+                            Icon(custicon.Publicaciones.publicaciones)
                           ],
+                        ),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
+    ));
+  }
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//  The body of the quickstrike
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+  Widget quickstrikeWidget(BuildContext context) {
+    return Container(
+      height: screenHeight(context) * 1.1,
+      width: screenWidth(context),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(bottom: screenHeight(context) * 0.015),
+            child: Text(
+              "Opciones",
+              style: unselectedTypeStyle,
+            ),
+          ),
+          Container(
+            width: screenWidth(context),
+            height: screenHeight(context) * 0.23,
+            decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(15)),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth(context) * 0.04,
+                  vertical: screenHeight(context) * 0.02),
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: screenHeight(context) * 0.04,
+                    decoration: BoxDecoration(
+                      color: greyColor,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: screenWidth(context) * 0.25,
+                          height: screenHeight(context) * 0.04,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white),
+                          child: Text(
+                            "Cantidad",
+                            style: containerStyle,
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: TextField(
+                              controller: model.qsQuantityController,
+                              maxLength: 1,
+                              maxLengthEnforced: true,
+                              style: selectorStyle,
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                counterText: "",
+                                isDense: true,
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10),
+                                border: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 0, style: BorderStyle.none),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: screenHeight(context) * 0.01),
+                    child: Container(
+                      width: double.infinity,
+                      height: screenHeight(context) * 0.04,
+                      decoration: BoxDecoration(
+                        color: greyColor,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            width: screenWidth(context) * 0.25,
+                            height: screenHeight(context) * 0.04,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white),
+                            child: Text(
+                              "Tipo",
+                              style: containerStyle,
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              height: double.infinity,
+                              alignment: Alignment.center,
+                              child: DropdownButton(
+                                value: model.dropDownValue,
+                                dropdownColor: Color(0xff3C3D42),
+                                isDense: true,
+                                underline: Container(),
+                                elevation: 8,
+                                items: [
+                                  DropdownMenuItem(
+                                    onTap: () {
+                                      model.quickStrikePost.isQuestion = false;
+                                      model.quickStrikePost.isGame = false;
+                                      model.quickStrikePost.isRandom = true;
+                                    },
+                                    value: "Random",
+                                    child: Text("Random", style: selectorStyle),
+                                  ),
+                                  DropdownMenuItem(
+                                    onTap: () {
+                                      model.quickStrikePost.isQuestion = false;
+                                      model.quickStrikePost.isGame = true;
+                                      model.quickStrikePost.isRandom = false;
+                                    },
+                                    value: "Boton",
+                                    child: Text(
+                                      "Boton",
+                                      style: selectorStyle,
+                                    ),
+                                  ),
+                                  DropdownMenuItem(
+                                    onTap: () {
+                                      model.quickStrikePost.isQuestion = true;
+                                      model.quickStrikePost.isGame = false;
+                                      model.quickStrikePost.isRandom = false;
+                                    },
+                                    value: "Pregunta",
+                                    child: Text(
+                                      "Pregunta",
+                                      style: selectorStyle,
+                                    ),
+                                  )
+                                ],
+                                onChanged: (val) {
+                                  model.setDropdownValue(val);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: screenHeight(context) * 0.01),
+                    child: Container(
+                      width: double.infinity,
+                      height: screenHeight(context) * 0.04,
+                      decoration: BoxDecoration(
+                        color: greyColor,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            width: screenWidth(context) * 0.25,
+                            height: screenHeight(context) * 0.04,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white),
+                            child: Text(
+                              "Modelo",
+                              style: containerStyle,
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: TextField(
+                                controller: model.qsModelController,
+                                maxLength: 1,
+                                maxLengthEnforced: true,
+                                style: selectorStyle,
+                                keyboardType: TextInputType.number,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  counterText: "",
+                                  isDense: true,
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 10),
+                                  border: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 0, style: BorderStyle.none),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: screenHeight(context) * 0.01),
+                    child: Container(
+                      width: double.infinity,
+                      height: screenHeight(context) * 0.04,
+                      decoration: BoxDecoration(
+                        color: greyColor,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            width: screenWidth(context) * 0.25,
+                            height: screenHeight(context) * 0.04,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white),
+                            child: Text(
+                              "Hora",
+                              style: containerStyle,
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () => model.selectDate(context),
+                              child: Container(
+                                width: double.infinity,
+                                height: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                alignment: Alignment.center,
+                                child: model.selectedDate != null
+                                    ? Text(
+                                        "${model.selectedDate.day}-${model.selectedDate.month}-${model.selectedDate.year} ${model.selectedDate.hour}:${model.selectedDate.minute}",
+                                        style: selectorStyle,
+                                      )
+                                    : Container(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//2do bloque del widget
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+          Padding(
+            padding: EdgeInsets.only(top: screenHeight(context) * 0.04),
+            child: Container(
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                width: double.infinity,
+                height: screenHeight(context) * 0.42,
+                child: Column(
+                  children: [
+                    Padding(
+                        padding:
+                            EdgeInsets.only(top: screenHeight(context) * 0.02),
+                        child: Text(
+                          "Pregunta",
+                          style: unselectedTypeStyle,
+                        )),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(top: screenHeight(context) * 0.02),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(20)),
+                        alignment: Alignment.center,
+                        width: screenWidth(context) * 0.55,
+                        height: screenHeight(context) * 0.04,
+                        child: TextField(
+                          controller: model.qsQuestionController,
+                          style: selectorStyle,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            hintText: "Formula la pregunta",
+                            isDense: true,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 0, style: BorderStyle.none),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () => model.isQuickstrike
-                          ? model.uploadQuickStrike()
-                          : model.uploadPost(),
+                    Padding(
+                        padding:
+                            EdgeInsets.only(top: screenHeight(context) * 0.02),
+                        child: Text(
+                          "Respuestas",
+                          style: unselectedTypeStyle,
+                        )),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(top: screenHeight(context) * 0.02),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(50),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black45,
-                                  offset: Offset(5, 5),
-                                  blurRadius: 4)
-                            ]),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 15),
-                        child: model.isUploading
-                            ? CircularProgressIndicator()
-                            : Row(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(20)),
+                        alignment: Alignment.center,
+                        width: screenWidth(context) * 0.55,
+                        height: screenHeight(context) * 0.04,
+                        child: TextField(
+                          style: selectorStyle,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            isDense: true,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 0, style: BorderStyle.none),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(top: screenHeight(context) * 0.02),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(20)),
+                        alignment: Alignment.center,
+                        width: screenWidth(context) * 0.55,
+                        height: screenHeight(context) * 0.04,
+                        child: TextField(
+                          style: selectorStyle,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            isDense: true,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 0, style: BorderStyle.none),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(top: screenHeight(context) * 0.02),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(20)),
+                        alignment: Alignment.center,
+                        width: screenWidth(context) * 0.55,
+                        height: screenHeight(context) * 0.04,
+                        child: TextField(
+                          style: selectorStyle,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            isDense: true,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 0, style: BorderStyle.none),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(top: screenHeight(context) * 0.02),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(20)),
+                        alignment: Alignment.center,
+                        width: screenWidth(context) * 0.55,
+                        height: screenHeight(context) * 0.04,
+                        child: TextField(
+                          style: selectorStyle,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            counterText: "",
+                            isDense: true,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 0, style: BorderStyle.none),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+          ),
+          //
+          //
+          // 3er bloque del widget
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+          Padding(
+            padding: EdgeInsets.only(top: screenHeight(context) * 0.01),
+            child: Container(
+                height: screenHeight(context) * 0.35,
+                width: screenWidth(context),
+                child: Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Descripción", style: unselectedTypeStyle)),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: screenHeight(context) * 0.02,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: screenWidth(context) * 0.5,
+                            height: screenHeight(context) * 0.2,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: backgroundColor,
+                            ),
+                            child: TextField(
+                              controller: model.qsDescController,
+                              expands: true,
+                              textAlignVertical: TextAlignVertical.top,
+                              style: TextStyle(color: Colors.white),
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                hintText: "Escribe una descripcion...",
+                                hintStyle: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.white24),
+                                filled: true,
+                                fillColor: Color(0xff17191E),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: screenHeight(context) * 0.2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () => model.selectFirstImage(),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xff17191E),
+                                        borderRadius: BorderRadius.circular(15),
+                                        image: model.firstImage != null
+                                            ? DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image:
+                                                    FileImage(model.firstImage),
+                                              )
+                                            : null),
+                                    child: model.firstImage == null
+                                        ? Icon(
+                                            Icons.add,
+                                            size: 40,
+                                            color: Colors.white,
+                                          )
+                                        : Container(),
+                                    width: screenWidth(context) * 0.18,
+                                    height: screenHeight(context) * 0.06,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => model.selectSecondImage(),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xff17191E),
+                                        borderRadius: BorderRadius.circular(15),
+                                        image: model.secondImage != null
+                                            ? DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: FileImage(
+                                                    model.secondImage),
+                                              )
+                                            : null),
+                                    child: model.secondImage == null
+                                        ? Icon(
+                                            Icons.add,
+                                            size: 40,
+                                            color: Colors.white,
+                                          )
+                                        : Container(),
+                                    width: screenWidth(context) * 0.18,
+                                    height: screenHeight(context) * 0.06,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => model.selectThirdImage(),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xff17191E),
+                                        borderRadius: BorderRadius.circular(15),
+                                        image: model.thirdImage != null
+                                            ? DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image:
+                                                    FileImage(model.thirdImage),
+                                              )
+                                            : null),
+                                    child: model.thirdImage == null
+                                        ? Icon(
+                                            Icons.add,
+                                            size: 40,
+                                            color: Colors.white,
+                                          )
+                                        : Container(),
+                                    width: screenWidth(context) * 0.18,
+                                    height: screenHeight(context) * 0.06,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(top: screenHeight(context) * 0.02),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            onTap: () => model.cancelChanges(),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(50),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black45,
+                                        offset: Offset(5, 5),
+                                        blurRadius: 4)
+                                  ]),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 15),
+                              child: Row(
                                 children: <Widget>[
-                                  Text("Listo",
+                                  Text("Cancelar",
                                       style: TextStyle(
                                           fontSize: 20,
                                           color: Color(0xff17191E),
                                           fontFamily: "Raleway",
                                           fontWeight: FontWeight.w700)),
                                   horizontalSpaceSmall,
-                                  Icon(custicon.QuickStrike.quickstrike)
+                                  Icon(Icons.clear)
                                 ],
                               ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => model.uploadQuickStrike(),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(50),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black45,
+                                        offset: Offset(5, 5),
+                                        blurRadius: 4)
+                                  ]),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 15),
+                              child: model.isUploading
+                                  ? CircularProgressIndicator()
+                                  : Row(
+                                      children: <Widget>[
+                                        Text("Listo",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Color(0xff17191E),
+                                                fontFamily: "Raleway",
+                                                fontWeight: FontWeight.w700)),
+                                        horizontalSpaceSmall,
+                                        Icon(custicon.QuickStrike.quickstrike)
+                                      ],
+                                    ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                    )
                   ],
-                )
-              ],
-            ),
-          ),
+                )),
+          )
         ],
+        crossAxisAlignment: CrossAxisAlignment.start,
       ),
     );
   }
