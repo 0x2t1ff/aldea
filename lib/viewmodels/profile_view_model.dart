@@ -111,18 +111,6 @@ class ProfileViewModel extends BaseModel {
         gender: gender,
         address: address);
 
-    if (profileResult != null) {
-      currentUser.picUrl = profileResult.imageUrl;
-      currentUser.picName = profileResult.imageFileName;
-    }
-
-    if (bkdResult != null) {
-      currentUser.bkdPicName = bkdResult.imageFileName;
-      currentUser.bkdPicUrl = bkdResult.imageUrl;
-    }
-    currentUser.email = email;
-    currentUser.address = address;
-    currentUser.gender = gender;
     _isEditting = false;
     selectedBkdImage = null;
     selectedProfileImage = null;

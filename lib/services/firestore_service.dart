@@ -55,8 +55,10 @@ class FirestoreService {
     return community.data;
   }
 
-  Future changeNotificationsSetting(String id , bool notifications) async{
-    _userCollectionReference.document(id).updateData({"notificationsEnabled":notifications});
+  Future changeNotificationsSetting(String id, bool notifications) async {
+    _userCollectionReference
+        .document(id)
+        .updateData({"notificationsEnabled": notifications});
   }
 
   Future removeRequest(String communityId, String uid) async {
@@ -73,6 +75,9 @@ class FirestoreService {
     _postsCollectionReference.document(uid).delete();
   }
 
+Future changeUserLanguage(String language , String uid){
+  _userCollectionReference.document(uid).updateData({"language":language});
+}
   Future<List<CommentModel>> getUserComments(
       String postId, String communityId) async {
     try {
@@ -482,7 +487,6 @@ class FirestoreService {
       String picName,
       String bkdPicName,
       String email,
-      String phoneNumber,
       String gender,
       String address}) async {
     await _userCollectionReference.document(uid).updateData({
@@ -491,7 +495,6 @@ class FirestoreService {
       'bkdPicUrl': bkdPicUrl,
       'bkdPicName': bkdPicName,
       'email': email,
-      'phoneNumber': phoneNumber,
       'gender': gender,
       'address': address
     });
@@ -897,6 +900,10 @@ class FirestoreService {
         .getDocuments();
   }
 
+  Stream<DocumentSnapshot> listenToUserChanges(String uid) {
+    return _userCollectionReference.document(uid).snapshots();
+  }
+
   Future giveCommunityMod(String communityId, String uid) async {
     var communityData =
         await _communitiesCollectionReference.document(communityId).get();
@@ -918,7 +925,7 @@ class FirestoreService {
     List modData = followerDocument.data["mod"];
     followersData.remove(uid);
     modData.remove(communityId);
-    _userCollectionReference.document(uid).updateData({"mod":modData});
+    _userCollectionReference.document(uid).updateData({"mod": modData});
     _followingPostsCollectionReference
         .document(communityId)
         .updateData({"followers": followersData});

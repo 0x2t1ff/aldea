@@ -1,12 +1,12 @@
 class User {
-  final String name;
-  final String uid;
+  String name;
+  String uid;
   String picUrl;
   String picName;
   String bkdPicUrl;
   String bkdPicName;
-  final int postsCount;
-  final int winCount;
+  int postsCount;
+  int winCount;
   List<dynamic> communities;
   List<dynamic> requests;
   String gender;
@@ -19,6 +19,7 @@ class User {
   bool isGodAdmin;
   List<dynamic> mod;
   bool notificationsEnabled;
+  String language;
 
   User(
       {this.name,
@@ -40,7 +41,8 @@ class User {
       this.chatRooms,
       this.isGodAdmin,
       this.mod,
-      this.notificationsEnabled});
+      this.notificationsEnabled,
+    this.language });
 
   User.fromData(Map<String, dynamic> data)
       : name = data['name'],
@@ -61,6 +63,7 @@ class User {
         communities = data['communities'],
         isGodAdmin = data["isGodAdmin"],
         mod = data["mod"],
+        language = data["language"],
         notificationsEnabled = data["notificationsEnabled"];
   Map<String, dynamic> toJson() {
     return {
@@ -83,6 +86,29 @@ class User {
       'isGodAdmin': isGodAdmin,
       'moderator': mod,
       'notificationsEnabled': notificationsEnabled,
+      'language':language
     };
+  }
+
+  void updateFromData(Map<String, dynamic> data) {
+    name = data['name'];
+    uid = data['uid'];
+    picUrl = data['picUrl'];
+    picName = data['picName'];
+    bkdPicUrl = data['bkdPicUrl'];
+    bkdPicName = data['bkdPicName'];
+    postsCount = data['postsCount'];
+    winCount = data['winCount'];
+    gender = data['gender'];
+    vouches = data['vouches'];
+    phoneNumber = data['phoneNumber'];
+    email = data['email'];
+    address = data['address'];
+    requests = data['requests'];
+    chatRooms = data["chatRooms"];
+    communities = data['communities'];
+    isGodAdmin = data["isGodAdmin"];
+    mod = data["mod"];
+    notificationsEnabled = data["notificationsEnabled"];
   }
 }

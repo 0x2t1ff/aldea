@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:aldea/locator.dart';
+import 'package:aldea/models/user_model.dart';
+import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/views/direct_message_view.dart';
 import 'package:aldea/ui/views/feed_view.dart';
@@ -21,11 +25,14 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final FirestoreService _firestoreService = locator<FirestoreService>();
   final CommunitiesView _communitiesView = locator<CommunitiesView>();
   final DirectMessageView _directMessageView = locator<DirectMessageView>();
   final FeedView _feedView = locator<FeedView>();
   final ProfileView _profileView = locator<ProfileView>();
   final QuickSTrikeView _quickSTrikeView = locator<QuickSTrikeView>();
+  final User _user = locator<User>();
+  StreamSubscription subscription;
   int selectedIndex = 0;
   PageController controller = PageController();
 
@@ -64,6 +71,20 @@ class _HomeViewState extends State<HomeView> {
       // textStyle: t.textStyle,
       text: 'Perfil         ',
     ));
+
+    subscription =
+        _firestoreService.listenToUserChanges(_user.uid).listen((document) {
+      setState(() {
+        _user.updateFromData(document.data);
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    subscription.cancel();
   }
 
   @override
