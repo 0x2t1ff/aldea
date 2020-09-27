@@ -99,7 +99,7 @@ export const chatNotification = functions.database
         });
 
 
-export const banUser = functions.https.onRequest((request, response) => {
+export const banUserFromCommunity = functions.https.onRequest((request, response) => {
     response.set('Access-Control-Allow-Origin', '*');
     response.set('Access-Control-Allow-Methods', 'GET, PUT, POST, OPTIONS');
     response.set('Access-Control-Allow-Headers', '*');
@@ -107,17 +107,36 @@ export const banUser = functions.https.onRequest((request, response) => {
         const { userId, communityId } = request.body;
         db.collection('communities').doc(communityId).get().then(community => {
             const data = community.data();
-            if(data){
+            if (data) {
                 let bannedUsers = data.bannedUsers as string[];
-                if(bannedUsers){
+                if (bannedUsers) {
                     bannedUsers.push(userId);
-                    community.ref.update({'bannedUsers': bannedUsers});
+                    community.ref.update({ 'bannedUsers': bannedUsers });
                 } else {
                     bannedUsers = [userId];
                 }
             }
+            response.status(200).send({ 'result': 'Ok' });
         }).catch(error => {
             console.log(`error al intentar obtener la comunidad al banear el user ${userId} de la comunidad ${communityId}`, error);
+            response.status(400).send({
+                'result': `error al intentar obtener la comunidad al banear el user ${userId} de la comunidad ${communityId}`,
+                'error': error});
+        });
+    });
+});
+
+export const banUser = functions.https.onRequest((request, response) => {
+    response.set('Access-Control-Allow-Origin', '*');
+    response.set('Access-Control-Allow-Methods', 'GET, PUT, POST, OPTIONS');
+    response.set('Access-Control-Allow-Headers', '*');
+    return cors(request, response, async () => {
+        let userId = request.body as string;
+        userId = userId.slice(1, -1);
+        admin.auth().updateUser(userId, {disabled: true}).then(() => {
+            response.status(200).send({'result': 'Ok'});
+        }).catch(error => {
+            response.status(400).send({'error': error});
         });
     });
 });

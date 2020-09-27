@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/models/user_model.dart';
 import 'package:aldea/services/firestore_service.dart';
@@ -6,6 +8,7 @@ import 'package:aldea/services/rtdb_service.dart';
 import '../services/dialog_service.dart';
 import 'base_model.dart';
 import '../locator.dart';
+import 'package:http/http.dart' as http;
 
 class OtherProfileViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
@@ -97,8 +100,29 @@ class OtherProfileViewModel extends BaseModel {
     notifyListeners();
   }
 
-  void banUser() {
-    print(" haha get yeeted son ");
+  Future<void> banUser() async {
+    http
+        .post(
+          'https://us-central1-aldea-dev-40685.cloudfunctions.net/banUser',
+          body: JsonEncoder().convert(user.uid),
+        )
+        .then((value) async => {
+              if (value.statusCode == 200)
+                {
+                  await _dialogService.showDialog(
+                      title: 'Usuario baneado',
+                      description:
+                          'El usuario ' + user.name + ' ha sido baneado')
+                }
+              else
+                {
+                  await _dialogService.showDialog(
+                      title: 'Error al banear usuario',
+                      description:
+                          'Algo ha ido mal al intentar banear al usuario ' +
+                              user.name)
+                }
+            });
   }
 
   void checkVouch() {
