@@ -30,7 +30,7 @@ class _AllCommunitiesState extends State<AllCommunities> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           verticalSpaceSmall,
-          Text("Comunidades",
+          Text("Aldeas",
               style: TextStyle(
                 color: Color(0xffb5b5b5),
                 fontSize: 29,

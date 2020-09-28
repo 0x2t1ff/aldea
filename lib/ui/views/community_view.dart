@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:aldea/constants/languages.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/views/user_posts_view.dart';
 import 'package:aldea/ui/views/news_view.dart';
@@ -182,70 +183,7 @@ class _CommunityViewState extends State<CommunityView>
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: <Widget>[
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: <Widget>[
-                                                      Text(
-                                                          model
-                                                              .followersDoc[
-                                                                  'posts']
-                                                              .length
-                                                              .toString(),
-                                                          style:
-                                                              TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      18)),
-                                                      Text("Publicaciones",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
-                                                              fontSize: 16))
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: <Widget>[
-                                                      Text(
-                                                          model
-                                                              .followersDoc[
-                                                                  'posts']
-                                                              .length
-                                                              .toString(),
-                                                          style:
-                                                              TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      18)),
-                                                      Text("Likes",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
-                                                              fontSize: 16))
-                                                    ],
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: () => model
-                                                        .goToAdminUsersScreen(
-                                                            model.community),
+                                                  Expanded(
                                                     child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
@@ -254,7 +192,7 @@ class _CommunityViewState extends State<CommunityView>
                                                         Text(
                                                             model
                                                                 .followersDoc[
-                                                                    "followers"]
+                                                                    'posts']
                                                                 .length
                                                                 .toString(),
                                                             style: TextStyle(
@@ -264,7 +202,10 @@ class _CommunityViewState extends State<CommunityView>
                                                                     FontWeight
                                                                         .bold,
                                                                 fontSize: 18)),
-                                                        Text("Seguidores",
+                                                        Text(
+                                                            languages[model
+                                                                    .currentLanguage]
+                                                                ["posts"],
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white,
@@ -273,6 +214,75 @@ class _CommunityViewState extends State<CommunityView>
                                                                         .w300,
                                                                 fontSize: 16))
                                                       ],
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        Text(
+                                                            model
+                                                                .followersDoc[
+                                                                    'posts']
+                                                                .length
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 18)),
+                                                        Text("Likes",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                fontSize: 16))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: GestureDetector(
+                                                      onTap: () => model
+                                                          .goToAdminUsersScreen(
+                                                              model.community),
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          Text(
+                                                              model
+                                                                  .followersDoc[
+                                                                      "followers"]
+                                                                  .length
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      18)),
+                                                          Text(
+                                                              languages[model
+                                                                      .currentLanguage]
+                                                                  ["followers"],
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300,
+                                                                  fontSize: 16))
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -396,7 +406,7 @@ class _CommunityViewState extends State<CommunityView>
                                                 Row(
                                                   children: <Widget>[
                                                     Text(
-                                                      "Tienes ",
+                                                      "${languages[model.currentLanguage]["admission1"]} ",
                                                       style: TextStyle(
                                                           fontStyle:
                                                               FontStyle.italic,
@@ -408,7 +418,7 @@ class _CommunityViewState extends State<CommunityView>
                                                               'Raleway'),
                                                     ),
                                                     Text(
-                                                      "${model.requests.length} peticiones ",
+                                                      "${model.requests.length} ${languages[model.currentLanguage]["admission2"]}  ",
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold,
@@ -422,7 +432,7 @@ class _CommunityViewState extends State<CommunityView>
                                                               0xff3CA759)),
                                                     ),
                                                     Text(
-                                                        "de admision pendientes.",
+                                                        "${languages[model.currentLanguage]["admission3"]}",
                                                         style: TextStyle(
                                                             fontStyle: FontStyle
                                                                 .italic,

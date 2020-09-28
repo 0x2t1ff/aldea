@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:aldea/constants/languages.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/widgets/all_communities.dart';
 import 'package:aldea/ui/widgets/communities_carousel.dart';
@@ -57,12 +58,13 @@ class _CommunitiesViewState extends State<CommunitiesView>
                           ),
                           horizontalSpaceSmall,
                           Text(
-                            "Top de la semana",
+                            languages[model.currentLanguage]["top"],
                             style: TextStyle(
                                 color: Color(0xffb5b5b5), fontSize: 29),
                           ),
                           Padding(
-                            padding:  EdgeInsets.only(left:screenWidth(context) *0.05),
+                            padding: EdgeInsets.only(
+                                left: screenWidth(context) * 0.05),
                             child: InkWell(
                               onTap: () => model.fetchCommunities(),
                               child: Container(

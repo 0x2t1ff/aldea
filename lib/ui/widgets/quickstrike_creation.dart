@@ -1,5 +1,8 @@
+import 'package:aldea/constants/languages.dart';
+import 'package:aldea/models/user_model.dart';
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
+import '../../locator.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import "package:aldea/constants/icondata.dart" as custicon;
@@ -11,6 +14,7 @@ class QuickStrikeCreation extends StatefulWidget {
 }
 
 class _QuickStrikeCreationState extends State<QuickStrikeCreation> {
+  final user = locator<User>();
   var time;
   @override
   Widget build(BuildContext context) {
@@ -18,8 +22,8 @@ class _QuickStrikeCreationState extends State<QuickStrikeCreation> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Padding(
-          padding:
-              EdgeInsets.symmetric(vertical: devicesize.screenHeight(context) * 0.0221),
+          padding: EdgeInsets.symmetric(
+              vertical: devicesize.screenHeight(context) * 0.0221),
           child: Container(
             width: devicesize.screenWidth(context) * 0.682,
             height: 2,
@@ -27,16 +31,18 @@ class _QuickStrikeCreationState extends State<QuickStrikeCreation> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(right: devicesize.screenWidth(context) * 0.47),
+          padding:
+              EdgeInsets.only(right: devicesize.screenWidth(context) * 0.47),
           child: Text(" Opciones",
               style: TextStyle(
                   color: custcolor.almostWhite,
                   fontFamily: 'Raleway',
                   fontWeight: FontWeight.w600,
-                  fontSize:  devicesize.screenHeight(context) * 0.027)),
+                  fontSize: devicesize.screenHeight(context) * 0.027)),
         ),
         Padding(
-          padding: EdgeInsets.only(top: devicesize.screenHeight(context)* 0.02),
+          padding:
+              EdgeInsets.only(top: devicesize.screenHeight(context) * 0.02),
           child: Container(
             width: devicesize.screenWidth(context) * 0.694,
             height: devicesize.screenHeight(context) * 0.211,
@@ -150,10 +156,10 @@ class _QuickStrikeCreationState extends State<QuickStrikeCreation> {
                       height: devicesize.screenHeight(context) * 0.0296,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          color:custcolor.almostWhite,
+                          color: custcolor.almostWhite,
                           borderRadius: BorderRadius.circular(100)),
                       child: Text(
-                        "Modelo",
+                        "${languages[user.language]["model"]}: ",
                         style: TextStyle(
                             fontFamily: 'Raleway',
                             fontWeight: FontWeight.w600,
@@ -235,17 +241,16 @@ class _QuickStrikeCreationState extends State<QuickStrikeCreation> {
         ),
         Padding(
           padding: EdgeInsets.only(
-            top: devicesize.screenHeight(context) * 0.013,
-            bottom: devicesize.screenHeight(context) * 0.013,
-            right: devicesize.screenWidth(context) * 0.41
-          ),
+              top: devicesize.screenHeight(context) * 0.013,
+              bottom: devicesize.screenHeight(context) * 0.013,
+              right: devicesize.screenWidth(context) * 0.41),
           child: Text(
             "Descripción",
             style: TextStyle(
                 fontSize: devicesize.screenHeight(context) * 0.026,
                 fontFamily: 'Raleway',
                 fontWeight: FontWeight.w600,
-                color:custcolor.almostWhite),
+                color: custcolor.almostWhite),
           ),
         ),
         Row(
@@ -274,7 +279,8 @@ class _QuickStrikeCreationState extends State<QuickStrikeCreation> {
                         borderRadius: BorderRadius.circular(
                             devicesize.screenHeight(context) * 0.012),
                       ),
-                      child: Icon(custicon.Add.add, color: custcolor.almostWhite),
+                      child:
+                          Icon(custicon.Add.add, color: custcolor.almostWhite),
                     ),
                   ),
                   Padding(
@@ -289,7 +295,8 @@ class _QuickStrikeCreationState extends State<QuickStrikeCreation> {
                           borderRadius: BorderRadius.circular(
                               devicesize.screenHeight(context) * 0.012),
                         ),
-                        child: Icon(custicon.Add.add, color: custcolor.almostWhite),
+                        child: Icon(custicon.Add.add,
+                            color: custcolor.almostWhite),
                       ),
                     ),
                   ),
@@ -299,9 +306,11 @@ class _QuickStrikeCreationState extends State<QuickStrikeCreation> {
                       height: devicesize.screenHeight(context) * 0.053,
                       decoration: BoxDecoration(
                         color: custcolor.almostBlack,
-                        borderRadius: BorderRadius.circular(devicesize.screenHeight(context) * 0.012),
+                        borderRadius: BorderRadius.circular(
+                            devicesize.screenHeight(context) * 0.012),
                       ),
-                      child: Icon(custicon.Add.add, color: custcolor.almostWhite),
+                      child:
+                          Icon(custicon.Add.add, color: custcolor.almostWhite),
                     ),
                   ),
                 ],
@@ -310,8 +319,9 @@ class _QuickStrikeCreationState extends State<QuickStrikeCreation> {
           ],
         ),
         Padding(
-          padding:
-              EdgeInsets.only(top: devicesize.screenHeight(context) * 0.03, ),
+          padding: EdgeInsets.only(
+            top: devicesize.screenHeight(context) * 0.03,
+          ),
           child: GestureDetector(
             child: Container(
               height: devicesize.screenHeight(context) * 0.0567,
