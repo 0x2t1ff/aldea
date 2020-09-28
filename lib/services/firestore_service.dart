@@ -75,9 +75,10 @@ class FirestoreService {
     _postsCollectionReference.document(uid).delete();
   }
 
-Future changeUserLanguage(String language , String uid){
-  _userCollectionReference.document(uid).updateData({"language":language});
-}
+  Future changeUserLanguage(String language, String uid) {
+    _userCollectionReference.document(uid).updateData({"language": language});
+  }
+
   Future<List<CommentModel>> getUserComments(
       String postId, String communityId) async {
     try {
@@ -201,6 +202,9 @@ Future changeUserLanguage(String language , String uid){
 
     var followerDocument =
         await _followingPostsCollectionReference.document(communityId).get();
+    _communitiesCollectionReference
+        .document(communityId)
+        .updateData({"follower  Count": FieldValue.increment(1)});
     List followersData = followerDocument.data["followers"];
     followersData.add(uid);
     _followingPostsCollectionReference
@@ -939,11 +943,13 @@ Future changeUserLanguage(String language , String uid){
     var communityData =
         await _communitiesCollectionReference.document(communityId).get();
     List moderatorList = communityData.data["moderators"];
+
     if (moderatorList.contains(uid)) {
       moderatorList.remove(uid);
-      _communitiesCollectionReference
-          .document(communityId)
-          .updateData({"moderators": moderatorList});
+      _communitiesCollectionReference.document(communityId).updateData({
+        "moderators": moderatorList,
+        "followerCount": FieldValue.increment(-1)
+      });
     }
   }
 

@@ -243,19 +243,23 @@ class _CommunityViewState extends State<CommunityView>
                                                     ],
                                                   ),
                                                   GestureDetector(
-                                                    onTap: () => model
-                                                        .goToAdminUsersScreen(
-                                                            model.community),
+                                                    onTap: widget.community
+                                                            .moderators
+                                                            .contains(model
+                                                                .currentUser
+                                                                .uid)
+                                                        ? () => model
+                                                            .goToAdminUsersScreen(
+                                                                model.community)
+                                                        : "", 
                                                     child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .center,
                                                       children: <Widget>[
                                                         Text(
-                                                            model
-                                                                .followersDoc[
-                                                                    "followers"]
-                                                                .length
+                                                            widget.community
+                                                                .followerCount
                                                                 .toString(),
                                                             style: TextStyle(
                                                                 color: Colors
