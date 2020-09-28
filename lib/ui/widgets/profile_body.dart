@@ -4,6 +4,7 @@ import 'package:aldea/viewmodels/profile_view_model.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import '../shared/shared_styles.dart';
+import '../../constants/languages.dart';
 
 class ProfileBody extends StatelessWidget {
   final String postsCount;
@@ -43,7 +44,7 @@ class ProfileBody extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Text(
-                          "Posts",
+                          languages[model.currentLanguage]["posts"],
                           style: TextStyle(
                               color: Color(0xffB1AFAF),
                               fontFamily: "Raleway",
@@ -100,8 +101,7 @@ class ProfileBody extends StatelessWidget {
                             ),
                             onTap: () {
                               model == null
-                                  ? otherModel
-                                      .seeVouches(otherModel.user.uid)
+                                  ? otherModel.seeVouches(otherModel.user.uid)
                                   : model.seeVouches(model.currentUser.uid);
                             }),
                         GestureDetector(
@@ -110,19 +110,24 @@ class ProfileBody extends StatelessWidget {
                                 ? otherModel.giveVouch()
                                 : print("pressed");
                           },
-                          child: model == null ? Container(
-
-                              height: usableScreenWithoughtBars(context) * 0.12,
-                              width: screenWidth(context) * 0.2 , 
-                              
-                              child:FlareActor(
+                          child: model == null
+                              ? Container(
+                                  height:
+                                      usableScreenWithoughtBars(context) * 0.12,
+                                  width: screenWidth(context) * 0.2,
+                                  child: FlareActor(
                                     'assets/animations/vouchAnimation.flr',
                                     fit: BoxFit.cover,
                                     animation: otherModel.animationController,
-                                  )) : SizedBox(
-                                    height: screenHeight(context) * 0.1,
-                                    width: screenWidth(context) * 0.15,
-                                    child: Image.asset("assets/images/vouch.png", fit: BoxFit.cover,),),
+                                  ))
+                              : SizedBox(
+                                  height: screenHeight(context) * 0.1,
+                                  width: screenWidth(context) * 0.15,
+                                  child: Image.asset(
+                                    "assets/images/vouch.png",
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                         )
                       ],
                     ),

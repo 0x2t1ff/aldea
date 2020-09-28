@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:aldea/constants/languages.dart';
 import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/viewmodels/community_view_model.dart';
 import 'package:flutter/material.dart';
@@ -192,7 +193,7 @@ class CreationPopup extends StatelessWidget {
                   Expanded(
                     child: Container(
                       child: Text(
-                        "Modelo",
+                        languages[model.currentLanguage]["model"],
                         style: TextStyle(
                             fontSize: 16,
                             color: Color(0xff3C3D42),

@@ -1,3 +1,4 @@
+import 'package:aldea/constants/languages.dart';
 import 'package:aldea/models/community.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
@@ -81,7 +82,7 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
                               ),
                               child: Center(
                                 child: Text(
-                                  "Configuración",
+                                  languages[model.currentLanguage]["config"],
                                   style: TextStyle(
                                       color: almostWhite,
                                       fontFamily: 'Raleway',
@@ -211,7 +212,8 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
-                                    "Posts públicos",
+                                    languages[model.currentLanguage]
+                                        ["public posts"],
                                     style: optionsStyle,
                                   ),
                                   GestureDetector(
@@ -242,7 +244,8 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
-                                    "Marketplace",
+                                    languages[model.currentLanguage]
+                                        ["marketplace"],
                                     style: optionsStyle,
                                   ),
                                   GestureDetector(
@@ -267,7 +270,7 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
                               ),
                             ),
                             Text(
-                              "Descripcion",
+                              languages[model.currentLanguage]["desc"],
                               style: optionsStyle,
                             ),
                             Padding(
@@ -322,7 +325,8 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
                               padding: EdgeInsets.only(
                                   top: screenHeight(context) * 0.03),
                               child: Text(
-                                "Normas comunidad",
+                                languages[model.currentLanguage]
+                                    ["community rules"],
                                 style: optionsStyle,
                               ),
                             ),
@@ -385,7 +389,9 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
                                       ),
                                     ),
                                     child: Center(
-                                        child: Text("Guardar",
+                                        child: Text(
+                                            languages[model.currentLanguage]
+                                                ["save"],
                                             style: optionsStyle)),
                                   ),
                                 ),

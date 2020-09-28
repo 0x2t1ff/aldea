@@ -7,6 +7,10 @@ class BaseModel extends ChangeNotifier {
     return locator<User>();
   }
 
+  String get currentLanguage {
+    return currentUser.language;
+  }
+
   bool _busy = false;
   bool get busy => _busy;
 

@@ -69,7 +69,7 @@ class _HomeViewState extends State<HomeView> {
     tabs.add(GButton(
       icon: custicon.Profile.profile,
       // textStyle: t.textStyle,
-      text: 'Perfil         ',
+      text: 'Profile     ',
     ));
 
     subscription =

@@ -42,7 +42,7 @@ class User {
       this.isGodAdmin,
       this.mod,
       this.notificationsEnabled,
-    this.language });
+      this.language});
 
   User.fromData(Map<String, dynamic> data)
       : name = data['name'],
@@ -86,7 +86,7 @@ class User {
       'isGodAdmin': isGodAdmin,
       'moderator': mod,
       'notificationsEnabled': notificationsEnabled,
-      'language':language
+      'language': language
     };
   }
 
@@ -110,5 +110,6 @@ class User {
     isGodAdmin = data["isGodAdmin"];
     mod = data["mod"];
     notificationsEnabled = data["notificationsEnabled"];
+    language = data["language"];
   }
 }

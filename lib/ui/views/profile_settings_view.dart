@@ -1,3 +1,4 @@
+import 'package:aldea/constants/languages.dart';
 import 'package:aldea/models/user_model.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
@@ -61,7 +62,7 @@ class ProfileSettingsView extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             vertical: devicesize.screenHeight(context) * 0.02),
                         child: Text(
-                          "Configuración",
+                          languages[model.currentLanguage]["config"],
                           style: TextStyle(
                               color: almostWhite,
                               fontFamily: 'Raleway',
@@ -79,36 +80,35 @@ class ProfileSettingsView extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () => print("pressed"),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Icon(
-                                Icons.notifications,
-                                color: blueTheme,
-                                size: 29,
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.notifications,
+                                    color: blueTheme,
+                                    size: 29,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: devicesize.screenWidth(context) *
+                                            0.04),
+                                    child: Text(
+                                      languages[model.currentLanguage]
+                                          ["notifications"],
+                                      style: optionsStyle,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left:
-                                        devicesize.screenWidth(context) * 0.04),
-                                child: Text(
-                                  "Notificaciones",
-                                  style: optionsStyle,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left:
-                                        devicesize.screenWidth(context) * 0.1),
-                                child: Container(
-                                    width:
-                                        devicesize.screenWidth(context) * 0.16,
-                                    child: Switch(
-                                        value: model
-                                            .currentUser.notificationsEnabled,
-                                        onChanged: (bool notifications) =>
-                                            model.changeNotifications(
-                                                notifications,
-                                                model.currentUser.uid))),
-                              )
+                              Container(
+                                  child: Switch(
+                                      value: model
+                                          .currentUser.notificationsEnabled,
+                                      onChanged: (bool notifications) =>
+                                          model.changeNotifications(
+                                              notifications,
+                                              model.currentUser.uid))),
                             ],
                           ),
                         ),
@@ -130,7 +130,7 @@ class ProfileSettingsView extends StatelessWidget {
                                       left: devicesize.screenWidth(context) *
                                           0.04),
                                   child: Text(
-                                    "Seguridad",
+                                    languages[model.currentLanguage]["sec"],
                                     style: optionsStyle,
                                   ))
                             ],
@@ -154,7 +154,7 @@ class ProfileSettingsView extends StatelessWidget {
                                       left: devicesize.screenWidth(context) *
                                           0.04),
                                   child: Text(
-                                    "Privacidad",
+                                    languages[model.currentLanguage]["priv"],
                                     style: optionsStyle,
                                   ))
                             ],
@@ -202,7 +202,7 @@ class ProfileSettingsView extends StatelessWidget {
                                       left: devicesize.screenWidth(context) *
                                           0.04),
                                   child: Text(
-                                    "Idiomas",
+                                    languages[model.currentLanguage]["langs"],
                                     style: optionsStyle,
                                   ))
                             ],
@@ -228,7 +228,7 @@ class ProfileSettingsView extends StatelessWidget {
                                       left: devicesize.screenWidth(context) *
                                           0.04),
                                   child: Text(
-                                    "Cerrar Sesión",
+                                    languages[model.currentLanguage]["logout"],
                                     style: optionsStyle,
                                   ))
                             ],
@@ -282,7 +282,8 @@ class ProfileSettingsView extends StatelessWidget {
                                     width:
                                         devicesize.screenWidth(context) * 0.6,
                                     child: Text(
-                                      "¿Te interesa crear una Aldea?",
+                                      languages[model.currentLanguage]
+                                          ["community creation"],
                                       style: optionsStyle,
                                     ),
                                   ),
@@ -334,7 +335,8 @@ class ProfileSettingsView extends StatelessWidget {
                                               Radius.circular(200))),
                                       alignment: Alignment.center,
                                       child: Text(
-                                        "¡Crear!",
+                                        languages[model.currentLanguage]
+                                            ["create"],
                                         style: TextStyle(
                                             fontFamily: 'Raleway',
                                             fontSize: 22,
@@ -364,7 +366,7 @@ class ProfileSettingsView extends StatelessWidget {
                                           Radius.circular(200))),
                                   alignment: Alignment.center,
                                   child: Text(
-                                    "¡Crear!",
+                                    languages[model.currentLanguage]["create"],
                                     style: TextStyle(
                                         fontFamily: 'Raleway',
                                         fontSize: 22,

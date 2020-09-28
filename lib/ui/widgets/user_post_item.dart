@@ -37,35 +37,9 @@ class UserPostItem extends StatefulWidget {
 
 class _UserPostItemState extends State<UserPostItem> {
   String readTimestamp(int timestamp) {
-    var now = DateTime.now();
-    var format = DateFormat('dd/M  hh:mm ');
-    var formatToday = DateFormat("hh:mm");
+    var format = DateFormat('dd/M/yy');
     var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-    var diff = now.difference(date);
-    var time = '';
-
-    if (diff.inHours > 0 && diff.inDays == 0) {
-      time = " Today " + formatToday.format(date);
-    } else if (diff.inSeconds <= 0 ||
-        diff.inSeconds > 0 && diff.inMinutes == 0 ||
-        diff.inMinutes > 0 && diff.inHours == 0 ||
-        diff.inHours > 0 && diff.inDays == 1) {
-      time = format.format(date);
-    } else if (diff.inDays > 0 && diff.inDays < 7) {
-      if (diff.inDays == 1) {
-        time = diff.inDays.toString() + ' DAY AGO';
-      } else {
-        time = diff.inDays.toString() + ' DAYS AGO';
-      }
-    } else {
-      if (diff.inDays == 7) {
-        time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
-      } else {
-        time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
-      }
-    }
-
-    return time;
+    return format.format(date).toString();
   }
 
   bool showingDelete = false;
@@ -244,23 +218,26 @@ class _UserPostItemState extends State<UserPostItem> {
                             ],
                           ),
                         ),
-                      widget.isMod ?  Padding(
-                          padding: EdgeInsets.only(
-                            left: devicesize.screenWidth(context) * 0.48,
-                          ),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                              size: devicesize.screenWidth(context) * 0.07,
-                            ),
-                            onPressed: () {
-                             setState(() {
-                                showingDelete = !showingDelete;
-                              });
-                            },
-                          ),
-                        ) : Container()
+                        widget.isMod
+                            ? Padding(
+                                padding: EdgeInsets.only(
+                                  left: devicesize.screenWidth(context) * 0.48,
+                                ),
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                    size:
+                                        devicesize.screenWidth(context) * 0.07,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      showingDelete = !showingDelete;
+                                    });
+                                  },
+                                ),
+                              )
+                            : Container()
                       ],
                     ),
                   )

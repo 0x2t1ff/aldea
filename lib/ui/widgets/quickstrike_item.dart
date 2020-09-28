@@ -1,11 +1,14 @@
 import 'dart:developer';
 
+import 'package:aldea/constants/languages.dart';
 import 'package:aldea/models/quickstrike_model.dart';
+import 'package:aldea/models/user_model.dart';
 import 'package:aldea/ui/shared/shared_styles.dart';
 import 'package:aldea/viewmodels/quickstrike_view_model.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../locator.dart';
 import '../shared/ui_helpers.dart' as devicesize;
 import '../shared/app_colors.dart' as custcolor;
 
@@ -32,6 +35,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
   bool isEnlisted = false;
   bool isExpanded = false;
   String animationSelector = "";
+  final user = locator<User>();
   @override
   void initState() {
     isEnlisted = widget.isParticipating;
@@ -180,7 +184,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                         Row(
                           children: <Widget>[
                             Text(
-                              "Modelo: ",
+                              "${languages[user.language]["model"]}: ",
                               style: TextStyle(
                                 color: Color(0xff8E8E8E),
                                 fontFamily: 'Raleway',

@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+import 'package:aldea/constants/languages.dart';
+import 'package:aldea/locator.dart';
 import 'package:aldea/models/post_model.dart';
+import 'package:aldea/models/user_model.dart';
 import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/ui/widgets/like_button.dart';
 import 'package:aldea/ui/widgets/posts_carousel.dart';
@@ -34,48 +37,21 @@ class FinishedQuickstrike extends StatefulWidget {
 }
 
 class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
-
-
+  final user = locator<User>();
   String quickstrikeType(bool game, bool random, bool lista) {
     if (game) {
-      return "game";
+      return languages[user.language]["game"];
     } else if (random) {
-      return "random";
+      return languages[user.language]["random"];
     } else {
-      return "lista";
+      return languages[user.language]["list"];
     }
   }
 
   String readTimestamp(int timestamp) {
-    var now = DateTime.now();
-    var format = DateFormat('dd/M  hh:mm ');
-    var formatToday = DateFormat("hh:mm");
+    var format = DateFormat('dd/M/yy');
     var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-    var diff = now.difference(date);
-    var time = '';
-
-    if (diff.inHours > 0 && diff.inDays == 0) {
-      time = " Today " + formatToday.format(date);
-    } else if (diff.inSeconds <= 0 ||
-        diff.inSeconds > 0 && diff.inMinutes == 0 ||
-        diff.inMinutes > 0 && diff.inHours == 0 ||
-        diff.inHours > 0 && diff.inDays == 1) {
-      time = format.format(date);
-    } else if (diff.inDays > 0 && diff.inDays < 7) {
-      if (diff.inDays == 1) {
-        time = diff.inDays.toString() + ' DAY AGO';
-      } else {
-        time = diff.inDays.toString() + ' DAYS AGO';
-      }
-    } else {
-      if (diff.inDays == 7) {
-        time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
-      } else {
-        time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
-      }
-    }
-
-    return time;
+    return format.format(date).toString();
   }
 
   Widget createWinnerRow(String winners, BuildContext context) {
@@ -102,7 +78,8 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
       ),
     );
   }
-bool showingDelete = false;
+
+  bool showingDelete = false;
   @override
   Widget build(BuildContext context) {
     String dayTime = readTimestamp(widget.postModel.fechaQuickstrike.seconds);
@@ -143,7 +120,8 @@ bool showingDelete = false;
                         GestureDetector(
                           onTap: () => widget.goToCommunity(),
                           child: CircleAvatar(
-                            backgroundImage: NetworkImage(widget.postModel.avatarUrl),
+                            backgroundImage:
+                                NetworkImage(widget.postModel.avatarUrl),
                             radius: devicesize.screenWidth(context) * 0.065,
                           ),
                         ),
@@ -223,7 +201,7 @@ bool showingDelete = false;
                               padding: EdgeInsets.only(
                                   left: devicesize.screenWidth(context) * 0.15),
                               child: Text(
-                                "¡Ganadores!",
+                                languages[user.language]["winners"],
                                 style: TextStyle(
                                     fontFamily: 'Raleway',
                                     fontWeight: FontWeight.w600,
@@ -252,15 +230,17 @@ bool showingDelete = false;
                       child: Row(
                         children: <Widget>[
                           Text(
-                            "Tipo de Quickstrike:",
+                            languages[user.language]["qs type"],
                             style: TextStyle(
                                 fontFamily: 'Raleway',
                                 fontWeight: FontWeight.w600,
                                 color: custcolor.greyColor),
                           ),
                           Text(
-                              quickstrikeType(widget.postModel.isGame,
-                                  widget.postModel.isRandom, widget.postModel.isLista),
+                              quickstrikeType(
+                                  widget.postModel.isGame,
+                                  widget.postModel.isRandom,
+                                  widget.postModel.isLista),
                               style: TextStyle(
                                   fontFamily: 'Raleway',
                                   fontWeight: FontWeight.w600,
@@ -271,7 +251,7 @@ bool showingDelete = false;
                     Row(
                       children: <Widget>[
                         Text(
-                          "Modelo:",
+                          "${languages[user.language]["model"]}: ",
                           style: TextStyle(
                               fontFamily: 'Raleway',
                               fontWeight: FontWeight.w600,
@@ -306,7 +286,7 @@ bool showingDelete = false;
                                   bottom:
                                       devicesize.screenHeight(context) * 0.005),
                               child: Text(
-                                "Enhorabuena a los ganadores!",
+                                languages[user.language]["congrats"],
                                 style: TextStyle(
                                     fontFamily: 'Raleway',
                                     fontWeight: FontWeight.w800,
@@ -343,8 +323,8 @@ bool showingDelete = false;
                                                     EdgeInsets.only(top: 2),
                                                 physics:
                                                     const NeverScrollableScrollPhysics(),
-                                                itemCount:
-                                                    widget.postModel.winners.length,
+                                                itemCount: widget
+                                                    .postModel.winners.length,
                                                 itemBuilder: (BuildContext ctx,
                                                     int index) {
                                                   return createWinnerRow(
@@ -421,7 +401,8 @@ bool showingDelete = false;
                                 child: Text(
                                     widget.postModel.commentCount == null
                                         ? "0"
-                                        : widget.postModel.commentCount.toString(),
+                                        : widget.postModel.commentCount
+                                            .toString(),
                                     style: TextStyle(
                                         color: greyColor,
                                         fontFamily: 'Raleway',
@@ -430,23 +411,27 @@ bool showingDelete = false;
                               ),
                             ],
                           ),
-                         widget.allowedDelete ? Padding(
-                          padding: EdgeInsets.only(
-                            left: devicesize.screenWidth(context) * 0.44,
-                          ),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                              size: devicesize.screenWidth(context) * 0.07,
-                            ),
-                            onPressed: () {
-                             setState(() {
-                                showingDelete = !showingDelete;
-                              });
-                            },
-                          ),
-                        ) : Container()
+                          widget.allowedDelete
+                              ? Padding(
+                                  padding: EdgeInsets.only(
+                                    left:
+                                        devicesize.screenWidth(context) * 0.44,
+                                  ),
+                                  child: IconButton(
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                      size: devicesize.screenWidth(context) *
+                                          0.07,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        showingDelete = !showingDelete;
+                                      });
+                                    },
+                                  ),
+                                )
+                              : Container()
                         ],
                       ),
                     )),
@@ -455,95 +440,98 @@ bool showingDelete = false;
               )
             ],
           ),
-        ),showingDelete
-          ? Positioned(
-              left: screenWidth(context) * 0.25,
-              top: widget.postModel.imageUrl.isEmpty == true
-                  ? screenHeight(context) * 0.12
-                  : screenHeight(context) * 0.2,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: 6.0,
-                    sigmaY: 6.0,
-                  ),
-                  child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(30),
+        ),
+        showingDelete
+            ? Positioned(
+                left: screenWidth(context) * 0.25,
+                top: widget.postModel.imageUrl.isEmpty == true
+                    ? screenHeight(context) * 0.12
+                    : screenHeight(context) * 0.2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: 6.0,
+                      sigmaY: 6.0,
+                    ),
+                    child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                          color: custcolor.blueTheme.withOpacity(0.4),
                         ),
-                        color: custcolor.blueTheme.withOpacity(0.4),
-                      ),
-                      width: screenWidth(context) * 0.5,
-                      height: screenHeight(context) * 0.22,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: screenWidth(context) * 0.04,
-                                right: screenWidth(context) * 0.04,
-                                top: screenHeight(context) * 0.03),
-                            child: Text(
-                              "¿Estas seguro que quieres borrar la publicación?",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: custcolor.almostWhite,
-                                fontFamily: "Raleway",
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                        width: screenWidth(context) * 0.5,
+                        height: screenHeight(context) * 0.22,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: screenWidth(context) * 0.04,
+                                  right: screenWidth(context) * 0.04,
+                                  top: screenHeight(context) * 0.03),
+                              child: Text(
+                                "¿Estas seguro que quieres borrar la publicación?",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: custcolor.almostWhite,
+                                  fontFamily: "Raleway",
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: screenHeight(context) * 0.02),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                GestureDetector(
-                                  //TODO: testing if this works
-                                  onTap: () {
-                                    widget.deletePost();
-                                    setState(() {
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: screenHeight(context) * 0.02),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  GestureDetector(
+                                    //TODO: testing if this works
+                                    onTap: () {
+                                      widget.deletePost();
+                                      setState(() {
+                                        showingDelete = false;
+                                      });
+                                    },
+                                    child: Container(
+                                        width: screenHeight(context) * 0.06,
+                                        height: screenHeight(context) * 0.06,
+                                        decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius:
+                                                BorderRadius.circular(200)),
+                                        child: Center(
+                                            child: Icon(Icons.check,
+                                                color: custcolor.almostWhite,
+                                                size: 35))),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => setState(() {
                                       showingDelete = false;
-                                    });
-                                  },
-                                  child: Container(
-                                      width: screenHeight(context) * 0.06,
-                                      height: screenHeight(context) * 0.06,
-                                      decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius:
-                                              BorderRadius.circular(200)),
-                                      child: Center(
-                                          child: Icon(Icons.check,
-                                              color: custcolor.almostWhite,
-                                              size: 35))),
-                                ),
-                                GestureDetector(
-                                  onTap: () => setState(() {
-                                    showingDelete = false;
-                                  }),
-                                  child: Container(
-                                      width: screenHeight(context) * 0.06,
-                                      height: screenHeight(context) * 0.06,
-                                      decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(200))),
-                                      child: Center(
-                                          child: Icon(Icons.close,
-                                              color: custcolor.almostWhite,
-                                              size: 40))),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      )),
-                ),
-              )) : Container()
+                                    }),
+                                    child: Container(
+                                        width: screenHeight(context) * 0.06,
+                                        height: screenHeight(context) * 0.06,
+                                        decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(200))),
+                                        child: Center(
+                                            child: Icon(Icons.close,
+                                                color: custcolor.almostWhite,
+                                                size: 40))),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        )),
+                  ),
+                ))
+            : Container()
       ],
     );
   }

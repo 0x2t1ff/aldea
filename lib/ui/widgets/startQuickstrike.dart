@@ -1,10 +1,13 @@
 import 'dart:ui';
 
+import 'package:aldea/constants/languages.dart';
 import 'package:aldea/models/post_model.dart';
+import 'package:aldea/models/user_model.dart';
 import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/ui/widgets/posts_carousel.dart';
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
+import '../../locator.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
 import "package:aldea/constants/icondata.dart" as custicon;
@@ -17,7 +20,7 @@ class StartQuickstrike extends StatefulWidget {
   final bool isLiked;
   final Function goToComments;
   final Function deletePost;
-  final bool  deleteAllowed;
+  final bool deleteAllowed;
   const StartQuickstrike(
       {Key key,
       this.postModel,
@@ -25,7 +28,8 @@ class StartQuickstrike extends StatefulWidget {
       this.isLiked,
       this.goToComments,
       this.goToCommunity,
-      this.deletePost, this.deleteAllowed})
+      this.deletePost,
+      this.deleteAllowed})
       : super(key: key);
 
   @override
@@ -33,36 +37,11 @@ class StartQuickstrike extends StatefulWidget {
 }
 
 class _StartQuickstrikeState extends State<StartQuickstrike> {
+  final user = locator<User>();
   String readTimestamp(int timestamp) {
-    var now = DateTime.now();
-    var format = DateFormat('dd/M  hh:mm ');
-    var formatToday = DateFormat("hh:mm");
+    var format = DateFormat('dd/M/yy');
     var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-    var diff = now.difference(date);
-    var time = '';
-
-    if (diff.inHours > 0 && diff.inDays == 0) {
-      time = " Today " + formatToday.format(date);
-    } else if (diff.inSeconds <= 0 ||
-        diff.inSeconds > 0 && diff.inMinutes == 0 ||
-        diff.inMinutes > 0 && diff.inHours == 0 ||
-        diff.inHours > 0 && diff.inDays == 1) {
-      time = format.format(date);
-    } else if (diff.inDays > 0 && diff.inDays < 7) {
-      if (diff.inDays == 1) {
-        time = diff.inDays.toString() + ' DAY AGO';
-      } else {
-        time = diff.inDays.toString() + ' DAYS AGO';
-      }
-    } else {
-      if (diff.inDays == 7) {
-        time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
-      } else {
-        time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
-      }
-    }
-
-    return time;
+    return format.format(date).toString();
   }
 
   var showingDelete = false;
@@ -237,7 +216,7 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                       child: Row(
                         children: <Widget>[
                           Text(
-                            "Tipo de Quickstrike:",
+                            "${languages[user.language]["qs type"]}",
                             style: TextStyle(
                                 fontFamily: 'Raleway',
                                 fontWeight: FontWeight.w600,
@@ -257,7 +236,7 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                       child: Row(
                         children: <Widget>[
                           Text(
-                            "Modelo:",
+                            "${languages[user.language]["model"]}: ",
                             style: TextStyle(
                                 fontFamily: 'Raleway',
                                 fontWeight: FontWeight.w600,
@@ -278,7 +257,7 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            "Descripción:",
+                            "${languages[user.language]["desc"]}: ",
                             style: TextStyle(
                                 fontFamily: 'Raleway',
                                 fontWeight: FontWeight.w600,
@@ -339,24 +318,28 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                                   ),
                                 ],
                               ),
-                             widget.deleteAllowed ?  Padding(
-                          padding: EdgeInsets.only(
-                            left: devicesize.screenWidth(context) * 0.48,
-                          ),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                              size: devicesize.screenWidth(context) * 0.07,
-                            ),
-                            onPressed: () {
-                             
-                              setState(() {
-                                showingDelete = !showingDelete;
-                              });
-                            },
-                          ),
-                        ) : Container()
+                              widget.deleteAllowed
+                                  ? Padding(
+                                      padding: EdgeInsets.only(
+                                        left: devicesize.screenWidth(context) *
+                                            0.48,
+                                      ),
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                          size:
+                                              devicesize.screenWidth(context) *
+                                                  0.07,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            showingDelete = !showingDelete;
+                                          });
+                                        },
+                                      ),
+                                    )
+                                  : Container()
                             ],
                           ),
                         )
@@ -368,94 +351,97 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
             ],
           ),
         ),
-        showingDelete ? Positioned(
-            left: screenWidth(context) * 0.25,
-            top: widget.postModel.imageUrl.isEmpty == true
-                ? screenHeight(context) * 0.12
-                : screenHeight(context) * 0.2,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                  sigmaX: 6.0,
-                  sigmaY: 6.0,
-                ),
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30),
-                      ),
-                      color: custcolor.blueTheme.withOpacity(0.4),
+        showingDelete
+            ? Positioned(
+                left: screenWidth(context) * 0.25,
+                top: widget.postModel.imageUrl.isEmpty == true
+                    ? screenHeight(context) * 0.12
+                    : screenHeight(context) * 0.2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: 6.0,
+                      sigmaY: 6.0,
                     ),
-                    width: screenWidth(context) * 0.5,
-                    height: screenHeight(context) * 0.22,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: screenWidth(context) * 0.04,
-                              right: screenWidth(context) * 0.04,
-                              top: screenHeight(context) * 0.03),
-                          child: Text(
-                            "¿Estas seguro que quieres borrar la publicación?",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: custcolor.almostWhite,
-                              fontFamily: "Raleway",
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
+                    child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
                           ),
+                          color: custcolor.blueTheme.withOpacity(0.4),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: screenHeight(context) * 0.02),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              GestureDetector(
-                                //TODO: testing if this works
-                                onTap: () {
-                                  widget.deletePost();
-                                  setState(() {
-                                    showingDelete = false;
-                                  });
-                                },
-                                child: Container(
-                                    width: screenHeight(context) * 0.06,
-                                    height: screenHeight(context) * 0.06,
-                                    decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius:
-                                            BorderRadius.circular(200)),
-                                    child: Center(
-                                        child: Icon(Icons.check,
-                                            color: custcolor.almostWhite,
-                                            size: 35))),
+                        width: screenWidth(context) * 0.5,
+                        height: screenHeight(context) * 0.22,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: screenWidth(context) * 0.04,
+                                  right: screenWidth(context) * 0.04,
+                                  top: screenHeight(context) * 0.03),
+                              child: Text(
+                                "¿Estas seguro que quieres borrar la publicación?",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: custcolor.almostWhite,
+                                  fontFamily: "Raleway",
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
                               ),
-                              GestureDetector(
-                                onTap: () => setState(() {
-                                  showingDelete = false;
-                                }),
-                                child: Container(
-                                    width: screenHeight(context) * 0.06,
-                                    height: screenHeight(context) * 0.06,
-                                    decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(200))),
-                                    child: Center(
-                                        child: Icon(Icons.close,
-                                            color: custcolor.almostWhite,
-                                            size: 40))),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    )),
-              ),
-            )) : Container()
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: screenHeight(context) * 0.02),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  GestureDetector(
+                                    //TODO: testing if this works
+                                    onTap: () {
+                                      widget.deletePost();
+                                      setState(() {
+                                        showingDelete = false;
+                                      });
+                                    },
+                                    child: Container(
+                                        width: screenHeight(context) * 0.06,
+                                        height: screenHeight(context) * 0.06,
+                                        decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius:
+                                                BorderRadius.circular(200)),
+                                        child: Center(
+                                            child: Icon(Icons.check,
+                                                color: custcolor.almostWhite,
+                                                size: 35))),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => setState(() {
+                                      showingDelete = false;
+                                    }),
+                                    child: Container(
+                                        width: screenHeight(context) * 0.06,
+                                        height: screenHeight(context) * 0.06,
+                                        decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(200))),
+                                        child: Center(
+                                            child: Icon(Icons.close,
+                                                color: custcolor.almostWhite,
+                                                size: 40))),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        )),
+                  ),
+                ))
+            : Container()
       ],
     );
   }
