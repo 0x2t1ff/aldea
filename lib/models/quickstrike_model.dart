@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuickStrikePost {
+  final String profilePic;
   final String title;
   int amount;
   List<dynamic> imageUrl;
@@ -23,6 +24,7 @@ class QuickStrikePost {
   final bool finished;
   QuickStrikePost(
       {this.userId,
+      this.profilePic,
       this.title,
       this.price,
       this.isActive,
@@ -64,7 +66,8 @@ class QuickStrikePost {
       'amount': amount,
       'question': question,
       'correctAnswer': correctAnswer,
-      'wrongAnswers': wrongAnswers
+      'wrongAnswers': wrongAnswers,
+      'profilePic':profilePic
     };
   }
 
@@ -89,6 +92,7 @@ class QuickStrikePost {
         finished: map['finished'],
         question: map['question'],
         correctAnswer: map['correctAnswer'],
+        profilePic: map['profilePic'],
         wrongAnswers: map['wrongAnswers']);
   }
 }

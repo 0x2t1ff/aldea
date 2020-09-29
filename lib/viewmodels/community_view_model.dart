@@ -335,6 +335,7 @@ class CommunityViewModel extends BaseModel {
     }
     QuickStrikePost uploadQuickstrike = QuickStrikePost(
       amount: int.parse(qsQuantityController.text),
+      profilePic: community.iconPicUrl,
       cid: community.uid,
       communityName: community.name,
       correctAnswer: qsCorrectAnswerController.text,
