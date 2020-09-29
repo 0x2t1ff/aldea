@@ -129,13 +129,6 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                             ),
                           ),
                         ),
-                        IconButton(
-                          iconSize: devicesize.screenWidth(context) * 0.08,
-                          icon: Icon(Icons.share),
-                          onPressed: () => print(
-                              "pressed but it ain't doing shit for now XD"),
-                          color: custcolor.blueTheme,
-                        ),
                       ],
                     ),
                     Padding(
@@ -252,7 +245,7 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          left: devicesize.screenWidth(context) * 0.04),
+                          left: devicesize.screenWidth(context) * 0.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -308,8 +301,10 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                                         top: devicesize.screenHeight(context) *
                                             0.005),
                                     child: Text(
-                                        widget.postModel.commentCount
-                                            .toString(),
+                                        widget.postModel.commentCount == null
+                                            ? "0"
+                                            : widget.postModel.commentCount
+                                                .toString(),
                                         style: TextStyle(
                                             color: greyColor,
                                             fontFamily: 'Raleway',

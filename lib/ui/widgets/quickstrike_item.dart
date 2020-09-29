@@ -74,13 +74,14 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                   : custcolor.backgroundColor,
               boxShadow: [
                 BoxShadow(
-                    color: isExpanded ? Colors.red : Colors.black,
-                    blurRadius: 4.0,
-                    spreadRadius: 0,
-                    offset: Offset(
-                      0,
-                      0,
-                    )),
+                  color: isExpanded ? Colors.red : Colors.black,
+                  blurRadius: 4.0,
+                  spreadRadius: 0,
+                  offset: Offset(
+                    0,
+                    0,
+                  ),
+                ),
               ],
             ),
             width: devicesize.screenWidth(context),
@@ -477,13 +478,13 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                                   isEnlisted = !isEnlisted;
                                   if (isEnlisted) {
                                     animationSelector = 'RTOG';
-                                    Future.delayed(Duration(milliseconds: 400),
+                                    Future.delayed(Duration(milliseconds: 500),
                                         () {
                                       animationSelector = "GREEN";
                                     });
                                   } else {
                                     animationSelector = 'GTOR';
-                                    Future.delayed(Duration(milliseconds: 400),
+                                    Future.delayed(Duration(milliseconds: 500),
                                         () {
                                       animationSelector = "RED";
                                     });
@@ -497,6 +498,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                                       devicesize.screenWidth(context) * 0.1921,
                                   child: FlareActor(
                                     'assets/animations/quickstrikeAnimation.flr',
+
                                     fit: BoxFit.cover,
                                     animation: animationSelector,
                                   ),

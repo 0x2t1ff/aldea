@@ -3,7 +3,7 @@ import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
 import 'package:aldea/utils/random_id_generator.dart';
-
+import 'dart:math';
 import 'base_model.dart';
 import '../locator.dart';
 import '../services/dialog_service.dart';
@@ -13,30 +13,103 @@ class QuickStrikeViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
-  Stream _quickstrikes;
-  Stream get posts => _quickstrikes;
-  bool showEmptyDialog;
-  Future fetchPosts() async {
-    setBusy(true);
-    var quickstrikeResults =
-        await _firestoreService.getQuickstrike(currentUser.uid);
+  List<QuickStrikePost> _quickstrikes;
+  List<QuickStrikePost> get posts => _quickstrikes;
+  bool showEmptyDialog = false;
+  bool isLoadingMore = false;
+  bool quickstrikeActive = false;
+  QuickStrikePost activeQuickstrike;
+  List randomQuestions = [];
+  List participatingIds = [];
 
-    if (quickstrikeResults is Stream<dynamic>) {
+  Future loadMorePosts() async {
+    isLoadingMore = true;
+    notifyListeners();
+    var postsToAdd = await _firestoreService.getMoreQuickstrikes(
+        currentUser.communities,
+        _quickstrikes[_quickstrikes.length - 1].fechaQuickstrike);
+
+    _quickstrikes.addAll(postsToAdd);
+    notifyListeners();
+  }
+
+//
+// ----------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//
+  List shuffle(List items) {
+    var random = new Random();
+
+    // Go through all elements.
+    for (var i = items.length - 1; i > 0; i--) {
+      // Pick a pseudorandom number according to the list length
+      var n = random.nextInt(i + 1);
+
+      var temp = items[i];
+      items[i] = items[n];
+      items[n] = temp;
+    }
+
+    return items;
+  }
+
+  Future fetchPosts() async {
+    participatingIds =
+        await _firestoreService.getParticipatingQuickstrikes(currentUser.uid);
+        print(participatingIds);
+    setBusy(true);
+    var communities = currentUser.communities;
+    var quickstrikeResults =
+        await _firestoreService.getQuickstrikes(communities);
+    if (quickstrikeResults.isEmpty) {
+      showEmptyDialog = true;
+    }
+
+    if (quickstrikeResults is List<QuickStrikePost>) {
       _quickstrikes = quickstrikeResults;
-      if (_quickstrikes == null) {
-        showEmptyDialog = true;
-      } else {
-        showEmptyDialog = false;
-      }
       setBusy(false);
       notifyListeners();
     } else {
-      //print(_quickstrikes.length.toString());
       await _dialogService.showDialog(
         title: 'La actualizacion de quickstrikes ha fallado',
-        description: "ha fallado XD asi al menos no crashea ",
+        description: "",
       );
     }
+
+    Future.delayed(
+        Duration(
+            seconds: posts.last.fechaQuickstrike.seconds -
+                DateTime.now().second), () {
+      if (participatingIds.contains(posts.last.id)) {
+        if (posts.first.isQuestion) {
+          randomQuestions.addAll(posts.first.wrongAnswers);
+          randomQuestions.add(posts.first.correctAnswer);
+          randomQuestions = shuffle(randomQuestions);
+          print(randomQuestions);
+
+          activeQuickstrike = posts.first;
+          quickstrikeActive = true;
+          notifyListeners();
+          return;
+        }
+        if (posts.first.isGame) {
+          activeQuickstrike = posts.first;
+          quickstrikeActive = true;
+          notifyListeners();
+          return;
+        }
+        if (posts.first.isRandom) {
+          fetchPosts();
+        }
+      } else {
+        fetchPosts();
+      }
+    });
   }
 
   Future joinQuickstrike(QuickStrikePost quickstrike) async {
@@ -57,15 +130,11 @@ class QuickStrikeViewModel extends BaseModel {
     _navigationService.navigateTo(HeroScreenRoute, false, arguments: url);
   }
 
-  Future<bool> checkParticipatingQuickstrike(String qid) async {
-    bool result = await _firestoreService.getParticipatingQuickstrikes(
-        currentUser.uid, qid);
-    print(" the result of the check is" + result.toString() + qid);
-    return result;
-  }
+
 
   Future submitResult(String id) {
     _firestoreService.submitQuickstrikeResult(id, currentUser.uid);
+    fetchPosts();
   }
 
   Future failedQuickstrike() async {
@@ -80,6 +149,18 @@ class QuickStrikeViewModel extends BaseModel {
         cancelTitle: "No",
         title: "¿Estas seguro que quieres salir de la app?");
     return response.confirmed;
+  }
+
+  void activateQuickstrike(int index) {
+    quickstrikeActive = true;
+    activeQuickstrike = posts[index];
+    notifyListeners();
+  }
+
+  void finishQuickstrike() {
+    randomQuestions.clear();
+    quickstrikeActive = false;
+    fetchPosts();
   }
 
   void hideDialog() {

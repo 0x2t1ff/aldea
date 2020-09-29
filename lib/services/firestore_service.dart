@@ -21,8 +21,7 @@ class FirestoreService {
       Firestore.instance.collection('quickstrikes');
   final CollectionReference _communitiesCollectionReference =
       Firestore.instance.collection('communities');
-  final CollectionReference _followingPostsCollectionReference =
-      Firestore.instance.collection('followers');
+
   final CollectionReference _communitiesCreationRequestsReference =
       Firestore.instance.collection('communityRequests');
   final CollectionReference _activityCollectionReference =
@@ -200,16 +199,9 @@ class FirestoreService {
         .document(uid)
         .updateData({"communities": userRequests});
 
-    var followerDocument =
-        await _followingPostsCollectionReference.document(communityId).get();
     _communitiesCollectionReference
         .document(communityId)
-        .updateData({"follower  Count": FieldValue.increment(1)});
-    List followersData = followerDocument.data["followers"];
-    followersData.add(uid);
-    _followingPostsCollectionReference
-        .document(communityId)
-        .updateData({"followers": followersData});
+        .updateData({"followerCount": FieldValue.increment(1)});
   }
 
   Future registerCommunityActivity(String uid, String imageUrl) async {
@@ -227,17 +219,6 @@ class FirestoreService {
   Future addActivityFromQuickstrike(String uid) async {
     var postRef = _userCollectionReference.document(uid);
     await postRef.updateData({"activity": FieldValue.increment(2)});
-  }
-
-  Future followCommunity(String uid, String communityId) async {
-    var followDoc =
-        await _followingPostsCollectionReference.document(communityId).get();
-    List followers = followDoc.data["followers"];
-
-    followers.add(communityId);
-    await _followingPostsCollectionReference
-        .document(communityId)
-        .updateData({"followers": followers});
   }
 
   Future updateCommunitySettings(String rules, bool isMarketplace,
@@ -564,51 +545,50 @@ class FirestoreService {
     return posts;
   }
 
-  Future getFollowingPostsOnceOff(String uid) async {
-    try {
-      var postDocumentSnapshot = await _followingPostsCollectionReference
-          .where("followers", arrayContains: uid)
-          .orderBy("lastPost", descending: true)
-          .limit(5)
-          .getDocuments();
-      var data = postDocumentSnapshot.documents.map((doc) => doc.data);
-      List lastPostsList = [];
-      data.forEach((f) => lastPostsList.add(f["posts"]));
-      var lastPosts = [];
-      lastPostsList.forEach((element) {
-        element.forEach((element) {
-          lastPosts.add(element["id"]);
-        });
-      });
+  Future<List<QuickStrikePost>> getQuickstrikes(
+      List<dynamic> communityIds) async {
+    List<QuickStrikePost> quickstrikes = [];
+    List<List<String>> lists = [];
+    List<String> list = [];
 
-      List<PostModel> listData = new List<PostModel>();
-      for (var f in lastPosts) {
-        await _postsCollectionReference.document(f).get().then((onValue) {
-          if (onValue.data != null) {
-            listData.add(PostModel.fromMap(onValue.data, id: f));
-          } else {}
-        });
+    for (var i = 0; i < communityIds.length; i++) {
+      list.add(communityIds[i]);
+      if (list.length == 10 || (i + 1) == communityIds.length) {
+        lists.add(list);
+        list = [];
       }
-      //TODO: HACER RETURN UNA VEZ ACABADA LA CARGA DE POSTS
-      listData.sort((a, b) {
-        return a.fechaQuickstrike.compareTo(b.fechaQuickstrike);
-      });
-
-      return listData.reversed.toList();
-    } catch (e) {
-      print(e.toString());
     }
+    try {
+      await Future.forEach(lists, (list) async {
+        var now = DateTime.now();
+        var quickstrikesResult = await _quickstrikeCollectionReference
+            .where("cid", whereIn: list)
+            .where("fechaQuickstrike", isGreaterThan: now)
+            .orderBy("fechaQuickstrike", descending: false)
+            .limit(10)
+            .getDocuments();
+        quickstrikesResult.documents.forEach((doc) {
+          var quickstrike = QuickStrikePost.fromMap(doc.data);
+          quickstrikes.add(quickstrike);
+        });
+        return null;
+      });
+    } catch (e) {
+      print(e);
+    }
+    return quickstrikes;
   }
 
-  Future addPostToFollowing(
-      String communityId, List<dynamic> posts, Timestamp lastPost) async {
-    try {
-      await _followingPostsCollectionReference
-          .document(communityId)
-          .setData({'posts': posts, 'lastPost': lastPost}, merge: true);
-    } catch (e) {
-      return (e.messages);
-    }
+  Future<List<dynamic>> getParticipatingQuickstrikes(String id) async {
+    var documents = await _userCollectionReference
+        .document(id)
+        .collection("pQuickstrikes")
+        .getDocuments();
+    List idsList = [];
+    documents.documents.forEach((element) {
+      idsList.add(element.documentID);
+    });
+    return idsList;
   }
 
   //      **COMMUNITY METHODS**
@@ -679,6 +659,40 @@ class FirestoreService {
     }
   }
 
+  Future<List<QuickStrikePost>> getMoreQuickstrikes(
+      List<dynamic> communityIds, Timestamp d,
+      {int limit = 9}) async {
+    List<QuickStrikePost> posts = [];
+    List<List<String>> lists = [];
+    List<String> list = [];
+
+    for (var i = 0; i < communityIds.length; i++) {
+      list.add(communityIds[i]);
+      if (list.length == 10 || (i + 1) == communityIds.length) {
+        lists.add(list);
+        list = [];
+      }
+    }
+    try {
+      await Future.forEach(lists, (list) async {
+        var postsResult = await _postsCollectionReference
+            .where("communityId", whereIn: list)
+            .where("fechaQuickstrike", isLessThan: d)
+            .orderBy("fechaQuickstrike", descending: true)
+            .limit(10)
+            .getDocuments();
+        postsResult.documents.forEach((doc) {
+          var post = QuickStrikePost.fromMap(doc.data);
+          posts.add(post);
+        });
+        return null;
+      });
+    } catch (e) {
+      print(e);
+    }
+    return posts;
+  }
+
   Future<List<PostModel>> getMorePosts(List<dynamic> communityIds, Timestamp d,
       {int limit = 9}) async {
     List<PostModel> posts = [];
@@ -740,38 +754,6 @@ class FirestoreService {
     }
   }
 
-  Future createFollowersDoc(String communityId) async {
-    try {
-      await _followingPostsCollectionReference.document(communityId).setData({
-        'followers': [],
-        'posts': [],
-        'quickstrikes': [],
-        'uid': communityId,
-      });
-    } catch (e) {
-      return (e.messages);
-    }
-  }
-
-  Future getCommunityFollowersDoc(String communityId) async {
-    try {
-      var result =
-          await _followingPostsCollectionReference.document(communityId).get();
-      return result.data;
-    } catch (e) {}
-  }
-
-  Future addQsToFollowing(
-      String communityId, List<dynamic> qs, Timestamp lastQs) async {
-    try {
-      await _followingPostsCollectionReference.document(communityId).setData(
-          {'quickstrikes': qs, 'lastQuickstrike': lastQs},
-          merge: true);
-    } catch (e) {
-      return (e.messages);
-    }
-  }
-
   //      **QUICKSTRIKE METHODS**
 
   Future<String> addQuickstrike(QuickStrikePost post) async {
@@ -781,38 +763,6 @@ class FirestoreService {
       return doc.documentID;
     } catch (e) {
       return e.toString();
-    }
-  }
-
-  Future getQuickstrike(String uid) async {
-    try {
-      var postDocumentSnapshot = await _followingPostsCollectionReference
-          .where("followers", arrayContains: uid)
-          .orderBy("lastQuickstrike", descending: true)
-          .limit(20)
-          .getDocuments();
-      var data = postDocumentSnapshot.documents.map((doc) => doc.data).toList();
-      var lastPosts = [];
-      data.forEach((value) {
-        for (var quickstrike in value['quickstrikes']) {
-          if ((quickstrike['date'] as Timestamp).seconds >
-              Timestamp.now().seconds) {
-            lastPosts.add(quickstrike["id"]);
-          }
-        }
-      });
-
-      List<Stream> listData = [];
-      for (var lastPost in lastPosts) {
-        listData.add(
-            _quickstrikeCollectionReference.document(lastPost).snapshots());
-      }
-
-      var mergedStream = Rx.combineLatestList(listData);
-
-      return mergedStream;
-    } catch (e) {
-      print(e.toString());
     }
   }
 
@@ -853,21 +803,13 @@ class FirestoreService {
         return false;
       }
     }).catchError((error) => print(error.toString()));
-  }
-
-  Future getParticipatingQuickstrikes(String uid, String qid) async {
-    var docRef = await _userCollectionReference
-        .document(uid)
+    _userCollectionReference
+        .document(userId)
         .collection("pQuickstrikes")
-        .document(qid)
-        .get();
-
-    if (docRef.data == null) {
-      return false;
-    } else {
-      return true;
-    }
+        .document(id)
+        .delete();
   }
+
 
   Stream<DocumentSnapshot> getChats(String uid) {
     try {
@@ -923,16 +865,6 @@ class FirestoreService {
   }
 
   Future kickCommunityUser(String communityId, String uid) async {
-    var followerDocument =
-        await _followingPostsCollectionReference.document(communityId).get();
-    List followersData = followerDocument.data["followers"];
-    List modData = followerDocument.data["mod"];
-    followersData.remove(uid);
-    modData.remove(communityId);
-    _userCollectionReference.document(uid).updateData({"mod": modData});
-    _followingPostsCollectionReference
-        .document(communityId)
-        .updateData({"followers": followersData});
     var userDocument = await _userCollectionReference.document(uid).get();
     List userCommunities = userDocument.data["communities"];
     userCommunities.remove(communityId);
@@ -957,6 +889,5 @@ class FirestoreService {
     _communitiesCollectionReference
         .document(communityId)
         .setData({"isDeleted": true, "name": communityName});
-    _followingPostsCollectionReference.document(communityId).delete();
   }
 }

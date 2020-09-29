@@ -6,7 +6,6 @@ import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/ui/widgets/quickstrike_item.dart';
 import 'package:aldea/viewmodels/quickstrike_view_model.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:stacked/stacked.dart';
 import "../shared/app_colors.dart" as custcolor;
@@ -37,18 +36,12 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
 
   final double buttonWidth = getRandomWidth();
   final double buttonHeight = getRandomHeight();
-  List testingData = [" 123 ", "e489763", "dksbgja", "fribak"];
-  int answer = 2;
 
-  bool quickstrikeActive = false;
-  QuickStrikePost activeQuickstrike;
   @override
-  // if there was a necessity of modifying this piece of code I take all responibility since I don't even know what the fuck it is anymore
   Widget build(BuildContext context) {
-    List<QuickStrikePost> quickstrikepostList = [];
     return ViewModelBuilder<QuickStrikeViewModel>.reactive(
         viewModelBuilder: () => QuickStrikeViewModel(),
-        onModelReady: (model) => model.fetchPosts(),
+        onModelReady: (model) async => await model.fetchPosts(),
         createNewModelOnInsert: true,
         builder: (context, model, child) => WillPopScope(
               onWillPop: model.onWillPop,
@@ -58,146 +51,35 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                           children: [
                             Container(
                               child: Stack(children: <Widget>[
-                                StreamBuilder(
-                                  stream: model.posts,
-                                  builder: (context, data) {
-                                    if (data.hasData == false) {
-                                      return ListView.builder(
-                                          padding: EdgeInsets.all(0),
-                                          itemCount: 8,
-                                          itemBuilder: (context, index) {
-                                            return QuickStrikeItem(
-                                              isParticipating: false,
-                                              index: index,
-                                              quickStrikePost: emptyQuickstrike,
-                                              model: model,
-                                            );
-                                          });
-                                    } else if (data.hasError) {
-                                      return Text(data.error.toString());
-                                    } else if (data.data == null) {
-                                      return Center(
-                                          child: Text("data is null"));
-                                    } else {
-                                      List dataList = data.data;
-                                      List<DocumentSnapshot> documentList = [];
-
-                                      //Primer foreach para filtrar el stream , ya que pasa un valor que no es un documentsnapshot dentro de la lista
-                                      dataList.forEach((element) {
-                                        if (element.runtimeType ==
-                                            DocumentSnapshot) {
-                                          documentList.add(element);
-                                        }
-                                      });
-                                      documentList.forEach((element) {
-                                        DocumentSnapshot docSnapshot = element;
-                                        Map<dynamic, dynamic> quickstrikeMap =
-                                            docSnapshot.data;
-                                        quickstrikepostList.add(
-                                            QuickStrikePost.fromMap(
-                                                quickstrikeMap));
-                                      });
-                                      return quickstrikepostList.length >= 8
-                                          ? ListView.builder(
-                                              padding: EdgeInsets.all(0),
-                                              itemCount:
-                                                  quickstrikepostList.length,
-                                              itemBuilder: (context, index) {
-                                                bool participating;
-                                                //si el quickstrike esta activo comprueba que el usuario esta participando.
-                                                if (quickstrikepostList[index]
-                                                        .isActive &&
-                                                    quickstrikeActive ==
-                                                        false) {
-                                                  model
-                                                      .checkParticipatingQuickstrike(
-                                                          quickstrikepostList[
-                                                                  index]
-                                                              .id)
-                                                      .then((value) {
-                                                    participating = value;
-                                                    if (value) {
-                                                      setState(() {
-                                                        quickstrikeActive =
-                                                            true;
-                                                        activeQuickstrike =
-                                                            quickstrikepostList[
-                                                                index];
-                                                      });
-                                                    } else {}
-                                                  });
-                                                }
-                                                return QuickStrikeItem(
-                                                    heroFunction: () =>
-                                                        model.heroAnimation(
-                                                            quickstrikepostList[
-                                                                    index]
-                                                                .imageUrl[0]),
-                                                    isParticipating: true,
-                                                    model: model,
-                                                    quickStrikePost:
-                                                        quickstrikepostList[
-                                                            index],
-                                                    index: index);
-                                              })
-                                          : ListView.builder(
-                                              padding: EdgeInsets.all(0),
-                                              itemCount: 8,
-                                              itemBuilder: (context, index) {
-                                                if (quickstrikepostList.length >
-                                                    index) {
-                                                  if (quickstrikepostList[index]
-                                                          .isActive &&
-                                                      quickstrikeActive ==
-                                                          false) {
-                                                    model
-                                                        .checkParticipatingQuickstrike(
-                                                            quickstrikepostList[
-                                                                    index]
-                                                                .id)
-                                                        .then((value) {
-                                                      if (value == true) {
-                                                        setState(() {
-                                                          quickstrikeActive =
-                                                              true;
-                                                          activeQuickstrike =
-                                                              quickstrikepostList[
-                                                                  index];
-                                                        });
-                                                      } else {}
-                                                    });
-                                                  }
-
-                                                  return QuickStrikeItem(
-                                                      heroFunction: () =>
-                                                          model.heroAnimation(
-                                                              quickstrikepostList[
-                                                                      index]
-                                                                  .imageUrl),
-                                                      isParticipating: true,
-                                                      model: model,
-                                                      quickStrikePost:
-                                                          quickstrikepostList[
-                                                              index],
-                                                      index: index);
-                                                } else {
-                                                  if (index == 7 &&
-                                                      quickstrikeActive ==
-                                                          true) {}
-                                                  return QuickStrikeItem(
-                                                    isParticipating: false,
-                                                    index: index,
-                                                    quickStrikePost:
-                                                        emptyQuickstrike,
-                                                    model: model,
-                                                  );
-                                                }
-                                              });
-                                    }
-                                  },
-                                ),
-                                quickstrikeActive
-                                    ? getQuickstrike(activeQuickstrike, model)
+                                ListView.builder(
+                                    padding: EdgeInsets.all(0),
+                                    itemCount: model.posts.length >= 8
+                                        ? model.posts.length
+                                        : 8,
+                                    itemBuilder: (context, index) {
+                                      if (model.posts.length > index) {
+                                        return QuickStrikeItem(
+                                            heroFunction: () =>
+                                                model.heroAnimation(model
+                                                    .posts[index].imageUrl),
+                                            isParticipating: model
+                                                .participatingIds
+                                                .contains(model.posts[index].id),
+                                            model: model,
+                                            quickStrikePost: model.posts[index],
+                                            index: index);
+                                      } else {
+                                        return QuickStrikeItem(
+                                          isParticipating: false,
+                                          index: index,
+                                          quickStrikePost: emptyQuickstrike,
+                                          model: model,
+                                        );
+                                      }
+                                    }),
+                                model.quickstrikeActive
+                                    ? getQuickstrike(
+                                        model.activeQuickstrike, model)
                                     : Container(),
                               ]),
                             ),
@@ -295,10 +177,8 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
           height: screenWidth(context) * 0.2,
           child: GestureDetector(
             onTap: () async {
-              setState(() {
-                quickstrikeActive = false;
-              });
-              model.submitResult(activeQuickstrike.id);
+              model.finishQuickstrike();
+              model.submitResult(model.activeQuickstrike.id);
             },
             child: Container(
                 child: Image.asset("assets/images/boton_quickstrike.png"),
@@ -311,7 +191,9 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
 // with 4 screenHeight(context) * 0.02
 // with 3 screenHeight(context) * 0.05
       double padding;
-      testingData.length == 3 ? padding = 0.05 : padding = 0.02;
+      model.activeQuickstrike.wrongAnswers.length == 3
+          ? padding = 0.02
+          : padding = 0.02;
       return Center(
           child: Container(
         child: ClipRect(
@@ -376,9 +258,8 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                 width: screenWidth(context) * 0.55,
                                 height: screenHeight(context) * 0.12,
                                 child: AutoSizeText(
-                                  quickstrike.description,
+                                  model.activeQuickstrike.question,
                                   maxLines: 3,
-                                  //overflow: TextOverflow.fade,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: custcolor.almostBlack,
@@ -400,7 +281,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                             padding: EdgeInsets.all(0),
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: testingData.length,
+                            itemCount: model.randomQuestions.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                   child: Padding(
@@ -415,7 +296,7 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                               Radius.circular(300)),
                                           color: custcolor.blueTheme),
                                       child: Text(
-                                        testingData[index],
+                                        model.randomQuestions[index],
                                         style: TextStyle(
                                             color: custcolor.almostBlack,
                                             fontFamily: "Raleway",
@@ -426,14 +307,15 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                     ),
                                   ),
                                   onTap: () {
-                                    if (index == answer) {
+                                    if (model.randomQuestions[index] ==
+                                        model.activeQuickstrike.correctAnswer) {
                                       print("yeeted son");
                                       model.submitResult(quickstrike.id);
+                                      model.finishQuickstrike();
                                     } else {
                                       model.quitQuickstrike(quickstrike);
                                       model.failedQuickstrike();
-                                      quickstrikeActive = false;
-                                      setState(() {});
+                                      model.finishQuickstrike();
                                     }
                                   });
                             }))
@@ -442,6 +324,8 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
           ),
         ),
       ));
+    } else {
+      return Container();
     }
   }
 }

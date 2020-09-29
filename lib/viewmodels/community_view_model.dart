@@ -20,9 +20,54 @@ import '../locator.dart';
 class CommunityViewModel extends BaseModel {
   CommunityViewModel(this.community);
 
+// the pop up data
+
+  final qsDescController = TextEditingController();
+  final qsQuestionController = TextEditingController();
+  final qsCorrectAnswerController = TextEditingController();
+  final qsFirstWrongAnserController = TextEditingController();
+  final qsSecondWrongAnserController = TextEditingController();
+  final qsThirdWrongAnserController = TextEditingController();
+  final qsModelController = TextEditingController();
+  final qsQuantityController = TextEditingController();
+  final qsAnswerNumberController = TextEditingController();
+  int questionNumber = 2;
   var isShowingPopup = false;
-  var isUploading = false;
   var isQuickstrike = true;
+  bool isGame = false;
+  bool isQuestion = false;
+  bool isRandom = true;
+
+  void cancelChanges() {
+    isShowingPopup = false;
+    dropDownValue = null;
+    modelDropdown = null;
+    qsDescController.text = '';
+    qsModelController.text = '';
+    postDescController.text = '';
+    qsQuantityController.text = '';
+    qsAnswerNumberController.text = '';
+    qsQuestionController.text = '';
+    qsCorrectAnswerController.text = '';
+    qsFirstWrongAnserController.text = '';
+    qsSecondWrongAnserController.text = '';
+    qsThirdWrongAnserController.text = '';
+    firstImage = null;
+    secondImage = null;
+    thirdImage = null;
+    selectedDate = null;
+    notifyListeners();
+  }
+
+  void changeNumberQuestions(int number) {
+    questionNumber = number;
+    notifyListeners();
+  }
+
+  //the pop up
+
+  var isUploading = false;
+
   bool unfollowDropdown = false;
   bool unfollowPopup = false;
   bool deletingCommunity = false;
@@ -31,15 +76,6 @@ class CommunityViewModel extends BaseModel {
   File firstImage;
   final postDescController = TextEditingController();
   final Map<String, List<Product>> products = {};
-  final qsDescController = TextEditingController();
-  final qsQuantityController = TextEditingController();
-  QuickStrikePost quickStrikePost = QuickStrikePost(
-    isGame: false,
-    isRandom: true,
-    isQuestion: false,
-    finished: false,
-    isEmpty: false,
-  );
 
   List<CommunityRequest> requests;
   File secondImage;
@@ -81,14 +117,10 @@ class CommunityViewModel extends BaseModel {
     notifyListeners();
   }
 
-  void setIsUnfollowPopup(){
+  void setIsUnfollowPopup() {
     unfollowPopup = !unfollowPopup;
     notifyListeners();
   }
-
-
-
- 
 
   Future selectFirstImage() async {
     var tempImage = await _imageSelector.selectPostImage();
@@ -112,25 +144,6 @@ class CommunityViewModel extends BaseModel {
       thirdImage = tempImage;
       notifyListeners();
     }
-  }
-
-  void cancelChanges() {
-    isShowingPopup = false;
-    dropDownValue = null;
-    modelDropdown = null;
-    qsDescController.text = '';
-    postDescController.text = '';
-    qsQuantityController.text = '';
-    firstImage = null;
-    secondImage = null;
-    thirdImage = null;
-    selectedDate = null;
-    notifyListeners();
-  }
-
-  Future getFollowersDoc() async {
-    followersDoc =
-        await _firestoreService.getCommunityFollowersDoc(community.uid);
   }
 
   Future getRequests(String communityId) async {
@@ -235,16 +248,12 @@ class CommunityViewModel extends BaseModel {
       isRandom: false,
       isResult: false,
       likes: [],
-      modelo: null,
+      modelo: qsModelController.text,
       title: null,
       userId: null,
       winners: null,
     );
-    var postId = await _firestoreService.addPost(post.toMap());
-    List<dynamic> postsList = followersDoc["posts"] ?? [];
-    postsList.add({'id': postId, 'date': post.fechaQuickstrike});
-    await _firestoreService.addPostToFollowing(
-        community.uid, postsList, post.fechaQuickstrike);
+    _firestoreService.addPost(post.toMap());
     isUploading = false;
     isShowingPopup = false;
     firstImage = null;
@@ -255,10 +264,18 @@ class CommunityViewModel extends BaseModel {
   }
 
   void uploadQuickStrike() async {
+    List wrongAnswers = [];
     if (qsDescController.text.isEmpty) {
       _dialogService.showDialog(
           title: "Error",
           description: "Debes escribir una descripcion",
+          buttonTitle: "Entendido");
+      return null;
+    }
+    if (qsModelController.text.isEmpty) {
+      _dialogService.showDialog(
+          title: "Error",
+          description: "Debes añadir al menos un mod",
           buttonTitle: "Entendido");
       return null;
     }
@@ -276,10 +293,10 @@ class CommunityViewModel extends BaseModel {
           buttonTitle: "Entendido");
       return null;
     }
-    if (modelDropdown == null) {
+    if (qsModelController == null) {
       _dialogService.showDialog(
           title: "Error",
-          description: "Debes elegir el modelo de producto.",
+          description: "Debes escribir el modelo del producto.",
           buttonTitle: "Entendido");
       return null;
     }
@@ -293,13 +310,12 @@ class CommunityViewModel extends BaseModel {
 
     isUploading = true;
     notifyListeners();
-    quickStrikePost.description = qsDescController.text;
-    quickStrikePost.communityName = community.name;
-    quickStrikePost.modelo = modelDropdown;
-    quickStrikePost.amount = int.parse(qsQuantityController.text);
-    quickStrikePost.cid = community.uid;
-    quickStrikePost.fechaQuickstrike = Timestamp.fromMillisecondsSinceEpoch(
-        selectedDate.millisecondsSinceEpoch);
+
+    wrongAnswers.addAll([
+      qsFirstWrongAnserController.text,
+      qsSecondWrongAnserController.text,
+      qsThirdWrongAnserController.text,
+    ]);
 
     var imagesList = [];
     if (firstImage != null) {
@@ -317,58 +333,90 @@ class CommunityViewModel extends BaseModel {
           thirdImage, community.uid);
       imagesList.add(image.imageUrl);
     }
-    quickStrikePost.imageUrl = imagesList;
-    var qsId = await _firestoreService.addQuickstrike(quickStrikePost);
-    List<dynamic> quickstrikeList = followersDoc["quickstrikes"] ?? [];
-    quickstrikeList.add({'id': qsId, 'date': quickStrikePost.fechaQuickstrike});
-    await _firestoreService.addQsToFollowing(
-        community.uid, quickstrikeList, quickStrikePost.fechaQuickstrike);
+    QuickStrikePost uploadQuickstrike = QuickStrikePost(
+      amount: int.parse(qsQuantityController.text),
+      cid: community.uid,
+      communityName: community.name,
+      correctAnswer: qsCorrectAnswerController.text,
+      wrongAnswers: wrongAnswers,
+      description: qsDescController.text,
+      fechaQuickstrike: Timestamp.fromMillisecondsSinceEpoch(
+          selectedDate.millisecondsSinceEpoch),
+      imageUrl: imagesList,
+      isQuestion: isQuestion,
+      finished: false,
+      isActive: false,
+      isGame: isGame,
+      isEmpty: false,
+      isRandom: isRandom,
+      modelo: qsModelController.text,
+      title: qsModelController.text,
+      question: qsQuestionController.text,
+      userId: currentUser.uid,
+    );
+    _firestoreService.addQuickstrike(uploadQuickstrike);
+    PostModel post = PostModel(
+      fechaQuickstrike: Timestamp.now(),
+      amount: int.parse(qsQuantityController.text),
+      commentCount: 0,
+      communityId: community.uid,
+      communityName: community.name,
+      avatarUrl: community.iconPicUrl,
+      description: qsDescController.text,
+      imageUrl: imagesList,
+      isAnnouncement: true,
+      isGame: false,
+      isLista: false,
+      isRandom: false,
+      isResult: false,
+      likes: [],
+      modelo: qsModelController.text,
+      title: qsModelController.text,
+      userId: null,
+      winners: null,
+    );
+    _firestoreService.addPost(post.toMap());
     isUploading = false;
     isShowingPopup = false;
-    quickStrikePost = QuickStrikePost(
-      isGame: false,
-      isRandom: true,
-      isQuestion: false,
-      finished: false,
-      isEmpty: false,
-    );
+
     firstImage = null;
     secondImage = null;
     thirdImage = null;
     selectedDate = null;
     notifyListeners();
   }
-  void setDropdownContainer( ){
+
+  void setDropdownContainer() {
     unfollowDropdown = !unfollowDropdown;
     notifyListeners();
   }
 
-
-   void setDropdownValue(String value) {
+  void setDropdownValue(String value) {
     dropDownValue = value;
     notifyListeners();
   }
+
   void setModelDropdown(String value) {
     modelDropdown = value;
     notifyListeners();
   }
 
-  void deleteCommunityDatabase (){
+  void deleteCommunityDatabase() {
     _firestoreService.deleteCommunity(community.uid, community.name);
     _rtdbService.deleteCommunityChat(community.uid);
-
-
   }
-  void setDeleteCommunity(){
+
+  void setDeleteCommunity() {
     deletingCommunity = true;
-  notifyListeners();
-  }
- void setNotDeleteCommunity(){
-    deletingCommunity = false;
-  notifyListeners();
+    notifyListeners();
   }
 
-  void deleteCommunity(){
+  void setNotDeleteCommunity() {
+    deletingCommunity = false;
+    notifyListeners();
+  }
+
+  void deleteCommunity() {
     setNotDeleteCommunity();
     deleteCommunityDatabase();
   }

@@ -45,7 +45,6 @@ class _CommunityViewState extends State<CommunityView>
         onModelReady: (model) async {
           if (widget.community.moderators.contains(model.currentUser.uid))
             model.getRequests(widget.community.uid);
-          await model.getFollowersDoc();
           await model.fetchProducts(widget.community.uid);
           _tabController = widget.community.isMarketplace
               ? TabController(vsync: this, length: 5, initialIndex: 0)
@@ -183,7 +182,69 @@ class _CommunityViewState extends State<CommunityView>
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: <Widget>[
-                                                  Expanded(
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      Text(
+                                                          widget.community.followerCount
+                                                              .toString(),
+                                                          style:
+                                                              TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      18)),
+                                                      Text("Publicaciones",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              fontSize: 16))
+                                                    ],
+                                                  ),
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      Text(
+                                                          widget.community.followerCount.toString(),
+                                                          style:
+                                                              TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize:
+                                                                      18)),
+                                                      Text("Likes",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              fontSize: 16))
+                                                    ],
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: widget.community
+                                                            .moderators
+                                                            .contains(model
+                                                                .currentUser
+                                                                .uid)
+                                                        ? () => model
+                                                            .goToAdminUsersScreen(
+                                                                model.community)
+                                                        : "",
                                                     child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment

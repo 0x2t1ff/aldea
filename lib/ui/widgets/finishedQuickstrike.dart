@@ -160,12 +160,6 @@ class _FinishedQuickstrikeState extends State<FinishedQuickstrike> {
                             ),
                           ),
                         ),
-                        IconButton(
-                          iconSize: devicesize.screenWidth(context) * 0.08,
-                          icon: Icon(Icons.share),
-                          onPressed: () => print("pressed"),
-                          color: custcolor.blueTheme,
-                        ),
                       ],
                     ),
                     Container(

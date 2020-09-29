@@ -146,7 +146,7 @@ export const buttonQuickstrikes = functions.pubsub.schedule('* * * * *').onRun(a
     const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isGame', '==', true);
     const quickStrikes = await query.get();
     quickStrikes.forEach(async (snapshot) => {
-        await snapshot.ref.update({ 'active': true });
+        await snapshot.ref.update({ 'isActive': true });
 
     });
     return null;
@@ -157,7 +157,7 @@ export const questionQuickstrikes = functions.pubsub.schedule('* * * * *').onRun
     const query = db.collection('quickstrikes').where('fechaQuickstrike', '<=', now).where('finished', '==', false).where('isQuestion', '==', true);
     const quickStrikes = await query.get();
     quickStrikes.forEach(async (snapshot) => {
-        await snapshot.ref.update({ 'active': true });
+        await snapshot.ref.update({ 'isActive': true });
 
     });
     return null;

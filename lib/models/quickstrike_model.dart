@@ -15,6 +15,9 @@ class QuickStrikePost {
   String id;
   String communityName;
   String cid;
+  String question;
+  String correctAnswer;
+  List<dynamic> wrongAnswers;
   bool isActive = false;
   final bool isEmpty;
   final bool finished;
@@ -35,7 +38,10 @@ class QuickStrikePost {
       this.isEmpty,
       this.finished,
       this.amount,
-      this.cid});
+      this.cid,
+      this.question,
+      this.correctAnswer,
+      this.wrongAnswers});
 
   Map<String, dynamic> toMap() {
     return {
@@ -55,7 +61,10 @@ class QuickStrikePost {
       'isEmpty': isEmpty,
       'finished': finished,
       'cid': cid,
-      'amount': amount
+      'amount': amount,
+      'question': question,
+      'correctAnswer': correctAnswer,
+      'wrongAnswers': wrongAnswers
     };
   }
 
@@ -77,6 +86,9 @@ class QuickStrikePost {
         isEmpty: map['isEmpty'],
         amount: map['amount'],
         cid: map['cid'],
-        finished: map['finished']);
+        finished: map['finished'],
+        question: map['question'],
+        correctAnswer: map['correctAnswer'],
+        wrongAnswers: map['wrongAnswers']);
   }
 }
