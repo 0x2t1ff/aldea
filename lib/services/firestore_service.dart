@@ -369,6 +369,19 @@ class FirestoreService {
     }
   }
 
+  Future<bool> phoneNumberExists(String phoneNumber) async {
+    var result = await _userCollectionReference
+        .where("phoneNumber", isEqualTo: phoneNumber)
+        .limit(1)
+        .getDocuments();
+
+    if (result.documents.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   Future<DocumentReference> createRequestId() async {
     var documentPath = await _communitiesCreationRequestsReference.document();
     return documentPath;

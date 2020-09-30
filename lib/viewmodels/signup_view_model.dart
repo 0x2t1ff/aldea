@@ -1,3 +1,5 @@
+import 'package:aldea/services/firestore_service.dart';
+
 import '../locator.dart';
 import '../constants/route_names.dart';
 import '../services/authentication_service.dart';
@@ -12,13 +14,14 @@ class SignUpViewModel extends BaseModel {
       locator<AuthenticationService>();
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  final FirestoreService _firestoreService = locator<FirestoreService>();
   String phoneNumber;
 
   void navigateLogin() {
     _navigationService.navigateTo(LoginViewRoute, true);
   }
 
-  Future onPhoneNumberChange(String phone) {
+  void onPhoneNumberChange(String phone) {
     phoneNumber = phone;
   }
 
@@ -28,28 +31,14 @@ class SignUpViewModel extends BaseModel {
     @required String name,
   }) async {
     setBusy(true);
-    _authenticationService.signUpPhoneNumber(
-        phoneNumber, email, name, password);
-
-    // var result = await _authenticationService.signupWithEmail(
-    //     email: email, password: password, name: name);
-    // if (result is bool) {
-    //   if (result) {
-    //     setBusy(false);
-    //     _navigationService.navigateTo(HomeViewRoute, true);
-    //   } else {
-    //     setBusy(false);
-    //     await _dialogService.showDialog(
-    //         title: 'Error',
-    //         description:
-    //             'Ha habido un error al intentar crear la cuenta. Por favor, intentelo de nuevo mas tarde.');
-    //   }
-    // } else {
-    //   setBusy(false);
-    //   await _dialogService.showDialog(
-    //     title: "Error",
-    //     description: result,
-    //   );
-    // }
+    var exists = await _firestoreService.phoneNumberExists(phoneNumber);
+    if (exists) {
+      _dialogService.showDialog(
+          title: "Error",
+          description: "Ya existe un usuario con ese número de teléfono.");
+    } else {
+      _authenticationService.signUpPhoneNumber(
+          phoneNumber, email, name, password);
+    }
   }
 }

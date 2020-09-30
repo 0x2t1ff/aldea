@@ -43,7 +43,7 @@ class AuthenticationService {
       String phone, String email, String name, String password) {
     _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phone,
-        timeout: Duration(seconds: 10),
+        timeout: Duration(seconds: 20),
         verificationCompleted: (credential) async {
           var result = await _firebaseAuth.signInWithCredential(credential);
           if (result.user != null) {
@@ -86,7 +86,7 @@ class AuthenticationService {
   void loginPhoneNumber(String phone) {
     _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phone,
-        timeout: Duration(seconds: 10),
+        timeout: Duration(seconds: 20),
         verificationCompleted: (credential) async {
           var result = await _firebaseAuth.signInWithCredential(credential);
           if (result.user != null) {
@@ -132,5 +132,4 @@ class AuthenticationService {
     var userId = _firebaseAuth.currentUser();
     return userId;
   }
-
 }

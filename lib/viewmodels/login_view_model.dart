@@ -21,7 +21,15 @@ class LoginViewModel extends BaseModel {
 
   Future login() async {
     setBusy(true);
-    _authenticationService.loginPhoneNumber(_phoneNumber);
+    var exists = await _firestoreService.phoneNumberExists(_phoneNumber);
+    if (exists) {
+      _authenticationService.loginPhoneNumber(_phoneNumber);
+    } else {
+      _dialogService.showDialog(
+          title: "Error",
+          description:
+              "No existe un usuario con ese número de teléfono. Por favor, registrese.");
+    }
   }
 
   onPhoneNumberChange(String internationalPhone) {
