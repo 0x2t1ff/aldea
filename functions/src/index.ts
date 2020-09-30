@@ -47,16 +47,17 @@ export const chatNotifications = functions.firestore
     .document('/userChats/{chatroomId}/messages/{message}').onCreate(
         async (snap) => {
             console.log('start of the chat notification');
-            const messageData = snap.data()
-            const message = messageData["message"];
-            const otherId = messageData["otherId"];
-            const name = messageData["username"];
+            const messageData = snap.data();
+            console.log(messageData);
+            const message = messageData?.message;
+            const otherId = messageData?.otherId;
+            const name = messageData?.username;
             await db.collection('users').doc(otherId).get().then(querySnapshot => {
                 const docData = querySnapshot.data();
                 if (docData !== undefined) {
 
                     const token = docData['pushToken'];
-                    if (messageData['isImage'] === true) {
+                    if (messageData?.isImage === true) {
                         const payload = {
                             notification: {
                                 title: `Tienes un mensaje de ${name}`,
