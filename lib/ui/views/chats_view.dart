@@ -1,4 +1,5 @@
 import 'package:aldea/models/message_model.dart';
+import 'package:aldea/ui/widgets/bottom_filler.dart';
 import 'package:aldea/ui/widgets/message_item.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:aldea/viewmodels/chats_view_model.dart';
@@ -17,8 +18,6 @@ class ChatsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("rebuilded");
-
     final messageController = TextEditingController();
     return ViewModelBuilder<ChatsViewModel>.reactive(
       viewModelBuilder: () => ChatsViewModel(),
@@ -156,8 +155,6 @@ class ChatsView extends StatelessWidget {
                             size: devicesize.screenWidth(context) * 0.08,
                           ),
                           onPressed: () async {
-                            print(" button pressed");
-
                             await model.selectMessageImage().then((value) =>
                                 model
                                     .uploadImage(
@@ -182,8 +179,6 @@ class ChatsView extends StatelessWidget {
                             size: devicesize.screenWidth(context) * 0.08,
                           ),
                           onPressed: () async {
-                            print(" button pressed");
-
                             await model.selectCameraImage().then((value) =>
                                 model
                                     .uploadImage(
@@ -224,6 +219,7 @@ class ChatsView extends StatelessWidget {
                       ),
                     ],
                   )),
+              BottomFiller(),
             ],
           ),
         ),

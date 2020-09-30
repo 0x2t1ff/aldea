@@ -1,5 +1,6 @@
 import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/shared/ui_helpers.dart';
+import 'package:aldea/ui/widgets/bottom_filler.dart';
 import 'package:aldea/ui/widgets/comment_widget.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:aldea/viewmodels/comments_view_model.dart';
@@ -25,7 +26,6 @@ class CommentsView extends StatelessWidget {
               backgroundColor: backgroundColor,
               body: Column(
                 children: <Widget>[
-                 
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     width: double.infinity,
@@ -51,7 +51,6 @@ class CommentsView extends StatelessWidget {
                   Container(
                     color: darkGrey,
                     width: screenWidth(context),
-                   
                     margin: EdgeInsets.symmetric(
                         vertical: screenHeight(context) * 0.005),
                     child: GestureDetector(
@@ -79,9 +78,7 @@ class CommentsView extends StatelessWidget {
                   Container(
                     color: backgroundColor,
                     width: screenWidth(context),
-                    height: screenHeight(context) * 0.786 ,
-                        
-                        
+                    height: screenHeight(context) * 0.786,
                     child: ListView.builder(
                         reverse: true,
                         padding: EdgeInsets.all(0),
@@ -162,6 +159,7 @@ class CommentsView extends StatelessWidget {
                       ],
                     ),
                   ),
+                  BottomFiller()
                 ],
               ),
             )
