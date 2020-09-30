@@ -526,8 +526,21 @@ class FirestoreService {
   }
 
   Future<bool> likePost(
-      List<dynamic> likeList, String postId, bool liked) async {
+    List<dynamic> likeList,
+    String postId,
+    bool liked,
+  ) async {
     await _postsCollectionReference
+        .document(postId)
+        .updateData({"likes": likeList});
+    return !liked;
+  }
+
+  Future<bool> likeUserPost(
+      List<dynamic> likeList, String postId, bool liked, String cid) async {
+    await _communitiesCollectionReference
+        .document(cid)
+        .collection("userPosts")
         .document(postId)
         .updateData({"likes": likeList});
     return !liked;
