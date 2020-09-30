@@ -1,5 +1,6 @@
 import 'package:aldea/models/chat_room_model.dart';
 import "package:flutter/material.dart";
+import 'package:intl/intl.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
 
@@ -11,13 +12,11 @@ class ChatRoomItem extends StatefulWidget {
   final String currentUser;
   final Map<dynamic, dynamic> urls;
   final Map<dynamic, dynamic> username;
-  final Map<dynamic, dynamic> unreadMessages;
 
   const ChatRoomItem({
     this.currentUser,
     this.users,
     this.urls,
-    this.unreadMessages,
     Key key,
     this.index,
     this.model,
@@ -32,7 +31,7 @@ class ChatRoomItem extends StatefulWidget {
 class _ChatRoomItemState extends State<ChatRoomItem> {
   @override
   Widget build(BuildContext context) {
-    String otherUser = widget.users[0] == widget.currentUser
+    String otherUser = widget.users[0] != widget.currentUser
         ? widget.users[1]
         : widget.users[0];
     return GestureDetector(
@@ -98,7 +97,7 @@ class _ChatRoomItemState extends State<ChatRoomItem> {
                             ],
                           )
                         : Text(
-                            widget.model.message,
+                            widget.model.lastMessage,
                             style: TextStyle(
                                 fontStyle: FontStyle.italic,
                                 fontSize:
@@ -115,25 +114,17 @@ class _ChatRoomItemState extends State<ChatRoomItem> {
                 padding: EdgeInsets.only(
                     top: devicesize.screenHeight(context) * 0.015),
                 child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      widget.model.time.substring(0, 10),
+                      DateFormat("dd/M/yy hh:mm")
+                          .format(widget.model.lastMessageSentAt.toDate()),
                       style: TextStyle(
                           fontFamily: 'Raleway',
                           color: custcolor.grey,
                           fontStyle: FontStyle.italic,
                           fontSize: 10),
                     ),
-                       Container(
-                         alignment: Alignment.center,
-                           width: devicesize.screenWidth(context) * 0.07,
-                           height: devicesize.screenWidth(context) * 0.07,
-                           decoration: BoxDecoration(
-                             color: custcolor.blueTheme,
-                             borderRadius: BorderRadius.circular(32),
-                           ),
-                           child: Text(widget.unreadMessages[widget.currentUser].toString()  , style: TextStyle( color: custcolor.almostWhite, fontFamily: 'Raleway', fontSize: devicesize.screenWidth(context) * 0.05),),)
                   ],
                 ),
               ),

@@ -3,62 +3,60 @@ import 'dart:io';
 
 import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/models/cloud_storage_result.dart';
+import 'package:aldea/models/message_model.dart';
 import 'package:aldea/services/cloud_storage_service.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
-import 'package:aldea/services/rtdb_service.dart';
 import 'package:aldea/utils/image_selector.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'base_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import '../locator.dart';
-import '../services/dialog_service.dart';
+import 'base_model.dart';
 
 class ChatsViewModel extends BaseModel {
-  final DialogService _dialogService = locator<DialogService>();
-  final RtdbService _rtdbService = locator<RtdbService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final ImageSelector _imageSelector = locator<ImageSelector>();
   final NavigationService _navigationService = locator<NavigationService>();
   final CloudStorageService _cloudStorageService =
       locator<CloudStorageService>();
 
-  Stream<Event> _chatStream;
   File selectedImage;
-  int limit = 15;
   bool isLoadingMore = false;
+  bool isFirstLoad = true;
   List messageList = [];
-  List get messages => messageList;
-  StreamSubscription sth;
+  List get messages => messageList.reversed.toList();
+  RefreshController refreshController = RefreshController();
+  ScrollController scrollController = ScrollController();
 
-  Future getMessages(String chatId) async {
-    setBusy(true);
+  Future<void> addRequestOldMessages(String cid) async {
+    var result = await _firestoreService.getOlderChatMessages(
+        cid, messages.first.createdAt);
+    messageList.addAll(
+        result.documents.map((e) => MessageModel.fromMap(e.data)).toList());
+    notifyListeners();
+  }
 
-    var chatStream = _rtdbService.getChatMessages(chatId, limit);
-
-    setBusy(true);
-
-    if (chatStream is Stream<Event>) {
-      _chatStream = chatStream;
-
-      print("ITS NULL");
-      sth = _chatStream.listen((event) {
-        print(event.snapshot.value);
-        if (messageList.contains(event.snapshot.value)) {
-          print("repeated");
-        } else {
-          messageList.add(event.snapshot.value);
-        }
-
-        notifyListeners();
-      });
-
-      notifyListeners();
+  void addMessages(List<DocumentSnapshot> docs) {
+    if (messageList.isEmpty) {
+      messageList = docs.map((e) => MessageModel.fromMap(e.data)).toList();
     } else {
-      await _dialogService.showDialog(
-        title: 'La actualizacion de mensajes ha fallado',
-        description: "ha fallado XD asi al menos no crashea ",
-      );
+      messageList.insertAll(
+          0,
+          docs.map((e) {
+            var message = MessageModel.fromMap(e.data);
+            if (message != null &&
+                !messageList.any((el) => el.createdAt == message.createdAt)) {
+              return message;
+            }
+          }).toList()
+            ..removeWhere((element) => element == null));
     }
+  }
+
+  Stream<QuerySnapshot> getChatStream(String chatRoomId) {
+    return _firestoreService.getChatMessages(chatRoomId);
   }
 
   Future<File> selectMessageImage() async {
@@ -90,8 +88,8 @@ class ChatsViewModel extends BaseModel {
   }
 
   Future sendMessage(String text, String senderId, String chatRoomId,
-      String username, String imageUrl, bool isImage) {
-    _rtdbService.sendMessage(
+      String username, String imageUrl, bool isImage) async {
+    await _firestoreService.sendMessage(
       message: text,
       senderId: senderId,
       chatRoomId: chatRoomId,
@@ -99,63 +97,24 @@ class ChatsViewModel extends BaseModel {
       imageUrl: imageUrl,
       isImage: isImage,
     );
+    await scrollController.animateTo(scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 250), curve: Curves.linear);
   }
 
   void openHeroView(List url) {
     _navigationService.navigateTo(HeroScreenRoute, false, arguments: url);
   }
 
-  void readMessage(chatRoomId) {
-    _rtdbService.readMessage(chatRoomId, currentUser.uid);
-  }
-
-  void navigateToUser(String id) async{
-    
+  void navigateToUser(String id) async {
     _navigationService.navigateTo(OtherProfileViewRoute, false, arguments: id);
   }
 
-  void loadMoreMessages(String chatId) async {
-    isLoadingMore = true;
-    var timestamp = messageList.first["time"];
-    print(timestamp);
-    print("next line to the timestamp");
-    var chatStream =
-       _rtdbService.getMoreChatMessages(chatId, limit, timestamp);
-    print(limit);
-    if (chatStream is Stream<Event>) {
-      _chatStream = chatStream;
-      if (sth != null) {
-        sth.cancel();
-        sth = _chatStream.listen((event) {
-          if (messageList.contains(event.snapshot.value)) {
-            print("repeated");
-          } else {
-            messageList.add(event.snapshot.value);
-          }
+  Future<void> scrollDown() async {
+    Timer(
+        Duration(milliseconds: 0),
+        () =>
+            scrollController.jumpTo(scrollController.position.maxScrollExtent));
 
-          notifyListeners();
-        });
-      } else {
-        print("ITS NULL");
-        sth = _chatStream.listen((event) {
-          if (messageList.contains(event.snapshot.value)) {
-            print("repeated");
-          } else {
-            messageList.add(event.snapshot.value);
-          }
-
-          notifyListeners();
-        });
-      }
-
-      notifyListeners();
-    } else {
-      await _dialogService.showDialog(
-        title: 'La actualizacion de mensajes ha fallado',
-        description: "ha fallado XD asi al menos no crashea ",
-      );
-    }
-
-    isLoadingMore = false;
+    isFirstLoad = false;
   }
 }

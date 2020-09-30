@@ -20,6 +20,7 @@ class OtherProfileViewModel extends BaseModel {
   User get userData => user;
   String targetUserId;
   String animationController = "Fijo Azul";
+  bool isOpening = false;
 
   Future fetchUser(String uid) async {
     targetUserId = uid;
@@ -53,23 +54,21 @@ class OtherProfileViewModel extends BaseModel {
   }
 
   Future openChat(String id) async {
-    bool existsChat = false;
-    currentUser.chatRooms.forEach((element) {
-      if (user.chatRooms.contains(element)) {
-        existsChat = true;
-        openExistingChat(element);
-      }
-    });
-    if (existsChat) {
-      return;
+    isOpening = true;
+    notifyListeners();
+    var result = await _firestoreService.getChat([currentUser.uid, user.uid]);
+    if (result != null) {
+      isOpening = false;
+      notifyListeners();
+      openExistingChat(result.documentID);
     } else {
-      print("ah y es this shouldnt happen");
       List userIds = [currentUser.uid, user.uid];
       List userImages = [currentUser.picUrl, user.picUrl];
       List username = [currentUser.name, user.name];
-      var chatId = _rtdb.createChatRoom(userIds, userImages, username);
-      _firestoreService.writeNewChatRoom(currentUser.uid, id, chatId);
-      _firestoreService.writeNewChatRoom(id, currentUser.uid, chatId);
+      var chatId =
+          await _firestoreService.createChatRoom(userIds, userImages, username);
+      isOpening = false;
+      notifyListeners();
       openExistingChat(chatId);
     }
   }

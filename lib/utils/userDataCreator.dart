@@ -23,5 +23,5 @@ Map<String, Object> generateInitialUserData(
       'requests': [],
       'isGodAdmin': false,
       'notificationsEnabled': true,
-      'language': "español"
+      'language': "Español"
     };

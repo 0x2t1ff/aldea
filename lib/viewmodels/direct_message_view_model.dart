@@ -1,48 +1,41 @@
 import 'dart:async';
 
 import 'package:aldea/constants/route_names.dart';
+import 'package:aldea/models/chat_room_model.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
 import 'package:aldea/services/rtdb_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'base_model.dart';
 import '../locator.dart';
 import '../services/dialog_service.dart';
 
 class DirectMessageViewModel extends BaseModel {
+  Stream<QuerySnapshot> chatsStream;
+  List<ChatRoomModel> chatRooms;
+  int limit = 0;
+  RefreshController refreshController = RefreshController();
+
   final DialogService _dialogService = locator<DialogService>();
-  final RtdbService _rtdbService = locator<RtdbService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final NavigationService _navigationService = locator<NavigationService>();
-  List chatRooms;
-  var chatStreams;
-  List<Stream<Event>> _chatStream;
-  List<Stream<Event>> get stream => _chatStream;
-  List<Event> initialData;
 
   void openChat(String c) {
     _navigationService.navigateTo(ChatViewRoute, false, arguments: c);
   }
 
-  Future getStream() async {
-    var stream =  _firestoreService.getChats(currentUser.uid);
+  void setChatRooms(List<DocumentSnapshot> docs) {
+    chatRooms = docs.map((e) => ChatRoomModel.fromMap(e.data)).toList();
+  }
 
-    stream.listen((event) async {
-      chatRooms = event.data["chatRooms"];
-      print(chatRooms.toString());
-      chatStreams = _rtdbService.getChats(chatRooms);
-      if (chatStreams is List<Stream<Event>>) {
-        _chatStream = chatStreams;
+  void loadMore() {}
 
-        notifyListeners();
-      } else {
-        //print(_quickstrikes.length.toString());
-        await _dialogService.showDialog(
-          title: 'La actualizacion de chats ha fallado',
-          description: "ha fallado XD asi al menos no crashea ",
-        );
-      }
-    });
+  void getChatsStream() {
+    limit += 8;
+    chatsStream = _firestoreService.getChats(currentUser.uid, limit);
+    notifyListeners();
   }
 
   Future<bool> onWillPop() async {
@@ -53,6 +46,4 @@ class DirectMessageViewModel extends BaseModel {
         title: "¿Estas seguro que quieres salir de la app?");
     return response.confirmed;
   }
-
-
 }

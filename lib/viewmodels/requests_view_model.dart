@@ -23,15 +23,13 @@ class RequestsViewModel extends BaseModel {
     notifyListeners();
   }
 
-  Future acceptRequest(String uid, int index) {
-    _firestoreService
+  Future acceptRequest(String uid, int index) async {
+    await _firestoreService
         .addCommunityFromRequest(uid, communityId)
         .then((value) => _firestoreService.addActivityFromRequest(communityId));
 
-
-
-    _firestoreService.removeRequestUser(communityId, uid);
-    _firestoreService.removeRequest(communityId, uid);
+    await _firestoreService.removeRequestUser(communityId, uid);
+    await _firestoreService.removeRequest(communityId, uid);
 
     requests.removeAt(index);
     notifyListeners();

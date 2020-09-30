@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:aldea/constants/languages.dart';
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/ui/shared/ui_helpers.dart';
 import 'package:aldea/ui/widgets/quickstrike_item.dart';
@@ -113,7 +114,8 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                "UPS...",
+                                                languages[model.currentLanguage]
+                                                    ["oops"],
                                                 style: TextStyle(
                                                     color:
                                                         custcolor.almostWhite,
@@ -140,7 +142,9 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                                         screenHeight(context) *
                                                             0.02),
                                                 child: Text(
-                                                    "Parece que en estos momentos no hay ningún quickstrike activo",
+                                                    languages[model
+                                                            .currentLanguage]
+                                                        ["quickstrikes empty"],
                                                     style: TextStyle(
                                                       color:
                                                           custcolor.almostBlack,

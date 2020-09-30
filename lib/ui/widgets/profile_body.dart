@@ -44,7 +44,9 @@ class ProfileBody extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Text(
-                          languages[model.currentLanguage]["posts"],
+                          languages[model != null
+                              ? model.currentLanguage
+                              : otherModel.currentLanguage]["posts"],
                           style: TextStyle(
                               color: Color(0xffB1AFAF),
                               fontFamily: "Raleway",

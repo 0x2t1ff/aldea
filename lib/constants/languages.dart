@@ -25,7 +25,11 @@ const languages = {
     "list": "Lista",
     "random": "Aleatorio",
     "game": "Juego",
-    "model": "Modelo"
+    "model": "Modelo",
+    "oops": "Ups...",
+    "quickstrikes empty":
+        "Parece que en estos momentos no hay ningún quickstrike activo.",
+    "chats empty": "Parece que en estos momentos no tienes ningun chat activo.",
   },
   "English": {
     "posts": "Posts",
@@ -53,6 +57,10 @@ const languages = {
     "list": "List",
     "random": "Random",
     "game": "Game",
-    "model": "Model"
+    "model": "Model",
+    "oops": "Oops...",
+    "quickstrikes empty":
+        "Seems like there are no active quickstrikes at the moment.",
+    "chats empty": "Seems like you don't have any active chats at the moment."
   }
 };

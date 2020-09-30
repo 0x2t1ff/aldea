@@ -1,7 +1,8 @@
 import 'package:aldea/models/message_model.dart';
-import 'package:aldea/ui/widgets/community_message_item.dart';
 import 'package:aldea/ui/widgets/message_item.dart';
 import 'package:aldea/viewmodels/community_chat_view_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../shared/ui_helpers.dart' as devicesize;
 import 'package:firebase_database/firebase_database.dart';
 import "package:flutter/material.dart";
@@ -18,24 +19,9 @@ class CommunityChatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("builded");
     final messageController = TextEditingController();
-    ScrollController controller = new ScrollController();
     return ViewModelBuilder<CommunityChatViewModel>.reactive(
       viewModelBuilder: () => CommunityChatViewModel(),
-      onModelReady: (model) async {
-        await model.getMessages(communityId);
-        controller.addListener(() {
-          if (controller.position.pixels /
-                      controller.position.maxScrollExtent >=
-                  0.8 &&
-              model.isLoadingMore == false) {
-            
-            model.loadMoreMessages(communityId);
-          }
-        });
-        
-      },
       createNewModelOnInsert: false,
       builder: (context, model, child) => Scaffold(
         backgroundColor: custcolor.darkBlue,
@@ -44,40 +30,48 @@ class CommunityChatView extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Container(
-                height: petitionsShowing
-                    ? devicesize.screenHeight(context) * 0.65 -
-                        MediaQuery.of(context).viewInsets.bottom
-                    :
-                    //TODO: testear que esta altura funciona , calculo pocho dice q es esto _but_ who knows
-                    devicesize.screenHeight(context) * 0.71 -
-                        MediaQuery.of(context).viewInsets.bottom,
-                color: custcolor.darkBlue,
-                width: devicesize.screenWidth(context),
-                child: model.messages != null
-                    ? ListView.builder(
-                        reverse: true,
-                        controller: controller,
-                        itemCount: model.messages.length,
-                        itemBuilder: (ctx, index) {
-                          return MessageItem(
-                            heroAnimation: () {
-                              List url = [];
-                              url.add(model.messages[index]["message"]);
-                              model.openHeroView(url);
-                            },
-                            model: MessageModel.fromMap(
-                                model.messages.reversed.elementAt(index)),
-                            currentUser: model.currentUser.uid,
-                          );
-                        },
-                      )
-                    : Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(
-                              custcolor.blueishGreyColor),
-                        ),
-                      ),
-              ),
+                  height: petitionsShowing
+                      ? devicesize.screenHeight(context) * 0.65 -
+                          MediaQuery.of(context).viewInsets.bottom
+                      :
+                      //TODO: testear que esta altura funciona , calculo pocho dice q es esto _but_ who knows
+                      devicesize.screenHeight(context) * 0.71 -
+                          MediaQuery.of(context).viewInsets.bottom,
+                  color: custcolor.darkBlue,
+                  width: devicesize.screenWidth(context),
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: model.getChatStream(communityId),
+                    builder: (ctx, querySnapshot) {
+                      if (querySnapshot.hasData &&
+                          querySnapshot.data.documents.isNotEmpty) {
+                        model.addMessages(querySnapshot.data.documents);
+
+                        return SmartRefresher(
+                          onRefresh: () async {
+                            await model.addRequestOldMessages(communityId);
+                            model.refreshController.refreshCompleted();
+                          },
+                          controller: model.refreshController,
+                          child: ListView.builder(
+                              controller: model.scrollController,
+                              itemCount: model.messages.length,
+                              itemBuilder: (context, index) {
+                                if (model.isFirstLoad) model.scrollDown();
+                                return MessageItem(
+                                  heroAnimation: () {
+                                    List url = [];
+                                    url.add(model.messages[index].message);
+                                    model.openHeroView(url);
+                                  },
+                                  model: model.messages[index],
+                                  currentUser: model.currentUser.uid,
+                                );
+                              }),
+                        );
+                      }
+                      return Container();
+                    },
+                  )),
               Container(
                 constraints: BoxConstraints(
                   maxWidth: devicesize.screenWidth(context),
@@ -135,8 +129,6 @@ class CommunityChatView extends StatelessWidget {
                           size: devicesize.screenWidth(context) * 0.1,
                         ),
                         onPressed: () async {
-                          print(" button pressed");
-
                           await model.selectMessageImage().then((value) => model
                               .uploadImage(
                                   image: value, communityId: communityId)

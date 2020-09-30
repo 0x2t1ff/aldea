@@ -65,10 +65,12 @@ class OtherProfileView extends StatelessWidget {
                               children: <Widget>[
                                 Container(
                                   decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              model.userData.bkdPicUrl),
-                                          fit: BoxFit.cover)),
+                                      image: model.userData.bkdPicUrl != null
+                                          ? DecorationImage(
+                                              image: NetworkImage(
+                                                  model.userData.bkdPicUrl),
+                                              fit: BoxFit.cover)
+                                          : null),
                                   width: double.infinity,
                                 ),
                                 Positioned(
@@ -81,23 +83,28 @@ class OtherProfileView extends StatelessWidget {
                                           radius: usableScreenWithoughtBars(
                                                   context) *
                                               0.07,
-                                          backgroundImage: NetworkImage(
-                                              model.userData.picUrl)),
+                                          backgroundImage:
+                                              model.userData.picUrl != null
+                                                  ? NetworkImage(
+                                                      model.userData.picUrl)
+                                                  : null),
                                     )),
-                              model.currentUser.isGodAdmin ?   Positioned(
-                                  top: screenHeight(context) * 0.04,
-                                  right: screenWidth(context) * 0.08,
-                                  child: GestureDetector(
-                                    onTap: () => model.banUser(),
-                                    child: Container(
-                                      child: Icon(
-                                        Icons.accessible_forward,
-                                        color: Colors.red,
-                                        size: 45,
-                                      ),
-                                    ),
-                                  ),
-                                ) : Container() ,
+                                model.currentUser.isGodAdmin
+                                    ? Positioned(
+                                        top: screenHeight(context) * 0.04,
+                                        right: screenWidth(context) * 0.08,
+                                        child: GestureDetector(
+                                          onTap: () => model.banUser(),
+                                          child: Container(
+                                            child: Icon(
+                                              Icons.accessible_forward,
+                                              color: Colors.red,
+                                              size: 45,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
                                 Positioned(
                                   left: screenWidth(context) * 0.038,
                                   top: usableScreenWithoughtBars(context) *
@@ -140,13 +147,16 @@ class OtherProfileView extends StatelessWidget {
                                                   fontFamily: "Raleway",
                                                   fontWeight: FontWeight.w600)),
                                           IconButton(
-                                            icon: Icon(
-                                              Icons.mail,
-                                              color: Colors.white,
-                                            ),
+                                            icon: model.isOpening
+                                                ? CircularProgressIndicator()
+                                                : Icon(
+                                                    Icons.mail,
+                                                    color: Colors.white,
+                                                  ),
                                             onPressed: () {
-                                              print("button pressed");
-                                              model.openChat(model.user.uid);
+                                              if (!model.isOpening) {
+                                                model.openChat(model.user.uid);
+                                              }
                                             },
                                             iconSize: 40,
                                           ),

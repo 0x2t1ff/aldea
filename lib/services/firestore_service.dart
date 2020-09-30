@@ -6,6 +6,7 @@ import 'package:aldea/models/post_model.dart';
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/models/user_post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 import '../models/user_model.dart';
@@ -17,6 +18,9 @@ class FirestoreService {
 
   final CollectionReference _postsCollectionReference =
       Firestore.instance.collection('posts');
+  final CollectionReference _userChatsCollectionReference =
+      Firestore.instance.collection('userChats');
+
   final CollectionReference _quickstrikeCollectionReference =
       Firestore.instance.collection('quickstrikes');
   final CollectionReference _communitiesCollectionReference =
@@ -28,6 +32,96 @@ class FirestoreService {
       Firestore.instance.collection('activity');
 
   //      **USER METHODS**
+
+  Stream<QuerySnapshot> getCommunityChat(String cid) {
+    return _communitiesCollectionReference
+        .document(cid)
+        .collection("messages")
+        .orderBy("createdAt", descending: true)
+        .limit(10)
+        .snapshots();
+  }
+
+  Future<QuerySnapshot> getCommunityMessages(
+      String cid, Timestamp lastTimestamp) async {
+    return await _communitiesCollectionReference
+        .document(cid)
+        .collection("messages")
+        .orderBy("createdAt", descending: true)
+        .startAfter([lastTimestamp])
+        .limit(10)
+        .getDocuments();
+  }
+
+  Future<QuerySnapshot> getOlderChatMessages(
+      String cid, Timestamp lastTimestamp) async {
+    return await _userChatsCollectionReference
+        .document(cid)
+        .collection("messages")
+        .orderBy("createdAt", descending: true)
+        .startAfter([lastTimestamp])
+        .limit(10)
+        .getDocuments();
+  }
+
+  Future sendMessage(
+      {String chatRoomId,
+      String message,
+      String senderId,
+      String username,
+      String imageUrl,
+      bool isImage}) async {
+    var createdAt = DateTime.now();
+    var ref = _userChatsCollectionReference.document(chatRoomId);
+    await ref.collection("messages").add({
+      'message': message,
+      'senderId': senderId,
+      'createdAt': createdAt,
+      'username': username,
+      'imageUrl': imageUrl,
+      'isImage': isImage,
+    });
+
+    await ref.updateData({
+      'lastMessage': message,
+      'senderId': senderId,
+      'lastMessageSentAt': createdAt,
+      'username': username,
+      'imageUrl': imageUrl,
+      'isImage': isImage,
+    });
+  }
+
+  Stream<QuerySnapshot> getChatMessages(String cid) {
+    return _userChatsCollectionReference
+        .document(cid)
+        .collection("messages")
+        .orderBy("createdAt", descending: true)
+        .limit(10)
+        .snapshots();
+  }
+
+  Future sendCommunityMessage(
+      {String communityId,
+      String message,
+      String senderId,
+      String username,
+      String imageUrl,
+      bool isImage}) async {
+    var createdAt = DateTime.now(); //.toString();
+    await _communitiesCollectionReference
+        .document(communityId)
+        .collection("messages")
+        .add({
+      'message': message,
+      'senderId': senderId,
+      'createdAt': createdAt,
+      'username': username,
+      'imageUrl': imageUrl,
+      'isImage': isImage
+    });
+  }
+
   Future<Map<String, dynamic>> getUserData(String uid) async {
     try {
       var userData = await _userCollectionReference.document(uid).get();
@@ -185,7 +279,7 @@ class FirestoreService {
     List userRequests = userInfo.data["requests"];
 
     userRequests.remove(communityId);
-
+    print("requests now are: $userRequests");
     _userCollectionReference
         .document(uid)
         .updateData({"requests": userRequests});
@@ -810,14 +904,44 @@ class FirestoreService {
         .delete();
   }
 
-
-  Stream<DocumentSnapshot> getChats(String uid) {
+  Stream<QuerySnapshot> getChats(String uid, int limit) {
     try {
-      var stream = _userCollectionReference.document(uid).snapshots();
+      var stream = _userChatsCollectionReference
+          .where("users", arrayContains: uid)
+          .orderBy("lastMessageSentAt")
+          .limit(limit)
+          .snapshots();
       return stream;
     } catch (e) {
       return (e.message);
     }
+  }
+
+  Future<DocumentSnapshot> getChat(List<String> userIds) async {
+    userIds.sort();
+    var result = await _userChatsCollectionReference
+        .where("users", isEqualTo: userIds)
+        .limit(1)
+        .getDocuments();
+    print(result.documents);
+    if (result != null && result.documents.isNotEmpty) {
+      return result.documents[0];
+    } else {
+      return null;
+    }
+  }
+
+  Future<String> createChatRoom(
+      List<dynamic> userIds, List<dynamic> images, List usernameList) async {
+    //Crea la CHAT ROOM con los users y devuelve su ID
+    Map avatarUrls;
+    Map usernames;
+    userIds.sort();
+    avatarUrls = {userIds[0]: images[0], userIds[1]: images[1]};
+    usernames = {userIds[0]: usernameList[0], userIds[1]: usernameList[1]};
+    var doc = await _userChatsCollectionReference.add(
+        {'users': userIds, "avatarUrls": avatarUrls, "usernames": usernames});
+    return doc.documentID;
   }
 
   Future<QuerySnapshot> getCommunityUsers(String uid) async {

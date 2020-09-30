@@ -1,5 +1,6 @@
 import 'package:aldea/models/message_model.dart';
 import "package:flutter/material.dart";
+import 'package:intl/intl.dart';
 import "../shared/ui_helpers.dart" as devicesize;
 import "../shared/app_colors.dart" as custcolor;
 
@@ -77,15 +78,13 @@ class MessageItem extends StatelessWidget {
                                                       child: ClipRRect(
                                                           borderRadius:
                                                               BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          10)),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                          ),
                                                           child: Container(
                                                             width: devicesize
                                                                     .screenWidth(
@@ -131,7 +130,9 @@ class MessageItem extends StatelessWidget {
                             top: devicesize.screenHeight(context) * 0.005,
                           ),
                           child: Text(
-                            model.time, //.substring(10, 16),
+                            DateFormat("dd/M/yy hh:mm")
+                                .format(model.createdAt.toDate())
+                                .toString(), //.substring(10, 16),
                             style: TextStyle(
                               color: Colors.grey,
                               fontFamily: 'Raleway',
@@ -254,7 +255,9 @@ class MessageItem extends StatelessWidget {
                               bottom: devicesize.screenHeight(context) * 0.005,
                               right: devicesize.screenWidth(context) * 0.538),
                           child: Text(
-                            model.time.substring(10, 16),
+                            DateFormat("dd/M/yy hh:mm")
+                                .format(model.createdAt.toDate())
+                                .toString(),
                             style: TextStyle(
                               color: Colors.grey,
                               fontFamily: 'Raleway',

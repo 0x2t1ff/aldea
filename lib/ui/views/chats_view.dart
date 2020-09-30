@@ -2,6 +2,8 @@ import 'package:aldea/models/message_model.dart';
 import 'package:aldea/ui/widgets/message_item.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:aldea/viewmodels/chats_view_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../shared/ui_helpers.dart' as devicesize;
 import "package:flutter/material.dart";
 import 'package:stacked/stacked.dart';
@@ -15,23 +17,10 @@ class ChatsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("rebuilded");
-    ScrollController controller = new ScrollController();
-    bool flag = false;
 
     final messageController = TextEditingController();
     return ViewModelBuilder<ChatsViewModel>.reactive(
       viewModelBuilder: () => ChatsViewModel(),
-      onModelReady: (model) async {
-        await model.getMessages(chatroomId);
-        controller.addListener(() {
-          if (controller.position.pixels /
-                      controller.position.maxScrollExtent >=
-                  0.8 &&
-              model.isLoadingMore == false) {
-            model.loadMoreMessages(chatroomId);
-          }
-        });
-      },
       createNewModelOnInsert: true,
       builder: (context, model, child) => Scaffold(
         backgroundColor: custcolor.darkBlue,
@@ -46,23 +35,37 @@ class ChatsView extends StatelessWidget {
                 color: custcolor.darkBlue,
                 width: devicesize.screenWidth(context),
                 child: model.messages != null
-                    ? ListView.builder(
-                        reverse: true,
-                        controller: controller,
-                        itemCount: model.messages.length,
-                        itemBuilder: (ctx, index) {
-                          model.readMessage(chatroomId);
-                          return MessageItem(
-                            navigateToUser: () => model.navigateToUser(model.messages.reversed.elementAt(index)["senderId"]),
-                            heroAnimation: () {
-                              List url = [];
-                              url.add(model.messages[index]["message"]);
-                              model.openHeroView(url);
-                            },
-                            model: MessageModel.fromMap(
-                                model.messages.reversed.elementAt(index)),
-                            currentUser: model.currentUser.uid,
-                          );
+                    ? StreamBuilder<QuerySnapshot>(
+                        stream: model.getChatStream(chatroomId),
+                        builder: (ctx, querySnapshot) {
+                          if (querySnapshot.data != null &&
+                              querySnapshot.data.documents.isNotEmpty) {
+                            model.addMessages(querySnapshot.data.documents);
+
+                            return SmartRefresher(
+                              onRefresh: () async {
+                                await model.addRequestOldMessages(chatroomId);
+                                model.refreshController.refreshCompleted();
+                              },
+                              controller: model.refreshController,
+                              child: ListView.builder(
+                                  controller: model.scrollController,
+                                  itemCount: model.messages.length,
+                                  itemBuilder: (context, index) {
+                                    if (model.isFirstLoad) model.scrollDown();
+                                    return MessageItem(
+                                      heroAnimation: () {
+                                        List url = [];
+                                        url.add(model.messages[index].message);
+                                        model.openHeroView(url);
+                                      },
+                                      model: model.messages[index],
+                                      currentUser: model.currentUser.uid,
+                                    );
+                                  }),
+                            );
+                          }
+                          return Container();
                         },
                       )
                     : Center(
@@ -149,7 +152,6 @@ class ChatsView extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            
                             bottom: devicesize.screenWidth(context) * 0.01),
                         child: IconButton(
                           icon: Icon(
@@ -176,8 +178,8 @@ class ChatsView extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            bottom: devicesize.screenWidth(context) * 0.01,
-                           ),
+                          bottom: devicesize.screenWidth(context) * 0.01,
+                        ),
                         child: IconButton(
                           icon: Icon(
                             Icons.send,

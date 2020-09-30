@@ -251,10 +251,8 @@ class _CommunityViewState extends State<CommunityView>
                                                               .center,
                                                       children: <Widget>[
                                                         Text(
-                                                            model
-                                                                .followersDoc[
-                                                                    'posts']
-                                                                .length
+                                                            model.community
+                                                                .followerCount
                                                                 .toString(),
                                                             style: TextStyle(
                                                                 color: Colors
@@ -288,7 +286,7 @@ class _CommunityViewState extends State<CommunityView>
                                                               .goToAdminUsersScreen(
                                                                   model
                                                                       .community)
-                                                          : "",
+                                                          : () {},
                                                       child: Column(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
@@ -329,10 +327,8 @@ class _CommunityViewState extends State<CommunityView>
                                                                 .center,
                                                         children: <Widget>[
                                                           Text(
-                                                              model
-                                                                  .followersDoc[
-                                                                      "followers"]
-                                                                  .length
+                                                              model.community
+                                                                  .followerCount
                                                                   .toString(),
                                                               style: TextStyle(
                                                                   color: Colors

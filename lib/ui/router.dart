@@ -16,18 +16,12 @@ import 'package:flutter/material.dart';
 import '../constants/route_names.dart';
 import './views/login_view.dart';
 import './views/signup_view.dart';
-import './views/confirm_number_view.dart';
 import 'views/community_view.dart';
 import 'views/language_view.dart';
 import './views/community_settings_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
-    case ConfirmPhoneNumberRoute:
-      return _getPageRoute(
-        routeName: settings.name,
-        viewToShow: ConfirmNumberView(),
-      );
     case CommunityViewRoute:
       return _getPageRoute(
         routeName: settings.name,

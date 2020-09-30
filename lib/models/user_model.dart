@@ -84,7 +84,7 @@ class User {
       'vouches': vouches,
       'chatRooms': chatRooms,
       'isGodAdmin': isGodAdmin,
-      'moderator': mod,
+      'mod': mod,
       'notificationsEnabled': notificationsEnabled,
       'language': language
     };

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class RtdbService {
@@ -167,7 +166,8 @@ class RtdbService {
         .child('chatRooms/$chatRoomId/')
         .update({"unreadMessages": unreadMessages});
   }
-   void deleteCommunityChat ( String communityId){
-     _database.reference().child("communitiesChatRooms/$communityId").remove();
-   }
+
+  void deleteCommunityChat(String communityId) {
+    _database.reference().child("communitiesChatRooms/$communityId").remove();
+  }
 }
