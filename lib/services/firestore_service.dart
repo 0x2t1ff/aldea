@@ -567,21 +567,17 @@ class FirestoreService {
     });
   }
 
-  Future getVouch(String userId) async {
+  Future<List> getVouch(String userId) async {
     var userDocument = await _userCollectionReference.document(userId).get();
     var userIdList = userDocument.data["vouches"];
     List<User> userList = new List<User>();
-
     for (var f in userIdList) {
-      await _userCollectionReference
-          .where("uid", isEqualTo: f)
-          .getDocuments()
-          .then((onValue) => onValue.documents.first.exists != null
-              ? userList.add(User.fromData(onValue.documents.first.data))
+      await _userCollectionReference.document(f).get().then((onValue) =>
+          onValue.data != null
+              ? userList.add(User.fromData(onValue.data))
               : print("it was null"));
-
-      return userList;
     }
+    return userList;
   }
 
   Future<List> getCommunitiesList(String uid) async {
