@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:aldea/constants/languages.dart';
 import 'package:aldea/models/quickstrike_model.dart';
 import 'package:aldea/models/user_model.dart';
@@ -125,7 +123,7 @@ class _QuickStrikeItemState extends State<QuickStrikeItem> {
                     child: CircleAvatar(
                       radius: devicesize.screenWidth(context) * 0.055,
                       backgroundImage:
-                          NetworkImage(widget.quickStrikePost.imageUrl[0]),
+                          NetworkImage(widget.quickStrikePost.profilePic),
                     ),
                   ),
                   Padding(

@@ -72,7 +72,6 @@ class CommunityViewModel extends BaseModel {
   bool unfollowPopup = false;
   bool deletingCommunity = false;
   final Community community;
-  Map<dynamic, dynamic> followersDoc;
   File firstImage;
   final postDescController = TextEditingController();
   final Map<String, List<Product>> products = {};
@@ -234,6 +233,7 @@ class CommunityViewModel extends BaseModel {
       imagesList.add(image.imageUrl);
     }
     PostModel post = PostModel(
+      creationDate: Timestamp.now(),
       fechaQuickstrike: Timestamp.now(),
       amount: null,
       commentCount: 0,
@@ -335,6 +335,7 @@ class CommunityViewModel extends BaseModel {
     }
     QuickStrikePost uploadQuickstrike = QuickStrikePost(
       amount: int.parse(qsQuantityController.text),
+      profilePic: community.iconPicUrl,
       cid: community.uid,
       communityName: community.name,
       correctAnswer: qsCorrectAnswerController.text,
@@ -356,7 +357,8 @@ class CommunityViewModel extends BaseModel {
     );
     _firestoreService.addQuickstrike(uploadQuickstrike);
     PostModel post = PostModel(
-      fechaQuickstrike: Timestamp.now(),
+      creationDate: Timestamp.now(),
+      fechaQuickstrike: Timestamp.fromMillisecondsSinceEpoch(selectedDate.millisecondsSinceEpoch),
       amount: int.parse(qsQuantityController.text),
       commentCount: 0,
       communityId: community.uid,

@@ -44,14 +44,19 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
     return format.format(date).toString();
   }
 
+  String quickstrikeType;
+
   var showingDelete = false;
 
   @override
   Widget build(BuildContext context) {
-    String quickstrikeType = "Lista";
-    String dayTime = "12:04, today";
-    Color greyColor = Color(0xff3a464d);
-
+    if (widget.postModel.isRandom) {
+      quickstrikeType = "Lista";
+    } else if (widget.postModel.isGame) {
+      quickstrikeType = "Boton random";
+    } else {
+      quickstrikeType = "Preguntas";
+    }
     return Stack(
       children: [
         Container(
@@ -88,8 +93,8 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                             ],
                           ),
                           child: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                "https://firebasestorage.googleapis.com/v0/b/aldea-dev-40685.appspot.com/o/users%2FwRCrNE3t8ne8h4pagZXYY8TFaHs1%2Fprofile%2FprofilePic1583145377119?alt=media&token=efd31978-9d91-4682-af35-106c9994e8de"),
+                            backgroundImage:
+                                NetworkImage(widget.postModel.avatarUrl),
                             radius: devicesize.screenWidth(context) * 0.07,
                           ),
                         ),
@@ -116,7 +121,8 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                                 ),
                                 Text(
                                   //TODO: formatting daytime
-                                  dayTime,
+                                  readTimestamp(widget
+                                      .postModel.creationDate.seconds),
                                   style: TextStyle(
                                       color: Color(0xff3a464d),
                                       fontWeight: FontWeight.w600,
@@ -204,8 +210,8 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                 child: Column(
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: devicesize.screenHeight(context) * 0.005),
+                      padding: EdgeInsets.only(
+                          top: devicesize.screenHeight(context) * 0.009),
                       child: Row(
                         children: <Widget>[
                           Text(
@@ -271,7 +277,8 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(
-                              bottom: devicesize.screenHeight(context) * 0.02),
+                              bottom: devicesize.screenHeight(context) * 0.01,
+                              top: devicesize.screenHeight(context) * 0.02),
                           child: Row(
                             children: <Widget>[
                               Padding(
@@ -280,8 +287,6 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                                         devicesize.screenWidth(context) * 0.06,
                                     right:
                                         devicesize.screenWidth(context) * 0.138,
-                                    bottom:
-                                        devicesize.screenHeight(context) * 0.04,
                                   ),
                                   child: LikeButton(
                                     liked: widget.isLiked,
@@ -306,7 +311,7 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                                             : widget.postModel.commentCount
                                                 .toString(),
                                         style: TextStyle(
-                                            color: greyColor,
+                                            color: custcolor.greyColor,
                                             fontFamily: 'Raleway',
                                             fontWeight: FontWeight.w600,
                                             fontSize: 14)),
@@ -317,7 +322,7 @@ class _StartQuickstrikeState extends State<StartQuickstrike> {
                                   ? Padding(
                                       padding: EdgeInsets.only(
                                         left: devicesize.screenWidth(context) *
-                                            0.48,
+                                            0.4,
                                       ),
                                       child: IconButton(
                                         icon: Icon(

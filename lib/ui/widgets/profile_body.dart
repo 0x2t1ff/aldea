@@ -102,6 +102,8 @@ class ProfileBody extends StatelessWidget {
                               ],
                             ),
                             onTap: () {
+
+                              vouchCount == "0" ? (){}: 
                               model == null
                                   ? otherModel.seeVouches(otherModel.user.uid)
                                   : model.seeVouches(model.currentUser.uid);

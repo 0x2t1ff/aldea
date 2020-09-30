@@ -166,6 +166,9 @@ class FirestoreService {
 
   Future deletePost(String uid, String cid) {
     _postsCollectionReference.document(uid).delete();
+    _communitiesCollectionReference
+        .document(cid)
+        .updateData({"postsCount": FieldValue.increment(-1)});
   }
 
   Future changeUserLanguage(String language, String uid) {
@@ -597,6 +600,9 @@ class FirestoreService {
   Future<String> addPost(Map<dynamic, dynamic> post) async {
     try {
       var doc = await _postsCollectionReference.add(post);
+      _communitiesCollectionReference
+          .document(post["communityId"])
+          .updateData({"postsCount": FieldValue.increment(1)});
       return doc.documentID;
     } catch (e) {
       return e.toString();
@@ -960,6 +966,16 @@ class FirestoreService {
   Future<QuerySnapshot> getCommunityUsers(String uid) async {
     return _userCollectionReference
         .where("communities", arrayContains: uid)
+        .limit(10)
+        .getDocuments();
+  }
+
+  Future<QuerySnapshot> getMoreCommunityUsers(
+      String uid, DocumentSnapshot documentSnapshot) async {
+    return _userCollectionReference
+        .where("communities", arrayContains: uid)
+        .startAfterDocument(documentSnapshot)
+        .limit(10)
         .getDocuments();
   }
 
@@ -1015,11 +1031,11 @@ class FirestoreService {
 
     if (moderatorList.contains(uid)) {
       moderatorList.remove(uid);
-      _communitiesCollectionReference.document(communityId).updateData({
-        "moderators": moderatorList,
-        "followerCount": FieldValue.increment(-1)
-      });
     }
+    _communitiesCollectionReference.document(communityId).updateData({
+      "moderators": moderatorList,
+      "followerCount": FieldValue.increment(-1)
+    });
   }
 
   void deleteCommunity(String communityId, String communityName) {

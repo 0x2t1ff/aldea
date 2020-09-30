@@ -47,6 +47,7 @@ class CommunityChatView extends StatelessWidget {
                         model.addMessages(querySnapshot.data.documents);
 
                         return SmartRefresher(
+                          
                           onRefresh: () async {
                             await model.addRequestOldMessages(communityId);
                             model.refreshController.refreshCompleted();

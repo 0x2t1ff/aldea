@@ -12,6 +12,8 @@ class CommunityUsersAdminViewModel extends BaseModel {
   bool showingDialog = false;
   User selectedUser;
   bool kicking = true;
+  var lastDocumentSnapshot;
+  bool isLoadingMore = false;
 
   List<DocumentSnapshot> _documentSnapshots;
   List<DocumentSnapshot> get users => _documentSnapshots;
@@ -21,7 +23,17 @@ class CommunityUsersAdminViewModel extends BaseModel {
     var documents = await _firestoreService.getCommunityUsers(uid);
     if (documents != null) {
       _documentSnapshots = documents.documents;
+      lastDocumentSnapshot = documents.documents.last;
     }
+    notifyListeners();
+  }
+
+  Future getMoreUsers(String uid) async {
+    setIsLoading(true);
+    print(" yay got triggered hehe");
+    var documentList = await _firestoreService.getMoreCommunityUsers(
+        uid, lastDocumentSnapshot);
+    _documentSnapshots.addAll(documentList.documents);
     notifyListeners();
   }
 
@@ -38,6 +50,11 @@ class CommunityUsersAdminViewModel extends BaseModel {
   void unselectDialog() {
     print("unselect Dialog");
     showingDialog = false;
+    notifyListeners();
+  }
+
+  void setIsLoading(bool value) {
+    isLoadingMore = value;
     notifyListeners();
   }
 
