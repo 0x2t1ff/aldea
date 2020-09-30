@@ -1,6 +1,7 @@
 import 'package:aldea/constants/languages.dart';
 import 'package:aldea/models/user_model.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
+import 'package:aldea/ui/widgets/bottom_filler.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:aldea/viewmodels/profile_settings_view_model.dart';
 import 'package:flutter/material.dart';
@@ -379,6 +380,7 @@ class ProfileSettingsView extends StatelessWidget {
                     ],
                   ),
                 )),
+            BottomFiller()
           ],
         ),
       ),
