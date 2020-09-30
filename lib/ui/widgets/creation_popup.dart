@@ -161,7 +161,7 @@ class CreationPopup extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: screenHeight(context) * 0.02),
           child: Container(
-              width: screenWidth(context) * 0.7,
+              width: screenWidth(context) * 0.8,
               height: screenHeight(context) * 0.3,
               decoration: BoxDecoration(
                   color: Color(0xff17191E),
