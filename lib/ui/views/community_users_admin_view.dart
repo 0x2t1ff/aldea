@@ -16,11 +16,24 @@ import "../shared/ui_helpers.dart";
 class CommunityUsersAdminView extends StatelessWidget {
   final Community community;
   const CommunityUsersAdminView(this.community);
+
   @override
   Widget build(BuildContext context) {
+    var controller = ScrollController();
     return ViewModelBuilder<CommunityUsersAdminViewModel>.reactive(
         viewModelBuilder: () => CommunityUsersAdminViewModel(),
-        onModelReady: (model) => model.fetchAllUsers(community.uid),
+        onModelReady: (model) {
+          model.fetchAllUsers(community.uid);
+          controller.addListener(() async {
+          if (controller.position.pixels /
+                      controller.position.maxScrollExtent >=
+                  0.6 &&
+              model.isLoadingMore == false) {
+            await model.getMoreUsers(community.uid);
+            model.setIsLoading(false);
+          }
+        });
+        },
         builder: (context, model, child) => WillPopScope(
               onWillPop: model.onWillPop,
               child: Scaffold(
@@ -61,6 +74,7 @@ class CommunityUsersAdminView extends StatelessWidget {
                             ),
                             Expanded(
                               child: ListView.builder(
+                                  controller: controller,
                                   padding: EdgeInsets.all(0),
                                   itemCount: model.users.length < 9
                                       ? 9
@@ -127,13 +141,14 @@ class CommunityUsersAdminView extends StatelessWidget {
       Function kickUser,
       Function modUser) {
     String name = user.name;
-    return ClipRRect(borderRadius: BorderRadius.circular(30),
-          child: BackdropFilter(
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(30),
+      child: BackdropFilter(
         filter: ImageFilter.blur(
           sigmaX: 6.0,
-          sigmaY:6.0,
+          sigmaY: 6.0,
         ),
-            child: Container(
+        child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
                 Radius.circular(30),
@@ -160,7 +175,7 @@ class CommunityUsersAdminView extends StatelessWidget {
                     kicking == true
                         ? "Estas seguro que quieres expulsar a $name de  $communityName?"
                         : "¿Estas seguro que quieres otorgar a $name el puesto de moderador en $communityName? ",
-                        textAlign: TextAlign.center,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: almostWhite,
                       fontFamily: "Raleway",

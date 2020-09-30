@@ -21,6 +21,7 @@ class PostModel {
   final List<dynamic> winners;
   final List<dynamic> likes;
   final int commentCount;
+  final Timestamp creationDate;
 
   PostModel({
     @required this.userId,
@@ -42,6 +43,7 @@ class PostModel {
     @required this.imageUrl,
     this.id,
     @required this.likes,
+    @required this.creationDate,
   });
 
   Map<String, dynamic> toMap() {
@@ -63,11 +65,12 @@ class PostModel {
       'likes': likes,
       'comments': commentCount,
       'communityName': communityName,
-      'avatarUrl': avatarUrl
+      'avatarUrl': avatarUrl,
+      'creationDate': creationDate
     };
   }
 
-  static PostModel fromMap(Map<String, dynamic> map,{ String id}) {
+  static PostModel fromMap(Map<String, dynamic> map, {String id}) {
     return PostModel(
         communityName: map['communityName'],
         title: map['title'],
@@ -86,6 +89,7 @@ class PostModel {
         amount: map['amount'],
         avatarUrl: map['avatarUrl'],
         likes: map['likes'],
+        creationDate: map['creationDate'],
         commentCount: map['commentCount'],
         winners: map['winners']);
   }

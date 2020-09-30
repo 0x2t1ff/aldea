@@ -182,59 +182,6 @@ class _CommunityViewState extends State<CommunityView>
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: <Widget>[
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: <Widget>[
-                                                      Text(
-                                                          widget.community.followerCount
-                                                              .toString(),
-                                                          style:
-                                                              TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      18)),
-                                                      Text("Publicaciones",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
-                                                              fontSize: 16))
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: <Widget>[
-                                                      Text(
-                                                          widget.community.followerCount.toString(),
-                                                          style:
-                                                              TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      18)),
-                                                      Text("Likes",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
-                                                              fontSize: 16))
-                                                    ],
-                                                  ),
                                                   GestureDetector(
                                                     onTap: widget.community
                                                             .moderators
@@ -251,10 +198,8 @@ class _CommunityViewState extends State<CommunityView>
                                                               .center,
                                                       children: <Widget>[
                                                         Text(
-                                                            model
-                                                                .followersDoc[
-                                                                    'posts']
-                                                                .length
+                                                            widget.community
+                                                                .postsCount
                                                                 .toString(),
                                                             style: TextStyle(
                                                                 color: Colors
@@ -289,33 +234,6 @@ class _CommunityViewState extends State<CommunityView>
                                                                   model
                                                                       .community)
                                                           : "",
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: <Widget>[
-                                                          Text(
-                                                              widget.community
-                                                                  .followerCount
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      18)),
-                                                          Text("Likes",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w300,
-                                                                  fontSize: 16))
-                                                        ],
-                                                      ),
                                                     ),
                                                   ),
                                                   Expanded(
@@ -329,10 +247,8 @@ class _CommunityViewState extends State<CommunityView>
                                                                 .center,
                                                         children: <Widget>[
                                                           Text(
-                                                              model
-                                                                  .followersDoc[
-                                                                      "followers"]
-                                                                  .length
+                                                              widget.community
+                                                                  .followerCount
                                                                   .toString(),
                                                               style: TextStyle(
                                                                   color: Colors
@@ -576,7 +492,10 @@ class _CommunityViewState extends State<CommunityView>
                               ),
                             ),
                           ),
-                          if (model.isShowingPopup) CreationPopup(model),
+                          if (model.isShowingPopup) Padding(
+                            padding: EdgeInsets.only(top:  screenHeight(context) * 0.1,),
+                            child: Center(child: CreationPopup(model)),
+                          ),
                           if (model.unfollowPopup)
                             Positioned(
                               top: screenHeight(context) * 0.25,

@@ -209,7 +209,7 @@ class _FeedViewState extends State<FeedView>
                             devicesize.screenHeight(context) * _containerHeight,
                         child: Align(
                           child: Container(
-                            height: devicesize.screenHeight(context) * 0.08,
+                            // height: devicesize.screenHeight(context) * 0.09,
                             child: model.communityList.length < 7
                                 ? ListView.builder(
                                     padding: EdgeInsets.only(
@@ -219,54 +219,72 @@ class _FeedViewState extends State<FeedView>
                                     itemCount: 6,
                                     itemBuilder: (context, index) {
                                       return index < model.communityList.length
-                                          ? GestureDetector(
-                                              onTap: () => model.goToCommunity(
-                                                  model.communityList[index]),
-                                              child: Container(
-                                                  decoration:
-                                                      BoxDecoration(boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.black,
-                                                      spreadRadius: 3,
-                                                      blurRadius: 7,
-                                                      offset: Offset(2,
-                                                          3), // changes position of shadow
-                                                    ),
-                                                  ], shape: BoxShape.circle),
+                                          ? Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 8.0),
+                                              child: GestureDetector(
+                                                onTap: () =>
+                                                    model.goToCommunity(model
+                                                        .communityList[index]),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      image: DecorationImage(
+                                                        image: NetworkImage(
+                                                          model
+                                                              .communityList[
+                                                                  index]
+                                                              .iconPicUrl,
+                                                        ),
+                                                      ),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: Colors.black
+                                                              .withOpacity(0.5),
+                                                          spreadRadius: 3,
+                                                          blurRadius: 7,
+                                                          offset: Offset(8,
+                                                              10), // changes position of shadow
+                                                        ),
+                                                      ]),
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: devicesize
                                                               .screenWidth(
                                                                   context) *
-                                                          0.02),
+                                                          0),
                                                   height:
                                                       devicesize.screenHeight(
                                                               context) *
-                                                          0.055,
-                                                  child: ClipOval(
-                                                    child: Image.network(
-                                                      model.communityList[index]
-                                                          .iconPicUrl,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  )))
-                                          : Container(
-                                              decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: custcolor
-                                                      .blueishGreyColor,
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.black
-                                                          .withOpacity(0.5),
-                                                      spreadRadius: 3,
-                                                      blurRadius: 7,
-                                                      offset: Offset(2,
-                                                          3), // changes position of shadow
-                                                    ),
-                                                  ]),
-                                              width: devicesize
-                                                      .screenHeight(context) *
-                                                  0.097,
+                                                          0.09,
+                                                  width:
+                                                      devicesize.screenHeight(
+                                                              context) *
+                                                          0.09,
+                                                ),
+                                              ),
+                                            )
+                                          : Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 8.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: custcolor
+                                                        .blueishGreyColor,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.black
+                                                            .withOpacity(0.5),
+                                                        spreadRadius: 3,
+                                                        blurRadius: 7,
+                                                        offset: Offset(8,
+                                                            10), // changes position of shadow
+                                                      ),
+                                                    ]),
+                                                width: devicesize
+                                                        .screenHeight(context) *
+                                                    0.09,
+                                              ),
                                             );
                                     })
                                 : ListView.builder(
@@ -276,27 +294,43 @@ class _FeedViewState extends State<FeedView>
                                     scrollDirection: Axis.horizontal,
                                     itemCount: model.communityList.length,
                                     itemBuilder: (context, index) {
-                                      return GestureDetector(
+                                      return Padding(
+                                        padding: EdgeInsets.only(right: 8.0),
+                                        child: GestureDetector(
                                           onTap: () => model.goToCommunity(
                                               model.communityList[index]),
                                           child: Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: devicesize
-                                                          .screenWidth(
-                                                              context) *
-                                                      0.018),
-                                              height: devicesize
-                                                      .screenHeight(context) *
-                                                  0.055,
-                                              width: devicesize
-                                                      .screenHeight(context) *
-                                                  0.1,
-                                              child: CircleAvatar(
-                                                backgroundImage: NetworkImage(
-                                                  model.communityList[index]
-                                                      .iconPicUrl,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                    model.communityList[index]
+                                                        .iconPicUrl,
+                                                  ),
                                                 ),
-                                              )));
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.5),
+                                                    spreadRadius: 3,
+                                                    blurRadius: 7,
+                                                    offset: Offset(8,
+                                                        10), // changes position of shadow
+                                                  ),
+                                                ]),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: devicesize
+                                                        .screenWidth(context) *
+                                                    0),
+                                            height: devicesize
+                                                    .screenHeight(context) *
+                                                0.09,
+                                            width: devicesize
+                                                    .screenHeight(context) *
+                                                0.09,
+                                          ),
+                                        ),
+                                      );
                                     }),
                           ),
                         ),

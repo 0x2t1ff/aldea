@@ -28,8 +28,6 @@ class RequestsViewModel extends BaseModel {
         .addCommunityFromRequest(uid, communityId)
         .then((value) => _firestoreService.addActivityFromRequest(communityId));
 
-
-
     _firestoreService.removeRequestUser(communityId, uid);
     _firestoreService.removeRequest(communityId, uid);
 

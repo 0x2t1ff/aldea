@@ -41,10 +41,11 @@ class RequestsView extends StatelessWidget {
                     itemCount: model.requests.length,
                     itemBuilder: (context, i) {
                       return RequestCard(
-                        request: model.requests[i],
-                        denyFunction: ()=> model.removeRequest(model.requests[i].uid, i),
-                        acceptFunction: ()=> model.acceptRequest(model.requests[i].uid,i)
-                      );
+                          request: model.requests[i],
+                          denyFunction: () =>
+                              model.removeRequest(model.requests[i].uid, i),
+                          acceptFunction: () =>
+                              model.acceptRequest(model.requests[i].uid, i));
                     })),
             Container(
               height: usableScreenHeight(context) * 0.46,
