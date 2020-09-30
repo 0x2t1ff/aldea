@@ -962,9 +962,10 @@ class FirestoreService {
     //Crea la CHAT ROOM con los users y devuelve su ID
     Map avatarUrls;
     Map usernames;
-    userIds.sort();
+
     avatarUrls = {userIds[0]: images[0], userIds[1]: images[1]};
     usernames = {userIds[0]: usernameList[0], userIds[1]: usernameList[1]};
+    userIds.sort();
     var doc = await _userChatsCollectionReference.add(
         {'users': userIds, "avatarUrls": avatarUrls, "usernames": usernames});
     return doc.documentID;
