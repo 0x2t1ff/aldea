@@ -48,6 +48,9 @@ class NewsView extends StatelessWidget {
                   ),
                   deleteAllowed:
                       community.moderators.contains(model.currentUser.uid),
+                      deletePost: () => model.deletePost(
+                                        model.posts[index].id,
+                                        model.posts[index].communityId)
                 ),
               )
             : Center(

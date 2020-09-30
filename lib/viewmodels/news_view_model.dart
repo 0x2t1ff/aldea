@@ -49,6 +49,10 @@ class NewsViewModel extends BaseModel {
     return likeBool;
   }
 
+  void deletePost(String id, String cid) {
+    _firestoreService.deletePost(id, cid);
+  }
+
   bool isLiked(List likeList) {
     if (likeList.contains(currentUser.uid)) {
       return true;
