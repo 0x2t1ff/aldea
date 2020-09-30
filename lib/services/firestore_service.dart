@@ -308,7 +308,7 @@ class FirestoreService {
   }
 
   Future addActivityFromRequest(String uid) async {
-    var postRef = _userCollectionReference.document(uid);
+    var postRef = _activityCollectionReference.document(uid);
 
     await postRef.updateData({"activity": FieldValue.increment(1)});
   }
