@@ -191,7 +191,7 @@ class _CommunityViewState extends State<CommunityView>
                                                         ? () => model
                                                             .goToAdminUsersScreen(
                                                                 model.community)
-                                                        : "",
+                                                        : () {},
                                                     child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
@@ -233,7 +233,7 @@ class _CommunityViewState extends State<CommunityView>
                                                               .goToAdminUsersScreen(
                                                                   model
                                                                       .community)
-                                                          : "",
+                                                          : () {},
                                                     ),
                                                   ),
                                                   Expanded(
@@ -280,7 +280,8 @@ class _CommunityViewState extends State<CommunityView>
                                         ),
                                       ],
                                     ),
-                                  ),isModerator
+                                  ),
+                                  isModerator
                                       ? GestureDetector(
                                           onTap: () => model.goToRequests(),
                                           child: Container(
@@ -442,7 +443,6 @@ class _CommunityViewState extends State<CommunityView>
                                             ],
                                           ),
                                   ),
-                                  
                                   Container(
                                     height: communityBodyHeight(context) * 0.92,
                                     width: double.infinity,
@@ -492,10 +492,13 @@ class _CommunityViewState extends State<CommunityView>
                               ),
                             ),
                           ),
-                          if (model.isShowingPopup) Padding(
-                            padding: EdgeInsets.only(top:  screenHeight(context) * 0.1,),
-                            child: Center(child: CreationPopup(model)),
-                          ),
+                          if (model.isShowingPopup)
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: screenHeight(context) * 0.1,
+                              ),
+                              child: Center(child: CreationPopup(model)),
+                            ),
                           if (model.unfollowPopup)
                             Positioned(
                               top: screenHeight(context) * 0.25,
