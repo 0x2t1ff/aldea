@@ -54,7 +54,7 @@ class CommunitiesViewModel extends BaseModel {
     var response = await _dialogService.showAccessRequestDialog(
         title: "Solicitud de acceso", description: "");
     if (response.confirmed) {
-      currentUser.requests.add(selectedCommunity.uid);
+      //   currentUser.requests.add(selectedCommunity.uid);
       isSendingRequest = true;
       notifyListeners();
       await _firestoreService.requestCommunityAccess(
