@@ -31,7 +31,7 @@ class ChatRoomItem extends StatefulWidget {
 class _ChatRoomItemState extends State<ChatRoomItem> {
   @override
   Widget build(BuildContext context) {
-    String otherUser = widget.users[0] != widget.currentUser
+    String otherUser = widget.users[0] == widget.currentUser
         ? widget.users[1]
         : widget.users[0];
     return GestureDetector(
