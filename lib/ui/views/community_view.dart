@@ -280,88 +280,7 @@ class _CommunityViewState extends State<CommunityView>
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Color(0xff17191E),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Colors.black26,
-                                              offset: Offset(0, 4))
-                                        ]),
-                                    height: communityBodyHeight(context) * 0.08,
-                                    width: double.infinity,
-                                    child: widget.community.isMarketplace
-                                        ? TabBar(
-                                            controller: _tabController,
-                                            indicatorColor: Colors.white,
-                                            tabs: [
-                                              SizedBox(
-                                                  height: communityBodyHeight(
-                                                          context) *
-                                                      0.04,
-                                                  child: Image.asset(
-                                                      "assets/images/reglas.png")),
-                                              SizedBox(
-                                                  height: communityBodyHeight(
-                                                          context) *
-                                                      0.04,
-                                                  child: Image.asset(
-                                                      "assets/images/posts.png")),
-                                              SizedBox(
-                                                  height: communityBodyHeight(
-                                                          context) *
-                                                      0.04,
-                                                  child: Image.asset(
-                                                      "assets/images/cart.png")),
-                                              SizedBox(
-                                                  height: communityBodyHeight(
-                                                          context) *
-                                                      0.04,
-                                                  child: Image.asset(
-                                                      "assets/images/community-chat.png")),
-                                              GestureDetector(
-                                                child: SizedBox(
-                                                    height: communityBodyHeight(
-                                                            context) *
-                                                        0.04,
-                                                    child: Image.asset(
-                                                        "assets/images/user-posts.png")),
-                                              ),
-                                            ],
-                                          )
-                                        : TabBar(
-                                            controller: _tabController,
-                                            indicatorColor: Colors.white,
-                                            tabs: [
-                                              SizedBox(
-                                                  height: communityBodyHeight(
-                                                          context) *
-                                                      0.04,
-                                                  child: Image.asset(
-                                                      "assets/images/reglas.png")),
-                                              SizedBox(
-                                                  height: communityBodyHeight(
-                                                          context) *
-                                                      0.04,
-                                                  child: Image.asset(
-                                                      "assets/images/posts.png")),
-                                              SizedBox(
-                                                  height: communityBodyHeight(
-                                                          context) *
-                                                      0.04,
-                                                  child: Image.asset(
-                                                      "assets/images/community-chat.png")),
-                                              SizedBox(
-                                                  height: communityBodyHeight(
-                                                          context) *
-                                                      0.04,
-                                                  child: Image.asset(
-                                                      "assets/images/user-posts.png")),
-                                            ],
-                                          ),
-                                  ),
-                                  isModerator
+                                  ),isModerator
                                       ? GestureDetector(
                                           onTap: () => model.goToRequests(),
                                           child: Container(
@@ -443,6 +362,87 @@ class _CommunityViewState extends State<CommunityView>
                                           ),
                                         )
                                       : Container(),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: Color(0xff17191E),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.black26,
+                                              offset: Offset(0, 4))
+                                        ]),
+                                    height: communityBodyHeight(context) * 0.08,
+                                    width: double.infinity,
+                                    child: widget.community.isMarketplace
+                                        ? TabBar(
+                                            controller: _tabController,
+                                            indicatorColor: Colors.white,
+                                            tabs: [
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/reglas.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/posts.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/cart.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/community-chat.png")),
+                                              GestureDetector(
+                                                child: SizedBox(
+                                                    height: communityBodyHeight(
+                                                            context) *
+                                                        0.04,
+                                                    child: Image.asset(
+                                                        "assets/images/user-posts.png")),
+                                              ),
+                                            ],
+                                          )
+                                        : TabBar(
+                                            controller: _tabController,
+                                            indicatorColor: Colors.white,
+                                            tabs: [
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/reglas.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/posts.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/community-chat.png")),
+                                              SizedBox(
+                                                  height: communityBodyHeight(
+                                                          context) *
+                                                      0.04,
+                                                  child: Image.asset(
+                                                      "assets/images/user-posts.png")),
+                                            ],
+                                          ),
+                                  ),
+                                  
                                   Container(
                                     height: communityBodyHeight(context) * 0.92,
                                     width: double.infinity,
