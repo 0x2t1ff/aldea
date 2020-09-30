@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../locator.dart';
+import "../models/chat_room_model.dart";
 import 'base_model.dart';
 
 class ChatsViewModel extends BaseModel {
@@ -29,6 +30,8 @@ class ChatsViewModel extends BaseModel {
   List get messages => messageList.reversed.toList();
   RefreshController refreshController = RefreshController();
   ScrollController scrollController = ScrollController();
+  ChatRoomModel chatRoomModel;
+  String otherId;
 
   Future<void> addRequestOldMessages(String cid) async {
     var result = await _firestoreService.getOlderChatMessages(
@@ -37,6 +40,16 @@ class ChatsViewModel extends BaseModel {
         result.documents.map((e) => MessageModel.fromMap(e.data)).toList());
     notifyListeners();
   }
+
+  Future<void> loadChatRoom(String chatRoomId) async {
+    var result = await _firestoreService.getChatRoom(chatRoomId);
+    chatRoomModel = ChatRoomModel.fromMap(result.data);
+    var temp = chatRoomModel.users;
+    temp.remove(currentUser.uid);
+    otherId = temp[0];
+  }
+
+
 
   void addMessages(List<DocumentSnapshot> docs) {
     if (messageList.isEmpty) {
@@ -99,6 +112,7 @@ class ChatsViewModel extends BaseModel {
       username: username,
       imageUrl: imageUrl,
       isImage: isImage,
+      otherId: otherId
     );
     await scrollController.animateTo(scrollController.position.maxScrollExtent,
         duration: Duration(milliseconds: 250), curve: Curves.linear);

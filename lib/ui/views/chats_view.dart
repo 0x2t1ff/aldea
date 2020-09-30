@@ -10,6 +10,7 @@ import "package:flutter/material.dart";
 import 'package:stacked/stacked.dart';
 import 'package:flutter/cupertino.dart';
 import "../shared/app_colors.dart" as custcolor;
+import "../../models/chat_room_model.dart";
 
 class ChatsView extends StatelessWidget {
   final String chatroomId;
@@ -21,6 +22,7 @@ class ChatsView extends StatelessWidget {
     final messageController = TextEditingController();
     return ViewModelBuilder<ChatsViewModel>.reactive(
       viewModelBuilder: () => ChatsViewModel(),
+      onModelReady: (model) async => await model.loadChatRoom(chatroomId),
       createNewModelOnInsert: true,
       builder: (context, model, child) => Scaffold(
         backgroundColor: custcolor.darkBlue,

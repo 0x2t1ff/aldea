@@ -33,6 +33,10 @@ class FirestoreService {
 
   //      **USER METHODS**
 
+  Future<DocumentSnapshot> getChatRoom(String cid) async {
+    return await _userChatsCollectionReference.document(cid).get();
+  }
+
   Stream<QuerySnapshot> getCommunityChat(String cid) {
     return _communitiesCollectionReference
         .document(cid)
@@ -70,7 +74,8 @@ class FirestoreService {
       String senderId,
       String username,
       String imageUrl,
-      bool isImage}) async {
+      bool isImage,
+      String otherId}) async {
     var createdAt = DateTime.now();
     var ref = _userChatsCollectionReference.document(chatRoomId);
     await ref.collection("messages").add({
@@ -80,6 +85,7 @@ class FirestoreService {
       'username': username,
       'imageUrl': imageUrl,
       'isImage': isImage,
+      "otherId": otherId
     });
 
     await ref.updateData({
@@ -89,6 +95,7 @@ class FirestoreService {
       'username': username,
       'imageUrl': imageUrl,
       'isImage': isImage,
+      "otherId": otherId
     });
   }
 
@@ -965,7 +972,8 @@ class FirestoreService {
 
   Future<QuerySnapshot> getCommunityUsers(String uid) async {
     return _userCollectionReference
-        .where("communities", arrayContains: uid).orderBy("winCount", descending: true)
+        .where("communities", arrayContains: uid)
+        .orderBy("winCount", descending: true)
         .limit(10)
         .getDocuments();
   }
@@ -973,7 +981,8 @@ class FirestoreService {
   Future<QuerySnapshot> getMoreCommunityUsers(
       String uid, DocumentSnapshot documentSnapshot) async {
     return _userCollectionReference
-        .where("communities", arrayContains: uid).orderBy("winCount", descending: true)
+        .where("communities", arrayContains: uid)
+        .orderBy("winCount", descending: true)
         .startAfterDocument(documentSnapshot)
         .limit(10)
         .getDocuments();

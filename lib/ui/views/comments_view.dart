@@ -26,6 +26,7 @@ class CommentsView extends StatelessWidget {
               backgroundColor: backgroundColor,
               body: Column(
                 children: <Widget>[
+                  NotchFiller(),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     width: double.infinity,
@@ -78,7 +79,7 @@ class CommentsView extends StatelessWidget {
                   Container(
                     color: backgroundColor,
                     width: screenWidth(context),
-                    height: screenHeight(context) * 0.786,
+                    height: screenHeight(context) * 0.75,
                     child: ListView.builder(
                         reverse: true,
                         padding: EdgeInsets.all(0),

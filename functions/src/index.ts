@@ -43,14 +43,14 @@ export const resetActivity = functions.pubsub.schedule('0 0 * * 0').onRun(async 
     });
 });
 
-export const chatNotification = functions.database
-    .ref('/messages/{chatroomId}/{messageId}').onCreate(
+export const chatNotifications = functions.firestore
+    .document('/userChats/{chatroomId}/messages/{message}').onCreate(
         async (snap) => {
             console.log('start of the chat notification');
-            const messageData = snap.val();
-            const message = messageData.message;
-            const otherId = messageData.otherId;
-            const name = messageData.username;
+            const messageData = snap.data()
+            const message = messageData["message"];
+            const otherId = messageData["otherId"];
+            const name = messageData["username"];
             await db.collection('users').doc(otherId).get().then(querySnapshot => {
                 const docData = querySnapshot.data();
                 if (docData !== undefined) {
@@ -121,7 +121,8 @@ export const banUserFromCommunity = functions.https.onRequest((request, response
             console.log(`error al intentar obtener la comunidad al banear el user ${userId} de la comunidad ${communityId}`, error);
             response.status(400).send({
                 'result': `error al intentar obtener la comunidad al banear el user ${userId} de la comunidad ${communityId}`,
-                'error': error});
+                'error': error
+            });
         });
     });
 });
@@ -133,10 +134,10 @@ export const banUser = functions.https.onRequest((request, response) => {
     return cors(request, response, async () => {
         let userId = request.body as string;
         userId = userId.slice(1, -1);
-        admin.auth().updateUser(userId, {disabled: true}).then(() => {
-            response.status(200).send({'result': 'Ok'});
+        admin.auth().updateUser(userId, { disabled: true }).then(() => {
+            response.status(200).send({ 'result': 'Ok' });
         }).catch(error => {
-            response.status(400).send({'error': error});
+            response.status(400).send({ 'error': error });
         });
     });
 });
