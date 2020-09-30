@@ -27,7 +27,7 @@ class DirectMessageViewModel extends BaseModel {
   }
 
   void setChatRooms(List<DocumentSnapshot> docs) {
-    chatRooms = docs.map((e) => ChatRoomModel.fromMap(e.data)).toList();
+    chatRooms = docs.map((e) => ChatRoomModel.fromMap(e.data)).toList().reversed.toList();
   }
 
   void loadMore() {}

@@ -67,6 +67,9 @@ class ChatsViewModel extends BaseModel {
       return tempImage;
     }
   }
+  void notifyyes(){
+    notifyListeners();
+  }
 
   Future<File> selectCameraImage() async {
     var tempImage = await _imageSelector.selectCameraImage();

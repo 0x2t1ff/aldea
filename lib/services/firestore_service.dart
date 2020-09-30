@@ -965,7 +965,7 @@ class FirestoreService {
 
   Future<QuerySnapshot> getCommunityUsers(String uid) async {
     return _userCollectionReference
-        .where("communities", arrayContains: uid)
+        .where("communities", arrayContains: uid).orderBy("winCount", descending: true)
         .limit(10)
         .getDocuments();
   }
@@ -973,7 +973,7 @@ class FirestoreService {
   Future<QuerySnapshot> getMoreCommunityUsers(
       String uid, DocumentSnapshot documentSnapshot) async {
     return _userCollectionReference
-        .where("communities", arrayContains: uid)
+        .where("communities", arrayContains: uid).orderBy("winCount", descending: true)
         .startAfterDocument(documentSnapshot)
         .limit(10)
         .getDocuments();

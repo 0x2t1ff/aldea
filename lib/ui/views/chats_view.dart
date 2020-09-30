@@ -7,6 +7,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../shared/ui_helpers.dart' as devicesize;
 import "package:flutter/material.dart";
 import 'package:stacked/stacked.dart';
+import 'package:flutter/cupertino.dart';
 import "../shared/app_colors.dart" as custcolor;
 
 class ChatsView extends StatelessWidget {
@@ -43,6 +44,27 @@ class ChatsView extends StatelessWidget {
                             model.addMessages(querySnapshot.data.documents);
 
                             return SmartRefresher(
+                              header: CustomHeader(
+                                height: model.refreshController.isRefresh ? 0 : 20,
+                                builder: (context, mode) {
+                                  Widget body;
+                                  if (mode == RefreshStatus.idle) {
+                                    body = Text("pull down refresh");
+                                  } else if (mode == RefreshStatus.refreshing) {
+                                    body = CupertinoActivityIndicator();
+                                  } else if (mode == RefreshStatus.canRefresh) {
+                                    body = Text("release to refresh");
+                                  } else if (mode == RefreshStatus.completed) {
+                                    body = Text("refreshCompleted!");
+                                  }
+                                  return Container(
+                                    height: 0.0,
+                                    child: Center(
+                                      child: body,
+                                    ),
+                                  );
+                                },
+                              ),
                               onRefresh: () async {
                                 await model.addRequestOldMessages(chatroomId);
                                 model.refreshController.refreshCompleted();

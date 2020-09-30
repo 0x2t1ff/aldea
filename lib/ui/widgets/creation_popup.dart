@@ -42,7 +42,7 @@ class CreationPopup extends StatelessWidget {
           child: Container(
             color: Colors.white.withOpacity(0.2),
             height: screenHeight(context) * 0.7,
-            width: screenWidth(context) * 0.8,
+            width: screenWidth(context) * 0.9,
             child: Padding(
               padding:
                   EdgeInsets.symmetric(horizontal: screenWidth(context) * 0.05),
@@ -61,7 +61,7 @@ class CreationPopup extends StatelessWidget {
                         child: Column(
                           children: <Widget>[
                             Container(
-                              width: screenWidth(context) * 0.6,
+                              width: screenWidth(context) * 0.7,
                               height: screenHeight(context) * 0.06,
                               decoration: BoxDecoration(
                                 color: Colors.black,

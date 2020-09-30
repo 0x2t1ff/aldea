@@ -30,7 +30,6 @@ class CommunityUsersAdminViewModel extends BaseModel {
 
   Future getMoreUsers(String uid) async {
     setIsLoading(true);
-    print(" yay got triggered hehe");
     var documentList = await _firestoreService.getMoreCommunityUsers(
         uid, lastDocumentSnapshot);
     _documentSnapshots.addAll(documentList.documents);

@@ -8,6 +8,7 @@ import 'package:firebase_database/firebase_database.dart';
 import "package:flutter/material.dart";
 import 'package:stacked/stacked.dart';
 import "../shared/app_colors.dart" as custcolor;
+import 'package:flutter/cupertino.dart';
 
 class CommunityChatView extends StatelessWidget {
   final String communityId;
@@ -47,7 +48,27 @@ class CommunityChatView extends StatelessWidget {
                         model.addMessages(querySnapshot.data.documents);
 
                         return SmartRefresher(
-                          
+                          header: CustomHeader(
+                            height: model.refreshController.isRefresh ? 0 : 30,
+                            builder: (context, mode) {
+                              Widget body;
+                              if (mode == RefreshStatus.idle) {
+                                body = Text("pull down refresh");
+                              } else if (mode == RefreshStatus.refreshing) {
+                                body = CupertinoActivityIndicator();
+                              } else if (mode == RefreshStatus.canRefresh) {
+                                body = Text("release to refresh");
+                              } else if (mode == RefreshStatus.completed) {
+                                body = Text("refreshCompleted!");
+                              }
+                              return Container(
+                                height: 0.0,
+                                child: Center(
+                                  child: body,
+                                ),
+                              );
+                            },
+                          ),
                           onRefresh: () async {
                             await model.addRequestOldMessages(communityId);
                             model.refreshController.refreshCompleted();

@@ -138,7 +138,7 @@ class _DirectMessageViewState extends State<DirectMessageView> {
                               model: model.chatRooms[i],
                               openChat: () {
                                 model.openChat(
-                                    snapshot.data.documents[i].documentID);
+                                    snapshot.data.documents.reversed.toList()[i].documentID);
                               }),
                         ));
                   }
