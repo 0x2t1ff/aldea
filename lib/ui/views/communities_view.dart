@@ -76,9 +76,7 @@ class _CommunitiesViewState extends State<CommunitiesView>
                       ),
                       CommunitiesCarousel(
                         busy: model.busy,
-                        url1: model.busy ? null : model.topCommunities[0],
-                        url2: model.busy ? null : model.topCommunities[1],
-                        url3: model.busy ? null : model.topCommunities[2],
+                        urls: model.busy ? null : model.topCommunities,
                         model: model,
                       ),
                       AllCommunities(

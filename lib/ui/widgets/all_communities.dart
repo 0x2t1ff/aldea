@@ -21,9 +21,7 @@ class _AllCommunitiesState extends State<AllCommunities> {
 
   @override
   Widget build(BuildContext context) {
-    var height = (widget.model.communitiesList.length / 3) * 0.21;
     return Container(
-      height: usableScreenHeight(context) * height,
       width: double.infinity,
       padding: EdgeInsets.only(bottom: 15, left: 15, right: 15),
       child: Column(
@@ -35,8 +33,8 @@ class _AllCommunitiesState extends State<AllCommunities> {
                 color: Color(0xffb5b5b5),
                 fontSize: 29,
               )),
-          Expanded(
-              child: ListView.builder(
+          ListView.builder(
+            shrinkWrap: true,
             primary: false,
             physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.all(0),
@@ -53,7 +51,7 @@ class _AllCommunitiesState extends State<AllCommunities> {
                               : widget.model.communitiesList.length)
                       .toList());
             },
-          )),
+          ),
         ],
       ),
     );

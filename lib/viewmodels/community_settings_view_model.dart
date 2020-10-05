@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aldea/models/community.dart';
 import 'package:aldea/services/cloud_storage_service.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
@@ -13,6 +14,7 @@ class CommunitySettingsViewModel extends BaseModel {
   NavigationService _navigationService = locator<NavigationService>();
   ImageSelector _imageSelector = locator<ImageSelector>();
   CloudStorageService _cloudStorageService = locator<CloudStorageService>();
+  final Community community;
   Map<String, dynamic> rulesData;
   bool isPublic;
   bool isMarketplace;
@@ -21,14 +23,20 @@ class CommunitySettingsViewModel extends BaseModel {
   File bkdPic;
   String description;
 
+  CommunitySettingsViewModel(this.community);
 
   Future saveChanges(String rules, bool isMarketplace, bool isPublic,
       String communityId, String description) {
-        //TODO: pending testing , but won't be doing it in the psycho one
+    //TODO: pending testing , but won't be doing it in the psycho one
     _firestoreService.updateCommunitySettings(
         rules, isMarketplace, isPublic, communityId, description);
     _cloudStorageService.uploadCommunityImages(
         backgroundImage: bkdPic, profileImage: profilePic, id: communityId);
+    community.rules = rules;
+    community.isMarketplace = isMarketplace;
+    community.isPublic = isPublic;
+    community.description = description;
+    notifyListeners();
   }
 
   void popWindow() {
