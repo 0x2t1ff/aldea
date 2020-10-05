@@ -1,15 +1,16 @@
 class Community {
-  final String uid;
-  final String name;
-  final String description;
-  final String rules;
-  final String iconPicUrl;
-  final String bkdPicUrl;
-  final int postsCount;
-  final int followerCount;
-  final List<dynamic> moderators;
-  final bool isPublic;
-  final bool isMarketplace;
+  String uid;
+  String name;
+  String description;
+  String rules;
+  String iconPicUrl;
+  String bkdPicUrl;
+  int postsCount;
+  int followerCount;
+  List<dynamic> moderators;
+  bool isPublic;
+  bool isMarketplace;
+  bool isDeleted;
 
   Community(this.uid, this.rules,
       {this.name,
@@ -20,7 +21,8 @@ class Community {
       this.followerCount,
       this.moderators,
       this.isMarketplace,
-      this.isPublic});
+      this.isPublic,
+      this.isDeleted});
 
   Community.fromData(Map<String, dynamic> data, String uid)
       : name = data['name'],
@@ -33,6 +35,7 @@ class Community {
         followerCount = data['followerCount'],
         isMarketplace = data['isMarketplace'],
         isPublic = data['isPublic'],
+        isDeleted = data['isDeleted'],
         moderators = data['moderators'];
 
   Map<String, dynamic> toJson() {
@@ -48,6 +51,7 @@ class Community {
       'moderators': moderators,
       'isMarketplace': isMarketplace,
       'isPublic': isPublic,
+      'isDeleted': isDeleted
     };
   }
 }

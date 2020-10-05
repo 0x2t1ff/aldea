@@ -5,12 +5,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class CommunitiesCarousel extends StatefulWidget {
   final bool busy;
-  final Map<String, dynamic> url1;
-  final Map<String, dynamic> url2;
-  final Map<String, dynamic> url3;
+  final List<Map<String, dynamic>> urls;
   final CommunitiesViewModel model;
 
-  CommunitiesCarousel({this.busy, this.url1, this.url2, this.url3, this.model});
+  CommunitiesCarousel({this.busy, this.urls, this.model});
 
   @override
   _CommunitiesCarouselState createState() => _CommunitiesCarouselState();
@@ -54,12 +52,8 @@ class _CommunitiesCarouselState extends State<CommunitiesCarousel> {
                 borderRadius: BorderRadius.circular(14),
                 child: CarouselSlider(
                   viewportFraction: 1.0,
-                  items: [
-                    imgContainer(widget.url1),
-                    imgContainer(widget.url2),
-                    imgContainer(widget.url3),
-                  ],
-                  autoPlay: true,
+                  items: [...widget.urls.map((e) => imgContainer(e)).toList()],
+                  autoPlay: widget.urls.length > 1,
                   autoPlayAnimationDuration: Duration(milliseconds: 500),
                   autoPlayInterval: Duration(seconds: 5),
                   onPageChanged: (index) {
@@ -76,39 +70,21 @@ class _CommunitiesCarouselState extends State<CommunitiesCarousel> {
         right: 0.0,
         child:
             Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-          Container(
-            width: 10.0,
-            height: 10.0,
-            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: _current == 0
-                  ? Colors.white.withOpacity(0.8)
-                  : Colors.grey.withOpacity(0.8),
-            ),
-          ),
-          Container(
-            width: 10.0,
-            height: 10.0,
-            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: _current == 1
-                  ? Colors.white.withOpacity(0.8)
-                  : Colors.grey.withOpacity(0.8),
-            ),
-          ),
-          Container(
-            width: 10.0,
-            height: 10.0,
-            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: _current == 2
-                  ? Colors.white.withOpacity(0.8)
-                  : Colors.grey.withOpacity(0.8),
-            ),
-          )
+          ...widget.urls
+              .map(
+                (e) => Container(
+                  width: 10.0,
+                  height: 10.0,
+                  margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _current == 0
+                        ? Colors.white.withOpacity(0.8)
+                        : Colors.grey.withOpacity(0.8),
+                  ),
+                ),
+              )
+              .toList(),
         ]),
       )
     ]);
