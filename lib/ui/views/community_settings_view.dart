@@ -28,7 +28,7 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CommunitySettingsViewModel>.reactive(
-      viewModelBuilder: () => CommunitySettingsViewModel(),
+      viewModelBuilder: () => CommunitySettingsViewModel(widget.community),
       onModelReady: (model) async {
         model.getData(widget.community.uid).then((value) {
           rulesController.text = model.rules;

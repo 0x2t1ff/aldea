@@ -34,9 +34,10 @@ class CommunitiesViewModel extends BaseModel {
       communitiesList.add(Community.fromData(c.data, c.documentID));
     });
     var topList = topDocument;
-    topCommunities.add(topList[0]);
-    topCommunities.add(topList[1]);
-    topCommunities.add(topList[2]);
+
+    if (topList.length > 0) topCommunities.add(topList[0]);
+    if (topList.length > 1) topCommunities.add(topList[1]);
+    if (topList.length > 2) topCommunities.add(topList[2]);
     setBusy(false);
   }
 
