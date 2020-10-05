@@ -20,67 +20,70 @@ class MarketView extends StatefulWidget {
 class _MarketViewState extends State<MarketView>
     with AutomaticKeepAliveClientMixin {
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MarketViewModel>.reactive(
-        viewModelBuilder: () => MarketViewModel(widget.community.uid, widget.products),
+        viewModelBuilder: () =>
+            MarketViewModel(widget.community.uid, widget.products),
         onModelReady: (m) {
           m.setFirstProducts();
         },
-        builder: (context, model, child) => Container(
-              height: double.infinity,
-              width: double.infinity,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.center,
-                    height: communityBodyHeight(context) * 0.08,
-                    padding: EdgeInsets.only(
-                        top: communityBodyHeight(context) * 0.025,
-                        left: 15,
-                        right: 15),
-                    width: double.infinity,
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                            child: TextField(
-                          style: TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                              suffixIcon: Icon(
-                                Icons.search,
-                                color: Colors.white,
-                              ),
-                              hintText: "Buscar",
-                              hintStyle: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  color: Colors.white24),
-                              filled: true,
-                              fillColor: Color(0xff15232B),
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 20),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(20),
-                              )),
-                        )),
-                        horizontalSpaceMedium,
-                        SizedBox(
-                          height: communityBodyHeight(context) * 0.045,
-                          child: Image.asset("assets/images/white-cart.png"),
-                        ),
-                      ],
+        builder: (context, model, child) => (model.firstCategory == null ||
+                model.products.isEmpty)
+            ? Container()
+            : Container(
+                height: double.infinity,
+                width: double.infinity,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.center,
+                      height: communityBodyHeight(context) * 0.08,
+                      padding: EdgeInsets.only(
+                          top: communityBodyHeight(context) * 0.025,
+                          left: 15,
+                          right: 15),
+                      width: double.infinity,
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                              child: TextField(
+                            style: TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                                suffixIcon: Icon(
+                                  Icons.search,
+                                  color: Colors.white,
+                                ),
+                                hintText: "Buscar",
+                                hintStyle: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.white24),
+                                filled: true,
+                                fillColor: Color(0xff15232B),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 20),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(20),
+                                )),
+                          )),
+                          horizontalSpaceMedium,
+                          SizedBox(
+                            height: communityBodyHeight(context) * 0.045,
+                            child: Image.asset("assets/images/white-cart.png"),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  model.isProductSelected
-                      ? ProductSelected(
-                          product: model.selectedProduct,
-                          model: model,
-                        )
-                      : MarketLanding(model: model),
-                ],
-              ),
-            ));
+                    model.isProductSelected
+                        ? ProductSelected(
+                            product: model.selectedProduct,
+                            model: model,
+                          )
+                        : MarketLanding(model: model),
+                  ],
+                ),
+              ));
   }
 }
