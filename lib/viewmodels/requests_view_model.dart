@@ -24,11 +24,12 @@ class RequestsViewModel extends BaseModel {
   }
 
   Future acceptRequest(String uid, int index) async {
+     await _firestoreService.removeRequestUser(communityId, uid);
     await _firestoreService
         .addCommunityFromRequest(uid, communityId)
         .then((value) => _firestoreService.addActivityFromRequest(communityId));
 
-    await _firestoreService.removeRequestUser(communityId, uid);
+   
     await _firestoreService.removeRequest(communityId, uid);
 
     requests.removeAt(index);
