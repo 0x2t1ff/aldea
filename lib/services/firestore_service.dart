@@ -365,10 +365,13 @@ class FirestoreService {
           .setData(community.toJson());
       var userData = await _userCollectionReference.document(userId).get();
       List communities = userData["communities"];
+      List mod = userData["mod"];
+      mod.add(community.uid);
+      
       communities.add(id);
       _userCollectionReference
           .document(userId)
-          .updateData({"communities": communities});
+          .updateData({"communities": communities, "mod":mod});
     } catch (e) {
       //TODO: Find or create a way to repeat error handling without so much repeated code
       if (e is PlatformException) {
