@@ -69,7 +69,7 @@ class _CommunitySettingsViewState extends State<CommunitySettingsView> {
                     margin: EdgeInsets.symmetric(
                         horizontal: screenWidth(context) * 0.1),
                     child: Container(
-                      height: screenHeight(context) * 0.8385 -
+                      height: screenHeight(context) * 0.9 -
                           MediaQuery.of(context).viewInsets.bottom,
                       child: SingleChildScrollView(
                         child: Column(

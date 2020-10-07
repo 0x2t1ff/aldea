@@ -365,10 +365,13 @@ class FirestoreService {
           .setData(community.toJson());
       var userData = await _userCollectionReference.document(userId).get();
       List communities = userData["communities"];
+      List mod = userData["mod"];
+      mod.add(community.uid);
+      
       communities.add(id);
       _userCollectionReference
           .document(userId)
-          .updateData({"communities": communities});
+          .updateData({"communities": communities, "mod":mod});
     } catch (e) {
       //TODO: Find or create a way to repeat error handling without so much repeated code
       if (e is PlatformException) {
@@ -526,8 +529,21 @@ class FirestoreService {
   }
 
   Future<bool> likePost(
-      List<dynamic> likeList, String postId, bool liked) async {
+    List<dynamic> likeList,
+    String postId,
+    bool liked,
+  ) async {
     await _postsCollectionReference
+        .document(postId)
+        .updateData({"likes": likeList});
+    return !liked;
+  }
+
+  Future<bool> likeUserPost(
+      List<dynamic> likeList, String postId, bool liked, String cid) async {
+    await _communitiesCollectionReference
+        .document(cid)
+        .collection("userPosts")
         .document(postId)
         .updateData({"likes": likeList});
     return !liked;
@@ -554,21 +570,17 @@ class FirestoreService {
     });
   }
 
-  Future getVouch(String userId) async {
+  Future<List> getVouch(String userId) async {
     var userDocument = await _userCollectionReference.document(userId).get();
     var userIdList = userDocument.data["vouches"];
     List<User> userList = new List<User>();
-
     for (var f in userIdList) {
-      await _userCollectionReference
-          .where("uid", isEqualTo: f)
-          .getDocuments()
-          .then((onValue) => onValue.documents.first.exists != null
-              ? userList.add(User.fromData(onValue.documents.first.data))
+      await _userCollectionReference.document(f).get().then((onValue) =>
+          onValue.data != null
+              ? userList.add(User.fromData(onValue.data))
               : print("it was null"));
-
-      return userList;
     }
+    return userList;
   }
 
   Future<List> getCommunitiesList(String uid) async {

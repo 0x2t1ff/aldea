@@ -28,7 +28,6 @@ class UserPostsViewModel extends BaseModel {
   Future fetchPosts(String uid) async {
     setBusy(true);
     var userPosts = await _firestoreService.getUserPosts(uid);
-   
 
     setBusy(true);
     if (userPosts is List<UserPostModel>) {
@@ -54,8 +53,8 @@ class UserPostsViewModel extends BaseModel {
     _firestoreService.deleteUserCommunityPosts(postId, communityId);
   }
 
-  Future<bool> likePost(
-      String postId, bool liked, List<dynamic> likeList) async {
+  Future<bool> likeUserPost(
+      String postId, bool liked, List<dynamic> likeList, String cid) async {
     bool likeBool;
 
     if (liked) {
@@ -64,7 +63,7 @@ class UserPostsViewModel extends BaseModel {
       likeList.add(currentUser.uid);
     }
     await _firestoreService
-        .likePost(likeList, postId, liked)
+        .likeUserPost(likeList, postId, liked, cid)
         .then((value) => likeBool = value);
     return likeBool;
   }

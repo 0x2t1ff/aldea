@@ -68,7 +68,7 @@ export const chatNotifications = functions.firestore
                             .messaging()
                             .sendToDevice(token, payload)
                             .then(response => {
-                                console.log('Successfully sent message:', response);
+                                console.log('Successfully sent message:', response.results[0].error);
                             })
                             .catch(error => {
                                 console.log('Error sending message:', error);

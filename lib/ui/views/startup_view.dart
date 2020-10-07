@@ -5,8 +5,7 @@ import 'package:stacked/stacked.dart';
 
 import '../../viewmodels/startup_view_model.dart';
 
-class 
-StartUpView extends StatelessWidget {
+class StartUpView extends StatelessWidget {
   const StartUpView({Key key}) : super(key: key);
 
   @override
@@ -23,9 +22,8 @@ StartUpView extends StatelessWidget {
                         width: screenWidth(context) * 0.45,
                         height: screenHeight(context) * 0.45,
                         child: Image.asset('assets/images/hoguera.png')),
-                      SizedBox(height:40),
+                    SizedBox(height: 40),
                     CircularProgressIndicator(
-                      
                         strokeWidth: 3,
                         valueColor: AlwaysStoppedAnimation(blueTheme))
                   ],

@@ -13,7 +13,6 @@ class VouchView extends StatelessWidget {
   const VouchView(this.uid);
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = devicesize.screenHeight(context) * 0.1043;
     return ViewModelBuilder<VouchViewModel>.reactive(
         viewModelBuilder: () => VouchViewModel(),
         onModelReady: (model) => model.fetchPosts(uid),

@@ -56,14 +56,15 @@ class _UserPostsViewState extends State<UserPostsView> {
                         navigate: () =>
                             model.navigate(model.posts[index].userId),
                         postModel: model.posts[index],
-                        likeFunction: () => model.likePost(
+                        likeFunction: () => model.likeUserPost(
                             model.posts[index].id,
                             model.isLiked(model.posts[index].likes),
-                            model.posts[index].likes),
+                            model.posts[index].likes,
+                            widget.community.uid),
                         isLiked: model.isLiked(model.posts[index].likes),
                         isMod: mod,
-                        deletePost: () =>
-                            model.deletePost(model.posts[index].id, widget.community.uid),
+                        deletePost: () => model.deletePost(
+                            model.posts[index].id, widget.community.uid),
                       ),
                     )
                   : Center(
