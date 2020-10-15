@@ -64,7 +64,6 @@ class _CreateUserPostsState extends State<CreateUserPosts> {
               height: double.infinity,
               width: double.infinity,
               child: TextField(
-                
                 controller: _textController,
                 textAlignVertical: TextAlignVertical.top,
                 expands: true,
@@ -191,8 +190,12 @@ class _CreateUserPostsState extends State<CreateUserPosts> {
             ),
           ),
           GestureDetector(
-            onTap: (){ widget.model.postCreation(widget.communityId ,_textController.text); widget.func();},
-                      child: Container(
+            onTap: () {
+              widget.model
+                  .postCreation(widget.communityId, _textController.text);
+              widget.func();
+            },
+            child: Container(
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(50),
@@ -226,8 +229,8 @@ class _CreateUserPostsState extends State<CreateUserPosts> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-      height: usableScreenHeight(context) * 0.9,
-      width: double.infinity,
+      height: usableScreenHeight(context) * 0.8,
+      width: screenWidth(context),
       child: Stack(
         children: <Widget>[
           ClipRRect(
@@ -258,23 +261,19 @@ class _CreateUserPostsState extends State<CreateUserPosts> {
                   child: Row(
                     children: <Widget>[
                       Expanded(
-                          child: GestureDetector(
-                              child: Expanded(
-                        child: GestureDetector(
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child:
-                                  Text("Publicacion", style: selectedTypeStyle),
-                            ),
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child:
+                                Text("Publicacion", style: selectedTypeStyle),
                           ),
                         ),
-                      )))
+                      ),
                     ],
                   ),
                 ),

@@ -30,6 +30,7 @@ const languages = {
     "quickstrikes empty":
         "Parece que en estos momentos no hay ningún quickstrike activo.",
     "chats empty": "Parece que en estos momentos no tienes ningun chat activo.",
+    "accept": "Aceptar",
   },
   "English": {
     "posts": "Posts",
@@ -61,6 +62,7 @@ const languages = {
     "oops": "Oops...",
     "quickstrikes empty":
         "Seems like there are no active quickstrikes at the moment.",
-    "chats empty": "Seems like you don't have any active chats at the moment."
+    "chats empty": "Seems like you don't have any active chats at the moment.",
+    "accept": "Accept",
   }
 };

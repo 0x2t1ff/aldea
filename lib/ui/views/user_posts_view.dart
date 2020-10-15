@@ -74,7 +74,7 @@ class _UserPostsViewState extends State<UserPostsView> {
                       ),
                     ),
               Positioned(
-                bottom: devicesize.screenHeight(context) * 0.05,
+                bottom: 50,
                 right: devicesize.screenWidth(context) * 0.1,
                 child: CircleAvatar(
                   radius: 30,
@@ -92,12 +92,15 @@ class _UserPostsViewState extends State<UserPostsView> {
                 ),
               ),
               isCreatingPost
-                  ? CreateUserPosts(
-                      model: model,
-                      func: () {
-                        creatingPost();
-                      },
-                      communityId: widget.community.uid,
+                  ? Positioned(
+                      top: 0,
+                      child: CreateUserPosts(
+                        model: model,
+                        func: () {
+                          creatingPost();
+                        },
+                        communityId: widget.community.uid,
+                      ),
                     )
                   : Container()
             ],

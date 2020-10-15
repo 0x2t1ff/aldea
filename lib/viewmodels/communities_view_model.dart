@@ -27,6 +27,7 @@ class CommunitiesViewModel extends BaseModel {
   Future fetchCommunities() async {
     setBusy(true);
     communitiesList.clear();
+    topCommunities.clear();
     var topDocument = await _firestoreService.getTopCommunities();
     var communities = await _firestoreService.getFirstCommunities();
     communities.forEach((c) {
