@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 
 class CommunityRules extends StatefulWidget {
   final Community community;
-  final bool isEditting;
 
-  CommunityRules({Key key, this.community, this.isEditting});
+  CommunityRules({Key key, this.community});
 
   @override
   _CommunityRulesState createState() => _CommunityRulesState();
@@ -17,7 +16,6 @@ class _CommunityRulesState extends State<CommunityRules> {
 
   @override
   void initState() {
-    controller.text = widget.community.description;
     super.initState();
   }
 
@@ -26,42 +24,31 @@ class _CommunityRulesState extends State<CommunityRules> {
     return Container(
       height: double.infinity,
       width: double.infinity,
-      padding: EdgeInsets.all(20),
-      child: Column(
-        children: <Widget>[
-          widget.isEditting
-              ? TextField(
-                  style: TextStyle(color: Colors.white),
-                  maxLines: 23,
-                  decoration: InputDecoration(
-                      hintText: "Escribe una descripcion...",
-                      hintStyle: TextStyle(
-                          fontStyle: FontStyle.italic, color: Colors.white24),
-                      filled: true,
-                      fillColor: Color(0xff15232B),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(15),
-                      )),
-                )
-              : Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Color(0xff17191E),
-                    borderRadius: BorderRadius.circular(15),
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Color(0xff17191E),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    widget.community.rules,
+                    style: TextStyle(color: Colors.white),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      widget.community.rules,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  width: double.infinity,
-                  constraints:
-                      BoxConstraints(minHeight: screenHeight(context) * 0.67),
-                )
-        ],
+                ),
+                width: double.infinity,
+                constraints:
+                    BoxConstraints(minHeight: screenHeight(context) * 0.67),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

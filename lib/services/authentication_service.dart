@@ -39,8 +39,8 @@ class AuthenticationService {
     }
   }
 
-  void signUpPhoneNumber(
-      String phone, String email, String name, String password) {
+  void signUpPhoneNumber(String phone, String email, String name,
+      String password, Function setBusy) {
     _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phone,
         timeout: Duration(seconds: 20),
@@ -61,6 +61,7 @@ class AuthenticationService {
         },
         verificationFailed: (error) => print("error: " + error.message),
         codeSent: (verificationId, [token]) async {
+          setBusy(false);
           var dialogResponse = await _dialogService.showPhoneCodeDialog(
               title: "Código de verificación");
           var credential = PhoneAuthProvider.getCredential(

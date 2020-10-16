@@ -182,16 +182,7 @@ class _CommunityViewState extends State<CommunityView>
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: <Widget>[
-                                                  GestureDetector(
-                                                    onTap: widget.community
-                                                            .moderators
-                                                            .contains(model
-                                                                .currentUser
-                                                                .uid)
-                                                        ? () => model
-                                                            .goToAdminUsersScreen(
-                                                                model.community)
-                                                        : () {},
+                                                  Expanded(
                                                     child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
@@ -224,23 +215,16 @@ class _CommunityViewState extends State<CommunityView>
                                                   ),
                                                   Expanded(
                                                     child: GestureDetector(
-                                                      onTap: widget.community
-                                                              .moderators
-                                                              .contains(model
-                                                                  .currentUser
-                                                                  .uid)
-                                                          ? () => model
-                                                              .goToAdminUsersScreen(
-                                                                  model
-                                                                      .community)
-                                                          : () {},
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: GestureDetector(
-                                                      onTap: () => model
-                                                          .goToAdminUsersScreen(
-                                                              model.community),
+                                                      onTap: () {
+                                                        if (model.community
+                                                            .moderators
+                                                            .contains(model
+                                                                .currentUser
+                                                                .uid)) {
+                                                          model.goToAdminUsersScreen(
+                                                              model.community);
+                                                        }
+                                                      },
                                                       child: Column(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
@@ -452,7 +436,6 @@ class _CommunityViewState extends State<CommunityView>
                                             children: [
                                                 CommunityRules(
                                                   community: widget.community,
-                                                  isEditting: false,
                                                 ),
                                                 NewsView(
                                                     community:
@@ -473,7 +456,6 @@ class _CommunityViewState extends State<CommunityView>
                                             children: [
                                                 CommunityRules(
                                                   community: widget.community,
-                                                  isEditting: false,
                                                 ),
                                                 NewsView(
                                                     community:

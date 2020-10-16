@@ -222,31 +222,37 @@ class _FeedViewState extends State<FeedView>
                                           ? Padding(
                                               padding:
                                                   EdgeInsets.only(right: 8.0),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: custcolor
-                                                        .blueishGreyColor,
-                                                    image: DecorationImage(
-                                                        image: NetworkImage(
-                                                            model
-                                                                .communityList[
-                                                                    index]
-                                                                .iconPicUrl),
-                                                        fit: BoxFit.cover),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.black
-                                                            .withOpacity(0.5),
-                                                        spreadRadius: 3,
-                                                        blurRadius: 7,
-                                                        offset: Offset(8,
-                                                            10), // changes position of shadow
-                                                      ),
-                                                    ]),
-                                                width: devicesize
-                                                        .screenHeight(context) *
-                                                    0.09,
+                                              child: GestureDetector(
+                                                onTap: () =>
+                                                    model.goToCommunity(
+                                                        model.communityList[0]),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: custcolor
+                                                          .blueishGreyColor,
+                                                      image: DecorationImage(
+                                                          image: NetworkImage(
+                                                              model
+                                                                  .communityList[
+                                                                      index]
+                                                                  .iconPicUrl),
+                                                          fit: BoxFit.cover),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: Colors.black
+                                                              .withOpacity(0.5),
+                                                          spreadRadius: 3,
+                                                          blurRadius: 7,
+                                                          offset: Offset(8,
+                                                              10), // changes position of shadow
+                                                        ),
+                                                      ]),
+                                                  width:
+                                                      devicesize.screenHeight(
+                                                              context) *
+                                                          0.09,
+                                                ),
                                               ),
                                             )
                                           : Padding(

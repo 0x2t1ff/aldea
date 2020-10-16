@@ -111,4 +111,12 @@ class CommunityChatViewModel extends BaseModel {
 
     isFirstLoad = false;
   }
+
+  void navigate(String uid) {
+    if (uid == currentUser.uid) {
+    } else {
+      _navigationService.navigateTo(OtherProfileViewRoute, false,
+          arguments: uid);
+    }
+  }
 }

@@ -37,6 +37,7 @@ class CommunitySettingsViewModel extends BaseModel {
     community.isPublic = isPublic;
     community.description = description;
     notifyListeners();
+    return null;
   }
 
   void popWindow() {
@@ -63,10 +64,11 @@ class CommunitySettingsViewModel extends BaseModel {
     setBusy(true);
     rulesData = await _firestoreService.getSettings(communityId);
     print(rulesData.toString());
-    isPublic = rulesData["isPublic"] == "true";
-    isMarketplace = rulesData["isMarketplace"] == "true";
+    isPublic = rulesData["isPublic"];
+    isMarketplace = rulesData["isMarketplace"];
     rules = rulesData["rules"];
     description = rulesData["description"];
     setBusy(false);
+    print(isMarketplace);
   }
 }

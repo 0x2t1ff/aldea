@@ -47,8 +47,15 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
         builder: (context, model, child) => WillPopScope(
               onWillPop: model.onWillPop,
               child: Scaffold(
-                  body: !model.busy
-                      ? Stack(
+                  backgroundColor: custcolor.blueishGreyColor,
+                  body: model.busy || model.posts == null
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(
+                                custcolor.blueishGreyColor),
+                          ),
+                        )
+                      : Stack(
                           children: [
                             Container(
                               child: Stack(children: <Widget>[
@@ -63,9 +70,9 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                             heroFunction: () =>
                                                 model.heroAnimation(model
                                                     .posts[index].imageUrl),
-                                            isParticipating: model
-                                                .participatingIds
-                                                .contains(model.posts[index].id),
+                                            isParticipating:
+                                                model.participatingIds.contains(
+                                                    model.posts[index].id),
                                             model: model,
                                             quickStrikePost: model.posts[index],
                                             index: index);
@@ -159,12 +166,6 @@ class _QuickSTrikeViewState extends State<QuickSTrikeView> {
                                   )
                                 : Container()
                           ],
-                        )
-                      : Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation(
-                                custcolor.blueishGreyColor),
-                          ),
                         )),
             ));
   }

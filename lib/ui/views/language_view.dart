@@ -1,3 +1,4 @@
+import 'package:aldea/constants/languages.dart';
 import 'package:aldea/models/user_model.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
@@ -165,12 +166,12 @@ class LanguageView extends StatelessWidget {
                               color: blueTheme,
                               borderRadius: BorderRadius.circular(40)),
                           child: Text(
-                            "Aceptar",
+                            languages[model.currentLanguage]["accept"],
                             style: TextStyle(
-                              color: almostWhite,
-                              fontFamily: "Raleway",
-                              fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                                color: almostWhite,
+                                fontFamily: "Raleway",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
                           )),
                     ))
               ]),

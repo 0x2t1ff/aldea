@@ -22,7 +22,7 @@ class CommentsView extends StatelessWidget {
       },
       builder: (context, model, child) => !model.busy
           ? Scaffold(
-              resizeToAvoidBottomInset: false,
+              resizeToAvoidBottomInset: true,
               backgroundColor: backgroundColor,
               body: Column(
                 children: <Widget>[
@@ -76,20 +76,25 @@ class CommentsView extends StatelessWidget {
                       )),
                     ),
                   ),
-                  Container(
-                    color: backgroundColor,
-                    width: screenWidth(context),
-                    height: screenHeight(context) * 0.75,
-                    child: ListView.builder(
-                        reverse: true,
-                        padding: EdgeInsets.all(0),
-                        itemCount: model.comments.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: screenHeight(context) * 0.005),
-                              child: CommentWidget(model.comments[index]));
-                        }),
+                  Expanded(
+                    child: Container(
+                      color: backgroundColor,
+                      width: screenWidth(context),
+                      height: screenHeight(context) * 0.75,
+                      child: ListView.builder(
+                          reverse: true,
+                          padding: EdgeInsets.all(0),
+                          itemCount: model.comments.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: screenHeight(context) * 0.005),
+                                child: CommentWidget(
+                                    model.comments[index],
+                                    () => model
+                                        .navigate(model.comments[index].uid)));
+                          }),
+                    ),
                   ),
                   Container(
                     decoration: BoxDecoration(

@@ -146,7 +146,11 @@ class ProfileView extends StatelessWidget {
                               width: screenWidth(context) * 0.18,
                               height: screenHeight(context) * 0.09,
                               child: GestureDetector(
-                                onTap: () => model.selectProfileImage(),
+                                onTap: () {
+                                  if (model.isEditting) {
+                                    model.selectProfileImage();
+                                  }
+                                },
                               ),
                             )),
                         Positioned(

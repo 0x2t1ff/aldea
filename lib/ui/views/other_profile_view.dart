@@ -91,15 +91,15 @@ class OtherProfileView extends StatelessWidget {
                                     )),
                                 model.currentUser.isGodAdmin
                                     ? Positioned(
-                                        top: screenHeight(context) * 0.04,
-                                        right: screenWidth(context) * 0.08,
+                                        top: 10,
+                                        right: 10,
                                         child: GestureDetector(
                                           onTap: () => model.banUser(),
                                           child: Container(
                                             child: Icon(
-                                              Icons.accessible_forward,
+                                              Icons.delete_outline_rounded,
                                               color: Colors.red,
-                                              size: 45,
+                                              size: 35,
                                             ),
                                           ),
                                         ),
