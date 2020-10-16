@@ -321,21 +321,25 @@ class _SignUpViewState extends State<SignUpView> {
                                                   vertical:
                                                       screenWidth(context) *
                                                           0.025),
-                                              child: Text("Entrar",
-                                                  style: TextStyle(
-                                                      color: blueTheme,
-                                                      fontFamily: "Raleway",
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize:
-                                                          screenWidth(context) *
+                                              child: model.busy
+                                                  ? CircularProgressIndicator()
+                                                  : Text("Entrar",
+                                                      style: TextStyle(
+                                                          color: blueTheme,
+                                                          fontFamily: "Raleway",
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: screenWidth(
+                                                                  context) *
                                                               0.045)),
                                             )),
                                         onTap: () {
-                                          model.signUp(
-                                              email: emailController.text,
-                                              password: passwordController.text,
-                                              name: nameController.text);
+                                          if (!model.busy)
+                                            model.signUp(
+                                                email: emailController.text,
+                                                password:
+                                                    passwordController.text,
+                                                name: nameController.text);
                                         },
                                       ),
                                     ),

@@ -1,3 +1,4 @@
+import 'package:aldea/constants/route_names.dart';
 import 'package:aldea/models/comment_model.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/navigation_service.dart';
@@ -10,7 +11,7 @@ class CommentsViewModel extends BaseModel {
   NavigationService _navigationService = locator<NavigationService>();
   List<CommentModel> _comments;
   List<CommentModel> get comments => _comments;
- 
+
   Map mapId;
   Future fetchComments(Map ids) async {
     mapId = ids;
@@ -48,11 +49,23 @@ class CommentsViewModel extends BaseModel {
       _firestoreService.postUserComment(mapId['communityId'], mapId['postId'],
           text, currentUser.name, currentUser.uid);
     }
-    _comments.add(CommentModel(date: DateTime.now().toString(), name: currentUser.name, uid: currentUser.uid, text: text));
+    _comments.add(CommentModel(
+        date: DateTime.now().toString(),
+        name: currentUser.name,
+        uid: currentUser.uid,
+        text: text));
     notifyListeners();
   }
 
   void goBack() {
     _navigationService.pop();
+  }
+
+  void navigate(String uid) {
+    if (uid == currentUser.uid) {
+    } else {
+      _navigationService.navigateTo(OtherProfileViewRoute, false,
+          arguments: uid);
+    }
   }
 }

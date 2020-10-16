@@ -87,6 +87,8 @@ class CommunityChatView extends StatelessWidget {
                                   },
                                   model: model.messages[index],
                                   currentUser: model.currentUser.uid,
+                                  navigateToUser: () => model
+                                      .navigate(model.messages[index].senderId),
                                 );
                               }),
                         );

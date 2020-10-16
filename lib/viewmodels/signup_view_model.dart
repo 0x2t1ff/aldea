@@ -33,12 +33,13 @@ class SignUpViewModel extends BaseModel {
     setBusy(true);
     var exists = await _firestoreService.phoneNumberExists(phoneNumber);
     if (exists) {
+      setBusy(false);
       _dialogService.showDialog(
           title: "Error",
           description: "Ya existe un usuario con ese número de teléfono.");
     } else {
       _authenticationService.signUpPhoneNumber(
-          phoneNumber, email, name, password);
+          phoneNumber, email, name, password, setBusy);
     }
   }
 }

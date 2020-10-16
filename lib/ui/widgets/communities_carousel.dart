@@ -52,7 +52,9 @@ class _CommunitiesCarouselState extends State<CommunitiesCarousel> {
                 borderRadius: BorderRadius.circular(14),
                 child: CarouselSlider(
                   viewportFraction: 1.0,
-                  items: [...widget.urls.map((e) => imgContainer(e)).toList()],
+                  items: widget.urls.length == 0
+                      ? []
+                      : [...widget.urls.map((e) => imgContainer(e)).toList()],
                   autoPlay: widget.urls.length > 1,
                   autoPlayAnimationDuration: Duration(milliseconds: 500),
                   autoPlayInterval: Duration(seconds: 5),
@@ -68,24 +70,28 @@ class _CommunitiesCarouselState extends State<CommunitiesCarousel> {
         top: screenHeight(context) * 0.24,
         left: 0.0,
         right: 0.0,
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-          ...widget.urls
-              .map(
-                (e) => Container(
-                  width: 10.0,
-                  height: 10.0,
-                  margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _current == 0
-                        ? Colors.white.withOpacity(0.8)
-                        : Colors.grey.withOpacity(0.8),
-                  ),
-                ),
-              )
-              .toList(),
-        ]),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: widget.urls == null
+                ? []
+                : [
+                    ...widget.urls
+                        .map(
+                          (e) => Container(
+                            width: 10.0,
+                            height: 10.0,
+                            margin: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 5.0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _current == 0
+                                  ? Colors.white.withOpacity(0.8)
+                                  : Colors.grey.withOpacity(0.8),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ]),
       )
     ]);
   }

@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 class CommentWidget extends StatelessWidget {
   final CommentModel model;
-  const CommentWidget(this.model);
+  final Function navigate;
+  const CommentWidget(this.model, this.navigate);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,14 +20,17 @@ class CommentWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(bottom: screenHeight(context) * 0.01),
-              child: Text(
-                model.name,
-                style: TextStyle(
-                    color: blueTheme,
-                    fontFamily: 'Raleway',
-                    fontWeight: FontWeight.bold),
+            GestureDetector(
+              onTap: navigate,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: screenHeight(context) * 0.01),
+                child: Text(
+                  model.name,
+                  style: TextStyle(
+                      color: blueTheme,
+                      fontFamily: 'Raleway',
+                      fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             Text(

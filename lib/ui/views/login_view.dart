@@ -1,3 +1,4 @@
+import 'package:aldea/ui/widgets/bottom_filler.dart';
 import 'package:aldea/ui/widgets/notch_filler.dart';
 import 'package:international_phone_input/international_phone_input.dart';
 
@@ -29,7 +30,9 @@ class _LoginViewState extends State<LoginView> {
         body: SingleChildScrollView(
           child: ConstrainedBox(
             constraints: BoxConstraints(
-                maxHeight: screenHeight(context),
+                maxHeight: screenHeight(context) +
+                    notchHeight(context) +
+                    bottomHeight(context),
                 maxWidth: screenWidth(context)),
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -86,7 +89,7 @@ class _LoginViewState extends State<LoginView> {
                                           bottom:
                                               screenHeight(context) * 0.009),
                                       child: Text(
-                                        "Email",
+                                        "Télefono",
                                         style: TextStyle(
                                             color: blueTheme,
                                             fontFamily: "Raleway",
@@ -192,16 +195,19 @@ class _LoginViewState extends State<LoginView> {
                                                 screenWidth(context) * 0.06,
                                             vertical:
                                                 screenWidth(context) * 0.025),
-                                        child: Text("Entrar",
-                                            style: TextStyle(
-                                                color: blueTheme,
-                                                fontFamily: "Raleway",
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: screenWidth(context) *
-                                                    0.045)),
+                                        child: model.busy
+                                            ? CircularProgressIndicator()
+                                            : Text("Entrar",
+                                                style: TextStyle(
+                                                    color: blueTheme,
+                                                    fontFamily: "Raleway",
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize:
+                                                        screenWidth(context) *
+                                                            0.045)),
                                       )),
                                   onTap: () {
-                                    model.login();
+                                    if (!model.busy) model.login();
                                   },
                                 ),
                               ),
@@ -210,7 +216,6 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       )),
                 ),
-                NotchFiller()
               ],
             ),
           ),

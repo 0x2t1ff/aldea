@@ -38,35 +38,44 @@ class CommunityPreview extends StatelessWidget {
         child: community != null
             ? Column(
                 children: <Widget>[
-                  Expanded(
-                      flex: 8,
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(25),
-                        child: Stack(
-                          alignment: Alignment.bottomLeft,
-                          children: <Widget>[
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: IconButton(
-                                  icon: Icon(
-                                    Icons.clear,
-                                    size: 30,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: cancel),
-                            ),
-                            Container(
-                                decoration: profilePicDecoration,
-                                child: CircleAvatar(
-                                  radius: 50,
-                                  backgroundImage:
-                                      NetworkImage(community.iconPicUrl),
-                                ))
-                          ],
-                        ),
-                      )),
+                  GestureDetector(
+                    onTap: () {
+                      if (model.currentUser.isGodAdmin ||
+                          model.currentUser.communities
+                              .contains(community.uid)) {
+                        model.goToCommunity(community);
+                      }
+                    },
+                    child: Expanded(
+                        flex: 7,
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(25),
+                          child: Stack(
+                            alignment: Alignment.bottomLeft,
+                            children: <Widget>[
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: IconButton(
+                                    icon: Icon(
+                                      Icons.clear,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: cancel),
+                              ),
+                              Container(
+                                  decoration: profilePicDecoration,
+                                  child: CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage:
+                                        NetworkImage(community.iconPicUrl),
+                                  ))
+                            ],
+                          ),
+                        )),
+                  ),
                   Expanded(
                     flex: 2,
                     child: ClipRect(
@@ -94,7 +103,7 @@ class CommunityPreview extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    flex: 5,
+                    flex: 6,
                     child: Container(
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
@@ -103,21 +112,24 @@ class CommunityPreview extends StatelessWidget {
                               bottomLeft: Radius.circular(25),
                               bottomRight: Radius.circular(25))),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Padding(
                             padding: EdgeInsets.only(
                                 left: screenWidth(context) * 0.023),
-                            child: Container(
-                              height: screenHeight(context) * 0.074,
-                              child: Text(
-                                community.description,
-                                style: TextStyle(
+                            child: Expanded(
+                              child: Container(
+                                child: Text(
+                                  community.description,
+                                  maxLines: 4,
+                                  style: TextStyle(
                                     color: Color(0xffB1AFAF),
                                     fontSize: 16,
                                     fontFamily: 'Raleway',
-                                    fontWeight: FontWeight.w600),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
                             ),
                           ),

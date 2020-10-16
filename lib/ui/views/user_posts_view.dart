@@ -81,7 +81,7 @@ class _UserPostsViewState extends State<UserPostsView> {
                   backgroundColor: custcolor.blueTheme,
                   child: IconButton(
                     color: custcolor.almostBlack,
-                    icon: Icon(Icons.local_post_office),
+                    icon: Icon(Icons.add),
                     onPressed: () {
                       setState(() {
                         creatingPost();

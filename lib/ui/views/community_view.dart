@@ -436,7 +436,6 @@ class _CommunityViewState extends State<CommunityView>
                                             children: [
                                                 CommunityRules(
                                                   community: widget.community,
-                                                  isEditting: false,
                                                 ),
                                                 NewsView(
                                                     community:
@@ -457,7 +456,6 @@ class _CommunityViewState extends State<CommunityView>
                                             children: [
                                                 CommunityRules(
                                                   community: widget.community,
-                                                  isEditting: false,
                                                 ),
                                                 NewsView(
                                                     community:
