@@ -4,6 +4,7 @@ import 'package:aldea/ui/widgets/market_landing.dart';
 import 'package:aldea/ui/widgets/product_selected.dart';
 import 'package:aldea/viewmodels/market_view_model.dart';
 import '../../models/product.dart';
+import 'package:aldea/ui/views/cart_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -41,9 +42,10 @@ class _MarketViewState extends State<MarketView>
                       alignment: Alignment.center,
                       height: communityBodyHeight(context) * 0.08,
                       padding: EdgeInsets.only(
-                          top: communityBodyHeight(context) * 0.025,
+                          top: communityBodyHeight(context) * 0.015,
                           left: 15,
-                          right: 15),
+                          right: 15,
+                          bottom: communityBodyHeight(context) * 0.015),
                       width: double.infinity,
                       child: Row(
                         children: <Widget>[
@@ -69,19 +71,25 @@ class _MarketViewState extends State<MarketView>
                                 )),
                           )),
                           horizontalSpaceMedium,
-                          SizedBox(
-                            height: communityBodyHeight(context) * 0.045,
-                            child: Image.asset("assets/images/white-cart.png"),
+                          GestureDetector(
+                            onTap: () => model.openCart(),
+                            child: SizedBox(
+                              height: communityBodyHeight(context) * 0.045,
+                              child:
+                                  Image.asset("assets/images/white-cart.png"),
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    model.isProductSelected
-                        ? ProductSelected(
-                            product: model.selectedProduct,
-                            model: model,
-                          )
-                        : MarketLanding(model: model),
+                    model.isShowingCart
+                        ? CartView(model)
+                        : model.isProductSelected
+                            ? ProductSelected(
+                                product: model.selectedProduct,
+                                model: model,
+                              )
+                            : MarketLanding(model: model),
                   ],
                 ),
               ));

@@ -12,6 +12,7 @@ import 'package:aldea/ui/views/requests_view.dart';
 import 'package:aldea/ui/views/vouch_view.dart';
 import './views/profile_settings_view.dart';
 import './views/home_view.dart';
+import './views/cart_view.dart';
 import 'package:flutter/material.dart';
 import '../constants/route_names.dart';
 import './views/login_view.dart';
@@ -115,6 +116,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
           routeName: settings.name,
           viewToShow: CommunitySettingsView(settings.arguments));
+    case CartViewRoute:
+      return _getPageRoute(
+          routeName: settings.name, viewToShow: CartView(settings.arguments));
     case CommunitiesProfileViewRoute:
       return _getPageRoute(
           routeName: settings.name,

@@ -41,7 +41,11 @@ class ProductSelected extends StatelessWidget {
                     )
                   ]),
                   IconButton(
-                      icon: Icon(Icons.reply, color: Colors.white, size: 32,),
+                      icon: Icon(
+                        Icons.reply,
+                        color: Colors.white,
+                        size: 32,
+                      ),
                       onPressed: () => model.unselectProduct())
                 ],
               ),
@@ -67,6 +71,7 @@ class ProductSelected extends StatelessWidget {
                               fontWeight: FontWeight.w600),
                         ),
                         GestureDetector(
+                          onTap: () => model.addToCart(product),
                           child: SizedBox(
                               height: 32,
                               child:

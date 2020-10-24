@@ -15,7 +15,8 @@ class MarketLanding extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15),
-      child: !model.isShowingMore
+      child: false
+      //por si algun dia hay q tocar el codigo antiguo lo lo borro but like...XD
           ? Column(
               children: <Widget>[
                 Container(
