@@ -3,6 +3,7 @@ import "../shared/ui_helpers.dart";
 import 'package:flutter/material.dart';
 import 'package:aldea/ui/widgets/product_list_item.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
+import '../../constants/languages.dart';
 
 class CartView extends StatelessWidget {
   final MarketViewModel model;
@@ -22,13 +23,16 @@ class CartView extends StatelessWidget {
           children: [
             Container(
                 height: screenHeight(context) * 0.62,
-                child: model.cartProducts == null
-                    ? Container()
-                    : ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: model.cartProducts.length,
-                        itemBuilder: (context, index) =>
-                            ProductListItem(model, index))),
+                child: model.cartProducts.isEmpty
+                ? Center(child:
+                    Text(languages[model.currentLanguage]["empty cart"],
+                        style: TextStyle(color: Colors.white))
+                )
+                : ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: model.cartProducts.length,
+                    itemBuilder: (context, index) =>
+                    ProductListItem(model, index))),
             Expanded(
               child: Container(
                   color: almostBlack,
@@ -48,7 +52,11 @@ class CartView extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => model.checkout(),
+                        onTap: () async {
+                          if(model.cartProducts.isNotEmpty && !model.isSubmitting){
+                            model.checkout();
+                          }
+                        },
                         child: Container(
                             height: screenHeight(context) * 0.05,
                             width: screenWidth(context) * 0.28,
@@ -58,8 +66,8 @@ class CartView extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("Encargar ", style: checkStyle),
-                                Icon(Icons.check_outlined)
+                                Text(languages[model.currentLanguage]["order"], style: checkStyle),
+                                model.isSubmitting ?SizedBox(height: 20,width: 20, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(almostBlack),),)  : Icon(Icons.check_outlined)
                               ],
                             )),
                       )

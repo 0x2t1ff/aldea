@@ -24,4 +24,15 @@ class Product {
         imagesList = data['imagesList'],
         dateAdded = data['dateAdded'],
         model = data['model'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'description': description,
+      'model': model,
+      'price': price,
+      'imagesList': imagesList,
+      'dateAdded': dateAdded,
+    };
+  }
 }

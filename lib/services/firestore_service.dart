@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 import '../models/user_model.dart';
+import '../models/order.dart';
+import '../models/product.dart';
 
 class FirestoreService {
   //COLLECTION REFERENCES
@@ -884,6 +886,21 @@ class FirestoreService {
     } catch (e) {
       return (e.message);
     }
+  }
+
+  Future submitOrder(List<Product> products, String userId, String cid) async {
+    double totalPrice = 0;
+    var mapProducts = products.map((product) { 
+      totalPrice += product.price;
+      return product.toJson();
+    }).toList();
+    final order = Order(userId: userId, products: mapProducts,totalPrice: totalPrice, pending: false, creationDate: Timestamp.now());
+    var result = await _communitiesCollectionReference
+        .document(cid)
+        .collection("orders")
+        .add(order.toJson());
+    return result;
+
   }
 
   //      **QUICKSTRIKE METHODS**

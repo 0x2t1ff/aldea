@@ -31,6 +31,10 @@ const languages = {
         "Parece que en estos momentos no hay ningún quickstrike activo.",
     "chats empty": "Parece que en estos momentos no tienes ningun chat activo.",
     "accept": "Aceptar",
+    "empty cart": "No hay productos en el carrito.",
+    "order sent" : "Pedido enviado!",
+    "mod contact" : "Un moderador se pondrá en contacto pronto para confirmar el pedido.",
+    "order": "Engargar",
   },
   "English": {
     "posts": "Posts",
@@ -64,5 +68,9 @@ const languages = {
         "Seems like there are no active quickstrikes at the moment.",
     "chats empty": "Seems like you don't have any active chats at the moment.",
     "accept": "Accept",
+    "empty cart": "There are no items in the cart.",
+    "order sent" : "Order sent!",
+    "mod contact" : "A moderator will contact you soon to confirm your order.",
+    "order": "Order"
   }
 };
