@@ -759,6 +759,7 @@ class FirestoreService {
     var documents = await _communitiesCollectionReference
         .document(cid)
         .collection("orders")
+        .where("pending", isEqualTo: true)
         .getDocuments();
     return documents.documents;
   }
@@ -767,6 +768,8 @@ class FirestoreService {
     var documents = await _communitiesCollectionReference
         .document(cid)
         .collection("orders")
+        .where("pending", isEqualTo: false)
+        .limit(10)
         .getDocuments();
     return documents.documents;
   }

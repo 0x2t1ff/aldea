@@ -6,10 +6,12 @@ import "../shared/app_colors.dart";
 import 'package:aldea/models/order.dart';
 import "../shared/ui_helpers.dart";
 import 'package:aldea/ui/widgets/notch_filler.dart';
+import '../../constants/languages.dart';
 
 class DetailedOrderView extends StatelessWidget {
   final List list;
-  DetailedOrderView(this.list);
+  final bool isOld;
+  DetailedOrderView({this.list, this.isOld});
   @override
   Widget build(BuildContext context) {
     TextStyle textStyle = TextStyle(
@@ -19,13 +21,15 @@ class DetailedOrderView extends StatelessWidget {
         fontSize: 18);
     return ViewModelBuilder<DetailedOrderViewModel>.reactive(
       viewModelBuilder: () => DetailedOrderViewModel(),
-      onModelReady: (model) {
+      onModelReady: (model) async {
+        model.setLoading(true);
         model.list = list;
-        model.setData();
+        await model.setData();
+        model.setLoading(false);
       },
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
-        body: Column(
+        body: model.isLoading ? Center(child: CircularProgressIndicator(),) : Column(
           children: [
             NotchFiller(),
             Container(
@@ -78,20 +82,14 @@ class DetailedOrderView extends StatelessWidget {
             Expanded(
               child: Container(
                   color: blueTheme,
-                  child: Row(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text("dirección del cliente", style: textStyle),
-                          Text(model.user.address, style: textStyle),
-                        ],
-                      ),
-                      Column(
+                      Text(model.user.address, style: textStyle),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          GestureDetector(
+                          if(!isOld)  GestureDetector(
                               onTap: () => model.dismissOrder(),
                               child: Container(
                                   decoration: BoxDecoration(
@@ -100,7 +98,7 @@ class DetailedOrderView extends StatelessWidget {
                                   child: Padding(
                                     padding: EdgeInsets.all(
                                         screenWidth(context) * 0.02),
-                                    child: Text(" Dismiss order",
+                                    child: Text(languages[model.currentLanguage]["dismissOrder"],
                                         style: textStyle),
                                   ))),
                           GestureDetector(
@@ -114,7 +112,7 @@ class DetailedOrderView extends StatelessWidget {
                                         screenWidth(context) * 0.02),
                                     child: Row(
                                       children: [
-                                        Text("perfil cliente"),
+                                        Text(languages[model.currentLanguage]["profile"]),
                                         Icon(Icons.person)
                                       ],
                                     ),

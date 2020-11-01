@@ -14,10 +14,16 @@ class DetailedOrderViewModel extends BaseModel {
   String id;
   Order order;
   User user;
-  setData() {
+  bool isLoading;
+  setData() async {
     order = list[0];
     id = list[1];
-    getUserData();
+    await getUserData();
+  }
+  
+  setLoading(bool val){
+    isLoading = val;
+   notifyListeners(); 
   }
 
   getUserData() async {

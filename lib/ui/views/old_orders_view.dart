@@ -12,7 +12,7 @@ class OldOrdersView extends StatelessWidget {
   bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
-    model.loadOrders();
+    model.loadOldOrders();
     return Container(
       height: screenHeight(context) * 0.64,
       child: ListView.builder(
@@ -21,11 +21,9 @@ class OldOrdersView extends StatelessWidget {
           itemBuilder: (context, index) {
             Order currentOrder = Order.fromData(
                 model.oldOrders[index].data, model.oldOrders[index].documentID);
-            return OrderWidget(
-                index, currentOrder, () => print(" nothing for now sorry kekw"),
-                () {
+            return OrderWidget( index, currentOrder, () => print(" nothing for now sorry kekw"), () {
               List list = [currentOrder, model.uid];
-              model.openDetailedOrder(list);
+              model.openDetailedOrder(list, isOld: true);
             }, model.uid);
           }),
     );

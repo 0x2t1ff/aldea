@@ -1,6 +1,7 @@
 const languages = {
   "Español": {
     "posts": "Publicaciones",
+    "profile": "Perfil",
     "top": "Top de la semana",
     "config": "Configuración",
     "notifications": "Notificaciones",
@@ -35,9 +36,11 @@ const languages = {
     "order sent" : "Pedido enviado!",
     "mod contact" : "Un moderador se pondrá en contacto pronto para confirmar el pedido.",
     "order": "Engargar",
+    "dismiss order": "Aceptar pedido"
   },
   "English": {
     "posts": "Posts",
+    "profile": "Profile",
     "top": "Weekly Top",
     "config": "Settings",
     "notifications": "Notifications",
@@ -71,6 +74,7 @@ const languages = {
     "empty cart": "There are no items in the cart.",
     "order sent" : "Order sent!",
     "mod contact" : "A moderator will contact you soon to confirm your order.",
-    "order": "Order"
+    "order": "Order",
+    "dismiss order": "Dismiss order"
   }
 };

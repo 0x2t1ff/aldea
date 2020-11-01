@@ -124,8 +124,8 @@ class MarketViewModel extends BaseModel {
     return null;
   }
 
-  void openDetailedOrder(List list) {
+  void openDetailedOrder(List list, {bool isOld = false}) {
     _navigationService.navigateTo(DetailedOrderViewRoute, false,
-        arguments: list);
+        arguments:[list, isOld]);
   }
 }

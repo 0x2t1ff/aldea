@@ -81,7 +81,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case DetailedOrderViewRoute:
       return _getPageRoute(
           routeName: settings.name,
-          viewToShow: DetailedOrderView(settings.arguments));
+          viewToShow: DetailedOrderView(list: (settings.arguments as List)[0], isOld:(settings.arguments as List)[1] ));
     case ProfileSettingsViewRoute:
       return _getPageRoute(
         routeName: settings.name,

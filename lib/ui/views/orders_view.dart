@@ -18,6 +18,13 @@ class OrdersView extends StatefulWidget {
 class _OrdersViewState extends State<OrdersView> with TickerProviderStateMixin {
   TabController _controller;
   bool get wantKeepAlive => true;
+ 
+  @override
+  void initState(){
+    super.initState();
+    _controller = TabController(vsync: this, length: 2, initialIndex: 0);
+  }
+  
   @override
   void dispose() {
     _controller.dispose();
@@ -26,7 +33,6 @@ class _OrdersViewState extends State<OrdersView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    _controller = TabController(vsync: this, length: 2, initialIndex: 0);
     TextStyle checkStyle = TextStyle(
         color: almostWhite,
         fontFamily: "Raleway",
