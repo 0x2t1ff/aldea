@@ -24,15 +24,15 @@ class CartView extends StatelessWidget {
             Container(
                 height: screenHeight(context) * 0.62,
                 child: model.cartProducts.isEmpty
-                ? Center(child:
-                    Text(languages[model.currentLanguage]["empty cart"],
-                        style: TextStyle(color: Colors.white))
-                )
-                : ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: model.cartProducts.length,
-                    itemBuilder: (context, index) =>
-                    ProductListItem(model, index))),
+                    ? Center(
+                        child: Text(
+                            languages[model.currentLanguage]["empty cart"],
+                            style: TextStyle(color: Colors.white)))
+                    : ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: model.cartProducts.length,
+                        itemBuilder: (context, index) =>
+                            ProductListItem(model, index))),
             Expanded(
               child: Container(
                   color: almostBlack,
@@ -53,7 +53,8 @@ class CartView extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          if(model.cartProducts.isNotEmpty && !model.isSubmitting){
+                          if (model.cartProducts.isNotEmpty &&
+                              !model.isSubmitting) {
                             model.checkout();
                           }
                         },
@@ -66,8 +67,19 @@ class CartView extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(languages[model.currentLanguage]["order"], style: checkStyle),
-                                model.isSubmitting ?SizedBox(height: 20,width: 20, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(almostBlack),),)  : Icon(Icons.check_outlined)
+                                Text(languages[model.currentLanguage]["order"],
+                                    style: checkStyle),
+                                model.isSubmitting
+                                    ? SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  almostBlack),
+                                        ),
+                                      )
+                                    : Icon(Icons.check_outlined)
                               ],
                             )),
                       )

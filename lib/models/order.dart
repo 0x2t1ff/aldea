@@ -7,6 +7,7 @@ class Order {
   final double totalPrice;
   final Timestamp creationDate;
   final bool pending;
+  final String id;
 
   const Order(
       {@required this.userId,
@@ -14,14 +15,15 @@ class Order {
       @required this.totalPrice,
       @required this.creationDate,
       @required this.pending,
-      });
+      this.id});
 
-  Order.fromData(Map<String, dynamic> data)
+  Order.fromData(Map<String, dynamic> data, String id)
       : userId = data['userId'],
         products = data['products'],
         totalPrice = data['totalPrice'].toDouble(),
         creationDate = data['creationDate'],
-        pending = data['pending'];
+        pending = data['pending'],
+        id = id;
 
   Map<String, dynamic> toJson() {
     return {
@@ -29,8 +31,8 @@ class Order {
       'products': products,
       'totalPrice': totalPrice,
       'pending': pending,
-      'creationDate': creationDate
+      'creationDate': creationDate,
+      'id': id,
     };
   }
-
 }

@@ -20,3 +20,4 @@ const String CommunityUsersAdminRoute= 'CommunityUsersAdminView';
 const String PrivacidadViewRoute = 'PrivacidadView';
 const String LanguageViewRoute = 'LanguageView';
 const String CartViewRoute = 'CartView';
+const String DetailedOrderViewRoute = 'DetailedOrderView';

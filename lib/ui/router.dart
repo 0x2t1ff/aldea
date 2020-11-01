@@ -21,6 +21,8 @@ import 'views/community_view.dart';
 import 'views/language_view.dart';
 import './views/community_settings_view.dart';
 
+import './views/detailed_order_view.dart';
+
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case CommunityViewRoute:
@@ -76,6 +78,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: HomeView(),
       );
+    case DetailedOrderViewRoute:
+      return _getPageRoute(
+          routeName: settings.name,
+          viewToShow: DetailedOrderView(settings.arguments));
     case ProfileSettingsViewRoute:
       return _getPageRoute(
         routeName: settings.name,

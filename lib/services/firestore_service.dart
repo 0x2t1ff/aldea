@@ -755,6 +755,14 @@ class FirestoreService {
     }
   }
 
+  Future<List<DocumentSnapshot>> getOrders(String cid) async {
+    var documents = await _communitiesCollectionReference
+        .document(cid)
+        .collection("orders")
+        .getDocuments();
+    return documents.documents;
+  }
+
   Future<Map<String, dynamic>> getSettings(String communityId) async {
     var snapshot =
         await _communitiesCollectionReference.document(communityId).get();
@@ -890,17 +898,21 @@ class FirestoreService {
 
   Future submitOrder(List<Product> products, String userId, String cid) async {
     double totalPrice = 0;
-    var mapProducts = products.map((product) { 
+    var mapProducts = products.map((product) {
       totalPrice += product.price;
       return product.toJson();
     }).toList();
-    final order = Order(userId: userId, products: mapProducts,totalPrice: totalPrice, pending: false, creationDate: Timestamp.now());
+    final order = Order(
+        userId: userId,
+        products: mapProducts,
+        totalPrice: totalPrice,
+        pending: false,
+        creationDate: Timestamp.now());
     var result = await _communitiesCollectionReference
         .document(cid)
         .collection("orders")
         .add(order.toJson());
     return result;
-
   }
 
   //      **QUICKSTRIKE METHODS**
@@ -957,6 +969,14 @@ class FirestoreService {
         .collection("pQuickstrikes")
         .document(id)
         .delete();
+  }
+
+  Future dismissOrder(String cid, String orderId) {
+    _communitiesCollectionReference
+        .document(cid)
+        .collection("orders")
+        .document(orderId)
+        .updateData({"pending": false});
   }
 
   Stream<QuerySnapshot> getChats(String uid, int limit) {

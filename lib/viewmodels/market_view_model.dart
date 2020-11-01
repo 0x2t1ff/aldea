@@ -3,6 +3,10 @@ import 'package:aldea/locator.dart';
 import 'package:aldea/models/product.dart';
 import 'package:aldea/services/firestore_service.dart';
 import 'package:aldea/services/dialog_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:aldea/services/navigation_service.dart';
+import 'package:aldea/models/order.dart';
+import 'package:aldea/constants/route_names.dart';
 
 import 'base_model.dart';
 
@@ -21,7 +25,9 @@ class MarketViewModel extends BaseModel {
   final String uid;
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final DialogService _dialogService = locator<DialogService>();
+  final NavigationService _navigationService = locator<NavigationService>();
   bool isSubmitting = false;
+  List<DocumentSnapshot> newOrders = [];
 
   void showMore() {
     isShowingMore = true;
@@ -93,7 +99,12 @@ class MarketViewModel extends BaseModel {
     notifyListeners();
   }
 
-  Future<void> checkout() async  {
+  Future loadOrders() async {
+    newOrders = await _firestoreService.getOrders(uid);
+    notifyListeners();
+  }
+
+  Future<void> checkout() async {
     isSubmitting = true;
     notifyListeners();
     await _firestoreService.submitOrder(cartProducts, currentUser.uid, uid);
@@ -101,7 +112,14 @@ class MarketViewModel extends BaseModel {
     cartProducts.clear();
     isSubmitting = false;
     notifyListeners();
-    await _dialogService.showDialog(title: languages[currentLanguage]["order sent"], description: languages[currentLanguage]["mod contact"]);
+    await _dialogService.showDialog(
+        title: languages[currentLanguage]["order sent"],
+        description: languages[currentLanguage]["mod contact"]);
     return null;
+  }
+
+  void openDetailedOrder(List list) {
+    _navigationService.navigateTo(DetailedOrderViewRoute, false,
+        arguments: list);
   }
 }
