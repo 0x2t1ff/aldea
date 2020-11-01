@@ -28,6 +28,7 @@ class MarketViewModel extends BaseModel {
   final NavigationService _navigationService = locator<NavigationService>();
   bool isSubmitting = false;
   List<DocumentSnapshot> newOrders = [];
+  List<DocumentSnapshot> oldOrders = [];
 
   void showMore() {
     isShowingMore = true;
@@ -101,6 +102,11 @@ class MarketViewModel extends BaseModel {
 
   Future loadOrders() async {
     newOrders = await _firestoreService.getOrders(uid);
+    notifyListeners();
+  }
+
+  Future loadOldOrders() async {
+    oldOrders = await _firestoreService.getOldOrders(uid);
     notifyListeners();
   }
 

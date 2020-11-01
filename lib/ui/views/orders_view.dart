@@ -3,6 +3,7 @@ import "../shared/ui_helpers.dart";
 import 'package:flutter/material.dart';
 import 'package:aldea/ui/widgets/product_list_item.dart';
 import 'package:aldea/ui/views/new_orders_view.dart';
+import 'package:aldea/ui/views/old_orders_view.dart';
 import 'package:aldea/ui/shared/app_colors.dart';
 import '../../constants/languages.dart';
 
@@ -41,7 +42,7 @@ class _OrdersViewState extends State<OrdersView> with TickerProviderStateMixin {
                 Container(
                     alignment: Alignment.center,
                     height: screenHeight(context) * 0.05,
-                    width: screenWidth(context) * 0.5,
+                    width: screenWidth(context) * 0.3,
                     child: Padding(
                       padding: EdgeInsets.only(left: 25),
                       child: Text("Nuevos pedidos", style: checkStyle),
@@ -49,7 +50,7 @@ class _OrdersViewState extends State<OrdersView> with TickerProviderStateMixin {
                 Container(
                     alignment: Alignment.center,
                     height: screenHeight(context) * 0.05,
-                    width: screenWidth(context) * 0.5,
+                    width: screenWidth(context) * 0.3,
                     child: Padding(
                       padding: EdgeInsets.only(left: 2),
                       child: Text("Realizados", style: checkStyle),
@@ -62,7 +63,7 @@ class _OrdersViewState extends State<OrdersView> with TickerProviderStateMixin {
                 controller: _controller,
                 children: [
                   NewOrdersView(widget.model),
-                  Container()
+                  OldOrdersView(widget.model)
                 ],
               ),
             )

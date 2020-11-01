@@ -763,6 +763,14 @@ class FirestoreService {
     return documents.documents;
   }
 
+  Future<List<DocumentSnapshot>> getOldOrders(String cid) async {
+    var documents = await _communitiesCollectionReference
+        .document(cid)
+        .collection("orders")
+        .getDocuments();
+    return documents.documents;
+  }
+
   Future<Map<String, dynamic>> getSettings(String communityId) async {
     var snapshot =
         await _communitiesCollectionReference.document(communityId).get();
