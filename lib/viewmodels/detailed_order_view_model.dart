@@ -15,20 +15,21 @@ class DetailedOrderViewModel extends BaseModel {
   Order order;
   User user;
   bool isLoading;
+
+
   setData() async {
     order = list[0];
     id = list[1];
     await getUserData();
   }
-  
-  setLoading(bool val){
+
+  setLoading(bool val) {
     isLoading = val;
-   notifyListeners(); 
+    notifyListeners();
   }
 
   getUserData() async {
     user = await _firestoreService.getUser(order.userId);
-    print(user);
     notifyListeners();
   }
 

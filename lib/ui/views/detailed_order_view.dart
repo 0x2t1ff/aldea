@@ -29,101 +29,113 @@ class DetailedOrderView extends StatelessWidget {
       },
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
-        body: model.isLoading ? Center(child: CircularProgressIndicator(),) : Column(
-          children: [
-            NotchFiller(),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              width: double.infinity,
-              height: screenHeight(context) * 0.1,
-              alignment: Alignment.centerLeft,
-              color: Color(0xff17191E),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'ALDEA',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Thinoo',
-                        fontSize: 40),
+        body: model.isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                children: [
+                  NotchFiller(),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    width: double.infinity,
+                    height: screenHeight(context) * 0.1,
+                    alignment: Alignment.centerLeft,
+                    color: Color(0xff17191E),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'ALDEA',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Thinoo',
+                              fontSize: 40),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: Image.asset('assets/images/hoguera.png'),
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(
-                    height: 50,
-                    child: Image.asset('assets/images/hoguera.png'),
+                  Container(
+                    height: screenHeight(context) * 0.75,
+                    child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: model.order.products.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                              color:
+                                  index % 2 == 0 ? darkGrey : backgroundColor,
+                              height: screenHeight(context) * 0.1,
+                              width: double.infinity,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(model.order.products[index]["model"],
+                                      style: textStyle),
+                                  Text(
+                                      model.order.products[index]["price"]
+                                              .toString() +
+                                          "€",
+                                      style: textStyle)
+                                ],
+                              ));
+                        }),
                   ),
-                ],
-              ),
-            ),
-            Container(
-              height: screenHeight(context) * 0.75,
-              child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: model.order.products.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                        color: index % 2 == 0 ? darkGrey : backgroundColor,
-                        height: screenHeight(context) * 0.1,
-                        width: double.infinity,
-                        child: Row(
+                  Expanded(
+                    child: Container(
+                        color: blueTheme,
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text(model.order.products[index]["model"],
-                                style: textStyle),
-                            Text(
-                                model.order.products[index]["price"]
-                                        .toString() +
-                                    "€",
-                                style: textStyle)
+                            Text(model.user.address, style: textStyle),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                if (!isOld)
+                                  GestureDetector(
+                                      onTap: () => model.dismissOrder(),
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(40)),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(
+                                                screenWidth(context) * 0.02),
+                                            child: Text(
+                                                languages[model.currentLanguage]
+                                                    ["dismiss order"],
+                                                style: textStyle),
+                                          ))),
+                                GestureDetector(
+                                    onTap: () => model.goToUser(),
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                            color: almostWhite,
+                                            borderRadius:
+                                                BorderRadius.circular(40)),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(
+                                              screenWidth(context) * 0.02),
+                                          child: Row(
+                                            children: [
+                                              Text(languages[model
+                                                  .currentLanguage]["profile"]),
+                                              Icon(Icons.person)
+                                            ],
+                                          ),
+                                        )))
+                              ],
+                            )
                           ],
-                        ));
-                  }),
-            ),
-            Expanded(
-              child: Container(
-                  color: blueTheme,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(model.user.address, style: textStyle),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          if(!isOld)  GestureDetector(
-                              onTap: () => model.dismissOrder(),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(40)),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(
-                                        screenWidth(context) * 0.02),
-                                    child: Text(languages[model.currentLanguage]["dismissOrder"],
-                                        style: textStyle),
-                                  ))),
-                          GestureDetector(
-                              onTap: () => model.goToUser(),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: almostWhite,
-                                      borderRadius: BorderRadius.circular(40)),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(
-                                        screenWidth(context) * 0.02),
-                                    child: Row(
-                                      children: [
-                                        Text(languages[model.currentLanguage]["profile"]),
-                                        Icon(Icons.person)
-                                      ],
-                                    ),
-                                  )))
-                        ],
-                      )
-                    ],
-                  )),
-            )
-          ],
-        ),
+                        )),
+                  )
+                ],
+              ),
       ),
     );
   }
